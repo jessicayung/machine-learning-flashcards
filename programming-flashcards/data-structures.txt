@@ -1,0 +1,79 @@
+What is an array?; An array is a low-level data structure that holds an ordered collection of elements. Each position in the array has an index, starting with 0. E.g. in Java: `int gasPrices = new int[10]` -> array to hold ten integers.
+
+
+What is the time complexity of looking up elements in an array?; O(1). If you know the address where an array starts in memory, it’s simple math to find the address of any index.
+
+
+What is array slicing?; Taking a subset from an array and allocating a new array with those elements. E.g. my_list[start_index:end_index]. You are (1) allocating a new list, (2) copying the elements from the original list to the new list, which takes O(n) time and space, where n is the number of elements in the resulting list.
+
+
+What is the space and time complexity of `my_list[start_index:end_index]`?; O(n) time and O(n) space, where n is the number of elements in the resulting list. You are (1) allocating a new list, (2) copying the elements from the original list to the new list. See also array slicing.
+
+
+What is a dynamic array?; I.e. a ‘list’ in Python. It doesn’t require you to specify the length and allows you to seamlessly (although sometimes with time and space costs) insert and delete elements at any index.
+
+
+What are strings usually implemented as?; Arrays of characters.
+
+
+What is a hash table? (hash, hash map, map, unordered map); A data structure that pairs keys to values. Also called a dictionary. It is unordered (keys are not guaranteed to stay in the same order). It can use many types of objects as keys (commonly strings).
+
+
+What is the average time complexity for insertions and lookups in hash tables?; O(1) on average.
+
+
+Can you use more than one type of objects as keys in a hash table?; Yes.
+
+
+What are hash tables built on?; Arrays.
+
+
+What is the worst case lookup cost for a hash table and why?; O(n) because of hash collisions and rebalancing. But usually in industry we assume hashing and resizing algorithms are clever enough that collisions are rare and cheap. So on average it is O(1).
+
+
+What is a linked list?; A low-level data structure. It stores an ordered list of items in individual "node" objects that have pointers to other nodes. In a singly linked list, the nodes each have one pointer to the next node.
+
+
+Advantages of linked lists compared with arrays; (1) constant-time insertions and deletions in any position (you just change some pointers). Arrays require O(n) time to do the same thing, because you'd have to "shift" all the subsequent items over 1 index. (2) Linked lists can continue to expand as long as there is space on the machine. Arrays (in low-level languages) must have their size specified ahead of time. Even in languages with "dynamic arrays" that automatically resize themselves when they run out of space (like Python, Ruby and JavaScript), the operation to resize a dynamic array has a large cost which can make a single insertion unexpectedly expensive.
+
+
+Disadvantages of linked lists compared with arrays; To access or edit an item in a linked list, you have to take O(i)O(i) time to walk from the head of the list to the iith item (unless of course you already have a pointer directly to that item). Arrays have constant-time lookups and edits to the iith item.
+
+
+Typically, what are our connections to linked lists?; Often, our only connection to the list itself is a variable pointing to the head. From there we can walk down the list to all the other nodes.
+
+
+Write a singly linked list node class; class LinkedListNode: def __init__(self, value): self.value = value \ self.next = None
+
+
+Write a doubly linked list node class; class LinkedListNode: def __init__(self, value): self.value = value  
+
+
+What is a queue?; A first in, first out (FIFO) data structure. The item that we put in the longest ago is the first item that comes out. It has two main methods enqueue() (adds an item), dequeue (removes and returns the next item in line). It can also include some utility methods peek() (returns the item at the front of the queue without removing it) and is_empty().
+
+
+What are the two main methods in a queue?; (1) enqueue() (adds an item), (2) dequeue (removes and returns the next item in line).
+
+
+Write a queue class;
+
+
+What is a stack?;  It's a "last in, first out" (LIFO) data structure, which means the item that was put in the stack most recently is the first item that comes out. It has two main methods: push() (adds an item) and pop() (removes and returns the top item). It can also include utility methods peek() (returns the item on the top of the stack without removing it) and is_empty().
+
+
+Write a stack class;
+
+
+What is a binary tree?; A tree where every node has two or fewer children. The children are usually called left and right.
+
+
+What is a perfect binary tree?; A binary tree where every level of the tree is completely full. There are no "gaps." 
+
+
+What are two interesting properties of perfect binary trees?; (1): the number of total nodes on each "level" doubles as we move down the tree. (2): the number of nodes on the last level is equal to the sum of the number of nodes on all other levels (plus 1). In other words, about half of our nodes are on the last level.
+
+
+What is the relationship between height h (0-indexed) and total nodes n in a perfect binary tree?; log​(n+1)/log2=h. That is, n = 1 + 2 + … + 2^(h-1) = 2^h - 1.
+
+
+Write a binary tree node class; class BinaryTreeNode: def __init__(self, value): self.value = value // self.left = None // self.right = None

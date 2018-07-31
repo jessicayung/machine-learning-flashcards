@@ -1,0 +1,17 @@
+In range(a,b), is each entry inclusive or exclusive?; First entry is inclusive, second entry is exclusive.
+
+### Lists
+Get the index and element in a list; enumerate(). E.g. `for index, element in enumerate(list): pass`.
+
+Add an element to a list; list.append(element)
+
+Does list[:i] include the ith element?; No.
+
+Does list[i:] include the ith element?; Yes.
+
+What does list[-1] return?; The last element of the list.
+
+Generate list e.g. [0,1,2,...,10]; np.arange(10)
+
+
+random.choices; k-sized list of population elements chosen with replacement. e.g. `choices([-1,+1], cum_weights=None, k=10)` returns size-10 list of elements in range [-1,+1]. \n if cum_weights is None, chosen with equal probability. (Also: np.random.choice([-1,+1], k))

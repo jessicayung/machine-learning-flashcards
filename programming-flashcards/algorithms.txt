@@ -1,0 +1,29 @@
+What is a binary search algorithm?; 1. Start with the middle item. Is it bigger or smaller than our target item? Since the list is sorted, this tells us if the target is in the first or second half of our list. 2. Rule out the half of the list that doesn’t contain the target item. 3. Repeat the same approach on the new half-size problem. Do it again and again until we either find the item or rule out the whole set.
+
+
+What is the runtime complexity of a binary search algorithm?; For a sorted array: O(lg n).
+
+
+Code an iterative binary search algorithm; def binary_search(target, nums): floor_index = -1 \ ceiling_index = len(nums) \ while floor_index + 1 < ceiling_index: distance = ceiling_index - floor_index \ half_distance = distance / 2 \ guess_index = floor_index + half_distance \ guess_value = nums[guess_index] \ if guess_value == target: return True \ if guess_value > target: ceiling_index = guess_index \ else: floor_index = guess_index \\ return False
+
+
+Code a recursive binary search algorithm; 
+
+
+When can’t we use binary search to our usual effect?; When the input list is not yet sorted.
+
+
+How many binary searches would it take to find an element out of a list of 100 sorted items?; 7. (Check.)
+
+
+Counting Sort
+What is a counting sort algorithm?; (1) Allocate a list nums_to_counts where the indices represent numbers from our input list and the values represent how many times the index number appears. Start each value at 0. (2) In one pass of the input list, update nums_to_counts as you go, so that at the end the values in nums_to_counts are correct. (3) Allocate a list sorted_list where we'll store our sorted numbers. (4) In one in-order pass of nums_to_counts put each number, the correct number of times, into sorted_list.
+
+
+Runtime and space complexity of counting sort algorithm; O(n) for both time and space.
+
+
+What does counting sort exploit?; The O(1) time insertions and lookups in a list.
+
+
+Can we use counting sort when our input items aren’t integers bound by constants?; Yes. We can first write a function that maps our items to integers from 0 to some constant such that different items will always map to different integers. This allows us to use counting sort.

@@ -1,0 +1,7 @@
+Reshape tensor `x` from 2x4 to 4x2; x=x.view(4,2)
+Reshape tensor `x` to 5 rows; x=x.view(5,-1)
+What does the -1 in x.view(-1) refer to?; infer dimension
+
+How to set up autodifferentiation; Set up tensor with requires_grad=True: `x=torch.Tensor([2,3], requires_grad=True)` then do operations on x. Can also set via `x.requires_grad = True`.
+
+

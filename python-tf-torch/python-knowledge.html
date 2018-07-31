@@ -1,0 +1,69 @@
+What does 'first class object' mean?; there are no restrictions on the object's use. It's the same as any other object. A first class object is an entity that can be dynamically created, destroyed, passed to a function, returned as a value, and have all the rights as other variables in the programming language have.
+
+egs of first-class objects in Python; Functions, classes.
+
+Is Python interpreted or compiled?; interpreted.
+
+typing of Python; dynamically typed (vs statically typed, specify types)
+
+does Python have access specifiers?; No. (e.g. C++'s public, private. bc 'we are all adults here'.)
+
+compiled vs interpreted languages; - compiled: (compiled code) can be executed directly in the CPU's 'native' language. - interpreted: must be translated at runtime from original format to CPU machine instructions
+
+Deep vs shallow copy; -Shallow copy copies reference pointers and changes to copied will change original. Faster. - Deep copy copies values but not reference pointers, is slower.
+
+Deep copy; Stores values copied separately. - Doesn't copy reference pointers. - Changes made in copy won't affect original etc. - Slower than shallow copy.
+
+Shallow copy; Copies reference pointers just like it copies values. - Changes made will also affect the original. - faster execution that depends on data size(?)
+
+lists vs tuples; lists are mutable, tuples are not.
+
+How multithreading is done in Python; - Global Interpreter Lock (GIL): makes sure only one thread executes at a time. Thread acquires GIL, does some work, then passes GIL onto next thread. - i.e. take turns using same CPU core. - GIL passing adds overhead to execution (slower)
+
+example of ternary operator; 5 if x > 4 else 4
+
+Memory management in Python; <ul><li>Managed by interpreter/Python memory manager (programmer does not have access, though there are some APIs?)</li><li>in Python private heap space.</li><li>Inbuilt garbage collector recycles unused memory, frees it and makes it available to the heap.</li></ul>
+
+Inheritance of classes; allows a class (derived / child class) to gain all the attributes and methods of a (parent / super) class.
+
+Does Python support Multiple inheritance?; Yes. i.e. derived class can inherit from more than one base class.
+
+help() function; displays documentation string, can see help related to modules, keywords, attributes, ...
+
+dir() function; displays defined symbols. (TODO: what are defined symbols? methods?)
+
+Why isn't all memory de-allocated when Python exits? <ul><li>Impossible to de-allocate memory reserved by the C library (Why?) </li><li>Modules which have circular refs to other objects or objects referenced from global namesspace are not always freed (why?) <li>Has own clean-up mech so python tries to de-allocate/destroy every other object...? so what's the deal here?</li></li></ul>
+
+Describe dictionaries in Python; TODO
+
+How are dictionaries implemented in Python?; TODO
+
+Monkey patching in Pythohn; Dynamic modifications of a class or module at runtime. E.g. import module m with class MyClass, modify methods outside of module.
+
+When use *args, **kwargs?; <ul><li>When you don't know how many arguments are going to be passed to a function.</li><li>Want to pass in tuple/list of args or dict of kwargs</li><li>Identifiers arg, kwargs are convention used for clarity, can used other words (but not recommended)</li></ul>
+
+Write one line of code that counts the number of capital letters in a file.; count sum(1 for line in file for character in line if character.isupper())
+
+Negative indices; -1 -> last index in sequence. -i -> last ith index in sequence. (TODO: poss add other uses, e.g. in strings?)
+
+Compiling and linking; for compiling new extensions. You can only link after you've passed compiling. (TODO: add/edit, something about dynamic loading config files. )
+
+Sort a list of integers in Python; list.sort()
+
+re module in Python; TODO for modifying strings? regex?
+
+re.split(); using regex to split a string into a list (HOW? what sep char?)
+
+re.sub(); finds all substrings where regex matches, replaces it with a diff string (todo)
+
+re.subn(); similar to re.sub, finds all substrings where regex matches, replaces it with a diff string (todo). Also returns number of replacements.
+
+yielding;
+
+range vs xrange (Q: this is Python 2 right...); range returned a list (can be memory-intensive) and xrange return a generator (?) in Python 2. Now in Python 3 range returns a generator.
+
+pickling; Converts Python object into a string and 'dumps' it into a file.
+
+
+Sources:
+- https://www.edureka.co/blog/interview-questions/python-interview-questions/

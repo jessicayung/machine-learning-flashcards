@@ -1,0 +1,85 @@
+What is the call stack?; A stack data structure that stores information about the active subroutines of a computer program.
+
+
+What is a stack overflow error?; The call stack gets too big and runs out of space. See also tail call optimisation (TCO), which optimises some recursive functions to avoid building up a tall call stack. TCO is NOT used by Python.
+
+
+What is tail call optimisation (TCO)?; Optimizes some recursive functions to avoid building up a tall call stack. Python and Java decidedly do not use TCO. Some Ruby implementations do, but most don't. Some C implementations do, and the JavaScript spec recently allowed TCO. Scheme is one of the few languages that guarantee TCO in all implementations. In general, best not to assume your compiler/interpreter will do this work for you.
+
+
+What is lazy evaluation?; Saving work for the last minute or avoid unnecessary work altogether. For example, if we had a conditional ‘if A and B: do C’. The Python interpreter’s lazy evaluation strategy wouldn’t bother checking the value of B if A was false.
+
+
+How might we use lazy evaluation in Python to avoid KeyErrors?; if ‘Becky’ in friends and friends[‘Becky’].is_free_this_friday(): invite_to_board_game_night(friends[‘Becky’])
+
+
+Does Python use lazy evaluation? If so, give examples.; Yes. (1) ‘if A and B: do C’. (2) Python generators, e.g. xrange() in Python 2.7, range() in Python 3.
+
+
+How does range(1,n) work in Python 2.7 and why might it be problematic?; Python generates a list of numbers in a specific range whose size is O(n). That could be a lot of space. -> Use a generator instead.
+
+
+What is a generator?; It behaves like a list in that we can loop through it, but instead of building up all of its contents at once, it simply generates the next element right when it's needed (lazily)! E.g. xrange() in Python 2 or range() in Python 3.
+
+
+What is a garbage collector?; Automatically frees up memory that a program is no longer using. Python has this, C does not. So you have to manually free up memory we’re not using any more by coding `free(str)` after `str = malloc(15)`. (manual memory management)
+
+
+What memory management does C++ have?; In the past, C++, like C, required programmers to manually manage memory. However, more recent revisions to C++ have introduced smart pointers, which are automatically freed when no longer needed. Using smart pointers makes it much easier to write exception-safe code, since allocated resources are automatically freed if an exception is thrown.
+
+
+Name and compare the two flavours of smart pointers C++ has with respect to memory management; Unique pointers and shared pointers. Both provide automatic freeing of memory when there are no more references to the shared resource. The main difference between the two lies in how many references to the pointer can exist. A unique pointer is the exclusive reference to an allocated resource - as soon as the unique pointer goes out of scope, the resource can be deallocated. By contrast, multiple shared pointers may reference the same resource - only when all of the references have gone out of scope can the resource be freed
+
+
+What is integer overflow?; When we have an integer that does fit in 32 or 64 bits, but the result after we add to it (or multiply it by something, or do another operation) does not fit in the original 32 or 64 bits.
+
+
+How do different languages handle integer overflow?; (1) In a high-level language like Python, the interpreter might notice this is about to happen and throw an error. Python and Ruby will also automatically use larger int types (`long` in Python) if your program needs them. (2) In a lower-level language like C, the processor will sort of "do its best" with the bits it has, which can cause some pretty nasty bugs. In our example above, when adding 01 to 11, the processor might take the true result 100 and throw out the highest bit, leaving 00, or it might say "this number can't go any higher" and just return 11.
+
+
+How do you reduce the risk of integer overflow?; Use larger integer types (like `long long int` in C and C++ or `BigInteger` in Java). Other modern languages will automatically use larger integer types if your program needs them (like `long` in Python and `Bignum` in Ruby).
+
+
+What is a closure?; a function that accesses a variable "outside" itself. Often in JS. For example: var message = ‘The British are coming.’; function sayMessage() { alert(message); }
+
+
+Give an example of creating an instance variable with a closure; This makes `nextGeneratedId` private, which prevents accidental changes from the outside world. Var getUniqueId = (function() { var nextGenerateId = 0; return function(element) { if (!element.id) { element.id = ‘generate-uid-’ + nextGeneratedId; nextGeneratedId++; } return element.id; }; })(); 
+
+
+What is a hash function?; It takes data (like a string or a file’s contents) and outputs a hash, a fixed-size string or number. We can think of a hash as a fingerprint. We can trust that a given file will always have the same hash, but we can’t go from the hash back to the original file.
+
+
+What is hash collision?; Multiple files having the same hash value.
+
+
+What are examples of hash functions?; MD5 hash, sha1.
+
+
+What are two uses for hashing?; (1) Dictionaries and (2) preventing man-in-the-middle attacks. (Dictionaries: want a list-like data structure with constant-time lookups, but we want to look up values based on arbitrary "keys," not just sequential "indices." We could allocate a list, and use a hash function to translate keys into list indices.)
+
+
+Mutable vs immutable objects; A mutable object can be changed after it's created (can make changes in-place -> all refs to that object will now reflect the change), and an immutable object can't. Python lists are mutable. Python tuples are not mutable: int_tuple[0] = 1 -> TypeError: ‘tuple’ object does not support item assignment.
+
+
+Are Python lists mutable?; Yes.
+
+
+Are Python tuples mutable?; No.
+
+
+Are strings mutable in Python? Javascript? Ruby? C++?; Immutable in Python and Javascript. Mutable in Ruby. Mutable or immutable in C++ depending on whether the string is declared with the `const` modifier (with which it is immutable)
+
+
+What is an in-place algorithm?; An in-place algorithm operates directly on its input and changes it, instead of creating and returning a new object. This is sometimes called destructive, since the original input is "destroyed" when it's edited to create the new output. (Careful: "In-place" does not mean "without creating any additional variables"! Rather, it means "without creating a new copy of the input." In general, an in-place function will only create additional variables that are O(1) space.)
+
+
+Does in-place mean "without creating any additional variables"?; No. It means "without creating a new copy of the input." In general, an in-place function will only create additional variables that are O(1) space.
+
+
+Write code that squares elements in a list in-place; ` for index, element in enumerate(int_list): int_list[index] *= element`.
+
+
+Why might you work in-place?; It saves space. Generally O(1) space cost.
+
+
+Why might you not work in-place?; It can cause side effects. Your input is "destroyed" or "altered," which can affect code outside of your function. E.g. `original_list` is the same as `squared_list=square_list_in_place(original_list)`. You should only use in-place if you’re v space constrained or if you’re positive you don’t need the original input any more, even for debugging.

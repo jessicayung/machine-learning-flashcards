@@ -1,0 +1,25 @@
+What does it mean for a problem to have overlapping subproblems?; Finding its solution involves solving the same subproblem multiple times. E.g. If we define fib(n) recursively, when calling fib(5), we end up calling the subproblem fib(2) three times.
+
+
+How do we tackle overlapping subproblems?; Memoization, i.e. keeping a record of the results for given inputs (usually in a dictionary).
+
+
+Code a function to compute the nth Fibonacci number; class Fibber: def __init__(self): self.memo = {} \\ def fib(self, n): if n < 0: raise Exception(“Index was negative. No such thing as a negative index in a series.”) \\ elif n in [0,1]: return n \\ if n in self.memo: print(“grabbing memo[%i]” % n \\ return self.memo[n] \\\ print(“computing fib(%i)” % n \\ result = self.fib(n-1) + self.fib(n-2) \\ self.memo[n] = result \\ return result 
+
+
+Dynamic programming problems; problems where the solution is composed of solutions to the same problem with smaller inputs (as with the fibonacci problem, above).
+
+
+Two common strategies for dynamic programming; (1) Memoization and (2) Going bottom-up.
+
+
+What is a bottom-up algorithm?; A bottom-up algorithm "starts from the beginning," while a recursive algorithm often "starts from the end and works backwards."
+
+
+Code a bottom-up style function for calculating the product of 1 to n; def product_1_to_n(n): result = 1 \ for num in range(1,n+1): result *= num \\ return result
+
+
+What is a potential problem with recursive functions (e.g. for calculating the product of 1...n)?; It may build up a call stack of size O(n), which makes our total memory cost O(n). This makes it vulnerable to a stack overflow error, where the call stack gets too big and runs out of space. See also tail call optimisation (TCO), which optimises some recursive functions to avoid building up a tall call stack. TCO is NOT used by Python.
+
+
+What is an example of using a lazy approach vs an ‘eager’ approach in system design?; TempTracker class lazily (or ‘just in time’) calculating the max whenever it’s requested vs eagerly keeping the max up to date whenever we insert a new temperature. Depends on how often you expect to run get_max().

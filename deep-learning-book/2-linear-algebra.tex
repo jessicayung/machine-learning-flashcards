@@ -1,0 +1,29 @@
+\documentclass{article}
+\begin{document}
+
+% References: Goodfellow, Bengio and Courville. Deep Learning. Ch 2 Linear Algebra
+
+\section{Basic definitions}
+
+Tensor; array with more than two dimensions.
+
+Caveats re using $A^{-1}$ to solve $Ax=b$ for $x$. \begin{itemize}
+	\item in practice; $A^{-1}$ can only be represented with limited precision on a digital computer. \item Algs that use $b$ can usually obtain more accurate estimates of $x$.
+	\item see also: condition number of matrix $\kappa(A)$.
+\end{itemize}
+
+Is it possible to have more than one but fewer than infinitely many solutions to $Ax=b$ for a particular $b$?; No. If x and y are solutions. then $z=\alpha x + (1-\alpha) y$ is also a solution $\forall \Re \alpha$.
+
+Conditions for existence of matrix inverse; Matrix is square, columns/rows all linearly independent (i.e. full rank). \newline Note full column rank and full row rank not equivalent for non-square matrices.
+
+Span of a set of vectors; all points obtainable by linear combination of the original vectors.
+
+$L^p$ norm; $||x||_p=(\sum_i |x_i|^p)^{1/p}$ for $p\in\Re, p\geq 1$.
+
+Define a norm; Intuitively: Norm($\mathbf{x})$ measures distance from origin to point $\mathbf{x}$. fns mapping vectors to non-negative values. Satisfy \begin{enumerate}
+	\item $f(x)=0\Rightarrow x=0$
+	\item $f(x+y)\leq f(x)+f(y)$ (triangle inequality)
+	\item $\forall \alpha \in \Re, f(\alpha x) = |\alpha| f(x)$.
+\end{enumerate}
+
+\end{document}

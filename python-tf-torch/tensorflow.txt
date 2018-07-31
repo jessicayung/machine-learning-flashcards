@@ -1,0 +1,50 @@
+What is a tf Session?; connection to C++ backend to do computation.
+
+Why might using NumPy have high overhead?; Cost of switching back to Python (after doing e.g. matrix multiplication outside Python) every operation. especially bad if running computations on GPUs or in a distributed manner, where there can be a high cost to transferring data. -> Tf defines entire graph that runs outside Python. Python code builds graph and defines which parts of the graph should be run.
+
+
+What does the first dimension of x = tf.placeholder(tf.float32, shape=[None, 784]) correspond to?; Batch size.
+
+What does it mean when a dimension of shape is None? It can be of any size.
+
+Is the shape argument to placeholder compulsory?; No, it's optional. Helps debugging though.
+
+What is the difference between a tf.placeholder and a tf.Variable?; Placeholders are given when we ask tf to run computations and cannot be modified (I think). Variables can be modified by the computation.
+
+What are the tf types of model parameters?; usually tf.Variable, e.g. tf.Variable(tf.zeros([784]))
+
+Do you have to initialise variables before using them in a session?; Yes: sess.run(tf.global_variables_initializer())
+
+
+Matrix multiplication in tf; y = tf.matmul(x, W) + b
+
+Categorical cross entropy loss; loss = tf.nn.softmax_cross_entropy_with_logits(labels=y_true, logits=yhat) . Then ou use e.g. step = tf.train.GradientDescentOptimizer(0.5).minimize(loss), where 0.5 is the learning rate.
+
+Gradient descent step in tf; step = tf.train.GradientDescentOptimizer(learning_rate).minimize(loss), then step.run(feed_dict={x: blah, y: blah})
+
+Take an average in tf; tf.reduce_mean(thing_to_sum)
+
+Can you replace a variable in your computation graph with other input using feed_dict?; Yes, you can replace any tensor in your graph using feed_dict.
+
+cast booleans to floats; tf.cast(list_of_booleans, tf.float32)
+
+why should you initialise weights with a small amount of noise?; (1) symmetry breaking (todo: expand) and (2) to prevent 0 gradients.
+
+when using ReLU neurons, how should you initialise them?; with a slight positive bias (e.g. 0.1) to avoid 'dead neurons'.
+
+how might you initialise weights with a small amount of noise?; tf.Variable(tf.truncated_normal(shape, stddev=0.1))
+
+2D convolution layer in tf; tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME'). 
+
+I want a conv layer to compute 32 features for each 5x5 patch, input having 1 channel (e.g. greyscale). What should the shape of the weights be?; [5, 5, 1, 32]. i.e. (patchdim1, patchdim2, num_input_channels, num_output_channels)
+
+specify shape in round or square brackets in tf?; square brackets: e.g. [5, 5, 1, 32].
+
+how can you turn dropout on during training and turn it off during testing?; create placeholder keep_prob=tf.placeholder(tf.float32), dropout = tf.nn.dropout(prev_layer, keep_prob) and feed dict corresponding values when training and testing (keep_prob=1).
+
+scaling used in tf.nn.dropout; output scaled up by 1/keep_prob, so expected sum is unchanged.
+
+
+
+
+

@@ -1,0 +1,30 @@
+Create array [0,1,...,n]; np.arange(n+1) (Torch: torch.range(0,n))
+Create array with values from a to b inclusive in steps of c; np.arange(a,b-c,c) (Torch: torch.linspace(a,b,(b-a)/c)
+Create array with values from a to b inclusive split into d steps; np.linspace(a,b,d) (torch.linspace(a,b,d))
+Create array of zeros with shape like `x`; `np.zeros_like(x)`. Torch: `torch.zeros(x.size())`
+
+
+Dimensions of array x; x.shape (torch: x.shape or x.size())
+
+
+np.random.choice; k-sized list of population elements chosen with replacement. e.g. np.random.choice([-1,+1], k) returns size-10 list of elements in range [-1,+1].
+
+Cumulative sum of array (e.g. CMF); np.cumsum(array) (same size as original array)
+
+Time to do random.choice and accumulate in Python vs np.random.choice and np.cumsum (list size 10k); 2.21 ms vs 14 microsec (over 100x faster) 
+
+How to make all elements of a Numpy array zero; array[...] = 0
+
+How is a np array saved in memory?; 1 mostly a contiguous block of memory whose parts can be accessed using an indexing scheme. \n 2 Indexing scheme is in turn defined by a shape and a data type 
+
+Strides of np array; number of bytes to step in each dimension when traversing the array. \n e.g. for shape (3,3), int16, array.strides is (6,2).
+
+item size for np.int16 array; 2 bytes.
+
+view
+
+copy
+
+views vs copies
+
+@ operator in Python wrt linalg (Not numpy); matrix multiplication
