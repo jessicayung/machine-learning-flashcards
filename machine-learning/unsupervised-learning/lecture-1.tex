@@ -1,0 +1,21 @@
+\documentclass{article}
+\begin{document}
+
+Semi-supervised learning; Most x are unlabelled, assumes structure of $\{x\}$ and relationship $x\to y$ are linked. \begin{itemize}
+	\item e.g. assign pseudo-labels using model trained on labelled data and train model on labelled + pseudo-labelled data.
+\end{itemize}
+	
+Dutch Book Theorem; Unless your beliefs satisfy the rules of probability theory, including Bayes' rule, there exists a set of simultaneous bets (a 'Dutch book') which you are willing to accept (individually), and for which you are guaranteed to lose money, no matter what the outcome. (e.g. not A, not B, A and B)
+
+Marginal likelihood; $p(D|\mathcal{M_i})=\int p(D|M_i, \theta_i)P(\theta_i|M_i)d\theta_i$
+
+Likelihood vs marginal likelihood; likelihood is $p(D|\theta_i, M_i)$, marginal likelihood is sum over all parameter values $p(D|M_i)$.
+
+Beta distribution; $Beta(q|\alpha_1, \alpha_2) = \frac{q^{(\alpha_1 - 1)}(1-q)^{(\alpha_2-1)}}{B(\alpha_1,\alpha_2)}$ (denominator for normalising)
+
+
+Describe a uniform priors on $q\in[0,1]$ using the Beta distribution; $Beta(q|\alpha_1=1,\alpha_2=1)$
+
+What is the probability of coin toss sequence HTTHH in terms of the Beta distribution if we believe the probability of heads is $q$?; $Beta(q|\alpha_1 + 3, \alpha_2 + 2)
+
+\end{document}
