@@ -38,29 +38,41 @@ Describe dictionaries in Python; TODO
 
 How are dictionaries implemented in Python?; TODO
 
+what is a hash table?; High level: key-value lookup for quick lookups. Hash function: map from key (e.g. string) to hash code to index. Re-map bc array may be smaller than all available hash codes. Two different strings could have same hash code (infinitely many strings, finitely many hash codes, e.g. 3B.) -> if collision: resolve. 
+
+e.g. method of resolving hash collision; e.g. by chaining. when there are collisions, store in linked list. array of linked list of people vs array. need to store keys with values in this linked list.
+
+runtime of hash table; if assume 'good', O(1). worst case O(n), e.g. with lots of collisions.
+
 Monkey patching in Pythohn; Dynamic modifications of a class or module at runtime. E.g. import module m with class MyClass, modify methods outside of module.
+
+When might you use monkey patching in Python?; <ul><li>e.g. issue with server deployment (but fine in dev env)</li><li>Cannot debug source code directly or use break points because libraries are proprietary.</li><li>Soln: Use monkey patching to dynamically add logging to source code and see what's going on.</li></ul> Source: Burn Ignorance
 
 When use *args, **kwargs?; <ul><li>When you don't know how many arguments are going to be passed to a function.</li><li>Want to pass in tuple/list of args or dict of kwargs</li><li>Identifiers arg, kwargs are convention used for clarity, can used other words (but not recommended)</li></ul>
 
-Write one line of code that counts the number of capital letters in a file.; count sum(1 for line in file for character in line if character.isupper())
+When using *args, what do you pass in if you want to pass in multiple args?; A list/tuple of args
 
-Negative indices; -1 -> last index in sequence. -i -> last ith index in sequence. (TODO: poss add other uses, e.g. in strings?)
+When using **kwargs, what do you pass in if you want to pass in multiple kwargs?; A dict of kwargs
+
+Write one line of code that counts the number of capital letters in a file (/text, fine).; sum(1 for char in text if char.isupper()) 
+
+Negative indices; -1 -> last index in sequence. -i -> last ith index in sequence.
 
 Compiling and linking; for compiling new extensions. You can only link after you've passed compiling. (TODO: add/edit, something about dynamic loading config files. )
 
-Sort a list of integers in Python; list.sort()
+Sort a list of integers in Python; sorted(ints_list) (ascending order)
 
 re module in Python; TODO for modifying strings? regex?
 
-re.split(); using regex to split a string into a list (HOW? what sep char?)
+re.split(); using regex to split a string into a list. re.split(sep_char, string)
 
-re.sub(); finds all substrings where regex matches, replaces it with a diff string (todo)
+re.sub(); re.sub(pattern, replacement, string). finds all substrings where regex matches, replaces it with a diff string.
 
-re.subn(); similar to re.sub, finds all substrings where regex matches, replaces it with a diff string (todo). Also returns number of replacements.
+re.subn(); re.subn(pattern, replacement, string). similar to re.sub, finds all substrings where regex matches, replaces it with a diff string. Also returns number of replacements. i.e. returns tuple (new_text, num_replacements).
 
 yielding;
 
-range vs xrange (Q: this is Python 2 right...); range returned a list (can be memory-intensive) and xrange return a generator (?) in Python 2. Now in Python 3 range returns a generator.
+range vs xrange in Python 2; range returned a list (can be memory-intensive) and xrange return a generator in Python 2. Now in Python 3 range returns a generator, xrange no longer valid.
 
 pickling; Converts Python object into a string and 'dumps' it into a file.
 
