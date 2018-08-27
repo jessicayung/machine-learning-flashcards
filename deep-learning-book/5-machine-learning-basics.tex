@@ -1,3 +1,4 @@
+% Front; 
 \documentclass{article}
 \begin{document}
 
@@ -118,7 +119,7 @@ Does asymptotic unbiasedness imply consistency?; No. E.g. first sample of datase
 
 \section{Maximum Likelihood Estimation}
 
-Describe maximum likelihood estimation; $\theta_{ML} = \arg\max_{\theta} p_{model}(\mathcal{X};\theta)$, where $\mathcal{X}$ is a set of examples drawn from the underlying data-generating distribution $p_{data}(\mathbf{x})$. Equivalently, maximise log-likelihood (to prevent numerical underflow or overflow from products).
+Describe maximum likelihood estimation; $\theta_{ML} = \arg\max_{\theta} p_{model}(\mathcal{X} | \theta)$, where $\mathcal{X}$ is a set of examples drawn from the underlying data-generating distribution $p_{data}(\mathbf{x})$. Equivalently, maximise log-likelihood (to prevent numerical underflow or overflow from products).
 
 Relationship between maximum likelihood and the KL divergence; Maximising expected log-likelihood is equivalent to minimising the KL divergence (with respect to parameters $\theta$). Helpful since KL has known minimum of zero, whereas NLL can become negative when $\mathbf{x}$ is real-valued.
 
@@ -132,11 +133,7 @@ How can we derive linear regression?; Derive MSE criterion using maximum likelih
 
 Conditional maximum likelihood estimator $\theta_{ML} = \arg\max_{\theta} p_{model}(Y | X;\theta)$
 
-Properties of maximum likelihood; \begin{itemize}
-	\item Fastest rate of convergence as number of examples m increases, $m\to\infty$.
-	\item Consistent under appopriate conditions (true dist lies within model family, true dist corresponds to exactly one value of $\theta$. (identifiable))
-	\item (Other sources: can be 'broken', i.e. can have infinite likelihood for a single point)
-\end{itemize}
+Properties of maximum likelihood; \begin{itemize} \item Fastest rate of convergence as number of examples m increases, $m\to\infty$.  \item Consistent under appopriate conditions (true dist lies within model family, true dist corresponds to exactly one value of $\theta$. (identifiable)) \item (Other sources: can be 'broken', i.e. can have infinite likelihood for a single point) \end{itemize}
 
 Comparing statistical efficiency of consistent estimators; Higher stat efficiency if it requires fewer examples to obtain a certain generalisation error or vice versa (lower gen error with fixed number of training examples). \\ Note statistical efficiency is typically studied in the parametric case (estimating value of a parameter as opposed to the value of a function).
 
@@ -146,17 +143,11 @@ In brief, what properties of maximum likelihood make it attractive?; Statistical
 
 \section{Bayesian Statistics}
 
-Compare the frequentist vs Bayesian perspectives on $\theta$ and the dataset. \begin{itemize}
-	\item Frequentist: true $\theta$ is fixed but unknown, point estimate $\hat{\theta}$ random because it is a function of the dataset (which is seen as random)
-	\item Bayesian: true $\theta$ is unknown or uncertain, represented as a radom variable. Dataset is directly observed and so is not random. Consider distribution of $\theta$ as opposed to a point estimate.
-\end{itemize}
+Compare the frequentist vs Bayesian perspectives on $\theta$ and the dataset.; \begin{itemize} \item Frequentist: true $\theta$ is fixed but unknown, point estimate $\hat{\theta}$ random because it is a function of the dataset (which is seen as random) \item Bayesian: true $\theta$ is unknown or uncertain, represented as a radom variable. Dataset is directly observed and so is not random. Consider distribution of $\theta$ as opposed to a point estimate.  \end{itemize} 
 
 Prior; $p(\theta)$, gat represent prior knowledge of $\theta$ or a preference for 'simpler' solutions.
 
-How do you deal with the uncertainty in an estimator (frequentist vs Bayesian approaches); \begin{itemize}
-	\item Frequentist: summarise in point estimate
-	\item Bayesian: integrate over it using the laws of probability. Protects against overfitting, but may be intractable.
-\end{itemize}
+How do you deal with the uncertainty in an estimator (frequentist vs Bayesian approaches); \begin{itemize} \item Frequentist: summarise in point estimate \item Bayesian: integrate over it using the laws of probability. Protects against overfitting, but may be intractable.  \end{itemize}
 
 \section{Supervised Learning Algorithms}
 
@@ -176,69 +167,25 @@ Kernel machines or kernel methods;
 
 Support vectors;
 
-K-nearest neighbours; \begin{itemize}
-	\item Find k nearest neighbours to test example \textbf{x} in the training set, then return the average or the corresponding y values.
-	\item Non-parametric
-	\item 'No' training phase: simple function of training data
-	\item Error: 1NN converges to 2x Bayes error if no voting (breaking ties randomly), 1xBayes if allow voting
-\end{itemize} 
+K-nearest neighbours; \begin{itemize} \item Find k nearest neighbours to test example \textbf{x} in the training set, then return the average or the corresponding y values.  \item Non-parametric \item 'No' training phase: simple function of training data \item Error: 1NN converges to 2x Bayes error if no voting (breaking ties randomly), 1xBayes if allow voting \end{itemize} 
 
-Disadvantages of k-nearest neighbours; \begin{itemize}
-	\item High compute cost
-	\item may generalise poorly with small finite trainig set
-	\item cannot learn that one feature is more discriminative than another (e.g. 100-coord, x1=y but NN det mostly by x2-x100.)
-\end{itemize}
+Disadvantages of k-nearest neighbours; \begin{itemize} \item High compute cost \item may generalise poorly with small finite trainig set \item cannot learn that one feature is more discriminative than another (e.g. 100-coord, x1=y but NN det mostly by x2-x100.) \end{itemize}
 
-Decision trees; \begin{itemize}
-	\item partitions input space with 1-1 correspondence between leaf nodes and input regions
-	\item usually each leaf node maps all points in input region to some output y
-	\item usually parametric in practice (since regularised with size constraints like max depth)
-	\item may struggle to solve simple problems solvable by logistic regression if we use typical \textbf{axis-aligned splits} and constant outputs (e.g. linear decision boundary diagonal to axes -> DT constructs staircase-like DB)
-\end{itemize}
+Decision trees; \begin{itemize} \item partitions input space with 1-1 correspondence between leaf nodes and input regions \item usually each leaf node maps all points in input region to some output y \item usually parametric in practice (since regularised with size constraints like max depth) \item may struggle to solve simple problems solvable by logistic regression if we use typical \textbf{axis-aligned splits} and constant outputs (e.g. linear decision boundary diagonal to axes -> DT constructs staircase-like DB) \end{itemize}
 
 \section{Unsupervised Learning Algorithms}
 
-Describe unsupervised learning; learning to find the 'best' representation of data. often involves \begin{itemize}
-	\item Preserving as much information about \textbf{x} as possible
-	\item While obeying constraints aimed at keeping representation simpler or more accessible than \textbf{x} itself, e.g.
-	\begin{itemize}
-		\item lower dim (compress info)
-		\item sparse (O\&F, 1996)
-		\item indepnedent (disentangle sources of variation)
-	\end{itemize}
-\end{itemize}
+Describe unsupervised learning; learning to find the 'best' representation of data. often involves \begin{itemize} \item Preserving as much information about \textbf{x} as possible \item While obeying constraints aimed at keeping representation simpler or more accessible than \textbf{x} itself, e.g.  \begin{itemize} \item lower dim (compress info) \item sparse (O\&F, 1996) \item independent (disentangle sources of variation) \end{itemize} \end{itemize}
 
-Principal Components Analysis; Learns repr that is \begin{itemize}
-	\item Repr Lower dim, 
-	\item Repr elements have no linear correlation with each other
-		\item info preservation measured by least-squares reconstruction error
-	\item Learns orthogonal, linear transformation of data $x\to z, z=XW$ such that var(z) is diagonal.
-	\item PCs of $X$ given by eigenvectors of $X^TX$, i.e. $X^X=W\Lambda W^T$.
-\end{itemize}
+Principal Components Analysis; Learns repr that is \begin{itemize} \item Repr Lower dim, \item Repr elements have no linear correlation with each other \item info preservation measured by least-squares reconstruction error \item Learns orthogonal, linear transformation of data $x\to z, z=XW$ such that var(z) is diagonal.  \item PCs of $X$ given by eigenvectors of $X^TX$, i.e. $X^X=W\Lambda W^T$.  \end{itemize}
 
-PCA: show PCs are linearly uncorrelated; Derive via SVD. \begin{itemize}
-	\item Show Var(Z) is diagonal. (z=PCs)
-	\item $X = U\Sigma W^T$, $X^TX = W\Lambda W^T$, $Z=XW$. todo details
-\end{itemize}
+PCA: show PCs are linearly uncorrelated; Derive via SVD. \begin{itemize} \item Show Var(Z) is diagonal. (z=PCs) \item $X = U\Sigma W^T$, $X^TX = W\Lambda W^T$, $Z=XW$. todo details \end{itemize}
 
-K-means clustering; \begin{itemize}
-	\item Learns sparse representation. (k-dim one-hot for each input)
-	\item Init K centroids. Till convergence:
-	\begin{itemize}
-		\item assign each training e.g. to cluster i (nearest centroid $\mu^{(i)}$)
-		\item Update centroids $\mu^{i}=$ mean of all training points assign to cluster i.
-	\end{itemize}
-\end{itemize}
+K-means clustering; \begin{itemize} \item Learns sparse representation. (k-dim one-hot for each input) \item Init K centroids. Till convergence: \begin{itemize} \item assign each training e.g. to cluster i (nearest centroid $\mu^{(i)}$) \item Update centroids $\mu^{i}=$ mean of all training points assign to cluster i.  \end{itemize} \end{itemize}
 
-Advantages and disadvantages of K-means clustering; \begin{itemize}
-	\item Computationally cheap
-	\item Naturally conveys idea all datapoin ts in same cluster are similar
-	\item Disadv: Loses many benefits of distributed representations
-\end{itemize}
+Advantages and disadvantages of K-means clustering; \begin{itemize} \item Computationally cheap \item Naturally conveys idea all datapoin ts in same cluster are similar \item Disadv: Loses many benefits of distributed representations \end{itemize}
 
-Problems with clustering; \begin{itemize}
-	\item Clustering problem inherently ill-posed: no single criterion that measures how well a clustering of data corresponds to the real world
-\end{itemize}
+Problems with clustering; \begin{itemize} \item Clustering problem inherently ill-posed: no single criterion that measures how well a clustering of data corresponds to the real world \end{itemize}
 
 Adv and disadv of distributed representations in representation learning; \begin{itemize}
 	\item 
