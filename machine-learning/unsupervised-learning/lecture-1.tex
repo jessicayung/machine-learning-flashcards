@@ -1,9 +1,8 @@
+%Front; back
 \documentclass{article}
 \begin{document}
 
-Semi-supervised learning; Most x are unlabelled, assumes structure of $\{x\}$ and relationship $x\to y$ are linked. \begin{itemize}
-	\item e.g. assign pseudo-labels using model trained on labelled data and train model on labelled + pseudo-labelled data.
-\end{itemize}
+Semi-supervised learning; Most x are unlabelled, assumes structure of $\{x\}$ and relationship $x\to y$ are linked. \begin{itemize} \item e.g. assign pseudo-labels using model trained on labelled data and train model on labelled + pseudo-labelled data.  \end{itemize}
 	
 Dutch Book Theorem; Unless your beliefs satisfy the rules of probability theory, including Bayes' rule, there exists a set of simultaneous bets (a 'Dutch book') which you are willing to accept (individually), and for which you are guaranteed to lose money, no matter what the outcome. (e.g. not A, not B, A and B)
 
@@ -13,9 +12,75 @@ Likelihood vs marginal likelihood; likelihood is $p(D|\theta_i, M_i)$, marginal 
 
 Beta distribution; $Beta(q|\alpha_1, \alpha_2) = \frac{q^{(\alpha_1 - 1)}(1-q)^{(\alpha_2-1)}}{B(\alpha_1,\alpha_2)}$ (denominator for normalising)
 
+Describe a uniform prior on $q\in[0,1]$ using the Beta distribution; $Beta(q|\alpha_1=1,\alpha_2=1)$
 
-Describe a uniform priors on $q\in[0,1]$ using the Beta distribution; $Beta(q|\alpha_1=1,\alpha_2=1)$
 
-What is the probability of coin toss sequence HTTHH in terms of the Beta distribution if we believe the probability of heads is $q$?; $Beta(q|\alpha_1 + 3, \alpha_2 + 2)
+What is the probability of coin toss sequence HTTHH in terms of the Beta distribution if we believe the probability of heads is $q$?; $Beta(q|\alpha_1 + 3, \alpha_2 + 2)$
+
+Conjugate prior; If the prior and posterior are in the same prob dist family, they are called conjugate distributions. \begin{itemize}
+	\item e.g. Gaussian conjugate to itself
+	\item All members of the exponential family have conjugate priors
+\end{itemize}
+
+Beta dist is a conjugate prior for what dists?; \begin{itemize}
+	\item Bernoulli
+	\item Binomial \item Neg binomaial \item Geometric
+\end{itemize}
+
+Exponential family distributions can be expressed as; $p(x|\theta) = g(\theta)f(x)e^{\phi(\theta)^T\mathbf{T}(x)}$, where $g(\theta)$ is the normaliser.
+
+Write down the form of a conjugate prior for the exponential family; $F(\tau, \nu)g(\theta)^\nu e^{\phi (\theta)^T\mathbf{\tau}}$, where \begin{itemize}
+	\item $F(\tau, \nu)$ is the normaliser
+	\item $\nu$ is the scale of the prior (not necessarily an integer, but analogous to number of observations)
+	\item $\mathbf{\tau}$ are pseudo-observations that define the prior, though
+	\begin{itemize}
+		\item prior has no prior...?
+		\item may have non-integral $\nu$ or impossible $\tau$ (e.g. =0 or negative? TODO), with no likelihood equivalent
+	\end{itemize}
+\item Derived from exp family likelihood (take product) $p(x|\theta) = g(\theta)f(x)e^{\phi(\theta)^T\mathbf{T}(x)}$
+\end{itemize}
+
+Posterior given exponential family likelihood and conjugate prior; $F(\tau + \sum_i\mathbf{T}(x_i), \nu + n)g(\theta)^{\nu+n} e^{\phi (\theta)^T\mathbf{(\tau+\sum_i\mathbf{T}(x_i))}}$, where \begin{itemize}
+	\item $F(\tau, \nu)$ is the normaliser
+	\item $\phi(\theta)$ is the vector of natural parameters
+	\item $\sum_i\mathbf{T}(x_i),]$ is the vector of sufficient statistics
+	\item $\nu$ is the scale of the prior (not necessarily an integer, but analogous to number of observations)
+	\item $\mathbf{\tau}$ are pseudo-observations that define the prior, though
+	\begin{itemize}
+		\item prior has no prior...?
+		\item may have no equivalent pseudo-obs / may be impossible (e.g. =0 or negative? TODO)
+	\end{itemize}
+	\item Derived from exp family likelihood (take product) $p(x|\theta) = g(\theta)f(x)e^{\phi(\theta)^T\mathbf{T}(x)}$
+\end{itemize}
+
+Sufficient statistics; A statistic if sufficient \begin{itemize}
+	\item wrt a statistical model and its associated unknown parameters 
+	\item if 'no other statistic that can be calculated from the \textbf{same sample} 
+	\item provides any additional information as to the value of the parameter'.
+\end{itemize}
+
+Write the Bernouilli distribution (single coin flip) in exponential form.; $P(x|q) = q^x(1-q)^{(1-x)} = (1-q)e^{x\log(q/1-q)}$
+
+Natural parameter and sufficient statistics for Bernouilli distribution written in exponential form; \begin{itemize}
+	\item Natural parameter: log odds $\log (q/(1-q))$
+	\item Sufficient stats (for multiple tosses): number of heads
+\end{itemize}
+
+Conjugate prior for Bernouilli distribution; \begin{itemize}
+	\item $P(q)=F(\tau, \nu)(1-q)^{\nu}e^{\log(q/1-q)\tau}$
+	\item $=F(\tau, \nu)(1-q)^{\nu-\tau}q^{\tau}$ 
+	\item $= Beta(\tau+1, \nu-\tau+1)$.
+\end{itemize}
+
+Posterior for Bernouilli dist with conjugate prior; $P(q|\{x_i\}) = Beta(\alpha_1, \alpha_2)$, where 
+\begin{itemize}
+	\item $\alpha_1 = 1+\tau+\sum_i x_i$ \item $\alpha_2 = 1+(\nu+n) - (\tau+\sum_i x_i)$
+	\item Obs head: add 1 to $\sum_i x_i$ and to count $n$, increments $\alpha_1$ but $\alpha_2$ stays the same.
+	\item Obs tail: add 1 to $n$ only, $\alpha_2$ increases, $\alpha_1$ stays the same.
+\end{itemize}
+
+\section{Matrix derivatives and facts}
+
+
 
 \end{document}
