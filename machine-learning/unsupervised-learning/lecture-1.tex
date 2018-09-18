@@ -1,12 +1,12 @@
-%Front; back
+%Front;
 \documentclass{article}
 \begin{document}
 
 Semi-supervised learning; Most x are unlabelled, assumes structure of $\{x\}$ and relationship $x\to y$ are linked. \begin{itemize} \item e.g. assign pseudo-labels using model trained on labelled data and train model on labelled + pseudo-labelled data.  \end{itemize}
 	
-Dutch Book Theorem; Unless your beliefs satisfy the rules of probability theory, including Bayes' rule, there exists a set of simultaneous bets (a 'Dutch book') which you are willing to accept (individually), and for which you are guaranteed to lose money, no matter what the outcome. (e.g. not A, not B, A and B)
+Dutch Book Theorem; Unless your beliefs satisfy the rules of probability theory, including Bayes' rule, there exists a set of simultaneous bets (a 'Dutch book') which you are willing to accept (individually), and for which you are guaranteed to lose money, no matter what the outcome. (e.g. not A 0.7, not B 0.8, A and B 0.6)
 
-Marginal likelihood; $p(D|\mathcal{M_i})=\int p(D|M_i, \theta_i)P(\theta_i|M_i)d\theta_i$
+Marginal likelihood; $p(D|\mathcal{M}_i)=\int p(D|M_i, \theta_i)P(\theta_i|M_i)d\theta_i$
 
 Likelihood vs marginal likelihood; likelihood is $p(D|\theta_i, M_i)$, marginal likelihood is sum over all parameter values $p(D|M_i)$.
 
@@ -15,72 +15,59 @@ Beta distribution; $Beta(q|\alpha_1, \alpha_2) = \frac{q^{(\alpha_1 - 1)}(1-q)^{
 Describe a uniform prior on $q\in[0,1]$ using the Beta distribution; $Beta(q|\alpha_1=1,\alpha_2=1)$
 
 
-What is the probability of coin toss sequence HTTHH in terms of the Beta distribution if we believe the probability of heads is $q$?; $Beta(q|\alpha_1 + 3, \alpha_2 + 2)$
+What is the probability of coin toss sequence HTTHH in terms of the Beta distribution if we believe the probability of heads is $q$, where our prior $p(q) = Beta(q|\alpha_1, \alpha_2)$?; $Beta(q|\alpha_1 + 3, \alpha_2 + 2)$
 
-Conjugate prior; If the prior and posterior are in the same prob dist family, they are called conjugate distributions. \begin{itemize}
-	\item e.g. Gaussian conjugate to itself
-	\item All members of the exponential family have conjugate priors
-\end{itemize}
+Conjugate prior; If the prior and posterior are in the same prob dist family, they are called conjugate distributions. \begin{itemize} \item e.g. Gaussian conjugate to itself \item All members of the exponential family have conjugate priors \end{itemize}
 
-Beta dist is a conjugate prior for what dists?; \begin{itemize}
-	\item Bernoulli
-	\item Binomial \item Neg binomaial \item Geometric
-\end{itemize}
+Beta dist is a conjugate prior for what dists?; \begin{itemize} \item Bernoulli \item Binomial \item Neg binomaial \item Geometric \end{itemize}
 
 Exponential family distributions can be expressed as; $p(x|\theta) = g(\theta)f(x)e^{\phi(\theta)^T\mathbf{T}(x)}$, where $g(\theta)$ is the normaliser.
 
-Write down the form of a conjugate prior for the exponential family; $F(\tau, \nu)g(\theta)^\nu e^{\phi (\theta)^T\mathbf{\tau}}$, where \begin{itemize}
-	\item $F(\tau, \nu)$ is the normaliser
-	\item $\nu$ is the scale of the prior (not necessarily an integer, but analogous to number of observations)
-	\item $\mathbf{\tau}$ are pseudo-observations that define the prior, though
-	\begin{itemize}
-		\item prior has no prior...?
-		\item may have non-integral $\nu$ or impossible $\tau$ (e.g. =0 or negative? TODO), with no likelihood equivalent
-	\end{itemize}
-\item Derived from exp family likelihood (take product) $p(x|\theta) = g(\theta)f(x)e^{\phi(\theta)^T\mathbf{T}(x)}$
-\end{itemize}
+Write down the form of a conjugate prior for the exponential family; $F(\tau, \nu)g(\theta)^\nu e^{\phi (\theta)^T\mathbf{\tau}}$, where \begin{itemize} \item $F(\tau, \nu)$ is the normaliser \item $\nu$ is the scale of the prior (not necessarily an integer, but analogous to number of observations) \item $\mathbf{\tau}$ are pseudo-observations that define the prior, though \begin{itemize} \item prior has no prior...?  \item may have non-integral $\nu$ or impossible $\tau$ (e.g. =0 or negative? TODO), with no likelihood equivalent \end{itemize} \item Derived from exp family likelihood (take product) $p(x|\theta) = g(\theta)f(x)e^{\phi(\theta)^T\mathbf{T}(x)}$ \end{itemize}
 
-Posterior given exponential family likelihood and conjugate prior; $F(\tau + \sum_i\mathbf{T}(x_i), \nu + n)g(\theta)^{\nu+n} e^{\phi (\theta)^T\mathbf{(\tau+\sum_i\mathbf{T}(x_i))}}$, where \begin{itemize}
-	\item $F(\tau, \nu)$ is the normaliser
-	\item $\phi(\theta)$ is the vector of natural parameters
-	\item $\sum_i\mathbf{T}(x_i),]$ is the vector of sufficient statistics
-	\item $\nu$ is the scale of the prior (not necessarily an integer, but analogous to number of observations)
-	\item $\mathbf{\tau}$ are pseudo-observations that define the prior, though
-	\begin{itemize}
-		\item prior has no prior...?
-		\item may have no equivalent pseudo-obs / may be impossible (e.g. =0 or negative? TODO)
-	\end{itemize}
-	\item Derived from exp family likelihood (take product) $p(x|\theta) = g(\theta)f(x)e^{\phi(\theta)^T\mathbf{T}(x)}$
-\end{itemize}
+Posterior given exponential family likelihood and conjugate prior; $F(\tau + \sum_i\mathbf{T}(x_i), \nu + n)g(\theta)^{\nu+n} e^{\phi (\theta)^T\mathbf{(\tau+\sum_i\mathbf{T}(x_i))}}$, where \begin{itemize} \item $F(\tau, \nu)$ is the normaliser \item $\phi(\theta)$ is the vector of natural parameters \item $\sum_i\mathbf{T}(x_i),]$ is the vector of sufficient statistics \item $\nu$ is the scale of the prior (not necessarily an integer, but analogous to number of observations) \item $\mathbf{\tau}$ are pseudo-observations that define the prior, though \begin{itemize} \item prior has no prior...?  \item may have no equivalent pseudo-obs / may be impossible (e.g. =0 or negative? TODO) \end{itemize} \item Derived from exp family likelihood (take product) $p(x|\theta) = g(\theta)f(x)e^{\phi(\theta)^T\mathbf{T}(x)}$ \end{itemize}
 
-Sufficient statistics; A statistic if sufficient \begin{itemize}
-	\item wrt a statistical model and its associated unknown parameters 
-	\item if 'no other statistic that can be calculated from the \textbf{same sample} 
-	\item provides any additional information as to the value of the parameter'.
-\end{itemize}
+Sufficient statistics; A statistic is sufficient \begin{itemize} \item wrt a statistical model and its associated unknown parameters \item if 'no other statistic that can be calculated from the \textbf{same sample} \item provides any additional information as to the value of the parameter'.  \end{itemize}
 
 Write the Bernouilli distribution (single coin flip) in exponential form.; $P(x|q) = q^x(1-q)^{(1-x)} = (1-q)e^{x\log(q/1-q)}$
 
-Natural parameter and sufficient statistics for Bernouilli distribution written in exponential form; \begin{itemize}
-	\item Natural parameter: log odds $\log (q/(1-q))$
-	\item Sufficient stats (for multiple tosses): number of heads
-\end{itemize}
+Natural parameter and sufficient statistics for Bernouilli distribution written in exponential form; \begin{itemize} \item Natural parameter: log odds $\log (q/(1-q))$ \item Sufficient stats (for multiple tosses): number of heads \end{itemize}
 
-Conjugate prior for Bernouilli distribution; \begin{itemize}
-	\item $P(q)=F(\tau, \nu)(1-q)^{\nu}e^{\log(q/1-q)\tau}$
-	\item $=F(\tau, \nu)(1-q)^{\nu-\tau}q^{\tau}$ 
-	\item $= Beta(\tau+1, \nu-\tau+1)$.
-\end{itemize}
+Conjugate prior for Bernouilli distribution; \begin{itemize} \item $P(q)=F(\tau, \nu)(1-q)^{\nu}e^{\log(q/1-q)\tau}$ \item $=F(\tau, \nu)(1-q)^{\nu-\tau}q^{\tau}$ \item $= Beta(\tau+1, \nu-\tau+1)$.  \end{itemize}
 
-Posterior for Bernouilli dist with conjugate prior; $P(q|\{x_i\}) = Beta(\alpha_1, \alpha_2)$, where 
-\begin{itemize}
-	\item $\alpha_1 = 1+\tau+\sum_i x_i$ \item $\alpha_2 = 1+(\nu+n) - (\tau+\sum_i x_i)$
-	\item Obs head: add 1 to $\sum_i x_i$ and to count $n$, increments $\alpha_1$ but $\alpha_2$ stays the same.
-	\item Obs tail: add 1 to $n$ only, $\alpha_2$ increases, $\alpha_1$ stays the same.
-\end{itemize}
+Posterior for Bernouilli dist with conjugate prior; $P(q|\{x_i\}) = Beta(\alpha_1, \alpha_2)$, where \begin{itemize} \item $\alpha_1 = 1+\tau+\sum_i x_i$ \item $\alpha_2 = 1+(\nu+n) - (\tau+\sum_i x_i)$ \item Obs head: add 1 to $\sum_i x_i$ and to count $n$, increments $\alpha_1$ but $\alpha_2$ stays the same.  \item Obs tail: add 1 to $n$ only, $\alpha_2$ increases, $\alpha_1$ stays the same.  \end{itemize}
 
 \section{Matrix derivatives and facts}
 
+$\mathbf{x^TAy}=$; $\mathbf{x^TAy}=\mathbf{y^TA^Tx=Tr(x^TAy)}$ (scalars equal own transpose and trace)
 
+Trace of matrix vs trace of transpose; $Tr[A] = Tr[A^T]$
+
+Tr[ABC] = ; Tr[CAB] = Tr[BCA]
+
+$\frac{\partial}{\partial A_{ij}}Tr[A^TB] =$; $\frac{\partial}{\partial A_{ij}}\sum_{mn}A_{mn}B_{mn} = B_ij$, so $\frac{\partial}{\partial A}Tr[A^TB] = B$.
+
+$\frac{\partial}{\partial A}Tr[A^TB] = $; B
+
+$\frac{\partial}{\partial A}Tr[A^TBAC] =$; $BAC+B^TAC^T$ \begin{itemize} \item $=\frac{\partial}{\partial A}Tr[F_1(A)^TBF_2(A)C]$ \item $= \frac{\partial}{\partial F_1}Tr[F_1^TBF_2C]\frac{\partial F_1}{\partial A} + \frac{\partial}{\partial F_2}Tr[F_2^TB^TF_1C^T]\frac{\partial F_2}{\partial A}$ \item $= BF_2C+B^TF_1C$ \item $= BAC+B^TAC^T$, \item $F_1, F_2$ both identity maps \end{itemize} 
+
+$\frac{\partial}{\partial A_{ij}}\log|A|=$; $\frac{1}{|A|}\frac{\partial}{\partial A_{ij}}\sum_{k}(-1)^{i+k}A_{ik}|[A]_{ik}|=\frac{1}{|A|}(-1)^{i+j}|[A]_{ij}|$, so \newline $\frac{\partial}{\partial A}\log|A| = (A^{-1})^T$.
+
+$\frac{\partial}{\partial A}\log|A| =$; $(A^{-1})^T$.
+
+\section{Gaussian Derivatives} 
+
+Gaussian derivatives $\frac{\partial(-\mathcal{l})}{\partial\mu}= $; \begin{itemize} \item $\frac{\partial}{\partial\mu}[\frac{N}{2}\log|2\pi\Sigma|+\frac{1}{2}\sum_n(\mathbf{x_n}-\mu)^T\Sigma^{-1}(\mathbf{x_n-\mu})]$ \item $=\frac{1}{2}\sum_n\frac{\partial}{\partial\mu}[ (\mathbf{x_n}-\mu)^T\Sigma^{-1}(\mathbf{x_n-\mu})]$ \item $=\frac{1}{2}\sum_n\frac{\partial}{\partial\mu}[\mathbf{x_n}^T\Sigma^{-1}\mathbf{x_n}+\mathbf{\mu}^T\Sigma^{-1}\mathbf{\mu}-2\mathbf{\mu}^T\Sigma^{-1}\mathbf{x_n}]$ \item $=\frac{1}{2}\sum_n\frac{\partial}{\partial\mu}[\mathbf{\mu}^T\Sigma^{-1}\mathbf{\mu}] - 2\frac{\partial}{\partial\mu}[\mathbf{\mu}^T\Sigma^{-1}\mathbf{x_n}]$  \item $=\frac{1}{2}\sum_n[2\Sigma^{-1}\mathbf{\mu} - 2\Sigma^{-1}\mathbf{x_n}]$ \item $=N\Sigma^{-1}\mathbf{\mu} - \Sigma^{-1}\sum_n\mathbf{x_n}=0$ \item $\Rightarrow \hat{\mathbf{mu}} = \frac{1}{N}\sum_n\mathbf{x_n}$ \end{itemize} 
+
+Gaussian derivatives $\frac{\partial(-\mathcal{l})}{\partial\Sigma^{-1}} = $; \begin{itemize} \item $\frac{\partial}{\partial\Sigma^{-1}}[\frac{N}{2}\log|2\pi\Sigma|+\frac{1}{2}\sum_n(\mathbf{x_n}-\mu)^T\Sigma^{-1}(\mathbf{x_n-\mu})]$ \item  $=\frac{\partial}{\partial\Sigma^{-1}}[\frac{N}{2}\log|2\pi I|] - \frac{\partial}{\partial\Sigma^{-1}}[\frac{N}{2}\log|\Sigma^{-1}|]+\frac{1}{2}\sum_n\frac{\partial}{\partial\Sigma^{-1}}[(\mathbf{x_n}-\mu)^T\Sigma^{-1}(\mathbf{x_n-\mu})]$ \item $ = -\frac{N}{2}\Sigma^T+\frac{1}{2}\sum_n (\mathbf{x_n}-\mu)^T(\mathbf{x_n-\mu}) = 0$ \item $\Rightarrow \hat{\Sigma}=\frac{1}{N}\sum_n)(\mathbf{x_n}-\mu)(\mathbf{x_n-\mu})^T$ \end{itemize}
+
+Equivalences with modelling correlations; \begin{itemize} \item Maximising likelihood of a Gaussian model \item Minimising a squared error function \item Minimising data coding cost in bits (assuming (TODO: what is? the bits? the cost? how can bits be Gaussian distributed?) Gaussian distributed) \end{itemize}
+
+Multivariate Linear Regression (Gaussian noise): State the conditional distribution of y given x; $p(\mathbf{y|x, \mu, \Sigma_y}) = |2\pi\Sigma_y|^{-1}\exp\{-\frac{1}{2}(\mathbf{y-Wx})^T\Sigma_y^{-1}(\mathbf{y-Wx})\}$
+
+Multivariate Linear Regression (Gaussian noise): $\frac{\partial(-\mathcal{l})}{\partial W} = $; \begin{itemize} \item $\frac{1}{2}\sum_i [2\Sigma^{-1}_yW\mathbf{x_ix_i^T}-2\Sigma_y^{-1}\mathbf{y_ix_i}^T]=0$ (Use trace $A^TBAC$ trick) \item $\hat{W} = \sum_i y_ix_y^T(\sum_i x_i x_i^T)^{-1}$ \end{itemize}
+
+
+Multivariate Linear Regression (Gaussian noise): Log posterior on $\mathbf{w}$; $\log N(\Sigma_w\sum_i(y_i\mathbf{x_i})\sigma^{-2}_y,\Sigma_w)$ $ = -\frac{1}{2}\mathbf{w^T\Sigma_w^{-1}w+w^T\Sigma^{-1}_w\Sigma_w\sum_i(y_i\mathbf{x_i})\sigma_y^{-2}}+C$, $\Sigma_w = A+\sigma_y^{-2}\sum_i \mathbf{x_ix_i^T}$
 
 \end{document}
