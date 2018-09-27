@@ -1,0 +1,103 @@
+%Front;
+\documentclass{article}
+\usepackage{amsmath}
+\begin{document}
+	
+\section{Distributions}
+
+% beta already included in lecture 1
+
+Dirichlet distribution; $p(\mathbf{x}|\mathbf{\alpha}) = \frac{\Gamma (\sum_{d=1}^{D}\alpha_d)}{\prod_{d=1}^{D}\Gamma(\alpha_d)}\prod_{d=1}^{D}x_d^{\alpha_{d}-1}$, $\mathbf{x}\in [0,1]^D$, $\mathbf{x}\sim Dirichlet(\alpha)$
+
+Gamma distribution; $p(x|\alpha, \beta) = \frac{\beta^{\alpha}}{\Gamma(\alpha)}x^{\alpha-1}e^{-\beta x}$, $x\in \Re_+$
+
+Poisson distribution; $p(x|\mu) = \frac{\mu^xe^{-\mu}}{x!}$, $x\in\mathcal{Z}_{0+}$
+
+Multinomial distribution; $p(\mathbf{x|p})=\frac{N!}{x_1!x_2!...x_D!}\prod_{d=1}^{D}p_d^{x_d}$, $\mathbf{x}\sim [\mathcal{Z}_{0-N}]^D$
+
+Binomial distribution; $p(x|p) = {N\choose x} p^x(1-p)^{(N-x)}$
+
+Multivariate Gaussian distribution; $p(\mathbf{x}|\mathbf{\mu, \Sigma}) = |2\pi\Sigma|^{-1/2}\exp(-\frac{1}{2}(\mathbf{x-\mu})^T\Sigma^{-1}(\mathbf{x-\mu})$
+
+What is one way of making generative models that are more expressive than those in the exponential family (but still involves using exponential family dists)?; Combining and transforming latent exponential family variates.
+
+What is the structure of a simple two-variable latent variable model?; \begin{itemize}
+	\item Suppose $y~P[\theta_y]$, $x|y~P[\theta_x]$.
+	\item $p(x,y|\theta_x, \theta_y) = p(x|y, \theta_x)p(y|\theta_y)$
+	\item $p(x|\theta_x, \theta_y) = \int dy p(x|y, \theta_x) p(y|\theta_y)$.
+\end{itemize}
+
+Why might we use latent variable models?; \begin{itemize}
+	\item Describe structured distributions \begin{itemize}
+		\item correlations in high-dim x may be captured by fewer parameters.
+	\end{itemize}
+\item Capture an underlying generative process
+\begin{itemize}
+	\item y may describe causes of x.
+	\item help to separate signal from noise.
+\end{itemize}
+\item Combine exponential family dists into richer, more flexible forms.
+\begin{itemize}
+	\item P(y), P(x|y) and even P(x,y) may be in the exponential family
+	\item P(x) rarely is. (Exception: linear Gaussian models)
+\end{itemize}
+\end{itemize}
+
+How can we decompose a Gaussian with correlated noise, e.g. $x~N(0, [ 3 2 / 2 3])$?; $y~N(0,1)$, $x~N(\sqrt{2}[1 / 1]y, I)$.
+
+Describe the probabilistic PCA model.; \begin{itemize}
+	\item N D-dim datapoints $\mathbf{x_i} \in \mathcal{R}^D$
+	\item N k-dimensional latents $y_i \in \mathcal{R}^K$
+	\item Linear generative model: $x_d = \sum_{k=1}^k \Lambda_{dk}y_k + \epsilon_d$, where
+	\begin{itemize}
+		\item $y_k$ are independent $N(0,1)$ Gaussian factors
+		\item $\epsilon_d$ are independent $N(0,\psi)$ Gaussian noise
+		\item latent dim K $<$ D (obs dim)
+		\item $\Lambda$ is a D x K matrix.
+	\end{itemize}
+\item $p(x|y) = N(\Lambda y,\phi I)$
+\item $p(x) = \int p(y)p(x|y)dy = N(E_y[\Lambda y], E_y[\Lambda y y^T\Lambda^T]+\psi I)/N(0,\Lambda\Lambda^T+\psi I)$
+\end{itemize}
+
+Law of iterated expectation; $E_x[f(x)] = E_y[E_{x|y}[f(x)]]$
+
+Variance of x in terms of expectation, variance over y, where x can be conditioned on y; $Var_X[x] = E_Y[V_X[x|y] + V_Y[E[x|y]]]$
+
+Compare modelling x as a multivariate Gaussian vs using probabilistic PCA; \begin{itemize}\item Multivariate Gaussian
+	\begin{itemize}
+		\item Model: Descriptive density model: correlations captured by off-diagonal elements of $\Sigma$.
+		\item $\Sigma$ has $\frac{D(D+1)}{2}$ free parameters.
+		\item $\Sigma$ only constrained to be positive definite.
+		\item Simple ML estimate.
+	\end{itemize}
+	\item Latent variables
+	\begin{itemize}
+		\item Interpretable causal model: correlations caputerd by common influence of latent variable.
+		\item $\Lambda\Lambda^T +\psi I$ has $DK+1$ free parameters.
+		\item For $K < D$, covariance structure (of x?) is constrained (blurry pancake)
+		\item ML estimation is more complex.
+	\end{itemize}
+\end{itemize}
+
+Probabilistic PCA log likelihood (over entire dataset); $\log p(\chi | \Lambda, \psi) = -\frac{N}{2}\log|2\pi(\Lambda\Lambda^T+\psi I)|-\frac{1}{2}Tr[(\Lambda\Lambda^T+\psi I)^{-1}\sum_n\mathbf{x x^T}]$
+
+[TODO: how to do maximum likelihood over PPCA likelihood for $(\Lambda, \psi)$?] (can do gradient ascent, but there is a 'simpler principle')
+
+Link between probabilistic PCA and PCA; PPCA $\to$ PCA when $\psi\to 0$, where $\psi$ is the magnitude of the additive noise to x conditional on y.
+
+Describe PCA; Assume data have zero mean. \begin{itemize}
+	\item Find direction of greatest variance $\mathbf{\lambda}_{(1)}=\arg\max\limits_{||\mathbf{v}||=1}\sum_n(\mathbf{x^T_nv})^2$ 
+	\item Find direction orthogonal to $\mathbf{\lambda}_{n}$ with greatest variance, call this  $\mathbf{\lambda}_{n+1}$.
+	\item Terminate when remaining variance drops below a threshold.
+	\item These turn out to be the eigenvectors of the empirical covariance matrix $S=\langle \mathbf{xx^T} \rangle$
+\end{itemize}
+
+Express in algebraic terms the fact that the D eigenvectors form an orthonormal basis.; $\sum_i\mathbf{u_{i}u_{i}^T}=I$.
+
+Rewrite a vector $v$ in terms of the orthonormal basis vectors $u$.; \begin{itemize}
+	\item $\mathbf{v}=(\sum_i \mathbf{u_{(i)}u_{(i)}^T})\mathbf{v}$
+	\item $=\sum_i (\mathbf{u_{(i)}^Tv)u_{(i)}$
+	\item $=\sum_i v_{(i)}\mathbf{u_{(i)}}$
+\end{itemize}
+
+\end{document}
