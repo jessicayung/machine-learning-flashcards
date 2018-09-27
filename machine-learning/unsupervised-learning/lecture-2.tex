@@ -94,10 +94,69 @@ Describe PCA; Assume data have zero mean. \begin{itemize}
 
 Express in algebraic terms the fact that the D eigenvectors form an orthonormal basis.; $\sum_i\mathbf{u_{i}u_{i}^T}=I$.
 
+
 Rewrite a vector $v$ in terms of the orthonormal basis vectors $u$.; \begin{itemize}
 	\item $\mathbf{v}=(\sum_i \mathbf{u_{(i)}u_{(i)}^T})\mathbf{v}$
-	\item $=\sum_i (\mathbf{u_{(i)}^Tv)u_{(i)}$
+	\item $=\sum_i (\mathbf{u_{(i)}^Tv)u_{(i)}}$
 	\item $=\sum_i v_{(i)}\mathbf{u_{(i)}}$
+	\end{itemize}
+
+Rewrite the empirical covariance matrix $S=\langle \mathbf{xx^T} \rangle$ in terms of the orthogonal basis vectors $\mathbf{u}_i$.; $S=\sum_i \omega_{(i)}\mathbf{u}_{(i)}\mathbf{u}_{(i)}^T = UWU^T$, where \begin{itemize}
+	\item $U=[\mathbf{u_{1}}...]$ collects the eigenvectors and
+	\item $W = diag[(\omega_{(1)}, \omega_{(2)},...,\omega_{(D)})]$.
+\end{itemize}
+
+How many eigenvalue-eigenvector pairs does the covariance matrix $S_{DXD}$ have?; \begin{itemize}
+	\item Usually D pairs,
+	\item except if two or more eigenvectors share the same eigenvalue (in which case the eigenvectors are degenerate - any linear combination is also an eigenvector).
+\end{itemize}
+
+Variance of empirical data in direction $\mathbf{u}_{(i)}$ (PCA); \begin{itemize}
+	\item $\langle (\mathbf{x^Tu_{(i)}})^2\rangle $
+	\item $= \langle \mathbf{u_{(i)}^Txx^Tu_{(i)}}\rangle $
+	\item $=\mathbf{u_{(i)}^TSu_{(i)}}$
+\item $=\mathbf{u_{(i)}^T\omega_{(i)}u_{(i)}}$
+\item $=\omega_{(i)}$
+\end{itemize}
+
+Variance of empirical data in an arbitrary direction $\mathbf{v}$; \begin{itemize}
+	\item $\langle (\mathbf{x^Tv})^2\rangle $
+	\item $= \langle (\mathbf{x^T(\sum_i v_{(i)}\mathbf{u}_{(i)})})^2\rangle $
+	\item $=\sum_{ij}v_{(i)}\mathbf{u_{(i)}^TSu_{(j)}}v_{(j)}$
+	\item $=\sum_{ij}v_{(i)}\omega_{(i)}v_{(j)}\mathbf{u_{(i)}^Tu_{(j)}}v_{(j)}$
+	\item $=\sum_i v_{(i)}^2\omega_{(i)}$
+\end{itemize}
+
+Explain how the PCs can be obtained from the empirical data.; \begin{itemize}
+	\item PCs are the eigenvectors of the empirical covariance matrix $S=\langle\mathbf{xx^T}\rangle$ with the largest eigenvalues.
+	\item Variance in arbitrary direction is $\langle (\mathbf{x^Tv})^2\rangle =\sum_i v_{(i)}^2\omega_{(i)}$.
+	\item If $\mathbf{v^Tv}=1$, then $\sum_i v_{(i)}^2=1$ and so $\arg\max_{||v||=1} \langle (\mathbf{x^Tv})^2\rangle = \mathbf{u}_{(max)}$. ($v_{(i)}=1$ corresponding to largest eigenvalue, zero otherwise.)
+	\item i.e. the direction of greatest variance is the eigenvector with the largest eigenvalue.
+\end{itemize}
+
+State the algebraic expression for a projection into a K-dimensional principal subspace.; $\hat{x_n} = \sum_{k=1}^K x_{n(k)}\mathbf{\lambda}_{(k)}$
+
+State three equivalent definitions of PCA.; \begin{itemize}
+	\item Find K directions of greatest variance in data.
+	\item Find K-dimensional orthogonal projection that preserves greatest variance.
+	\item Find K-dimensional vectors $y_i$ and matrix $\Lambda$ so that $\hat{\mathbf{x}}_i = \Lambda\mathbf{y_i}$ is as close as possible (in terms of squared distance) to $\mathbf{x_i}$.
+\end{itemize}
+
+Describe PCA from the perspective of mutual information.; \begin{itemize}
+	\item Problem: Given $\mathbf{x}$, find $\mathbf{y = Ax}$ with columns of $A$ being unit vectors such that $I(y,x)$ is maximised, assuming $p(\mathbf{x})$ is Gaussian. (Also dim y $<$ dim x.)
+	\item I(y,x) = H(y) + H(x) - H(x,y). Here, H(x) = H(x,y) so I(x,y) = H(y).
+	\item $H(y)=-\int dz p(z) \ln p(z) = \frac{1}{2}\ln|\Sigma|+\frac{D}{2}(1+\ln 2\pi )$.
+	\item I.e. want to choose $y$ with largest det of covariance matrix $|\Sigma|$, i.e. largest volume.
+	\item $\Sigma_y = A\Sigma_x A^T = AUW_XU^TA^T$
+	\item So $A$ should be aligned with the columns of $U$ which are associated with the largest eigenvalues (variances).
+	\item Projection to the principal component subspace preserves the most information about the data.
+\end{itemize}
+
+How do you interpret a matrix? e.g. $U = [u_1 u_2 ...]$, and you have the product $Ux$.; Each $u_i$ is an axis (or directional vector), and each $x_i$ is how far you want to walk in the direction of $u_i$. \newline Note: this is not in the notes.
+
+Briefly describe linear autoencoders.; \begin{itemize}
+	\item Learn $\arg\min_{P,Q}||\hat{\mathbf{x}}-\mathbf{x}||^2, \mathbf{\hat{x}=Qy}$ (decoder 'generation'), $\mathbf{y=Px}$ (encoder 'recognition').
+	\item At the optimum, P and Q perform the projection and reconstruction steps of PCA (Baldi and Hornik 1989).
 \end{itemize}
 
 \end{document}
