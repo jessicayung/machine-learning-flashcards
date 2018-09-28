@@ -50,7 +50,12 @@ Markov boundary; \begin{itemize}
 	\item If no proper subset of a Markov blanket M satisfies the definition of Markov blanket of T, then M is called a Markov boundary of T
 	\item i.e. the minimal Markov blanket.
 	\item equal to ne(X) for undirected graphs. 
+	\item DAGs: equal to $\{pa(X)\cup ch(X) \cup pa(ch(X)) \}$.
 \end{itemize}
+
+Markov boundary in undirected graphs; equal to ne(X).
+
+Markov boundary in DAGs; equal to $\{pa(X)\cup ch(X) \cup pa(ch(X)) \}$.
 
 Undirected graphical model (Markov network); \begin{itemize}
 	\item A direct representation of conditional independence structure.
@@ -63,5 +68,39 @@ Undirected graphical model (Markov network); \begin{itemize}
 Cliques; fully connected subgraphs.
 
 Maximal cliques; Cliques not contained in other cliques.
+
+Limitations of undirected and factor graphs; \begin{itemize}
+	\item Fail to capture some useful independencies: a pair of variables may be connected merely because some other variable depends on them.
+	\item e.g. Rain - Sprinker - Ground Wet, but Rain -> Ground wet <- Sprinkler.
+	\item Seeing sprinkler when 'ground wet' has \bf{'explaining away'} effect.
+	\item $R \indep S|\emptyset$ but $R \not\indep S | G$.
+\end{itemize}
+
+Directed acyclic graphical model (DAG); also called Bayesian networks. \begin{itemize}
+	\item Represents a factorisation of the joint probability distribution in terms of the conditionals.
+	\item $P(X_1,...,X_n)=\prod_{i=1}^n P(X_j|X_\mathtt{pa(i)})$, where pa(i) are the parent nodes of node $i$.
+\end{itemize}
+
+Conditional independence in DAGs;(TODO: clarify, add image) \begin{itemize}
+	\item Indep: conditioning nodes block paths
+	\item Indep: Other nodes block reflected paths
+	\item Not indep: Conditioning node creates a reflected path by explaining away
+	\item Not indep: Created path extends to E (target node) via D
+	\item Indep: but is blocked by observing D
+\end{itemize}
+
+How to find out if $X \not \indep Y | \mathcal{V}$ in a DAG (name method); Bayes-ball algorithm.
+
+Bayes-ball algorithm; Finding $X \not \indep Y | \mathcal{V}$. \newline Can you get a ball from X to Y without being blocked by $\mathcal{V}$? If so, $X \not \indep Y | \mathcal{V}$. Rules:
+\begin{itemize}
+	\item not in $\mathcal{V}$: pass balls down or up chains, bounce balls from children to children.
+	\item in $\mathcal{V}$: bounce balls from parents to parents (including returning the ball to whence it came.) (blocks all balls from children, stops balls from parents reaching children.)
+\end{itemize}
+
+D-separation; Finding out when $X \indep Y | \mathcal{V}$. Consider every undirected path (i.e. ignoring arrows) between X and Y. The path is blocked by $\mathcal{V}$ if there is a node V on the path such that either: \begin{itemize}
+	\item V has convergent arrows on the path (i.e. collider node) and neither V nor its descendants are in $\mathcal{V}$.
+	\item V does not have convergente arrows on the path and $V\in\mathcal{V}$.
+\end{itemize}
+If all paths are blocked, we say $\mathcal{V}$ d-separates X from Y (d for directed), and $X \indep Y | \mathcal{V}$.
 
 \end{document}
