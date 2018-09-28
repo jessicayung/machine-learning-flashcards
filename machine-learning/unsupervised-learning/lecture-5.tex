@@ -1,0 +1,67 @@
+\documentclass{article}
+\usepackage{graphicx}
+\newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+
+\begin{document}
+	
+Briefly describe what elements in a graph correspond to.; \begin{itemize}
+	\item Nodes: random variables
+	\item Edges: statistical dependence between the variables.
+\end{itemize}
+
+Define conditional independence between RVs X, Y; 
+\begin{itemize}
+	\item $X\indep Y|V \Leftrightarrow P(X|Y, V) = P(X|V)$ (provided, for events, $P(Y,V)>0$.
+	\item Thus, $X\indep Y|V \Leftrightarrow P(X,Y|V)=P(X|Y,V)P(Y|V)=P(X|V)P(Y|V)$.
+\end{itemize}
+
+Define conditional independence between sets of random variables; $\mathcal{X} \indep \mathcal{Y}|\mathcal{V} \Leftrightarrow \{X\indep Y | \mathcal{V}, \forall X \in \mathcal{X} \mathtt{ and }\forall Y \in \mathcal{Y}\}$.
+
+Marginal independence (graph); $X\indep Y \Leftrightarrow X \indep Y | \emptyset \Leftrightarrow P(X,Y) = P(X)P(Y)$.
+
+Factor graph; \begin{itemize}
+	\item Graphical repr of the factorised model structure
+	\item Each square indicates a factor that depends on the linked variables.
+	\item $P(\mathcal{X})=\frac{1}{Z}\prod_j f_j(\mathcal{X}_{C_j})$
+	\item where $\mathcal{X}=\{X_1,...,X_K\}, \mathcal{X}_S=\{X_i:i\in S\}$, $j$ indexes the factors, $C_j$ contains the indices of variables adjacent to factor $j$, $f_j$ is the factor function (also called the factor potential or clique potential) and $Z$ is the normalisation constant.
+\end{itemize}
+
+Conditional independence in a graph; $X\indep Y|\mathcal{V}$ if every path between X and Y contains some $V\in\mathcal{V}$.
+
+State a condition where, when satisfied, there exists a factorisation of the probability distribution (graph); \begin{itemize}
+	\item If every path between X and Y contains some $V\in\mathcal{V}$, then
+	\item there exists a factorisation $P(X,Y,\mathcal{V})=\frac{1}{Z}g_X(X,\mathcal{V}_X, \mathcal{Q}_X)g_Y(Y,\mathcal{V}_Y, \mathcal{Q}_Y)g_R(\mathcal{V}_R, \mathcal{Q}_R)$
+	\item where $\mathcal{V}_X, \mathcal{V}_Y, \mathcal{V}_R \subseteq \mathcal{V}$ and the sets of remaining variables $\mathcal{Q}_X,\mathcal{Q}_Y,\mathcal{Q}_R$ are disjoint.
+\end{itemize}
+
+Variables in a factor graph are neighbours if; they share a common factor. 
+
+The neighbourhood ne(X) (in a factor graph) is;  the set of all neighbours of X. (Vars in a factor graph are neighbours if they share a common factor.)
+
+Markov blanket; \begin{itemize}
+	\item All the variables that shield the node from the rest of the network. 
+	\item $\to$ The only knowledge needed to predict the behavior of that node and its children.
+	\item $\mathcal{V}$ is a Markov blanket for X iff $X \indep Y |\mathcal{V}$ for all $Y \notin \{X\cup \mathcal{V} \}$.
+	\item ne(X) is  a Markov blanket for $X$.
+	\item since each variable $X$ is conditionally independent of all non-neighbours given its neighbours: $X\indep Y|ne(X), \forall Y \notin \{X\cup ne(X) \}$.
+\end{itemize}
+
+Markov boundary; \begin{itemize}
+	\item If no proper subset of a Markov blanket M satisfies the definition of Markov blanket of T, then M is called a Markov boundary of T
+	\item i.e. the minimal Markov blanket.
+	\item equal to ne(X) for undirected graphs. 
+\end{itemize}
+
+Undirected graphical model (Markov network); \begin{itemize}
+	\item A direct representation of conditional independence structure.
+	\item Nodes are connected iff they are conditionally dependent given all others.
+	\item Neighbours in a Markov net share a factor.
+	\item Non-neighbours in a Markov net cannot share a factor.
+	\item The joint probability factors over the maximal cliques $C_j$ of the graph: $P(\mathcal{X})=\frac{1}{Z}\prod_j f_j(\mathcal{X}_{C_j})$. It may also factor more finely.
+\end{itemize}
+
+Cliques; fully connected subgraphs.
+
+Maximal cliques; Cliques not contained in other cliques.
+
+\end{document}
