@@ -45,7 +45,6 @@ Describe PCA; Assume data have zero mean. \begin{itemize} \item Find direction o
 
 Express in algebraic terms the fact that the D eigenvectors form an orthonormal basis.; $\sum_i\mathbf{u_{i}u_{i}^T}=I$.
 
-
 Rewrite a vector $v$ in terms of the orthonormal basis vectors $u$.; \begin{itemize} \item $\mathbf{v}=(\sum_i \mathbf{u_{(i)}u_{(i)}^T})\mathbf{v}$ \item $=\sum_i (\mathbf{u_{(i)}^Tv)u_{(i)}}$ \item $=\sum_i v_{(i)}\mathbf{u_{(i)}}$ \end{itemize}
 
 Rewrite the empirical covariance matrix $S=\langle \mathbf{xx^T} \rangle$ in terms of the orthogonal basis vectors $\mathbf{u}_i$.; $S=\sum_i \omega_{(i)}\mathbf{u}_{(i)}\mathbf{u}_{(i)}^T = UWU^T$, where \begin{itemize} \item $U=[\mathbf{u_{1}}...]$ collects the eigenvectors and \item $W = diag[(\omega_{(1)}, \omega_{(2)},...,\omega_{(D)})]$.  \end{itemize}
@@ -72,8 +71,15 @@ Derivative of a matrix inverse $\frac{d\mathbf{Y^{-1}}}{dx}$; $-Y^{-1}\frac{\par
 
 Rank-Nullity theorem; rank(S) + Nullity(S) = dim(V), where $S:V\to W$. i.e. V is number of columns of matrix. k
 
+Derivative of trace of matrix inverse multiplied by other matrices $\frac{d Tr \mathbf{(AX^{-1}B)^{-1}}}{dX}$; $-(X^{-1}BAX^{-1})^T$
+
 SVD: todo
 
+Properties of an empirical covariance matrix; \begin{itemize}
+	\item DxD, where D is the dimension of the data $x$
+	\item Symmetric
+	\item Positive semi-definite
+\end{itemize}
 
 
 
