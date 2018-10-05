@@ -68,8 +68,18 @@ Multivariate Linear Regression (Gaussian noise): State the conditional distribut
 Multivariate Linear Regression (Gaussian noise): $\frac{\partial(-\mathcal{l})}{\partial W} = $; \begin{itemize} \item $\frac{1}{2}\sum_i [2\Sigma^{-1}_yW\mathbf{x_ix_i^T}-2\Sigma_y^{-1}\mathbf{y_ix_i}^T]=0$ (Use trace $A^TBAC$ trick) \item $\hat{W} = \sum_i y_ix_i^T(\sum_i x_i x_i^T)^{-1}$ \end{itemize}
 
 
-Multivariate Linear Regression (Gaussian noise): Log posterior on $\mathbf{w}$; $\log N(\Sigma_w\sum_i(y_i\mathbf{x_i})\sigma^{-2}_y,\Sigma_w)$ $ = -\frac{1}{2}\mathbf{w^T\Sigma_w^{-1}w+w^T\Sigma^{-1}_w\Sigma_w\sum_i(y_i\mathbf{x_i})\sigma_y^{-2}}+C$, $\Sigma_w = A+\sigma_y^{-2}\sum_i \mathbf{x_ix_i^T}$
+Multivariate Linear Regression (Gaussian noise): Log posterior on $\mathbf{w}$; $\log N(\Sigma_w\sum_i(y_i\mathbf{x_i})\sigma^{-2}_y,\Sigma_w)$ $ = -\frac{1}{2}\mathbf{w^T\Sigma_w^{-1}w+w^T\Sigma^{-1}_w\Sigma_w\sum_i(y_i\mathbf{x_i})\sigma_y^{-2}}+C$, $\Sigma_w^{-1} = A+\sigma_y^{-2}\sum_i \mathbf{x_ix_i^T}$
 
 $\det A^{-1}$; $1/\det A$
+
+log odds; $\log(q/(1-q))$
+
+Cox's Axioms; desiderata. \begin{itemize} \item Let b(x) be real. As b(x) increases, $b(\neg x)$ decreases, and so the function mapping $b(x) \leftrightarrow b(\neg x)$ is monotonically decreasing and self-inverse.  \item $b(x \wedge y)$ depends only on $b(y)$ and $b(x|y)$ \item Consistency \begin{itemize} \item If a conclusion can be reached via reasoning in more than one way, then every way should lead to the same answer.  \item Beliefs always take into account all relevant evidence.  \item Equivalent states of knowledge are represented by equivalent plausibilty assignments.  \end{itemize} \item Cox showed that these axioms implied that belief functions $b(x), b(x|y), b(x,y)$ must be isomorphic to probabilities, satisfying all the usual laws, including Bayes' Rule.  \end{itemize} 
+            
+p(x) vs P(x); p(x) is probability density (for continuous variables), P(x) is for discrete variables.
+
+(Not in notes) Frequentists vs Bayesians in brief:; Bayesians talk about unknown but fixed quantities in a probabilistic way.
+
+(Not in notes) Briefly describe a sufficient statistic in a probabilistic way; makes data and parameters conditionally independent.
 
 \end{document}
