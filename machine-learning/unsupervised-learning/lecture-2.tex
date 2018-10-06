@@ -73,14 +73,58 @@ Rank-Nullity theorem; rank(S) + Nullity(S) = dim(V), where $S:V\to W$. i.e. V is
 
 Derivative of trace of matrix inverse multiplied by other matrices $\frac{d Tr \mathbf{(AX^{-1}B)^{-1}}}{dX}$; $-(X^{-1}BAX^{-1})^T$
 
-SVD: todo
-
 Properties of an empirical covariance matrix; \begin{itemize}
 	\item DxD, where D is the dimension of the data $x$
 	\item Symmetric
 	\item Positive semi-definite
 \end{itemize}
 
+Log likelihood of PPCA; $l = -\frac{N}{2}\log|2\pi C|-\frac{N}{2}Tr[C^{-1}S]$, where $C=\Lambda\Lambda^T+\psi I$.
 
+Maximum likelihood expression for PPCA $\Lambda$: \begin{itemize}
+	\item $\frac{\partial l}{\partial \Lambda} = N(-C^{-1}\Lambda+C^{-1}SC^{-1}\Lambda) = 0$
+	\item (Use trace inverse trick.)
+	\item So at stationary point we have $\Lambda = SC^{-1}\Lambda$.
+	\item working: $l = -\frac{N}{2}\log|2\pi C|-\frac{N}{2}Tr[C^{-1}S]$, where $C=\Lambda\Lambda^T+\psi I$
+	\item and use trace inverse formula $\frac{d Tr \mathbf{(AX^{-1}B)^{-1}}}{dX}] = -(X^{-1}BAX^{-1})^T$
+\end{itemize}
+
+Singular Value Decomposition; SVD decomposes any n x p matrix $\mathbf{X}$.\begin{itemize}
+	\item $X = USV^T$
+	\item dim U = nxn, $U^TU=I_n$.
+	\item dim V = pxp, $V^TV=I_p$
+	\item dim S = nxp, S diagonal. 
+	\item Singular values are diagonal entries $[S]_{jj}$, all positive, ordered in decreasing order from upper left diagonal element.
+\end{itemize} (From Intro to DL Background Maths slides)
+
+ML learning of $\Lambda$ for PPCA: what to do after obtaining stationary point expression $\Lambda = SC^{-1}\Lambda, C=(\Lambda\Lambda^T+\psi I)$; \begin{itemize}
+	\item Either (1) $\Lambda=0$, which turns out to be a minimum, or
+	\item (2) $C=S \Rightarrow \Lambda\Lambda^T=S-\psi I$
+	\begin{itemize}
+		\item Method 1: $rank(\Lambda\Lambda^T)\leq K\Rightarrow rank(S-\psi I) \leq K$
+		\item $\Rightarrow S$ has $D-K$ eigenvalues $=\psi$ and $\Lambda$ aligns with the space of remaining eigenvectors.
+		\item Method 2: Take the SVD $\Lambda = ULV^T$ on stat pt expression, use trick $U(L^2+\psi I)=(UL^2UU^T+\psi I)U$ and take inverses of both sides to get $SU=U(L^2+\psi I), (L^2+\psi I)$ diagonal.
+		\item So columns of U are eigenvectors of S with eigenvalues given by $l^2_i + \psi$. 
+		\item Thus, $\Lambda = ULV^T$ spans a space defined by K eigenvectors of S, 
+		\item and the lengths of the column vectors of L are given by the eigenvalues $-\psi$ (V selects an arbitrary basis in the latent space).
+	\end{itemize}
+\item Remains to show that the global ML solution is attained when $\Lambda$ aligns with the K leading eigenvectors. (claims this is intuitively reasonable.)
+\end{itemize}
+
+Can we project $x_n \rightarrow \hat{x_n}$ trivially in PCA and in PPCA?; \begin{itemize}
+	\item PCA yes since 'noise' is orthogonal to subspace.
+	\item PPCA no since noise is equal in all directions.
+\end{itemize}
+
+Finding the projection for PPCA; \begin{itemize}
+	\item Find the expected value $\mathbf{\bar{y}}_n=E[\mathbf{y_n|x_n}]$ and then take $\hat{x}_n=\Lambda\bar{y}_n$.
+	\item Find expected value by taking $p(y_n, x_n|\theta)$ and considering $x_n$ to be fixed.
+	\item Then get $p(y_n, x_n) \sim N(\mu, \Sigma)$, where $Sigma = (I+\Lambda^T\Psi^{-1}\Lambda)^{-1}=I-\beta\Lambda$ and $\mu=\Sigma\Lambda^T\Psi^{-1}x_n=\beta x_n$, where $\beta = \Sigma\Lambda^T\Psi^{-1}$.
+	\item Above: use $(I+P)^{-1}=I-(I+P)^{-1}P$.
+	\item Thus, $\hat{x}_n=\Lambda\mu=x_n - \Psi(\Lambda\Lambda^T+\Psi)^{-1}x_n$.
+	\item Above: use $(I+PQ)^{-1}P=P(I+QP)^{-1}$, and then add I and take away I, $I=\Psi\Psi^{-1}$.
+	\item Not the same projection as PCA. PPCA takes into account noise in the principal subspace.
+	\item As $\psi\rightarrow 0$, PPCA est approaches PCA value.
+\end{itemize}
 
 \end{document}
