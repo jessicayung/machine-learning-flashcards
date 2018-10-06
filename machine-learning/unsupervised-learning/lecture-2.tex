@@ -127,4 +127,74 @@ Finding the projection for PPCA; \begin{itemize}
 	\item As $\psi\rightarrow 0$, PPCA est approaches PCA value.
 \end{itemize}
 
+Difference between Factor Analysis and PPCA; \begin{itemize}
+	\item Noise is not the same in each dimension: $\epsilon_d$ are indep $N(0,\Psi_{dd})$ gaussian noise.
+	\item i.e. if dims not equivalent, equal variance assumption is inappropriate.
+\end{itemize}
+
+Briefly describe dimensionality reduction; \begin{itemize}
+	\item Find a low-dimensional projection of high-dimensional data that captures the correlation structure of the data.
+\end{itemize}
+
+Number of parameters for factor analysis; $DK + D - \frac{K(K+1)}{2}$. \begin{itemize}
+	\item Note if number of parameters $> \frac{D(D+1)}{2}$, model is not identifiable (even after accounting for rotational degeneracy discussed later)
+	\item TODO: proof for above? where did the number come from? what is the rotational degeneracy?
+\end{itemize}
+
+Is there a closed form solution for ML parameters for factor analysis?; No
+
+Factor analysis projections compared to PPCA; Analysis from PPCA still applies, but $\Psi$ only diagonal but not spherical. i.e. \begin{itemize}
+	\item $\hat{x}_n=\Lambda\mu=x_n - \Psi(\Lambda\Lambda^T+\Psi)^{-1}x_n$.
+	\item Note $\Lambda$ generally different from that found by PPCA.
+	\item and $\Lambda$ is not unique: latent space may be transformed by an arbitrary orthogonal transform without changing the likelihood. (also true for PPCA)
+\end{itemize}
+
+Is the $\Lambda$ learned in FA or PPCA unique?; No. Latent space may be transformed by an arbitrary orthogonal transform without changing the likelihood.
+
+How can you learn parameters for FA? (/issues associated with this); \begin{itemize}
+	\item No spectral short-cut (closed-form solution) exists.
+	\item Likelihood can hahve more than one (local) optimum, making it difficult to find the global value.
+	\item For some data ('Heywood cases'), likelihood may grow unboundedly by taking one or more $\Psi_{dd}\rightarrow 0$.
+	\begin{itemize}
+		\item Can eliminate problem by assuming prior on $\Psi$ with zero density at $\Psi_{dd}=0$, but results sensitive to precise choice of prior.
+	\end{itemize}
+	\item can use e.g. gradient-based methods. Can also use EM, though EM does not solve issues mentioned.
+\end{itemize}
+
+Comparing FA, PPCA and PCA; \begin{itemize}
+	\item PCA and PPCA rotationally invariant, FA not
+	\begin{itemize}
+		\item if $x\rightarrow Ux$ for unitary U, then $\Lambda^{PCA}_{i}\rightarrow U \lambda^{PCA}_{(i)}$.
+	\end{itemize}
+	\item FA measurement scale invariant, PCA and PPCA not
+		\begin{itemize}
+		\item if $x\rightarrow Sx$ for diagonal S, then $\Lambda^{FA}_{i}\rightarrow S \lambda^{FA}_{(i)}$.
+		\item Pre-processing data to have equal variance on each axis does not eliminate scale-dependence of (P)PCA, since it assumes equal noise variance. Total variance has contributions from both $\Lambda\Lambda^T$ and noise.
+	\end{itemize}
+	\item FA and PPCA define a probabilistic model, PCA does not
+\end{itemize}
+
+Does pre-processing data to have equal variance on each eliminate scale-dependence of (P)PCA? ;No, since (P)PCA assumes equal noise variance. Total variance has contributions from both $\Lambda\Lambda^T$ and noise.
+
+Classical Canonical Correlations Analysis; \begin{itemize}
+	\item Given data vector pairs $\mathcal{D}=\{(\mathbf{u_1, v_1}), \mathbf{(u_2, v_2)},...\}$ in spaces $\mathcal{U}$ and $\mathcal{V}$
+	\item Find unit vectors $\upsilon_1\in\mathcal{U}, \phi_1\in\mathcal{V}$ s.t. the correlation of $\mathbf{u_i}^T\upsilon_1$ and $\mathbf{v_i}^T\phi_1$ is maximised.
+	\item As with PCA, repeat in orthogonal subspaces.
+\end{itemize}
+
+Probabilistic Canonical Correlations Analysis; \begin{itemize}
+	\item Generative model with latent $y_i\in R^k$
+	\item $y\sim N(0,I)$
+	\item $u\sim N(\Upsilon_y, \Psi_u), \Psi_u \succeq 0$
+	\item $v\sim N(\Phi_y, \Psi_v), \Psi_v \succeq 0$
+	\item TODO: huh? what does this mean? still want to find $\Upsilon, \Phi$ that maximises corrrelation with directions u and v? 
+	\item Block diagonal noise
+\end{itemize}
+
+Limitations of Gaussian, FA and PCA models; \begin{itemize}
+	\item Class of densities which can be modelled is too restrictive:
+	\item only take into account mean and variance of the data.
+	\item (Use mixtures of distributions to expand the class of densities which can be modelled greatly.)
+\end{itemize}
+
 \end{document}
