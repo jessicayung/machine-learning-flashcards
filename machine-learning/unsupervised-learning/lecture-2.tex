@@ -23,9 +23,25 @@ What is one way of making generative models that are more expressive than those 
 
 What is the structure of a simple two-variable latent variable model?; \begin{itemize} \item Suppose $y~P[\theta_y]$, $x|y~P[\theta_x]$.  \item $p(x,y|\theta_x, \theta_y) = p(x|y, \theta_x)p(y|\theta_y)$ \item $p(x|\theta_x, \theta_y) = \int dy p(x|y, \theta_x) p(y|\theta_y)$.  \end{itemize}
 
+Conditional independence relationship between x, $\theta_y$ in latent variable model; Given $y$, $x$ is conditionally independent of $\theta_y$.
+
+Likelihood vs likelihood over latents; \begin{itemize}	\item Likelihood: $p(x|\theta)$,	\item Likelihood over latents: $p(x|y, \theta)$ \end{itemize}
+
 Why might we use latent variable models?; \begin{itemize} \item Describe structured distributions \begin{itemize} \item correlations in high-dim x may be captured by fewer parameters.  \end{itemize} \item Capture an underlying generative process \begin{itemize} \item y may describe causes of x.  \item help to separate signal from noise.  \end{itemize} \item Combine exponential family dists into richer, more flexible forms.  \begin{itemize} \item P(y), P(x|y) and even P(x,y) may be in the exponential family \item P(x) rarely is. (Exception: linear Gaussian models) \end{itemize} \end{itemize}
 
+If $P(y)$ and $P(x|y)$ live in the exponential family, does $P(x,y)$ live in the exponential family?; Not necessarily - x-y coupling in product may mean this doesn't live in the exp family.
+
 How can we decompose a Gaussian with correlated noise, e.g. $x~N(0, [ 3 2 / 2 3])$?; $y~N(0,1)$, $x~N(\sqrt{2}[1 / 1]y, I)$.
+
+Isotropic (noise); scalar*identity matrix.
+
+Required relationship between K and D for factor analysis; K << D for model to be identifiable
+
+Is trace a linear operator?; Yes. $Tr(A+B) = Tr(A)+Tr(B)$. $kTr(A) = Tr(kA)$ for scalar $k$.
+
+If two or more eigenvectors share an eigenvalue $\lambda$, what can we say about the eigenvectors?; they are degenerate: any linear combination $\alpha u_1 + (1-\alpha)u_2$ is also an eigenvector.
+
+PPCA model: as $\psi\rightarrow 0$, how many dimensions of variance can the model capture?; K dims
 
 Describe the probabilistic PCA model.; \begin{itemize} \item N D-dim datapoints $\mathbf{x_i} \in \mathcal{R}^D$ \item N k-dimensional latents $y_i \in \mathcal{R}^K$ \item Linear generative model: $x_d = \sum_{k=1}^k \Lambda_{dk}y_k + \epsilon_d$, where \begin{itemize} \item $y_k$ are independent $N(0,1)$ Gaussian factors \item $\epsilon_d$ are independent $N(0,\psi)$ Gaussian noise \item latent dim K $<$ D (obs dim) \item $\Lambda$ is a D x K matrix.  \end{itemize} \item $p(x|y) = N(\Lambda y,\phi I)$ \item $p(x) = \int p(y)p(x|y)dy = N(E_y[\Lambda y], E_y[\Lambda y y^T\Lambda^T]+\psi I)/N(0,\Lambda\Lambda^T+\psi I)$ \end{itemize}
 
@@ -49,6 +65,10 @@ Rewrite a vector $v$ in terms of the orthonormal basis vectors $u$.; \begin{item
 
 Rewrite the empirical covariance matrix $S=\langle \mathbf{xx^T} \rangle$ in terms of the orthogonal basis vectors $\mathbf{u}_i$.; $S=\sum_i \omega_{(i)}\mathbf{u}_{(i)}\mathbf{u}_{(i)}^T = UWU^T$, where \begin{itemize} \item $U=[\mathbf{u_{1}}...]$ collects the eigenvectors and \item $W = diag[(\omega_{(1)}, \omega_{(2)},...,\omega_{(D)})]$.  \end{itemize}
 
+Write in matrix form for all eigenvectors $Su = \omega u$.; $SU=UW$.
+
+Given the direction of greatest variance is the eigenvector of the empirical covariance matrix S with the largest eigenvalue, show that the PCs are exactly the eigenvectors of S ordered by decreasing eigenvalue; TODO
+
 How many eigenvalue-eigenvector pairs does the covariance matrix $S_{DXD}$ have?; \begin{itemize} \item Usually D pairs, \item except if two or more eigenvectors share the same eigenvalue (in which case the eigenvectors are degenerate - any linear combination is also an eigenvector).  \end{itemize}
 
 Variance of empirical data in direction $\mathbf{u}_{(i)}$ (PCA); \begin{itemize} \item $\langle (\mathbf{x^Tu_{(i)}})^2\rangle $ \item $= \langle \mathbf{u_{(i)}^Txx^Tu_{(i)}}\rangle $ \item $=\mathbf{u_{(i)}^TSu_{(i)}}$ \item $=\mathbf{u_{(i)}^T\omega_{(i)}u_{(i)}}$ \item $=\omega_{(i)}$ \end{itemize}
@@ -62,6 +82,8 @@ State the algebraic expression for a projection into a K-dimensional principal s
 State three equivalent definitions of PCA.; \begin{itemize} \item Find K directions of greatest variance in data.  \item Find K-dimensional orthogonal projection that preserves greatest variance.  \item Find K-dimensional vectors $y_i$ and matrix $\Lambda$ so that $\hat{\mathbf{x}}_i = \Lambda\mathbf{y_i}$ is as close as possible (in terms of squared distance) to $\mathbf{x_i}$.  \end{itemize}
 
 Describe PCA from the perspective of mutual information.; \begin{itemize} \item Problem: Given $\mathbf{x}$, find $\mathbf{y = Ax}$ with columns of $A$ being unit vectors such that $I(y,x)$ is maximised, assuming $p(\mathbf{x})$ is Gaussian. (Also dim y $<$ dim x.) \item I(y,x) = H(y) + H(x) - H(x,y). Here, H(x) = H(x,y) so I(x,y) = H(y).  \item $H(y)=-\int dz p(z) \ln p(z) = \frac{1}{2}\ln|\Sigma|+\frac{D}{2}(1+\ln 2\pi )$.  \item I.e. want to choose $y$ with largest det of covariance matrix $|\Sigma|$, i.e. largest volume.  \item $\Sigma_y = A\Sigma_x A^T = AUW_XU^TA^T$ \item So $A$ should be aligned with the columns of $U$ which are associated with the largest eigenvalues (variances).  \item Projection to the principal component subspace preserves the most information about the data.  \end{itemize}
+
+PC score; project vector onto first few (two e.g.) PCs.
 
 How do you interpret a matrix? e.g. $U = [u_1 u_2 ...]$, and you have the product $Ux$.; Each $u_i$ is an axis (or directional vector), and each $x_i$ is how far you want to walk in the direction of $u_i$. \newline Note: this is not in the notes.
 
@@ -111,6 +133,8 @@ ML learning of $\Lambda$ for PPCA: what to do after obtaining stationary point e
 \item Remains to show that the global ML solution is attained when $\Lambda$ aligns with the K leading eigenvectors. (claims this is intuitively reasonable.)
 \end{itemize}
 
+PCA projection; $\Lambda\Lambda^Tx$. Note that the pseudo-inverse (check this is accurate) of $\Lambda$ is $\Lambda^T$.
+
 Can we project $x_n \rightarrow \hat{x_n}$ trivially in PCA and in PPCA?; \begin{itemize}
 	\item PCA yes since 'noise' is orthogonal to subspace.
 	\item PPCA no since noise is equal in all directions.
@@ -127,6 +151,14 @@ Finding the projection for PPCA; \begin{itemize}
 	\item As $\psi\rightarrow 0$, PPCA est approaches PCA value.
 \end{itemize}
 
+Interpret the results for projection of PPCA; \begin{itemize}
+	\item Two sources of information about same variance
+	\item Sum prior and likelihood weighted be precision of each
+	\item FYI: $Sigma = (I+\Lambda^T\Psi^{-1}\Lambda)^{-1}=I-\beta\Lambda$ and $\mu=\Sigma\Lambda^T\Psi^{-1}x_n=\beta x_n$, where $\beta = \Sigma\Lambda^T\Psi^{-1}$.	
+\end{itemize}
+
+Name two models with different choices of noise that have an interesting difference in results; PPCA vs Factor Analysis. \newline Interesting bc we often spend lots of time on the generative model vs the noise model.
+
 Difference between Factor Analysis and PPCA; \begin{itemize}
 	\item Noise is not the same in each dimension: $\epsilon_d$ are indep $N(0,\Psi_{dd})$ gaussian noise.
 	\item i.e. if dims not equivalent, equal variance assumption is inappropriate.
@@ -137,9 +169,14 @@ Briefly describe dimensionality reduction; \begin{itemize}
 \end{itemize}
 
 Number of parameters for factor analysis; $DK + D - \frac{K(K+1)}{2}$. \begin{itemize}
+	\item Correction $- \frac{K(K+1)}{2}$ is for subtracting extra DoF in model that don't appear in the likelihood.
 	\item Note if number of parameters $> \frac{D(D+1)}{2}$, model is not identifiable (even after accounting for rotational degeneracy discussed later)
+	\item figure is from num of params in empirical covariance matrix
+	\item Here, 'identifiable' means you can't separate the variance in the latent variable from the variance in the noise.
 	\item TODO: proof for above? where did the number come from? what is the rotational degeneracy?
 \end{itemize}
+
+What does it mean for a model to be identifiable?; As number of datapoints tends to infinity, should be able to uniquely identify $\theta$.
 
 Is there a closed form solution for ML parameters for factor analysis?; No
 
@@ -148,6 +185,10 @@ Factor analysis projections compared to PPCA; Analysis from PPCA still applies, 
 	\item Note $\Lambda$ generally different from that found by PPCA.
 	\item and $\Lambda$ is not unique: latent space may be transformed by an arbitrary orthogonal transform without changing the likelihood. (also true for PPCA)
 \end{itemize}
+
+Why is the $\Lambda$ in factor analysis generally different from that found in PPCA?; $\Psi$ affects estimate of $\Lambda$.
+
+Why can the latent space for factor analysis be transformed by an arbitrary orthogonal transform without changing the likelihood?; Partially because the prior is preserved. (Poss also because noise is learned?)
 
 Is the $\Lambda$ learned in FA or PPCA unique?; No. Latent space may be transformed by an arbitrary orthogonal transform without changing the likelihood.
 
@@ -161,12 +202,19 @@ How can you learn parameters for FA? (/issues associated with this); \begin{item
 	\item can use e.g. gradient-based methods. Can also use EM, though EM does not solve issues mentioned.
 \end{itemize}
 
+Give an example of a prior that has zero density at $\Upsilon_{dd}=0$.; $\chi^2$ 
+
+What does it mean for $\Psi_{dd}\rightarrow 0$? Is it realistic?; \begin{itemize}
+	\item Appears that all variance in one dimension can be explained by model $\Lambda y$, so no need for noise in that dim.
+	\item Don't usually see this in real data.
+\end{itemize}
+
 Comparing FA, PPCA and PCA; \begin{itemize}
-	\item PCA and PPCA rotationally invariant, FA not
+	\item PCA and PPCA rotationally invariant/covariant (since noise model has equal var in all dirs), FA not
 	\begin{itemize}
 		\item if $x\rightarrow Ux$ for unitary U, then $\Lambda^{PCA}_{i}\rightarrow U \lambda^{PCA}_{(i)}$.
 	\end{itemize}
-	\item FA measurement scale invariant, PCA and PPCA not
+	\item FA measurement scale invariant, PCA and PPCA not (since expect noise to be different scale if measurement scale diff, but FA estimates noise level)
 		\begin{itemize}
 		\item if $x\rightarrow Sx$ for diagonal S, then $\Lambda^{FA}_{i}\rightarrow S \lambda^{FA}_{(i)}$.
 		\item Pre-processing data to have equal variance on each axis does not eliminate scale-dependence of (P)PCA, since it assumes equal noise variance. Total variance has contributions from both $\Lambda\Lambda^T$ and noise.
@@ -174,7 +222,10 @@ Comparing FA, PPCA and PCA; \begin{itemize}
 	\item FA and PPCA define a probabilistic model, PCA does not
 \end{itemize}
 
-Does pre-processing data to have equal variance on each eliminate scale-dependence of (P)PCA? ;No, since (P)PCA assumes equal noise variance. Total variance has contributions from both $\Lambda\Lambda^T$ and noise.
+Does pre-processing data to have equal variance on each eliminate scale-dependence of (P)PCA? ;\begin{itemize}
+	\item No, since (P)PCA assumes equal noise variance. Total variance has contributions from both $\Lambda\Lambda^T$ and noise. 
+	\item If originally equal noise (e.g. measured by same sensor), z-scoring destroys equal noise.
+\end{itemize}
 
 Classical Canonical Correlations Analysis; \begin{itemize}
 	\item Given data vector pairs $\mathcal{D}=\{(\mathbf{u_1, v_1}), \mathbf{(u_2, v_2)},...\}$ in spaces $\mathcal{U}$ and $\mathcal{V}$
@@ -184,10 +235,10 @@ Classical Canonical Correlations Analysis; \begin{itemize}
 
 Probabilistic Canonical Correlations Analysis; \begin{itemize}
 	\item Generative model with latent $y_i\in R^k$
-	\item $y\sim N(0,I)$
+	\item $y\sim N(0,I)$ (like correlation between locations)
 	\item $u\sim N(\Upsilon_y, \Psi_u), \Psi_u \succeq 0$
-	\item $v\sim N(\Phi_y, \Psi_v), \Psi_v \succeq 0$
-	\item TODO: huh? what does this mean? still want to find $\Upsilon, \Phi$ that maximises corrrelation with directions u and v? 
+	\item $v\sim N(\Phi_y, \Psi_v), \Psi_v \succeq 0$ (pos semidef)
+	\item $\Upsilon$ are like local correlations e.g. between temperature and rainfall 
 	\item Block diagonal noise
 \end{itemize}
 
@@ -195,6 +246,53 @@ Limitations of Gaussian, FA and PCA models; \begin{itemize}
 	\item Class of densities which can be modelled is too restrictive:
 	\item only take into account mean and variance of the data.
 	\item (Use mixtures of distributions to expand the class of densities which can be modelled greatly.)
+\end{itemize}
+
+When might mixture distributions arise naturally?; \begin{itemize}
+	\item Clustering: Obs collected from different sources of data or different phases of a source. (Structure learning)
+	\item Approximating densities: each component an element of a basis (Density estimation)
+\end{itemize}
+
+Is $s_i~_{iid}Discrete[\pi]$ a multinomial distribution?; No, it is a categorical dist. \begin{itemize}
+	\item Multinomial = dist on counts for many draws.
+	\item Here a single choice.
+\end{itemize}
+
+What is a Gaussian scale mixture model? (intuitively); \begin{itemize}
+	\item Combining Gaussians with different variances, e.g. all mean 0. 
+	\item Often for flexible prior e.g. for count values(?)
+	\item Want underlying to be tractable but also to have heavier tails.
+\end{itemize}
+
+An example of a class of methods we approach as the number of components in a muxture model approaches infinity; Bayesian nonparametrics
+
+MoG responsibility (no need to expand component density); $P(s_i=m|x_i) = \frac{P(x|s_i=m)\pi_m}{\sum_m P(x|s_i=m)\pi_m}$
+
+For $P(\theta, .), \frac{\partial P}{\partial \theta} =$; $P\times \frac{\partial\log P}{\partial \theta}$.
+
+MoG derivatives: $\frac{\partial \mathcal{L}}{\partial \mathbf{\mu_m}} =$; $\sum_{i=1}^n r_{im}\Sigma^{-1}_m(x_i-\mu_m)$
+
+MoG derivatives: $\frac{\partial \mathcal{L}}{\partial \mathbf{\Sigma^{-1}_m}} =$; $\frac{1}{2}\sum_{i=1}^n r_{im}(\Sigma_m-(x_i-\mu_m)(x_i-\mu_m)^T$. \newline Remember to use Lagrange multiplier for $\pi_m$ because prob mass needs to sum to 1.
+
+Describe K means; \begin{itemize}
+	\item Limiting case of the mixture of Gaussians: $\pi_m = 1/k, \Sigma_m=\sigma^2I, \sigma^2\rightarrow 0$. 
+	\item Then the responsibilities become binary: $r_{im}\rightarrow\delta(m, \arg\min ||x_i-\mu_i||^2)$.
+	\item i.e. 1 for component with closest mean, 0 for all other components. -> Solve directly for means by setting gradient to 0.
+	\item Iterate: \begin{itemize}
+		\item Assign each point to closest mean (assign $r_{im}=$limit.)
+		\item Update means to average of assigned points (set $\mathbf{\mu_m}=\frac{\sum_i r_{im}\mathbf{x_i}}{\sum_i r_{im}}$
+	\end{itemize}
+\item Usually converges within a few iterations, although fixed point depends on initial values chosen for $\mu_m$.
+\item No learning rate, but assumptions limiting.
+\end{itemize}
+
+Problems with iterative gradient descent algorithms; \begin{itemize}
+	\item Slow convergence for gradient based methods
+	\item Gradient based methods may develop invalid (not pd) covariance matrices (e.g. if step size large. Need to put bounds, make constrained opt.)
+	\item Local minima: end config may depend on starting state.
+	\item How adjust num clusters k? Likelihood alone no good.
+	\item Singularities: components with a single data point will have covar going to zero, $l\rightarrow\inf$. (important failure mode for MoG with $\geq 2$ Gaussians. Usually if init with large covar, don't see degeneracy.)
+	
 \end{itemize}
 
 \end{document}
