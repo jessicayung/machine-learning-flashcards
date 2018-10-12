@@ -160,6 +160,15 @@ MoG responsibility (no need to expand component density); $P(s_i=m|x_i) = \frac{
 
 For $P(\theta, .), \frac{\partial P}{\partial \theta} =$; $P\times \frac{\partial\log P}{\partial \theta}$.
 
+MoG log likelihood; $\log P(\{\mathbf{x}\}|\{\mathbf{\mu_m} \},\{\mathbf{\Sigma_m} \}) = \sum_{i=1}^N\log \sum_{m=1}^k \frac{\pi_m}{\sqrt{|2\pi\Sigma_m|}}\exp(-\frac{1}{2}(x_i-\mu_m)^T\Sigma^{-1}_m(x_i-\mu_m)$ \newline Note the likelihood does not lie in the exponential family.
+
+Log likelihood for a mixture model; $l=\sum_{i=1}^N\log \sum_{m=1}^k \pi_mP_m(x_i, \theta_m)$
+
+Partial derivative $\frac{\partial \mathcal{L}}{\partial \theta_m}$ for a mixture model; $\sum_{i=1}^N r_{im} \frac{\partial\log P_m(x_i, \theta_m)}{\partial\theta_m}$ using 
+$\frac{\partial P}{\partial \theta} = P \times \frac{\partial\log P}{\partial \theta}$
+
+Partial derivative $\frac{\partial \mathcal{L}}{\partial \pi_m}$ for a mixture model; $\sum_{i=1}^N \frac{r_{im}}{\pi_m}$
+
 MoG derivatives: $\frac{\partial \mathcal{L}}{\partial \mathbf{\mu_m}} =$; $\sum_{i=1}^n r_{im}\Sigma^{-1}_m(x_i-\mu_m)$
 
 MoG derivatives: $\frac{\partial \mathcal{L}}{\partial \mathbf{\Sigma^{-1}_m}} =$; $\frac{1}{2}\sum_{i=1}^n r_{im}(\Sigma_m-(x_i-\mu_m)(x_i-\mu_m)^T$. \newline Remember to use Lagrange multiplier for $\pi_m$ because prob mass needs to sum to 1.
