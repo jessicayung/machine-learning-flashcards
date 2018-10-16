@@ -1,0 +1,103 @@
+%Front;
+% From lectures by David Barber, 2018.
+
+\documentclass{article}
+\usepackage{amsmath}
+\begin{document}
+	
+Linear dependence; a set of vectors $\mathbf{x^1, ..., x^n}$ is linearly dependent  \begin{itemize}
+	\item if there exists a vector $\mathbf{x^j}$ that can be expressed as a linear combination of the other vectors, i.e.
+	\item if the only solution to $\sum_{i=1}^{n}\alpha_i\mathbf{x}^i=0$ is for all $\alpha_i = 0$.
+\end{itemize}
+	
+Intuition for what the determinant $|A|$ is; \begin{itemize}
+	\item Volume of the transformation of the matrix $A$ up to a sign change.
+	\item if det = 0, volume = 0. At least one dim collapsed, lost information.
+	\item Geometrically, singular matrices correspond to projections.
+\end{itemize}
+
+det(AB) = ; det(A)det(B)
+
+$\det(A^T)=$; $\det(A)$.
+
+$\det(A^{-1})=$; $1/det(A)$.
+
+$(AB)^{-1}=$; $B^{-1}A^{-1}$
+
+Geometrically, singular matrices correspond to; projections.
+
+Pseudo inverse; \begin{itemize}
+	\item $A^\dagger=A^T(AA^T)^{-1}$
+	\item for a non-square matrix $A$ such that $AA^T$ is invertible.
+	\item Satisfies $AA^\dagger$ = 1, so also called right-inverse.
+\end{itemize}
+
+Why might we not solve for $x=A^{-1}b$ in practice when finding a vector $x$ that satisfies $Ax=b$?; \begin{itemize}
+	\item Inefficient, not necessary to store matrix inverse
+	\item Less stable (robust to numerical errors) (e.g. ill-conditioned matrices, or nearly non-singular matrix may become singular)
+\end{itemize}
+
+Complexity of solving a linear system Ax=b; \begin{itemize}
+	\item $O(N^3)$
+	\item very expensive for large N, e.g. at Google you routinely have size $N=10^9+$.
+	\item Approx methods include conjugate gradient and related approaches.
+\end{itemize}
+	
+Rank of a matrix $X_{mxn}$; maximum number of linearly independent columns (or equivalently rows)
+
+Orthogonal matrix A and a property; if $A^TA=I=AA^T$. \begin{itemize}
+	\item det = $\pm 1$ from properties of det
+	\item so matrix corresponds to a volume-preserving transformation, something like a rotation, reflection or shear.
+\end{itemize}
+	
+Interpret a matrix; \begin{itemize}
+	\item Columns of matrix A represent where the cartesian basis vectors get transformed to.
+\end{itemize}
+
+Finding eigenvalues of matrix A (and intuition for why we use this method); $\lambda$ is an eigenvalue of $A$ if $\det(A-\lambda I) = 0$. Intuition:
+\begin{itemize}
+	\item $Ae=\lambda e$, $e$ an eigenvector.
+	\item $(A-\lambda I)e=0$
+	\item If $B=(A-\lambda I)$ has an inverse, then the only solution is $e=B^{-1}0 = 0$, which trivially satisfies the eigen-equation.
+	\item For any non-trivial solution we need $B$ to be non-invertible, i.e. to have a det of 0.
+	\item Hence $\lambda$ is an eigenvalue of A if $\det(A-\lambda I) = 0$.
+\end{itemize}
+
+Computational complexity of computing the eigen-decomposition; $O(N^3)$.
+
+Eigendecomposition; \begin{itemize}
+	\item For real symmetric matrices $A_{NXN}$.
+	\item $A = \sum_{i=1}^N \lambda_i e_i e_i^T = E\Lambda E^T$
+	\item $O(N^3)$ time complexity
+\end{itemize}
+
+Singular value decomposition; \begin{itemize}
+	\item of $X_{nxp}$: 
+	\item $X = U_{nxn}S_{nxp}V^T_{pxp}$
+	\item $U^TU=I$, $V^TV=I$, $S$ diagonal.
+	\item Singular values are diagonal entries of S and are positive. 
+	\item Singular values are ordered in descending order from the upper left element of S.
+	\item $O(\max(n,p)(\min(n,p))^2) \rightarrow$ same as eigendecomposition if matrix square, else can be slightly cheaper. Makes a big difference.
+\end{itemize}
+
+Positive definite matrix; \begin{itemize}
+	\item Symmetric matrix $A$ with property $x^TAx >  0 \forall x \ne 0$.
+	\item Has full rank and is thus invertible
+	\item iff all eigenvalues are positive, since $x^TAx = \sum_i \lambda_i x^Te^i(e^i)^Tx = \sum_i \lambda_i (x^Te^i)^2$.
+\end{itemize}
+
+Positive semidefinite matrix; \begin{itemize}
+	\item Symmetric matrix $A$ with property $x^TAx \geq  0 \forall x$.
+\end{itemize}
+
+Trace (special trick); $tr(A) = \sum_i A_{ii} = \sum_i{\lambda_i}$, where $\lambda_i$ are the eigenvalues of $A$.
+
+Calculating Det (trick); $det(A) = \prod_{i=1}^{N}\lambda_i$, so matrix is singular if it has a zero eigenvalue.
+
+Trace-log formula; \begin{itemize}
+	\item For a positive definite matrix $A$,
+	\item $trace(\log A) \equiv \log \det (A)$.
+	\item NOTE not an element-wise log. Generally f(M) defined as taylor expansion of the function. Also note here det is a scalar.
+\end{itemize}
+
+\end{document}
