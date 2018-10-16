@@ -103,4 +103,12 @@ D-separation; Finding out when $X \indep Y | \mathcal{V}$. Consider every undire
 \end{itemize}
 If all paths are blocked, we say $\mathcal{V}$ d-separates X from Y (d for directed), and $X \indep Y | \mathcal{V}$.
 
+Give an example of an undirected graph that a DAG cannot represent.; Square-like undirected graph. \begin{itemize}
+	\item No matter how we direct the arrows there will always be two non-adjacent parents sharing a common child $\Leftarrow$ dependence in DAG but independence in undirected graph.
+\end{itemize}
+
+Give an example of a DAG that an undirected or factor graph cannot represent.; A -> C <- B. \begin{itemize}
+	\item One three-way factor, but this does not encode marginal independence.	
+\end{itemize}
+
 \end{document}
