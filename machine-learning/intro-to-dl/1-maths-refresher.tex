@@ -31,8 +31,7 @@ Orthogonal matrix A and a property; if $A^TA=I=AA^T$. \begin{itemize} \item det 
 	
 Interpret a matrix; \begin{itemize} \item Columns of matrix A represent where the cartesian basis vectors get transformed to. \end{itemize}
 
-Finding eigenvalues of matrix A (and intuition for why we use this method); $\lambda$ is an eigenvalue of $A$ if $\det(A-\lambda I) = 0$. Intuition:
-\begin{itemize} \item $Ae=\lambda e$, $e$ an eigenvector. \item $(A-\lambda I)e=0$ \item If $B=(A-\lambda I)$ has an inverse, then the only solution is $e=B^{-1}0 = 0$, which trivially satisfies the eigen-equation. \item For any non-trivial solution we need $B$ to be non-invertible, i.e. to have a det of 0. \item Hence $\lambda$ is an eigenvalue of A if $\det(A-\lambda I) = 0$. \end{itemize}
+Finding eigenvalues of matrix A (and intuition for why we use this method); $\lambda$ is an eigenvalue of $A$ if $\det(A-\lambda I) = 0$. Intuition: \begin{itemize} \item $Ae=\lambda e$, $e$ an eigenvector. \item $(A-\lambda I)e=0$ \item If $B=(A-\lambda I)$ has an inverse, then the only solution is $e=B^{-1}0 = 0$, which trivially satisfies the eigen-equation. \item For any non-trivial solution we need $B$ to be non-invertible, i.e. to have a det of 0. \item Hence $\lambda$ is an eigenvalue of A if $\det(A-\lambda I) = 0$. \end{itemize}
 
 Computational complexity of computing the eigen-decomposition; $O(N^3)$.
 
@@ -116,7 +115,7 @@ Implement $p(c=i|x)=\frac{\exp(-(x-m_i)^2)}{\sum_j \exp(-(x-m_j)^2)}$; $\log p(c
 
 What are the axes of probability density contours (ellipse) of a bivariate Gaussian?; The eigendirections of the covariance matrix.
 
-Geometric picture of a multivariate Gaussian; \begin{itemize} \item Can be transformed under $y=\Lambda^{-1/2}E^T(x-\mu)$ to be a product of D univariate zero-mean unit variance Gaussians. \item i.e. multivariate Gaussian as a shifted, scaled and rotated version of N(0,I),  \item where the centre is given by the mean $\mu$, the rotation is given by the eigenvectors, and the scaling by the square root of the eigenvalues. \item Steps: decompose covariance $\Sigma = E\Lambda E^T$ (since rael, symmetric).  \item Note all eigenvalues $\lambda_i$ are positive in a covariance matrix since positive definite. And in eigendecomposition, $E^TE=I$. \end{itemize}
+Geometric picture of a multivariate Gaussian; \begin{itemize} \item Can be transformed under $y=\Lambda^{-1/2}E^T(x-\mu)$ to be a product of D univariate zero-mean unit variance Gaussians. \item i.e. multivariate Gaussian as a shifted, scaled and rotated version of N(0,I),  \item where the centre is given by the mean $\mu$, the rotation is given by the eigenvectors, and the scaling by the square root of the eigenvalues. \item Steps: decompose covariance $\Sigma = E\Lambda E^T$ (since real, symmetric).  \item Note all eigenvalues $\lambda_i$ are positive in a covariance matrix since positive definite. And in eigendecomposition, $E^TE=I$. \end{itemize}
 
 Linear transform of a Gaussian; \begin{itemize} \item Let y be linearly related to x through $\mathbf{y = Mx + \eta}$ \item where $\eta \sim N(\mu, \Sigma)$ and $x\sim N(\mu_x, \Sigma_X)$. \item Then the marginal $p(y)=\int_X p(y|x)p(x)$ is a Gaussian \item $p(y) = N(y|M\mu_X + \mu, M\Sigma_XM^T+\Sigma)$. \end{itemize}
 
