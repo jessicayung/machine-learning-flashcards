@@ -1,0 +1,45 @@
+\documentclass{article}
+\usepackage{amsmath}
+\begin{document}
+
+Why is it hard to maximise the joint data likelihood for latent variable models?; \begin{itemize}
+	\item latent z is not known
+	\item Usually no closed form optima
+	\item often multiple local maxima
+	\item direct numerical optimisation may be possibly but infrequently easy
+	\item Note log still has sum or integral inside it even though in exp family, since we don't know the latent y.
+\end{itemize}
+
+Describe EM algorithm in words; \begin{itemize}
+	\item Start from arbitrary parameters and iterate two steps:
+	\item E step (inference): fill in values of latent variables $q$ according to posterior given data.
+	\item M step (learning): Maximime likelihood wrt $\theta$ as if latent variables were not hidden.
+\end{itemize} 1977 with significant earlier precedents.
+
+Jensen's inequality; \begin{itemize}
+	\item For concave function $f(x)$ and probability measure $\alpha$,
+	\item $f(E_{\alpha}(x))\geq E_\alpha[f(x)]$.
+	\item Equality iff $f(x)$ is almost surely constant or linear on convex support of $\alpha$.
+\end{itemize}
+
+EM free energy; $F(q,\theta) = \langle \log P(\mathcal{Y, X}|\theta)\rangle_{q(\mathcal{Y})}+H(q)$.
+
+Derive the expression for the free energy.; \begin{itemize}
+	\item $l(\theta) = \log \int P(\mathcal{X, Y}|\theta)d\mathcal{Y}$ \item $= \log \int q(\mathcal{Y})\frac{P(\mathcal{X, Y}|\theta)}{q(\mathcal{Y})}d\mathcal{Y}$ \item $\geq \int q(\mathcal{Y})\log \frac{P(\mathcal{X, Y}|\theta)}{q(\mathcal{Y})}d\mathcal{Y} = F(q,\theta)$ \item Inequality by Jensen's inequality.
+\end{itemize}
+
+Formulae for E and M steps of EM algorithm; \begin{itemize}
+	\item E step: $q^(k)(\mathcal{Y}):=\arg\max_{q(\mathcal{Y})}  F(q(\mathcal{Y}),\theta^{(k-1)}) = P(\mathcal{Y}|\mathcal{X},\theta^{(k-1)})$
+	\item M step: $\theta^{(k)}:=\arg\max_\theta F(q^(k)(\mathcal{Y}),\theta)=\arg\max_{\theta}\langle \log P(\mathcal{Y}, \mathcal{X}|\theta)\rangle_{q^{(k)}(\mathcal{Y})}$.
+	\item where $F(q,\theta)=\langle \log P(\mathcal{Y}, \mathcal{X}|\theta)\rangle_{q^{(k)}(\mathcal{Y})}+H(q)$
+\end{itemize}
+
+Rewrite free energy for the E-step; \begin{itemize}
+	\item $F(q,\theta) = \int q(\mathcal{Y})\log \frac{P(\mathcal{X, Y}|\theta)}{q(\mathcal{Y})}d\mathcal{Y}$
+	\item $= l(\theta) - KL[q(\mathcal{Y})||P(\mathcal{Y}|\mathcal{X},\theta)]$
+	\item where $KL(q||p) = \int q(y)\log\frac{q(y)}{p(y)}dy$.
+\end{itemize}
+
+Why does EM never decrease the likelihood?; TODO
+
+\end{document}
