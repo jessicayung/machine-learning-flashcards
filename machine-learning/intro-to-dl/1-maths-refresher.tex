@@ -5,16 +5,9 @@
 \usepackage{amsmath}
 \begin{document}
 	
-Linear dependence; a set of vectors $\mathbf{x^1, ..., x^n}$ is linearly dependent  \begin{itemize}
-	\item if there exists a vector $\mathbf{x^j}$ that can be expressed as a linear combination of the other vectors, i.e.
-	\item if the only solution to $\sum_{i=1}^{n}\alpha_i\mathbf{x}^i=0$ is for all $\alpha_i = 0$.
-\end{itemize}
+Linear dependence; a set of vectors $\mathbf{x^1, ..., x^n}$ is linearly dependent  \begin{itemize} \item if there exists a vector $\mathbf{x^j}$ that can be expressed as a linear combination of the other vectors, i.e. \item if the only solution to $\sum_{i=1}^{n}\alpha_i\mathbf{x}^i=0$ is for all $\alpha_i = 0$. \end{itemize}
 	
-Intuition for what the determinant $|A|$ is; \begin{itemize}
-	\item Volume of the transformation of the matrix $A$ up to a sign change.
-	\item if det = 0, volume = 0. At least one dim collapsed, lost information.
-	\item Geometrically, singular matrices correspond to projections.
-\end{itemize}
+Intuition for what the determinant $|A|$ is; \begin{itemize} \item Volume of the transformation of the matrix $A$ up to a sign change. \item if det = 0, volume = 0. At least one dim collapsed, lost information. \item Geometrically, singular matrices correspond to projections. \end{itemize}
 
 det(AB) = ; det(A)det(B)
 
@@ -26,129 +19,62 @@ $(AB)^{-1}=$; $B^{-1}A^{-1}$
 
 Geometrically, singular matrices correspond to; projections.
 
-Pseudo inverse; \begin{itemize}
-	\item $A^\dagger=A^T(AA^T)^{-1}$
-	\item for a non-square matrix $A$ such that $AA^T$ is invertible.
-	\item Satisfies $AA^\dagger$ = 1, so also called right-inverse.
-\end{itemize}
+Pseudo inverse; \begin{itemize} \item $A^\dagger=A^T(AA^T)^{-1}$ \item for a non-square matrix $A$ such that $AA^T$ is invertible. \item Satisfies $AA^\dagger$ = 1, so also called right-inverse. \end{itemize}
 
-Why might we not solve for $x=A^{-1}b$ in practice when finding a vector $x$ that satisfies $Ax=b$?; \begin{itemize}
-	\item Inefficient, not necessary to store matrix inverse
-	\item Less stable (robust to numerical errors) (e.g. ill-conditioned matrices, or nearly non-singular matrix may become singular)
-\end{itemize}
+Why might we not solve for $x=A^{-1}b$ in practice when finding a vector $x$ that satisfies $Ax=b$?; \begin{itemize} \item Inefficient, not necessary to store matrix inverse \item Less stable (robust to numerical errors) (e.g. ill-conditioned matrices, or nearly non-singular matrix may become singular) \end{itemize} 
 
-Complexity of solving a linear system Ax=b; \begin{itemize}
-	\item $O(N^3)$
-	\item very expensive for large N, e.g. at Google you routinely have size $N=10^9+$.
-	\item Approx methods include conjugate gradient and related approaches.
-\end{itemize}
+Complexity of solving a linear system Ax=b; \begin{itemize} \item $O(N^3)$ \item very expensive for large N, e.g. at Google you routinely have size $N=10^9+$. \item Approx methods include conjugate gradient and related approaches. \end{itemize}
 	
 Rank of a matrix $X_{mxn}$; maximum number of linearly independent columns (or equivalently rows)
 
-Orthogonal matrix A and a property; if $A^TA=I=AA^T$. \begin{itemize}
-	\item det = $\pm 1$ from properties of det
-	\item so matrix corresponds to a volume-preserving transformation, something like a rotation, reflection or shear.
-\end{itemize}
+Orthogonal matrix A and a property; if $A^TA=I=AA^T$. \begin{itemize} \item det = $\pm 1$ from properties of det \item so matrix corresponds to a volume-preserving transformation, something like a rotation, reflection or shear. \end{itemize}
 	
-Interpret a matrix; \begin{itemize}
-	\item Columns of matrix A represent where the cartesian basis vectors get transformed to.
-\end{itemize}
+Interpret a matrix; \begin{itemize} \item Columns of matrix A represent where the cartesian basis vectors get transformed to. \end{itemize}
 
 Finding eigenvalues of matrix A (and intuition for why we use this method); $\lambda$ is an eigenvalue of $A$ if $\det(A-\lambda I) = 0$. Intuition:
-\begin{itemize}
-	\item $Ae=\lambda e$, $e$ an eigenvector.
-	\item $(A-\lambda I)e=0$
-	\item If $B=(A-\lambda I)$ has an inverse, then the only solution is $e=B^{-1}0 = 0$, which trivially satisfies the eigen-equation.
-	\item For any non-trivial solution we need $B$ to be non-invertible, i.e. to have a det of 0.
-	\item Hence $\lambda$ is an eigenvalue of A if $\det(A-\lambda I) = 0$.
-\end{itemize}
+\begin{itemize} \item $Ae=\lambda e$, $e$ an eigenvector. \item $(A-\lambda I)e=0$ \item If $B=(A-\lambda I)$ has an inverse, then the only solution is $e=B^{-1}0 = 0$, which trivially satisfies the eigen-equation. \item For any non-trivial solution we need $B$ to be non-invertible, i.e. to have a det of 0. \item Hence $\lambda$ is an eigenvalue of A if $\det(A-\lambda I) = 0$. \end{itemize}
 
 Computational complexity of computing the eigen-decomposition; $O(N^3)$.
 
-Eigendecomposition; \begin{itemize}
-	\item For real symmetric matrices $A_{NXN}$.
-	\item $A = \sum_{i=1}^N \lambda_i e_i e_i^T = E\Lambda E^T$
-	\item $O(N^3)$ time complexity
-\end{itemize}
+Eigendecomposition; \begin{itemize} \item For real symmetric matrices $A_{NXN}$. \item $A = \sum_{i=1}^N \lambda_i e_i e_i^T = E\Lambda E^T$ \item $O(N^3)$ time complexity \end{itemize}
 
-Singular value decomposition; \begin{itemize}
-	\item of $X_{nxp}$: 
-	\item $X = U_{nxn}S_{nxp}V^T_{pxp}$
-	\item $U^TU=I$, $V^TV=I$, $S$ diagonal.
-	\item Singular values are diagonal entries of S and are positive. 
-	\item Singular values are ordered in descending order from the upper left element of S.
-	\item $O(\max(n,p)(\min(n,p))^2) \rightarrow$ same as eigendecomposition if matrix square, else can be slightly cheaper. Makes a big difference.
-\end{itemize}
+Singular value decomposition; \begin{itemize} \item of $X_{nxp}$:  \item $X = U_{nxn}S_{nxp}V^T_{pxp}$ \item $U^TU=I$, $V^TV=I$, $S$ diagonal. \item Singular values are diagonal entries of S and are positive.  \item Singular values are ordered in descending order from the upper left element of S. \item $O(\max(n,p)(\min(n,p))^2) \rightarrow$ same as eigendecomposition if matrix square, else can be slightly cheaper. Makes a big difference. \end{itemize}
 
-Positive definite matrix; \begin{itemize}
-	\item Symmetric matrix $A$ with property $x^TAx >  0 \forall x \ne 0$.
-	\item Has full rank and is thus invertible
-	\item iff all eigenvalues are positive, since $x^TAx = \sum_i \lambda_i x^Te^i(e^i)^Tx = \sum_i \lambda_i (x^Te^i)^2$.
-\end{itemize}
+Positive definite matrix; \begin{itemize} \item Symmetric matrix $A$ with property $x^TAx >  0 \forall x \ne 0$. \item Has full rank and is thus invertible \item iff all eigenvalues are positive, since $x^TAx = \sum_i \lambda_i x^Te^i(e^i)^Tx = \sum_i \lambda_i (x^Te^i)^2$. \end{itemize}
 
-Positive semidefinite matrix; \begin{itemize}
-	\item Symmetric matrix $A$ with property $x^TAx \geq  0 \forall x$.
-\end{itemize}
+Positive semidefinite matrix; \begin{itemize} \item Symmetric matrix $A$ with property $x^TAx \geq  0 \forall x$. \end{itemize}
 
 Trace (special trick); $tr(A) = \sum_i A_{ii} = \sum_i{\lambda_i}$, where $\lambda_i$ are the eigenvalues of $A$.
 
 Calculating Det (trick); $det(A) = \prod_{i=1}^{N}\lambda_i$, so matrix is singular if it has a zero eigenvalue.
 
-Trace-log formula; \begin{itemize}
-	\item For a positive definite matrix $A$,
-	\item $trace(\log A) \equiv \log \det (A)$.
-	\item NOTE not an element-wise log. Generally f(M) defined as taylor expansion of the function. Also note here det is a scalar.
-\end{itemize}
+Trace-log formula; \begin{itemize} \item For a positive definite matrix $A$, \item $trace(\log A) \equiv \log \det (A)$. \item NOTE not an element-wise log. Generally f(M) defined as taylor expansion of the function. Also note here det is a scalar. \end{itemize}
 
-Definition of the derivative; \begin{itemize}
-    \item $\frac{df}{dx} = \lim_{\delta\rightarrow 0$}\frac{f(x+\delta)-f(x)}{\delta}$
-    \item Rate of change of function
-\end{itemize}
+Definition of the derivative; \begin{itemize} \item $\frac{df}{dx} = \lim_{\delta\rightarrow 0$}\frac{f(x+\delta)-f(x)}{\delta}$ \item Rate of change of function \end{itemize}
 
 Taylor series; $f(x) = f(0) + x\frac{df}{dx}\vert_{x=0} + \frac{x^2}{2}\frac{d^f}{dx^2}\vert_{x=0}+...$
 
 Is taking derivatives a linear operator?; Yes.
 
-Central Difference numerical approximation; \begin{itemize}
-    \item $f'(x)\simeq \frac{f(x+\delta) - f(x-\delta)}{2\delta} + O(\delta^3)$
-    \item Much more accurate approx than $\frac{df}{dx}\simeq \frac{f(x+\delta) - f(x)}{\delta} + O(\delta^2)$
-    \item at the cost of an additional function evaluation.
-    \item By taking taylor series up to second order derivatives for $f(x+\delta), f(x-\delta)$.
-\end{itemize}
+Central Difference numerical approximation; \begin{itemize} \item $f'(x)\simeq \frac{f(x+\delta) - f(x-\delta)}{2\delta} + O(\delta^3)$ \item Much more accurate approx than $\frac{df}{dx}\simeq \frac{f(x+\delta) - f(x)}{\delta} + O(\delta^2)$ \item at the cost of an additional function evaluation. \item By taking taylor series up to second order derivatives for $f(x+\delta), f(x-\delta)$. \end{itemize} 
 
 Is $\frac{df}{dx}$ a partial or total derivative?; Total.
 
 Is $\frac{\partial f}{\partial x}$ a partial or total derivative?; Partial.
 
-Partial derivative; \begin{itemize}
-    \item $\frac{\partial f}{\partial x} = \lim_{\delta\rightarrow 0} \frac{f(x+\delta, y)-f(x,y)}{\delta}$. 
-    \item i.e. keeps the state of all variables fixed.
-\end{itemize}
+Partial derivative; \begin{itemize} \item $\frac{\partial f}{\partial x} = \lim_{\delta\rightarrow 0} \frac{f(x+\delta, y)-f(x,y)}{\delta}$.  \item i.e. keeps the state of all variables fixed. \end{itemize} 
 
 Total derivative when function has multiple variables; Sum of partial derivatives. e.g. for $f(x, g(x)), \frac{df}{dx} = \frac{\partial f}{\partial x} + \frac{\partial f}{\partial g}\frac{dg}{dx}$.
 
-Graphical representation of total derivative of f with respect to x; \begin{itemize}
-    \item The sum over all path values from x to f, where each path value is the product of the derivatives on the edges.
-\end{itemize}
+Graphical representation of total derivative of f with respect to x; \begin{itemize} \item The sum over all path values from x to f, where each path value is the product of the derivatives on the edges. \end{itemize}
 
 Interpreting the gradient vector; The direction along which the function is changing most rapidly.
 
-Show that the direction along which a function f(x) changes the most rapidly is $\nabla f(x)$.; \begin{itemize}
-    \item Consider a direction $\mathbf{\hat p}$, a unit vector. Then a displacement $\delta$ units along this direction changes the function value to 
-    \item $f(\mathbf{x}+\delta\mathbf{\hat p} \simeq f(\mathbf{x})+\delta\grad f(\mathbf{x})\dot \hat{\mathbf{p}}$.
-    \item Dir $\hat\mathbf{p}$ for which fn has largest change is that which maximises the overlap:
-    \item $\grad f(\mathbf{x})\dot \mathbf{\hat{p}} = |\gradf(\mathbf{x})||\hat{\mathbf{p}}|\cos\theta = |\grad f(\mathbf{x})|\cos\theta$.
-    \item where $\theta$ is the angle between $\mathbf{\hat p}$ and $\grad f(\mathbf{x})$, which is maximised when $\theta=0$. 
-    \item Hence, the direction along which the function changes the most rapidly is along $\grad f(\mathbf{x})$.
-\end{itemize}
+Show that the direction along which a function f(x) changes the most rapidly is $\nabla f(x)$.; \begin{itemize} \item Consider a direction $\mathbf{\hat p}$, a unit vector. Then a displacement $\delta$ units along this direction changes the function value to  \item $f(\mathbf{x}+\delta\mathbf{\hat p} \simeq f(\mathbf{x})+\delta\grad f(\mathbf{x})\dot \hat{\mathbf{p}}$. \item Dir $\hat\mathbf{p}$ for which fn has largest change is that which maximises the overlap: \item $\grad f(\mathbf{x})\dot \mathbf{\hat{p}} = |\gradf(\mathbf{x})||\hat{\mathbf{p}}|\cos\theta = |\grad f(\mathbf{x})|\cos\theta$. \item where $\theta$ is the angle between $\mathbf{\hat p}$ and $\grad f(\mathbf{x})$, which is maximised when $\theta=0$.  \item Hence, the direction along which the function changes the most rapidly is along $\grad f(\mathbf{x})$. \end{itemize}
 
 Hessian matrix; square, symmetric matrix of second partial derivatives $\frac{\partial^2 f}{\partial x_i \partial x_j}$.
 
-Geometric interpretation of definite-ness of Hessian of a function f evaluated at \mathbf{x}; \begin{itemize}
-    \item Positive definite: function looks locally like a bowl $\cup$ around the point $\mathbf{x}$.
-    \item Negative definite: function looks locally like $\cap$ around the point $\mathbf{x}$.
-    \item Non-definite: fn looks like $\cup$ along some directions and like $\cap$ along others.
-\end{itemize} 
+Geometric interpretation of definite-ness of Hessian of a function f evaluated at \mathbf{x}; \begin{itemize} \item Positive definite: function looks locally like a bowl $\cup$ around the point $\mathbf{x}$. \item Negative definite: function looks locally like $\cap$ around the point $\mathbf{x}$. \item Non-definite: fn looks like $\cup$ along some directions and like $\cap$ along others. \end{itemize} 
 
 $\frac{\partial}{\partial A}trace(AB) =$;$B^T$.
 
@@ -158,10 +84,7 @@ $\frac{\partial}{\partial A}\log\det(A)=$; $A^{-T}$
 
 For an invertible matrix $A$, $\partial A^{-1}=$; $-A^{-T}\partial A (A^{-1})$
 
-Definition of a convex function (x2); \begin{itemize}
-    \item if for any two points $\mathbf{x, y}$ and $0<\lambda < 1$, $f(\lambda\mathbf{x}+(1-\lambda)\mathbf{y}\leq \lambdaf(\mathbf{x})+(1-\lambdaf)f(\mathbf{y})$
-    \item if f is twice  differentiable, $f(\mathbf{x})$ is convex if its Hessian $\mathbf{H(x)}$ is positive definite for all points $\mathbf{x}$.
-\end{itemize}
+Definition of a convex function (x2); \begin{itemize} \item if for any two points $\mathbf{x, y}$ and $0<\lambda < 1$, $f(\lambda\mathbf{x}+(1-\lambda)\mathbf{y}\leq \lambdaf(\mathbf{x})+(1-\lambdaf)f(\mathbf{y})$ \item if f is twice  differentiable, $f(\mathbf{x})$ is convex if its Hessian $\mathbf{H(x)}$ is positive definite for all points $\mathbf{x}$. \end{itemize}
 
 What strictly convex functions are like geometrically; Look like $\cup$ and have only one minimum.
 
@@ -171,11 +94,7 @@ Log convexity; A functino g s.t. $f(x)=\log g(x)$ is convex.
 
 Norms and convexity; All norms are convex, including the p-norm $||x||_p \equiv (\sum_i |x_i|^p)^{1/p}, p\geq 1$.
 
-Compositions of convex functions; If f and g are convex, then \begin{itemize}
-    \item f+ g is convex (positive sums of convex functions are convex)
-    \item f(Ax+b) is convex (affine transformation)
-    \item f(g(x)) is convex provided f is an increasing function.
-\end{itemize}
+Compositions of convex functions; If f and g are convex, then \begin{itemize} \item f+ g is convex (positive sums of convex functions are convex) \item f(Ax+b) is convex (affine transformation) \item f(g(x)) is convex provided f is an increasing function. \end{itemize}
 
 Show $f(x)=x^2$ is convex.; TODO
 
@@ -185,19 +104,11 @@ Show $f(\mathbf{x}) = \mathbf{x^TAx}$ for positive definite $\mathbf{A}$ is conv
 
 Show $f(\mathbf{x}) = -\log\sigma(\mathbf{x^Tw}),sigma(x)=1/(1+\exp(-x))$ is convex.; TODO 
 
-Why rounding error matters in ML; \begin{itemize}
-    \item Often have a large number of terms to sum, e.g. when computing the log likelihood for a large number of datapoints.
-\end{itemize}
+Why rounding error matters in ML; \begin{itemize} \item Often have a large number of terms to sum, e.g. when computing the log likelihood for a large number of datapoints. \end{itemize}
 
 Double floats have a relative error of around; $10^{-16}$.
 
-How can we compute log(S), where $S=\exp(a)+\exp(b)$, a and b large?; logsumexp. \begin{itemize}
-    \item Let $m=\max(a,b$$.
-    \item \$\log S = m+\log(\exp(a-m)+\exp(b-m))$
-    \item Suppose m = a. Then $\log S = a + \log(1+\exp(b-a))$
-    \item Since a > b, then $\exp(b-a)<1$ and $\log(1+\exp(b-a))<\log 2$. We can compute $\log S$ more accurately this way.
-    \item In general, $logsumexp(\mathbf{x})=m+\log(\sum_{i=1}^N\exp(x_i-m)), m=\max(x_1,...,x_N)$$
-\end{itemize}
+How can we compute log(S), where $S=\exp(a)+\exp(b)$, a and b large?; logsumexp. \begin{itemize} \item Let $m=\max(a,b$$. \item \$\log S = m+\log(\exp(a-m)+\exp(b-m))$ \item Suppose m = a. Then $\log S = a + \log(1+\exp(b-a))$ \item Since a > b, then $\exp(b-a)<1$ and $\log(1+\exp(b-a))<\log 2$. We can compute $\log S$ more accurately this way. \item In general, $logsumexp(\mathbf{x})=m+\log(\sum_{i=1}^N\exp(x_i-m)), m=\max(x_1,...,x_N)$$ \end{itemize}
 
 General formula for log S, where $S=\exp(x_1)+...+\exp(x_N)$; $logsumexp(\mathbf{x})=m+\log(\sum_{i=1}^N\exp(x_i-m)), m=\max(x_1,...,x_N)$
 
@@ -205,26 +116,10 @@ Implement $p(c=i|x)=\frac{\exp(-(x-m_i)^2)}{\sum_j \exp(-(x-m_j)^2)}$; $\log p(c
 
 What are the axes of probability density contours (ellipse) of a bivariate Gaussian?; The eigendirections of the covariance matrix.
 
-Geometric picture of a multivariate Gaussian; \begin{itemize}
-    \item Can be transformed under $y=\Lambda^{-1/2}E^T(x-\mu)$ to be a product of D univariate zero-mean unit variance Gaussians.
-    \item i.e. multivariate Gaussian as a shifted, scaled and rotated version of N(0,I), 
-    \item where the centre is given by the mean $\mu$, the rotation is given by the eigenvectors, and the scaling by the square root of the eigenvalues.
-    \item Steps: decompose covariance $\Sigma = E\Lambda E^T$ (since rael, symmetric). 
-    \item Note all eigenvalues $\lambda_i$ are positive in a covariance matrix since positive definite. And in eigendecomposition, $E^TE=I$.
-\end{itemize}
+Geometric picture of a multivariate Gaussian; \begin{itemize} \item Can be transformed under $y=\Lambda^{-1/2}E^T(x-\mu)$ to be a product of D univariate zero-mean unit variance Gaussians. \item i.e. multivariate Gaussian as a shifted, scaled and rotated version of N(0,I),  \item where the centre is given by the mean $\mu$, the rotation is given by the eigenvectors, and the scaling by the square root of the eigenvalues. \item Steps: decompose covariance $\Sigma = E\Lambda E^T$ (since rael, symmetric).  \item Note all eigenvalues $\lambda_i$ are positive in a covariance matrix since positive definite. And in eigendecomposition, $E^TE=I$. \end{itemize}
 
-Linear transform of a Gaussian; \begin{itemize}
-    \item Let y be linearly related to x through $\mathbf{y = Mx + \eta}$
-    \item where $\eta \sim N(\mu, \Sigma)$ and $x\sim N(\mu_x, \Sigma_X)$.
-    \item Then the marginal $p(y)=\int_X p(y|x)p(x)$ is a Gaussian
-    \item $p(y) = N(y|M\mu_X + \mu, M\Sigma_XM^T+\Sigma)$.
-\end{itemize}
+Linear transform of a Gaussian; \begin{itemize} \item Let y be linearly related to x through $\mathbf{y = Mx + \eta}$ \item where $\eta \sim N(\mu, \Sigma)$ and $x\sim N(\mu_x, \Sigma_X)$. \item Then the marginal $p(y)=\int_X p(y|x)p(x)$ is a Gaussian \item $p(y) = N(y|M\mu_X + \mu, M\Sigma_XM^T+\Sigma)$. \end{itemize}
 
-Decorrelating (whitening); \begin{itemize}
-    \item If x has covariance matrix $\Sigma_X$ and mean $\mu_X$, then 
-    \item then $y=\Sigma_X^{-1/2}(x-\mu_X)$ has mean 0 and identity covariance matrix.
-    \item A commonly used initial transformation on data.
-    \item note: can find $\Sigma_X^{-1/2} through eigendecomposition.$
-\end{itemize}
+Decorrelating (whitening); \begin{itemize} \item If x has covariance matrix $\Sigma_X$ and mean $\mu_X$, then  \item then $y=\Sigma_X^{-1/2}(x-\mu_X)$ has mean 0 and identity covariance matrix. \item A commonly used initial transformation on data. \item note: can find $\Sigma_X^{-1/2} through eigendecomposition.$ \end{itemize}
 
 \end{document}
