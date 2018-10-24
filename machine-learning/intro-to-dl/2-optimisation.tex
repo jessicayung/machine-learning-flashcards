@@ -121,6 +121,98 @@ Show that gradient descent is coordinate system dependent.; \begin{itemize}
 	\item Implications: strictly speaking better to choose coordinate system for best convergence, but typically don't do this because it's a pain
 \end{itemize}
 
+Why use SGD?; \begin{itemize}
+	\item Taking gradient of loss across entire dataset takes too long. (O(N) operations usually.)
+	\item Stochastic nature makes algo robust to synchronisation issues in parallel implementations. \begin{itemize}
+		\item Since OK if gradient is slightly miscalculated since SG is noisy anyway.
+	\end{itemize}
+\item Works for online applications
+\end{itemize}
 
+Describe SGD; \begin{itemize}
+	\item Replace true gradient with approximation 
+	\item $\hat{G}(\mathcal{M}) = \frac{1}{M}\sum_{m\in\mathcal{M}} g(x^m)$
+	\item where $\mathcal{M}$ is a minibatch, a set of $M\ll N$ randomly selected datapoints from the training set.
+	\item $g(x^n)$ is the gradient on datapoint $x^n$.
+	\item Unbiased, variance $V=\frac{1}{M}(E[g(x^m)^2]-E[g(x^m)]^2)$ goes down quickly. (need maybe < 200 members to get good estimate.)
+\end{itemize}
+
+Show that the minibatch gradient estimate is unbiased.; \begin{itemize}
+	\item $\hat{G}(\mathcal{M}) = \frac{1}{M}\sum_{m\in\mathcal{M}} g(x^m)$, $G$ is average over all $N$ datapoints.
+	\item $E[\hat{G}] = \sum_{m_1,...,m_M} p(m_1,...,m_M)\frac{1}{M}\sum_{i=1}^M g(x^{m_i})$
+	\item $= \frac{1}{M}\sum_{i=1}^M\sum_{m_i} p(m_i)g(x^{m_i})$
+	\item $=\frac{1}{M}\sum_{i=1}^M\frac{1}{N}\sum_{m_i}g(x^{m_i})$
+	\item $=\frac{1}{M}\sum_{i=1}^M\frac{1}{N}\sum_{n}g(x^{n})=G$
+\end{itemize}
+
+Derive the variance of the minibatch gradient estimate.; \begin{itemize}
+	\item $E[\hat{G}^2] = \frac{1}{M^2}\sum_{i,j}E[g(x^{m_i})g(x^{m_j})]$
+	\item $=\frac{1}{M^2}(\sum_{i\ne j}E[g(x^{m_i})g(x^{m_j})]+\sum_i E[g(x^{m_i})^2])$
+	\item $=\frac{1}{M^2}((M^2-M)E[g(x^{m})]^2 + M E[g(x^{m})^2])$
+	\item so that $V=E[\hat{G}^2]-E[\hat{G}]^2 = \frac{1}{M}(E[g(x^{m})^2]- E[g(x^{m})]^2)$
+\end{itemize}
+
+State the Newton update.; $\mathbf{x_{k+1} = x_k} - \epsilon\mathbf{H^{-1}_f}\nabla f$.
+
+Derive the Newton update; \begin{itemize}
+	\item Taylor: $f(x+\Delta) = f(\mathbf{x}) + \Delta^T\nabla f + \frac{1}{2}\mathbf{\Delta^T H_f \Delta} + O(|\Delta|^3)$.
+	\item RHS has lowest value when $\nabla f = -\mathbf{H}_f\Delta \Rightarrow \Delta = -\mathbf{H}^{-1}_f \nabla f$.
+	\item set update quantity to $\Delta$
+	\item Upd: $\mathbf{x_{k+1} = x_k} - \epsilon\mathbf{H^{-1}_f}\nabla f$.
+	\item Check: change in fn is $\epsilon (-1+\frac{\epsilon}{2}\nabla f^T H^{-1}_f\nabla f)$, which is negative for small $\epsilon$ if H is pd.
+\end{itemize}
+
+Using the Newton update \begin{itemize}
+	\item Converges in one step for quadratic functions, $\epsilon = 1$.
+	\item Generally one uses a value $\epsilon < 1$ to avoid overshooting.
+\end{itemize}
+
+Advs and disadvs of using Newton's method; \begin{itemize}
+	\item Adv: \begin{itemize}
+	\item Decrease in objective function is invariant under a linear change in coordinates $x=My$ (vs GD not).
+\end{itemize}
+\item Disadv: \begin{itemize}
+	\item Storing the Hessian (TB for moderate-sized NN) and solving the linear system $\mathbf{H}_f^{-1}\nabla f$ is expensive. (in practice use conjugate gradient)
+	\item Not guaranteed to produce a downhill step: only downhill if $\epsilon$ small, H pd.
+	\item If H is pd, we can use line search in the direction $\mathbf{H}^{-1}\nabla f$ to ensure we go downhill and make a non-trivial jump.
+\end{itemize}
+\end{itemize}
+
+In practice, how might we solve the linear system $\mathbf{H\Delta}=\nabla f$?; \begin{itemize}
+	\item Conjugate gradient
+	\item Min $\mathbf{\Psi(\Delta)\equiv \frac{1}{2}\Delta^TH\Delta -\Delta^T\nabla f}$. 
+	\item Typically much faster than calling standard linear solvers (such as Gaussian elimination).
+\end{itemize}
+
+Briefly describe Quasi-Newton methods and give an example of one.; \begin{itemize}
+	\item Approximate inverse Hessian is formed iteratively.
+	\item E.g.: BFGS, or LBGFS (limits memory requirement of BFGS).
+	\item (Recall Newton update is $\mathbf{x_{k+1} = x_k} - \epsilon\mathbf{H^{-1}_f}\nabla f$.)
+\end{itemize}
+
+Describe the Gauss Newton method; \begin{itemize}
+	\item Motivation: Fix problem of H not necessarily being positive definite in Newton's method (then not necc downhill step)
+	\item Hessian for squared loss: $\frac{\partial^2 E}{\partial w_i \partial w_j}=2\sum_n (-[y^n-f(\mathbf{x^n, w})]\frac{\partial ^2 f^n}{\partial w_i \partial w_j}+\frac{\partial f^n}{\partial w_j}\frac{\partial f^n}{\partial w_j})$, $f^n\equiv f(\mathbf{x^n, w})$.
+	\item Intuition: suppose close to min, then residual $y^n-f(\mathbf{x^n,w})$ is small, can ignore first term in Hessian. 
+	\item Second term in Hessian is positive definite (outer product of two vectors), use that instead of the Hessian in the Newton update.
+	\item i.e. $\mathbf{C}=2\sum_n\nabla f^n(\nabla f^n)^T$
+	\item Generalised Gauss Newton method generalises this to convex loss functions, e.g. classification.
+\end{itemize}
+
+Describe the Levenberg-Marquardt algorithm; \begin{itemize}
+	\item Motivation: Gauss-Newton update requires us to solve $\mathbf{C\Delta} = \nabla E$. 
+	\item But if don't have many training datapoints, $\mathbf{C}$ will be rank deficient (non-invertible). Even if invertible, in practice C may be ill-conditioned (large range of eigenvalues), which makes solving the system numerically unstable.
+	\item Idea: Regularise the problem and solve (using conjugate gradients): $(\mathbf{C+\lambda I})\mathbf{\Delta}=\nabla E$ for some scalar $\lambda > 0$.
+	\item $\lambda \mathbf{I}$ is stabiliser limiting size of update.
+	\item Effectively defines a `trust region' since this in equiv to minimising (wrt $\Delta$) \begin{itemize}
+		\item $E(\mathbf{w}) + \mathbf{\Delta}^T\nabla E + \frac{1}{2}\mathbf{\Delta^TC\Delta} + \frac{\lambda}{2}\mathbf{\Delta^2\Delta}$,
+	\end{itemize} \item where the final regularising terms constrain the scale of the update $\mathbf{\Delta}$.
+\item makes sense since we only trust the Taylor expansion in the vicinity of $\mathbf{w}$.
+\item (Not particularly impt't to know for this course, GN methods still a bit unstable.)
+\end{itemize}
+
+One big tradeoff between first and second order methods; Number of iterations and amount of computation per iteration. \begin{itemize}
+	\item GN converges in smaller number of iterations that e.g. momentum on some problems, but each update much more expensive.
+\end{itemize}
 
 \end{document}
