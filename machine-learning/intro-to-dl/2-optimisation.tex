@@ -5,4 +5,17 @@
 \usepackage{amsmath}
 \begin{document}
 
+Find the analytical optimum $\mathbf{\theta}$ for a linear predictor $y(x|\theta)=\mathbf{x^T \theta}$ with squared loss.; \begin{itemize}
+	\item Loss $E(\mathbf{\theta}) = \sum_n (y^n - \mathbf{\theta^Tx^n})^2$
+	\item Optimum at $\frac{\partial E}{\partial \theta_i] = 2\sum_n (y^n - \mathbf{\theta^Tx^n})x^n_i = 0$
+	\item $\Rightarrow \sum_n y^n x^n_i = \sum_j \sum_n x^n_i x^n_j \theta_j$
+	\item which we can write in matrix form as $\mathbf{b = X\theta}$ (each of $\theta_i$ as a row) and solve as a linear system in $O(\dim(\theta)^3)$ time.
+\end{itemize}
+
+Time complexity of solving linear system $\mathbf{b=X\theta}$; $O(\dim(\theta)^3)$ time.
+
+Does the quadratic function $f(x)=\frac{1}{2}x^TAx - x^Tb$ have a unique minimum?; iff $A$ is positive definite.
+
+Minimum of quadratic function $f(x)=\frac{1}{2}x^TAx - x^Tb$ (if it exists); TODO 
+
 \end{document}
