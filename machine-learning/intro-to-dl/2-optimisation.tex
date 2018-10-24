@@ -7,15 +7,120 @@
 
 Find the analytical optimum $\mathbf{\theta}$ for a linear predictor $y(x|\theta)=\mathbf{x^T \theta}$ with squared loss.; \begin{itemize}
 	\item Loss $E(\mathbf{\theta}) = \sum_n (y^n - \mathbf{\theta^Tx^n})^2$
-	\item Optimum at $\frac{\partial E}{\partial \theta_i] = 2\sum_n (y^n - \mathbf{\theta^Tx^n})x^n_i = 0$
+	\item Optimum at $\frac{\partial E}{\partial \theta_i} = 2\sum_n (y^n - \mathbf{\theta^Tx^n})x^n_i = 0$
 	\item $\Rightarrow \sum_n y^n x^n_i = \sum_j \sum_n x^n_i x^n_j \theta_j$
 	\item which we can write in matrix form as $\mathbf{b = X\theta}$ (each of $\theta_i$ as a row) and solve as a linear system in $O(\dim(\theta)^3)$ time.
 \end{itemize}
 
 Time complexity of solving linear system $\mathbf{b=X\theta}$; $O(\dim(\theta)^3)$ time.
 
-Does the quadratic function $f(x)=\frac{1}{2}x^TAx - x^Tb$ have a unique minimum?; iff $A$ is positive definite.
+Does the quadratic function $f(x)=\frac{1}{2} x^TAx - x^Tb$ have a unique minimum?; iff $A$ is positive definite.
 
-Minimum of quadratic function $f(x)=\frac{1}{2}x^TAx - x^Tb$ (if it exists); TODO 
+
+Minimum of quadratic function $f(x)=\frac{1}{2} x^TAx - x^Tb$ (if it exists). Given $A$ is positive definite.; \begin{itemize}
+	\item At the optimum, $\nabla f = \mathbf{Ax-b=0}\Rightarrow \mathbf{x = A^{-1}b}$.
+	\item Minimum since function is concave: Hessian is $A$, which is positive definite.
+	\item Can also see it is a min through $f(\mathbf{x+\delta})=f(\mathbf{x})+\mathbf{\delta^T}\nabla f + \frac{1}{2}\mathbf{\delta^T A\delta}$, penultimate term = 0, final term $\geq 0$ since A is positive definite.
+\end{itemize}
+
+Derive a simple algorithm for gradient descent.; \begin{itemize}
+	\item Taylor series: for $\mathbf{x_{k+1}\approx x_k}$, $f(\mathbf{x_{k+1}})\approx f(\mathbf{x_k})+(\mathbf{x_{k+1}-x_k})^T\nabla f(\mathbf{x_k})$
+	\item setting $\mathbf{x_{k+1}-x_k}=-\epsilon \nabla f(\mathbf{x_k})$
+	\item gives $f(\mathbf{x_{k+1}}) \approx f(\mathbf{x_k}) - \epsilon |\nabla f(\mathbf{x_k})|^2$.
+	\item Hence, for small $\epsilon$, the algorithm $\mathbf{x_{k+1}}=\mathbf{x_k}-\epsilon\nabla f(\mathbf{x_k})$ decreases $f$. 
+	\item Iterate until convergence.
+\end{itemize}
+
+Problems if learning rate for gradient descent is too high or too low; \begin{itemize}
+	\item Too high: overshoots
+	\item Too low: convergence very slow
+	\item (Usually determie LR by experimenting with different values or learning schedules, adaptive methods.)
+\end{itemize}
+
+Is there a significant difference between (almost) converging to the minimum function value and the optimum parameters?; Yes - we might have almost converged to the minimal value but still be a long way from the optimum parameters.
+
+Are there many local minima in neural networks?; Usually, yes. Auer, Herbster and Warmuth (1996) showed that 'for a single neuron with the logistic function as the transfer function, the number of local minima of the error function based on the square loss can grow exponentially in the dimension.' 
+
+Describe the formula for a generalised gradient update and why it works.; \begin{itemize}
+	\item Update: $\mathbf{x_{t+1}}=\mathbf{x_t}-\epsilon \mathbf{C^{-1}g}$, $\mathbf{C}$ symmmetric and positive definite, $\epsilon > 0$.
+	\item Taylor $f(\mathbf{x_{t+1}})\approx f(\mathbf{x_t})-\epsilon \mathbf{g^TC^{-1}g}+\frac{\epsilon^2}{2}\mathbf{g^TC^{-1}HC^{-1}g}$
+	\item The first term $-\epsilon \mathbf{g^TC^{-1}g}$ reduces the fn value (inverse of pd matrix is pd). Provided $\epsilon$ is small, the second term will be small and will not affect the function reduction. \item i.e. up to second order, we'd get a reduction in the function value provided $\epsilon < \frac{2\mathbf{g^TC^{-1}g}}{\mathbf{g^TC^{-1}HC^{-1}g}}$.
+\end{itemize}
+
+State the result for the convergence rate for the gradient descent algorithm for convex functions.; Assuming \begin{itemize}
+	\item Convexity: $f$ is convex and finite over the path $\mathbf{x_1...x_T}$ that the gradient descent algorithm will take.
+	\item Finite solution: the optimum $\mathbf{x^*}$ exists and is finite
+	\item $\nabla f$ Lipschitz continuous: The gradient is Lipschitz with constant L. We further assume $f$ is twice differentiable. i.e. $\mathbf{H(x)}\succeq L\mathbf{I}$.
+	\item Learning rate: at each step, the learning rate $\epsilon \leq 1/L$.
+\end{itemize}
+Then, \begin{itemize}
+	\item $f(\mathbf{x_T})-f (\mathbf{x^*})\leq \frac{1}{2\epsilon T}(\mathbf{x_1-x^*})^2$.
+	\item i.e. the error goes down as $O(1/T)$ where $T$ is the number of iterations in the gradient descent algorithm.
+\end{itemize}
+
+Describe momentum.\begin{itemize}
+	\item Make an update in the (moving) average direction of the previous updates.
+	\item $\mathbf{x_{k+1}=x_k+\tilde{g}_{k+1}}$
+	\item $\mathbf{\tilde{g}_{k+1}}=\mu_k\mathbf{\tilde{g}_k}-\epsilon \mathbf{g_k(x_k)}$
+	\item i.e. use moving average of update $\mathbf{\tilde{g}_{k+1}}$ to form the new update
+\end{itemize}
+
+Benefits of momentum; \begin{itemize}
+	\item Can increase the speed of convergence since, for smooth objectives, as we get close to the minimum the gradient decreases and standard gradient descent starts to slow down.
+	\item If learning rate is too large, standard GD may oscillate, but momentum may reduce oscillations by going in the average direction.
+	\item But momentum param $\mu$ may need to be reduced with iteration count to ensure convergence.
+	\item Particularly useful when the gradient is noisy. 
+	\begin{itemize}
+		\item By averaging over previous gradients, the noise 'averages' out and the moving average dir can be much less noisy.
+	\end{itemize}
+\item Useful to avoid saddles (a big problem!) since momentum will typically carry you over the saddle.
+\end{itemize}
+
+Describe Nesterov's Accelerated Gradient; \begin{itemize}
+	\item Similar to momentum, but different in that we use the gradient of the point we will move to rather than the current point:
+		\begin{itemize}
+			\item $\mathbf{\tilde{g}_{k+1}}=\mu_k\mathbf{\tilde{g}_k}-\epsilon \mathbf{g_k(x_k+\mu_k\tilde{{g}}_k}$
+				\item $\mathbf{x_{k+1}=x_k+\tilde{g}_{k+1}}$ (same)
+			\end{itemize}
+		\item Achieves optimal rate of convergence for convex functions.
+		\item Need to choose schedule for $\mu_k$. Nesterov suggests $\mu_k = 1 - 3/(k+5)$.
+		\item Not clear why this works, but it works very well.
+	\end{itemize}
+
+
+NAG Rate of convergence to the optimum for convex functions (NAG = Nesterove's Accelerated Gradient); \begin{itemize}
+	\item $f(\mathbf{x_k})-f^*\leq \frac{c}{k^2}$ for some constant $c$, compared to $\frac{1}{k}$ convergence for gradient descent.
+\end{itemize}
+
+Describe how you might interpret NAG (why it works); TODO, slides 17-18.
+
+Why might convex optimisation be useful for NNs?; \begin{itemize}
+	\item NNs not convex, but
+	\item locally often convex, want convergence to local optima to be fast.
+\end{itemize}
+
+Is a NN usually deterministic?; No.
+
+Discuss the advantages and disadvantages of gradient descent.; \begin{itemize}
+	\item Good: Simple, easy to implement
+	\item Bad: 
+	\begin{itemize}
+		\item Only improves solution at each stage by a small amount.
+		\item If $\epsilon$ is not small enough, the function may not decrease in value (Taylor not valid). \item In practice one needs to find a suitably small $\epsilon$ to guarantee convergence.
+	\end{itemize}
+\item Ugly: \begin{itemize}
+	\item Method is coordinate system dependent (except for orthogonal transformations). Get to different solutions (accounting for transformations) if you transform the data.
+\end{itemize}
+
+\end{itemize}
+Show that gradient descent is coordinate system dependent.; \begin{itemize}
+	\item Let $\mathbf{x=My}$, define $\hat{f}(\mathbf{y})=f(\mathbf{x})$.
+	\item GD on $\hat{f}(\mathbf{y})$: $[\mathbf{y_{k+1}}]_i = [\mathbf{y_k}]_i - \epsilon \sum_j \frac{\partial f}{\partial x_j}\frac{\partial x_j}{\partial y_i}$ \item $\rightarrow \mathbf{y_{k+1}} = \mathbf{y_k} - \epsilon \mathbf{M^T}\nabla f(\mathbf{x_k})$.
+	\item Hence $\mathbf{My_{k+1}=My_k}-\epsilon \mathbf{MM^T}\nabla f(x_k)$ \item $\rightarrow \mathbf{x_{k+1}}=\mathbf{x_k}-\epsilon\mathbf{MM^T}\nabla f(\mathbf{x_k})$
+	\item Coordinate system dependent: transformed by $\mathbf{MM^T}$.
+	\item Implications: strictly speaking better to choose coordinate system for best convergence, but typically don't do this because it's a pain
+\end{itemize}
+
+
 
 \end{document}
