@@ -152,6 +152,44 @@ Derive the variance of the minibatch gradient estimate.; \begin{itemize}
 	\item so that $V=E[\hat{G}^2]-E[\hat{G}]^2 = \frac{1}{M}(E[g(x^{m})^2]- E[g(x^{m})]^2)$
 \end{itemize}
 
+Briefly discuss the proposed motivation of using SGD to avoid overfitting. \begin{itemize}
+	\item Maybe, not as well understood, more hacky.
+	\item Objective fn shifting as you change the minibatch so the minimum changes, but using this to `avoid overfitting' is not well understood.
+\end{itemize}
+
+Briefly describe adaptive learning methods (vs SGD) and give two examples; \begin{itemize}
+	\item Changing learning rate as we go, mostly hacks
+	\item e.g. Adam, fixed length updates, 
+\end{itemize}
+
+Describe fixed length updates (learning rate schedule); \begin{itemize}
+	\item Recall Taylor expansion motivates GD update, so $x_{k+1}-x_k = -\epsilon g(x_k)$ must be small. 
+	\item So if gradient is large, this may not hold.
+	\item Idea: require size of update $x_{k+1}-x_k$ to be fixed, `guaranteeing' its size. i.e. something like 
+	\item $x_{k+1}-x_k = -\epsilon sign (g(x_k))=-\epsilon \frac{g(x_k)}{\sqrt{g(x_k)^2}}$.
+	\item Can view as gradient descent with adaptive learning rate $\frac{\epsilon}{\sqrt{g(x_k)^2}}$.
+	\item said intuition was like looking in $\epsilon$ radius sphere and seeing what dir gives the largest decrease in fn val, not sure if this is the case since we're using gradients that change across the sphere...?
+\end{itemize}
+
+Describe Adam (optimiser); \begin{itemize}
+	\item Adaptive Moment: Use fixed length update intuition in a stochastic (minibatch) setting.
+	\item (Scalar case below, do in each dim.)
+	\item Moving average of gradient and squared gradient: \begin{itemize}
+		\item $m_k = \beta_1m_{k-1}+(1-\beta_1)g_k$
+		\item $\nu_k = \beta_2\nu_{k-1} + (1-\beta_2)g_k^2$.
+		\item Moving average of num and denom separately, likely more numerically stable than ratio but dk
+	\end{itemize}
+	\item Correct bias (dk if this makes a difference, dk why don't initialise to true gradient)
+	\item Use update $x_{k+1}=x_k - \frac{\epsilon}{\sqrt{\hat{\nu_k}++\gamma}}\hat{m}_k$.
+	\item $gamma$ for numerical stability (else if zero gradient, have problems.) Tends to work robustly for training NNs using $\beta_1 = 0.9, \beta_2 = 0.999, \gamma = 10^{-8}$.
+	\item thousands of similar things you can do
+\end{itemize}
+
+Adam bias correction; (wtv) \begin{itemize}
+	\item $\hat{m}_k = \frac{m_k}{1-\beta^k_1}$
+	\item $\hat{\nu}_k = \frac{\nu_k}{1-\beta^k_2}$.
+\end{itemize}
+
 State the Newton update.; $\mathbf{x_{k+1} = x_k} - \epsilon\mathbf{H^{-1}_f}\nabla f$.
 
 Derive the Newton update; \begin{itemize}
