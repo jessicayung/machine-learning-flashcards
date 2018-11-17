@@ -1,0 +1,48 @@
+%Front; Back
+\documentclass{article}
+\begin{document}
+
+Describe merge sort.; \begin{itemize} \item Split list into halves until you get list of length 1. \item Merge two (sorted) lists at a time. \end{itemize}
+
+Implement merge sort.; Merge sort fn: \begin{itemize} \item def merge\_sort(array, start, end2): \item if start < end: \begin{itemize} \item 	end1 = (start + end) // 2 \item (in-place or arr1=) merge\_sort(array, start, end1) \item (in-place or arr2=) merge\_sort(array) \item (ip or return) merge(array, start, end1, end2) \end{itemize} \end{itemize} Merge fn: \begin{itemize} \item def merge(arr, start, end1, end2): \begin{itemize} \item temp = [0]*(end2-start+1) \item i, j, k = start, end1 + 1, 0 # k = index in temp \item  while (i <= end1 or j <= end2): \begin{itemize} \item if (i <= end1 and (arr[i] <= arr[j] or j > end2): \item temp[k] = arr[i] \item i += 1 \item else: \item temp[k] = arr[j] \itemj += 1 \item k += 1 \end{itemize} \item # copy temp to original array \item for m in range(start, end2+1): array[m] = temp[m-start] \end{itemize} \end{itemize}
+
+Describe quicksort; \begin{itemize} \item Partition an array around a pivot (first, last, random el) \item such that elements smaller than pivot are to the left of pivot, larger els are to the right of pivot \item Quicksort array to left and array to right of pivot till array sizes = 1 el \end{itemize}
+
+Implement quicksort; Quicksort fn \begin{itemize} \item def quicksort(arr, start end): \item if start == end: return \item pivot\_index = partition(array, start, end) \item quicksort(array, start, pivot\_index - 1) \item quicksort(array, pivot\_index + 1, end) \end{itemize} Partition fn \begin{itemize} \item def partition(arr, start, end): \item pivot = array[end] \item i, j = 0, 0 \item for j in range(start, end+1): \begin{itemize} \item if arr[j] <= pivot: \begin{itemize} \item arr[i], arr[j] = arr[j], arr[i] \item i += 1 \end{itemize} \item arr[high], arr[i] = arr[i], arr[high] \item return i # pivot index \end{itemize} \end{itemize}
+
+What is a binary search algorithm?; 1. Start with the middle item. Is it bigger or smaller than our target item? Since the list is sorted, this tells us if the target is in the first or second half of our list. 2. Rule out the half of the list that doesn’t contain the target item. 3. Repeat the same approach on the new half-size problem. Do it again and again until we either find the item or rule out the whole set.
+
+What is the runtime complexity of a binary search algorithm?; For a sorted array: O(lg n).
+
+Code an iterative binary search algorithm; def binary_search(target, nums): floor_index = -1 \ ceiling_index = len(nums) \ while floor_index + 1 < ceiling_index: distance = ceiling_index - floor_index \ half_distance = distance / 2 \ guess_index = floor_index + half_distance \ guess_value = nums[guess_index] \ if guess_value == target: return True \ if guess_value > target: ceiling_index = guess_index \ else: floor_index = guess_index \\ return False
+
+Code a recursive binary search algorithm; 
+
+When can’t we use binary search to our usual effect?; When the input list is not yet sorted.
+
+How many binary searches would it take to find an element out of a list of 100 sorted items?; 7. (Check.)
+
+\section{Counting Sort}
+
+What is a counting sort algorithm?; (1) Allocate a list nums_to_counts where the indices represent numbers from our input list and the values represent how many times the index number appears. Start each value at 0. (2) In one pass of the input list, update nums_to_counts as you go, so that at the end the values in nums_to_counts are correct. (3) Allocate a list sorted_list where we'll store our sorted numbers. (4) In one in-order pass of nums_to_counts put each number, the correct number of times, into sorted_list.
+
+Runtime and space complexity of counting sort algorithm; O(n) for both time and space.
+
+What does counting sort exploit?; The O(1) time insertions and lookups in a list.
+
+Can we use counting sort when our input items aren’t integers bound by constants?; Yes. We can first write a function that maps our items to integers from 0 to some constant such that different items will always map to different integers. This allows us to use counting sort.
+
+Balanced binary trees; \begin{itemize}
+	\item If every subtree is balanced and \item the height of the two subtrees differs by at most one.
+	\item Red-black trees impose softer constraints.
+\end{itemize}
+
+Red-black tree properties; \begin{itemize}
+	\item Nodes are either red or black
+	\item The root and its leaves (NIL) are black
+	\item If a node is red, then its children are black
+	\item All paths from a node to its NIL descendants contain the same number of black nodes.
+	\item 'black height': don't count root node.
+\end{itemize}
+
+\end{document}
