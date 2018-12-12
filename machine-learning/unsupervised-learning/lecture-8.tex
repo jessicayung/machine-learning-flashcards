@@ -1,0 +1,133 @@
+\documentclass{article}
+\usepackage{amssymb, bm}
+\begin{document}
+
+% Recap: distributed representations of posterior. (For these: often don't have an easy way to spend more compute to get closer to the true distribution, unlike sampling) Approximate distributions on parameters. Approx may involve sampling. 
+
+Describe two ways in which integrals may be intractable; \begin{itemize}
+	\item Analytic intractability: integrals may not have closed form in non-linear, non-Gaussian models. Soln: numerical integration.
+	\item Computational intractability: numerical integral may be exponential in data or model size. (Focus of this lecture)
+\end{itemize}
+
+Is the marginal likelihood for MoG tractable? Explain.; \begin{itemize}
+	\item No. (Computationally intractable.)
+	\item Exact computations are exponential in the number of data points:
+	\item $p(\bm{x_1, ... x_N}) = \int d\theta p(\theta)\prod_{i=1}^N\sum_{s_i}p(\bm{x_i}|s_i,\theta)p(s_i|\theta)$
+	\item $= \sum_{s_1}...\sum_{s_N}\int d\theta p(\theta)\prod_{i=1}^Np(\bm{x_i}|s_i,\theta)p(s_i|\theta)$
+	\item need to compute $\mathtt{num-s-settings}^N$ integrals, each with prod of N terms.
+\end{itemize}
+
+Is computing the conditional probabilities in a large multiply-connected DAG tractable? Explain. \begin{itemize}
+	\item No. (Computationally intractable.)
+	\item $p(x_i|X_j=a)=\sum_{\mathtt{all-settings-y-except-i-j}}p(x_i, \bm{y}, X_j=a)/p(X_j=a)$
+	\item Need to sum over all settings of y, which is exponential in dimension of y. (TODO: what is dim of y? num other nodes or sth?)
+\end{itemize}
+
+Is computing the hidden state distribution in a general nonlinear dynamical system tractable?; \begin{itemize}
+	\item No. (Computationally intractable.)
+	\item $p(\bm{y_t|x_1, ..., x_t})\propto \int d\bm{y}_{t-1}p(\bm{y_t}|f(\bm{y}_{t-1}))p(\bm{x}_t|g(\bm{y}_t))p(\bm{y}_{t-1}|\bm{x_1,...,x_{t-1}})$
+	\item Q:is this intractable because summing over the $y_{t-1}$ is intractable? bc the latter part of the expression is recursive. And assuming we have $p(x_t|g(y_t))$ from somewhere else.
+\end{itemize}
+
+TODO: L8 VB slide 4 distributed models (FHMM sum); TODO
+
+What does the E in EM stand for?; \begin{itemize}
+	\item Expectation
+	\item Because we only need to calculate the expectations of the sufficient statistics to do the updates if our distributions are in the exponential family.
+\end{itemize}
+
+Where might intractability in EM come from (in general)?; \begin{itemize}
+	\item q is intractable
+	\item Finding expected values of sufficient statistics (under $p(Y|X,\theta)$ for M-step) is intractable
+\end{itemize}
+
+Where might intractability in EM come from for the M-step on a graphical model?; \begin{itemize}
+	\item Difficulty of computing marginal posteriors 
+	\item in graphs with large tree-width or non-linear/non-conjugate conditionals.
+	\item TODO:add an example.
+	\item Non-DAG:partition function (normalising constant) may also be intractable.
+	\begin{itemize}
+		\item recall: need expected sufficient stats from marginal posteriors on each factor group.
+		\item Non-DAG only since for DAGs, can optimise each factor parameter vector separately. (So?)
+	\end{itemize}
+\end{itemize}
+
+What are the key ideas behind variational approximation E-steps?; \begin{itemize}
+	\item Parameterise $q=q_{\rho}(Y)$ and take a gradient step in $\rho$.
+	\item Assume some simplified form for $q$, usually factored: $q=\pi_i q_i(Y_i)$ where $Y_i$ partition $Y$, and maximise within this form. 
+	\begin{itemize}
+		\item focus of this lecture
+		\item Can write as $q^{(k)}(Y):=\arg\max_{q(Y)\in\mathcal{Q}}\mathcal{F}(q(Y),\theta^{(k-1)})$, where $\mathcal{Q}$ is the constraint set.
+		\item Changes optimisation problem (vs gradient step does not).
+		\item So the fixed point this arrives at may not be at an unconstrained optimum of $\mathcal{F}$.
+	\end{itemize}
+\end{itemize}
+
+Describe the differences (in results) between variational approx E-step and general EM.; \begin{itemize}
+	\item Since $p(\mathcal{Y}|\mathcal{X},\theta^{(k)})$ may not lie in $\mathcal{Q}$, we no longer have $\mathcal{F}=l$ after the E-step.
+	\item Thus the likelihood may not increase on each full EM step (since we only know F increases, and during E-step likelihood may decrease.)
+	\item So we may not converge to a maximum of l.
+	\item Idea is that by increasing a lower bound on l, we may find a decent solution.
+\end{itemize}
+
+Describe the nature of the result obtained from the variational approx E-step in terms of the expression for F.; \begin{itemize}
+	\item EM soln: A compromise between maximising the likelihood $P(X|\theta)$ and minimising the $KL(q||p)$ since the KL is no longer zero after the E-step.
+	\item E-step: min $KL(q||p(Y|X,\theta^{(k-1)}))$.
+	\item Min KL component can be seen as a bias in $\theta$ drawing the approx form closer to the posterior.
+	\item (And since approx anyway, suggests generalisation to other divergence measures.)
+	\item (In practice could try early stopping based on test/val set preds? assuming this stopping refers to E-step iterations?)
+\end{itemize}
+
+Describe the factored variational E-step; \begin{itemize}
+	\item Partition latents $\mathcal{Y}$ into disjoint sets $Y_i$ with 
+	\item $\mathcal{Q}=\{q|q(Y)=\prod_i q_i(Y_i)\}$
+	\item Max $\mathcal{F}(q,\theta)$ wrt $q_i(Y_i)$ given other $q_j$ and parameters:
+	\item $q_i^{(k)}(Y_i)=\arg\max_{q_i(Y_i)}\mathcal{F}(q_i(Y_i)\prod_{j\ne i}q_j(Y_j),\theta^{(k-1)})$.
+	\begin{itemize}
+		\item $q_i$ updates iterated to convergence to 'complete' VE-step.
+		\item Every $VE_i$-step separately increases F, so any schedule of $VE_i$- and M-steps will converge.
+		\item So if M-step is very cheap, may do an M-step after each $VE_i$-step. Usually a few passes through E first.
+	\end{itemize}
+\end{itemize}
+
+Derive the general form of $q_i(Y_i)$ for the factored var E-step.; \begin{itemize}
+	\item FRee energy is $\mathcal{F}(\prod_j q_j(Y_j),\theta^{(k-1)}) = \langle \log P(X,Y|\theta^{(k-1)})\rangle_{\prod_j q_j(Y_j)} +H[\prod_jq_j(Y_j)]$
+	\begin{itemize}
+		\item = $\int dY_i q_i(Y_i)  \langle \log P(X,Y|\theta^{(k-1)})\rangle_{\prod_{j\ne i} q_j(Y_j)} +H[q_i] +\sum_{j\ne i}H[q_j]$
+	\end{itemize}
+	\item Take variational derivative (diff wrt fn) of Lagrangian (enforcing normalisation of q i.e. int to 1 since it's a dist)
+	\begin{itemize}
+		\item $\frac{\delta}{\delta q_i} (\mathcal{F}+\lambda (\int q_i - 1)) =  \langle \log P(X,Y|\theta^{(k-1)})\rangle_{\prod_{j\ne i} q_j(Y_j)}- \log q_i(Y_i) - \frac{q_i(Y_i)}{q_i(Y_i)}+\lambda = 0$
+		\item $\Rightarrow q_i(Y_i) \propto \exp  \langle \log P(X,Y|\theta^{(k-1)})\rangle_{\prod_{j\ne i} q_j(Y_j)}$
+	\end{itemize}
+	\item Generally depends only on the expected sufficient statistics under $q_j$ (vs need entire dist). 
+\end{itemize}
+
+Intuition for variational derivatives (differentiating wrt a function); \begin{itemize}
+	\item Discretise space of $Y_i$, so $q_i$ become vectors on space, with each dimension being a setting of $Y_i$.
+\end{itemize}
+
+Describe mean-field approximations for factored VE.; \begin{itemize}
+	\item Factored approx: next q is what should those disjoint sets be? One answer is having each variable in its own set. 
+	\item Strong assumption of `independence' so gap (KL) may be larger.
+	\item Intuit: Each var sees the 'mean field' (mean suff stats in general) of its neighbours/other vars (only affected by mean suff stats usually),
+	\item and we update these fields (qs) until they all agree.
+\end{itemize}
+
+What do mean-field approximations correspond to in physics?; Boltzmann machines or Ising model.
+
+Write down the joint $P(X,Y)$ for the Boltzmann machine.; \begin{itemize}
+	\item $P(X,Y)=\frac{1}{Z}\exp(\sum_{ij}W_{ij}s_is_j+\sum_ib_is_i)$,
+	\item with some $s_i\in Y$ and others observed (in $X$).
+\end{itemize}
+
+What is the expectation over a fully factored q for a Boltzmann machine ($P(X,Y)=\frac{1}{Z}\exp(\sum_{ij}W_{ij}s_is_j+\sum_ib_is_i)$, some $s_i$ hidden, some observed)?; \begin{itemize}
+	\item $\langle \log P(X,Y)\rangle_{\prod q_i} =\exp(\sum_{ij}W_{ij}\langle s_i\rangle_{q_i}\langle s_j\rangle_{q_j}+\sum_ib_i\langle s_i\rangle q_i$
+	\item where $q_i$ for $s_i \in X$ is a delta function on the observed value.
+	\item TODO: when did this become an equality?
+	\item So can update each $q_i$ in turn given the means (/in gen mean suff stats of others). Since all that affects one var from other var are the means.
+\end{itemize}
+
+Mean-field FHMM; TODO, big cchunk slides 16-17 of L8.
+
+\end{document}
