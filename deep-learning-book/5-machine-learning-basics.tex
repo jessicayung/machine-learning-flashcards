@@ -121,19 +121,19 @@ Does asymptotic unbiasedness imply consistency?; No. E.g. first sample of datase
 
 Describe maximum likelihood estimation; $\theta_{ML} = \arg\max_{\theta} p_{model}(\mathcal{X} | \theta)$, where $\mathcal{X}$ is a set of examples drawn from the underlying data-generating distribution $p_{data}(\mathbf{x})$. Equivalently, maximise log-likelihood (to prevent numerical underflow or overflow from products).
 
-Relationship between maximum likelihood and the KL divergence; Maximising expected log-likelihood is equivalent to minimising the KL divergence (with respect to parameters $\theta$). Helpful since KL has known minimum of zero, whereas NLL can become negative when $\mathbf{x}$ is real-valued.
+Relationship between maximum likelihood and the KL divergence; Maximising expected log-likelihood is equivalent to minimising the KL divergence between empirical distribution and model distribution (with respect to parameters $\theta$). Helpful since KL has known minimum of zero, whereas NLL can become negative when $\mathbf{x}$ is real-valued.
 
-We can reformulate maximising likelihood as minimising negative log-likelihood. Can the NLL become negative?; Yes, if $\mathbf{x}$ is real-valued.
+We can reformulate maximising likelihood as minimising negative log-likelihood. Can the NLL become negative?; Yes, if $\mathbf{x}$ is real-valued. (Since likelihood = product of densities evaluated at observations,d ensity can be > 1.)
 
 KL divergence; $D_{KL}(\hat{p}_{data}||p_{model}) = E_{\mathbf{x}\sim \hat{p}_{data}}[\log\hat{p}_{data}(\mathbf{x})-\log p_{model}(\mathbf{x})]$
 
-Cross-entropy; Any loss consisting of a negative log-likelihood is a cross-entropy between (1) $\hat{p}_{data}$, the empirical distribution defined by the training set and (2) $p_{model}$, the probability dist defined by the model. \\ i.e. not just NLL of Bernouille or softmax dist.
+Cross-entropy; Any loss consisting of a negative log-likelihood is a cross-entropy between (1) $\hat{p}_{data}$, the empirical distribution defined by the training set and (2) $p_{model}$, the probability dist defined by the model. \\ i.e. not just NLL of Bernouilli or softmax dist.
 
 How can we derive linear regression?; Derive MSE criterion using maximum likelihood on a linear Gaussian (noise) model.
 
-Conditional maximum likelihood estimator $\theta_{ML} = \arg\max_{\theta} p_{model}(Y | X;\theta)$
+Conditional maximum likelihood estimator; $\theta_{ML} = \arg\max_{\theta} p_{model}(Y | X,\theta)$
 
-Properties of maximum likelihood; \begin{itemize} \item Fastest rate of convergence as number of examples m increases, $m\to\infty$.  \item Consistent under appopriate conditions (true dist lies within model family, true dist corresponds to exactly one value of $\theta$. (identifiable)) \item (Other sources: can be 'broken', i.e. can have infinite likelihood for a single point) \end{itemize}
+Properties of maximum likelihood; \begin{itemize} \item Fastest rate of convergence as number of examples m increases, $m\to\infty$.  \item Consistent under appropriate conditions (true dist lies within model family, true dist corresponds to exactly one value of $\theta$. (identifiable)) \item (Other sources: can be 'broken', i.e. can have infinite likelihood for a single point) \end{itemize}
 
 Comparing statistical efficiency of consistent estimators; Higher stat efficiency if it requires fewer examples to obtain a certain generalisation error or vice versa (lower gen error with fixed number of training examples). \\ Note statistical efficiency is typically studied in the parametric case (estimating value of a parameter as opposed to the value of a function).
 
@@ -145,9 +145,9 @@ In brief, what properties of maximum likelihood make it attractive?; Statistical
 
 Compare the frequentist vs Bayesian perspectives on $\theta$ and the dataset.; \begin{itemize} \item Frequentist: true $\theta$ is fixed but unknown, point estimate $\hat{\theta}$ random because it is a function of the dataset (which is seen as random) \item Bayesian: true $\theta$ is unknown or uncertain, represented as a radom variable. Dataset is directly observed and so is not random. Consider distribution of $\theta$ as opposed to a point estimate.  \end{itemize} 
 
-Prior; $p(\theta)$, gat represent prior knowledge of $\theta$ or a preference for 'simpler' solutions.
+Prior; $p(\theta)$, can represent prior knowledge of $\theta$ or a preference for `simpler' solutions.
 
-How do you deal with the uncertainty in an estimator (frequentist vs Bayesian approaches); \begin{itemize} \item Frequentist: summarise in point estimate \item Bayesian: integrate over it using the laws of probability. Protects against overfitting, but may be intractable.  \end{itemize}
+How do you deal with the uncertainty in an estimator, e.g. when making predictions (frequentist vs Bayesian approaches); \begin{itemize} \item Frequentist: summarise in point estimate \item Bayesian: integrate over it using the laws of probability. Protects against overfitting, but may be intractable.  \end{itemize}
 
 \section{Supervised Learning Algorithms}
 
@@ -171,13 +171,13 @@ K-nearest neighbours; \begin{itemize} \item Find k nearest neighbours to test ex
 
 Disadvantages of k-nearest neighbours; \begin{itemize} \item High compute cost \item may generalise poorly with small finite trainig set \item cannot learn that one feature is more discriminative than another (e.g. 100-coord, x1=y but NN det mostly by x2-x100.) \end{itemize}
 
-Decision trees; \begin{itemize} \item partitions input space with 1-1 correspondence between leaf nodes and input regions \item usually each leaf node maps all points in input region to some output y \item usually parametric in practice (since regularised with size constraints like max depth) \item may struggle to solve simple problems solvable by logistic regression if we use typical \textbf{axis-aligned splits} and constant outputs (e.g. linear decision boundary diagonal to axes -> DT constructs staircase-like DB) \end{itemize}
+Decision trees; \begin{itemize} \item partitions input space with 1-1 correspondence between leaf nodes and input regions \item usually each leaf node maps all points in input region to some output y \item usually parametric in practice (since regularised with size constraints like max depth) \item may struggle to solve simple problems solvable by logistic regression if we use typical \textbf{axis-aligned splits} and constant outputs (e.g. linear decision boundary diagonal to axes $\to$ DT constructs staircase-like DB) \end{itemize}
 
 \section{Unsupervised Learning Algorithms}
 
 Describe unsupervised learning; learning to find the 'best' representation of data. often involves \begin{itemize} \item Preserving as much information about \textbf{x} as possible \item While obeying constraints aimed at keeping representation simpler or more accessible than \textbf{x} itself, e.g.  \begin{itemize} \item lower dim (compress info) \item sparse (O\&F, 1996) \item independent (disentangle sources of variation) \end{itemize} \end{itemize}
 
-Principal Components Analysis; Learns repr that is \begin{itemize} \item Repr Lower dim, \item Repr elements have no linear correlation with each other \item info preservation measured by least-squares reconstruction error \item Learns orthogonal, linear transformation of data $x\to z, z=XW$ such that var(z) is diagonal.  \item PCs of $X$ given by eigenvectors of $X^TX$, i.e. $X^X=W\Lambda W^T$.  \end{itemize}
+Principal Components Analysis; Learns repr that is \begin{itemize} \item Repr Lower dim, \item Repr elements have no linear correlation with each other \item info preservation measured by least-squares reconstruction error \item Learns orthogonal, linear transformation of data $x\to z, z=XW$ such that var(z) is diagonal.  \item PCs of $X$ given by eigenvectors of $X^TX$, i.e. $X^T=W\Lambda W^T$.  \end{itemize}
 
 PCA: show PCs are linearly uncorrelated; Derive via SVD. \begin{itemize} \item Show Var(Z) is diagonal. (z=PCs) \item $X = U\Sigma W^T$, $X^TX = W\Lambda W^T$, $Z=XW$. todo details \end{itemize}
 
