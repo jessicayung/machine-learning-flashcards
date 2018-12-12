@@ -1,0 +1,33 @@
+%Front; 
+\documentclass{article}
+\begin{document}
+
+Describe how decision trees work.; \begin{itemize} \item At each node, ask a true/false question. Q is which questions to ask and when.  \item Goal: maximise information gain at each node\begin{itemize} \item Info gain = starting Gini impurity - $\frac{1}{\mathtt{num e.g.s}}\sum_{i=1,2}$(num in set i)$\times$ (Gini impurity of set i) \end{itemize} \item Gini Impurity = chance of being incorrect if you randomly assign a label from the set to an example in the same set \end{itemize} 
+
+Gini impurity; \begin{itemize} \item chance of being incorrect if you randomly assign a label from the set to an example in the same set \item For classification, equal to $\sum_{i\in \mathtt{classes}}p_i(1-p_i)$ \end{itemize}
+
+Bagging; Bootstrap aggregation. \begin{itemize} \item e.g. Create multiple trees with different samples of the training set (different views of the problem, sample with replacement) and \item combining their predictions, e.g. by voting.  \end{itemize}
+
+Briefly compare Random Forests with bagged decision trees.; \begin{itemize} \item In RFs, we also force trees to be different by limiting the features questions can choose from at each node to m randomly sampled features.  \item For classification, may set $m<\sqrt(M)$, where M is the total number of features.  \end{itemize}
+
+Describe Naive Bayes (and name one app); \begin{itemize} \item Assume xs are independent conditioned on y. Then we have \item $p(y|x_1,...,x_m) = \frac{p(x_1|y)...p(x_m|y)p(y)}{\sum_y p(x_1|y)...p(x_m|y)p(y)}$ \item Fast, easy to code, but assumes predictors indep cond on y. Can work v well.  \item May need to smooth unobserved classes with 0 probability \item (App: mostly text classification bc good with multi-class and indep-cond-on-y inputs) \end{itemize}
+
+Describe Support Vector Machines; \begin{itemize} \item Minimise $\frac{1}{2}||w||^2$ (equiv to max margin since margin$=\frac{2}{||w||}$) (from proj margin vec onto $w$, rewrite using yx eqn) \item s.t. $y_i(w^Tx_i+b)-1\geq 0$ for all examples, $=0$ for support vectors.  \item Decision rule: $w^Tu+b\geq 0\rightarrow$ class 1, e.g.  \item Convex optimisation \end{itemize}
+
+Briefly describe logistic regression; \begin{itemize} \item $h_{\theta}(x) = g(\theta^Tx)$ ,where $g(x)=\frac{1}{1+e^{-x}}$.  \end{itemize}
+
+Describe boosting; \begin{itemize} \item A variety of bagging where \item data for the next model is sampled not uniformly at random, but \item \textbf{weighted according to the error of the predictions of the models so far}, \item so future models focus on getting examples previous models got wrong right \end{itemize}
+
+Decscribe random forests; \begin{itemize} \item At each node, $m<M$ (total number of features) selected at random, best split (info gain max) on this subset of features is used \item Each tree grown to largest extent possible (or max depth), no pruning \item Aggregate predictions of trees \item num features used per node m is constant as we grow trees \end{itemize}
+
+Floating point benefits \begin{itemize}
+	\item Speed: 
+	\item Efficient (space):
+	\item Does not understand recurring numbers, stops after x digits.
+\end{itemize}
+
+How many significant figures do 32-bit computers store? (and); about 7 decimal (23 bits). 8 bits for exponent. 1 sign bit.
+
+How many significant figures do 64-bit computers store? (and); about 16 decimal (52 bits). 11 bits for exponent. 1 sign bit.
+
+\end{document}
