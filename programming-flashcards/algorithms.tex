@@ -4,17 +4,17 @@
 
 Describe merge sort.; \begin{itemize} \item Split list into halves until you get list of length 1. \item Merge two (sorted) lists at a time. \end{itemize}
 
-Implement merge sort.; Merge sort fn: \begin{itemize} \item def merge\_sort(array, start, end2): \item if start < end: \begin{itemize} \item 	end1 = (start + end) // 2 \item (in-place or arr1=) merge\_sort(array, start, end1) \item (in-place or arr2=) merge\_sort(array) \item (ip or return) merge(array, start, end1, end2) \end{itemize} \end{itemize} Merge fn: \begin{itemize} \item def merge(arr, start, end1, end2): \begin{itemize} \item temp = [0]*(end2-start+1) \item i, j, k = start, end1 + 1, 0 # k = index in temp \item  while (i <= end1 or j <= end2): \begin{itemize} \item if (i <= end1 and (arr[i] <= arr[j] or j > end2): \item temp[k] = arr[i] \item i += 1 \item else: \item temp[k] = arr[j] \itemj += 1 \item k += 1 \end{itemize} \item # copy temp to original array \item for m in range(start, end2+1): array[m] = temp[m-start] \end{itemize} \end{itemize}
+Implement merge sort.; Merge sort fn: \begin{itemize} \item def merge\_sort(array, start, end2): \item if start < end: \begin{itemize} \item 	end1 = (start + end) // 2 \item (in-place or arr1=) merge\_sort(array, start, end1) \item (in-place or arr2=) merge\_sort(array) \item (ip or return) merge(array, start, end1, end2) \end{itemize} \end{itemize} Merge fn: \begin{itemize} \item def merge(arr, start, end1, end2): \begin{itemize} \item temp = [0]*(end2-start+1) \item i, j, k = start, end1 + 1, 0 \# k = index in temp \item  while (i <= end1 or j <= end2): \begin{itemize} \item if (i <= end1 and (arr[i] <= arr[j] or j > end2): \item temp[k] = arr[i] \item i += 1 \item else: \item temp[k] = arr[j] \item j += 1 \item k += 1 \end{itemize} \item \# copy temp to original array \item for m in range(start, end2+1): array[m] = temp[m-start] \end{itemize} \end{itemize}
 
 Describe quicksort; \begin{itemize} \item Partition an array around a pivot (first, last, random el) \item such that elements smaller than pivot are to the left of pivot, larger els are to the right of pivot \item Quicksort array to left and array to right of pivot till array sizes = 1 el \end{itemize}
 
-Implement quicksort; Quicksort fn \begin{itemize} \item def quicksort(arr, start end): \item if start == end: return \item pivot\_index = partition(array, start, end) \item quicksort(array, start, pivot\_index - 1) \item quicksort(array, pivot\_index + 1, end) \end{itemize} Partition fn \begin{itemize} \item def partition(arr, start, end): \item pivot = array[end] \item i, j = 0, 0 \item for j in range(start, end+1): \begin{itemize} \item if arr[j] <= pivot: \begin{itemize} \item arr[i], arr[j] = arr[j], arr[i] \item i += 1 \end{itemize} \item arr[high], arr[i] = arr[i], arr[high] \item return i # pivot index \end{itemize} \end{itemize}
+Implement quicksort; Quicksort fn \begin{itemize} \item def quicksort(arr, start end): \item if start == end: return \item pivot\_index = partition(array, start, end) \item quicksort(array, start, pivot\_index - 1) \item quicksort(array, pivot\_index + 1, end) \end{itemize} Partition fn \begin{itemize} \item def partition(arr, start, end): \item pivot = array[end] \item i, j = 0, 0 \item for j in range(start, end+1): \begin{itemize} \item if arr[j] <= pivot: \begin{itemize} \item arr[i], arr[j] = arr[j], arr[i] \item i += 1 \end{itemize} \item arr[high], arr[i] = arr[i], arr[high] \item return i \# pivot index \end{itemize} \end{itemize}
 
 What is a binary search algorithm?; 1. Start with the middle item. Is it bigger or smaller than our target item? Since the list is sorted, this tells us if the target is in the first or second half of our list. 2. Rule out the half of the list that doesn’t contain the target item. 3. Repeat the same approach on the new half-size problem. Do it again and again until we either find the item or rule out the whole set.
 
 What is the runtime complexity of a binary search algorithm?; For a sorted array: O(lg n).
 
-Code an iterative binary search algorithm; def binary_search(target, nums): floor_index = -1 \ ceiling_index = len(nums) \ while floor_index + 1 < ceiling_index: distance = ceiling_index - floor_index \ half_distance = distance / 2 \ guess_index = floor_index + half_distance \ guess_value = nums[guess_index] \ if guess_value == target: return True \ if guess_value > target: ceiling_index = guess_index \ else: floor_index = guess_index \\ return False
+Code an iterative binary search algorithm; def binary\_search(target, nums): floor\_index = -1 \ ceiling\_index = len(nums) \ while floor\_index + 1 < ceiling\_index: distance = ceiling\_index - floor\_index \ half\_distance = distance / 2 \ guess\_index = floor\_index + half\_distance \ guess\_value = nums[guess\_index] \ if guess\_value == target: return True \ if guess\_value > target: ceiling\_index = guess\_index \ else: floor\_index = guess\_index \\ return False
 
 Code a recursive binary search algorithm; 
 
@@ -24,7 +24,7 @@ How many binary searches would it take to find an element out of a list of 100 s
 
 \section{Counting Sort}
 
-What is a counting sort algorithm?; (1) Allocate a list nums_to_counts where the indices represent numbers from our input list and the values represent how many times the index number appears. Start each value at 0. (2) In one pass of the input list, update nums_to_counts as you go, so that at the end the values in nums_to_counts are correct. (3) Allocate a list sorted_list where we'll store our sorted numbers. (4) In one in-order pass of nums_to_counts put each number, the correct number of times, into sorted_list.
+What is a counting sort algorithm?; (1) Allocate a list nums\_to\_counts where the indices represent numbers from our input list and the values represent how many times the index number appears. Start each value at 0. (2) In one pass of the input list, update nums\_to\_counts as you go, so that at the end the values in nums\_to\_counts are correct. (3) Allocate a list sorted\_list where we'll store our sorted numbers. (4) In one in-order pass of nums\_to\_counts put each number, the correct number of times, into sorted\_list.
 
 Runtime and space complexity of counting sort algorithm; O(n) for both time and space.
 
@@ -32,17 +32,34 @@ What does counting sort exploit?; The O(1) time insertions and lookups in a list
 
 Can we use counting sort when our input items aren’t integers bound by constants?; Yes. We can first write a function that maps our items to integers from 0 to some constant such that different items will always map to different integers. This allows us to use counting sort.
 
-Balanced binary trees; \begin{itemize}
-	\item If every subtree is balanced and \item the height of the two subtrees differs by at most one.
-	\item Red-black trees impose softer constraints.
-\end{itemize}
+Balanced binary trees; \begin{itemize} \item If every subtree is balanced and \item the height of the two subtrees differs by at most one.  \item Red-black trees impose softer constraints.  \end{itemize}
 
-Red-black tree properties; \begin{itemize}
-	\item Nodes are either red or black
-	\item The root and its leaves (NIL) are black
-	\item If a node is red, then its children are black
-	\item All paths from a node to its NIL descendants contain the same number of black nodes.
-	\item 'black height': don't count root node.
-\end{itemize}
+Red-black tree properties; \begin{itemize} \item Nodes are either red or black \item The root and its leaves (NIL) are black \item If a node is red, then its children are black \item All paths from a node to its NIL descendants contain the same number of black nodes.  \item 'black height': don't count root node.  \end{itemize}
+
+Insert and removing on red-black trees; \begin{itemize} \item May violate structure of red-black trees \item so ROTATE: alter structure of \end{itemize}
+
+Search on red-black trees; TODO
+
+Are AVL or red-black trees better for lookup-intensive applications?; \begin{itemize} \item AVL trees are faster than red–black trees for lookup-intensive applications \item because they are more strictly balanced.  \item AVL: heights of left and right subtrees differ by at most one \item RBT: black height same for all root-to-leaf-node paths \end{itemize}
+
+Write a class for a trie node; Node attributes: \begin{itemize} \item Hash map from character (or label of child node) to child nodes \item Boolean is\_complete\_word (i.e. if one of the 'child nodes' can be an end-of-word) \end{itemize}
+
+Cases to use tries; e.g. catch spelling errors in real time.
+
+Advs and disadvs of tries (vs hash tables); \begin{itemize} \item Advs: \begin{itemize} \item Worst-case lookup time O(m), m = length of search string, faster than imperfect hash table: O(N), n=num entries. But typical O(1) with O(m) time spent evaluating hash...?  \item No key/hash collisions \item Buckets only necessary if single key associated with more than one value (vs collision storage for hash table buckets) \item No need to provide or change hash functions as more keys are added to a trie \item Can provide alphabetical ordering of entries by key \end{itemize} \item Disadvs: \begin{itemize} \item Lookups can be slower than hash tables, esp when data \item Can require more space than hash table, as memory may be allocated for each char in teh search string vs a single chunk of memory for the whole entry (as in most hash tables) \item (Some keys like floats can lead to long chains/prefixes that are not that meaningful.) \end{itemize} \end{itemize}
+
+Define an k-ary tree; a tree where no node has more than k children.
+
+Define in-order, pre-order and post-order traversal for trees; \begin{itemize} \item In-order: left subtree, then root, then right subtree \item Pre-order: root, then left subtree, then right subtree \item Post-order: left subtree, then right subtree, then root \end{itemize}
+
+Dijkstra's Algorithm tells you; \begin{itemize} \item shortest path from one node to every other node \item (vs Min spanning tree Prim's etc?) \end{itemize}
+
+Describe Dijkstra's Algorithm; \begin{itemize} \item Goal: find shortest path from one node to every other node \item Init distance = infinity \item Start from starting node \item Update tentative distances (min(len of path through current node, prev marked dist)) to each node \item Repeat with unclosed neighbour with shortest tentative distance till all nodes closed \item Time complexity: O(E + VlogV) (queue of distance values, looping through edges of each node) \end{itemize}
+
+Problems with Dijkstra; \begin{itemize} \item If graph is dense: e.g. if grid, flood fills. Not optimal e.g. if we want to go straight down. Want to build in intuition we're going towards our goal.  \item Will go down shortest edges possibly unnecessarily (e.g. not in direction of goal at all) \item A* vs Dijkstra: builds in intuition that we're going towards our goal.  \end{itemize}
+
+Briefly compare A* with Dijkstra (main difference); A* builds in intuition that we're going towards our goal.
+
+Advs and disadvs of A* vs Dijkstra\begin{itemize} \item A* can use less memory and compute since doesn't expand all nodes \item If heuristic is bad then in trouble, may not get good solution \end{itemize} Describe the A* algorithm; \begin{itemize} \item Goal: Find shortest path from start node to target node \item Picks node with lowest f(n) = g(n) + h(n) at each step \begin{itemize} \item g(n) = cost of path from start node to n \item h(n) = heuristic than ests cost of cheapest path from n to target node \end{itemize} \item H calc varies, e.g. euclidean distance between nodes on a drawn graph \end{itemize}
 
 \end{document}
