@@ -5,252 +5,79 @@
 \usepackage{amsmath}
 \begin{document}
 
-Find the analytical optimum $\mathbf{\theta}$ for a linear predictor $y(x|\theta)=\mathbf{x^T \theta}$ with squared loss.; \begin{itemize}
-	\item Loss $E(\mathbf{\theta}) = \sum_n (y^n - \mathbf{\theta^Tx^n})^2$
-	\item Optimum at $\frac{\partial E}{\partial \theta_i} = 2\sum_n (y^n - \mathbf{\theta^Tx^n})x^n_i = 0$
-	\item $\Rightarrow \sum_n y^n x^n_i = \sum_j \sum_n x^n_i x^n_j \theta_j$
-	\item which we can write in matrix form as $\mathbf{b = X\theta}$ (each of $\theta_i$ as a row) and solve as a linear system in $O(\dim(\theta)^3)$ time.
-\end{itemize}
+Find the analytical optimum $\mathbf{\theta}$ for a linear predictor $y(x|\theta)=\mathbf{x^T \theta}$ with squared loss.; \begin{itemize} \item Loss $E(\mathbf{\theta}) = \sum_n (y^n - \mathbf{\theta^Tx^n})^2$ \item Optimum at $\frac{\partial E}{\partial \theta_i} = 2\sum_n (y^n - \mathbf{\theta^Tx^n})x^n_i = 0$ \item $\Rightarrow \sum_n y^n x^n_i = \sum_j \sum_n x^n_i x^n_j \theta_j$ \item which we can write in matrix form as $\mathbf{b = X\theta}$ (each of $\theta_i$ as a row) and solve as a linear system in $O(\dim(\theta)^3)$ time.  \end{itemize}
 
 Time complexity of solving linear system $\mathbf{b=X\theta}$; $O(\dim(\theta)^3)$ time.
 
 Does the quadratic function $f(x)=\frac{1}{2} x^TAx - x^Tb$ have a unique minimum?; iff $A$ is positive definite.
 
 
-Minimum of quadratic function $f(x)=\frac{1}{2} x^TAx - x^Tb$ (if it exists). Given $A$ is positive definite.; \begin{itemize}
-	\item At the optimum, $\nabla f = \mathbf{Ax-b=0}\Rightarrow \mathbf{x = A^{-1}b}$.
-	\item Minimum since function is concave: Hessian is $A$, which is positive definite.
-	\item Can also see it is a min through $f(\mathbf{x+\delta})=f(\mathbf{x})+\mathbf{\delta^T}\nabla f + \frac{1}{2}\mathbf{\delta^T A\delta}$, penultimate term = 0, final term $\geq 0$ since A is positive definite.
-\end{itemize}
+Minimum of quadratic function $f(x)=\frac{1}{2} x^TAx - x^Tb$ (if it exists). Given $A$ is positive definite.; \begin{itemize} \item At the optimum, $\nabla f = \mathbf{Ax-b=0}\Rightarrow \mathbf{x = A^{-1}b}$.  \item Minimum since function is convex: Hessian is $A$, which is positive definite.  \item Can also see it is a min through $f(\mathbf{x+\delta})=f(\mathbf{x})+\mathbf{\delta^T}\nabla f + \frac{1}{2}\mathbf{\delta^T A\delta}$, penultimate term = 0, final term $\geq 0$ since A is positive definite.  \end{itemize}
 
-Derive a simple algorithm for gradient descent.; \begin{itemize}
-	\item Taylor series: for $\mathbf{x_{k+1}\approx x_k}$, $f(\mathbf{x_{k+1}})\approx f(\mathbf{x_k})+(\mathbf{x_{k+1}-x_k})^T\nabla f(\mathbf{x_k})$
-	\item setting $\mathbf{x_{k+1}-x_k}=-\epsilon \nabla f(\mathbf{x_k})$
-	\item gives $f(\mathbf{x_{k+1}}) \approx f(\mathbf{x_k}) - \epsilon |\nabla f(\mathbf{x_k})|^2$.
-	\item Hence, for small $\epsilon$, the algorithm $\mathbf{x_{k+1}}=\mathbf{x_k}-\epsilon\nabla f(\mathbf{x_k})$ decreases $f$. 
-	\item Iterate until convergence.
-\end{itemize}
+Derive a simple algorithm for gradient descent.; \begin{itemize} \item Taylor series: for $\mathbf{x_{k+1}\approx x_k}$, $f(\mathbf{x_{k+1}})\approx f(\mathbf{x_k})+(\mathbf{x_{k+1}-x_k})^T\nabla f(\mathbf{x_k})$ \item setting $\mathbf{x_{k+1}-x_k}=-\epsilon \nabla f(\mathbf{x_k})$ \item gives $f(\mathbf{x_{k+1}}) \approx f(\mathbf{x_k}) - \epsilon |\nabla f(\mathbf{x_k})|^2$.  \item Hence, for small $\epsilon$, the algorithm $\mathbf{x_{k+1}}=\mathbf{x_k}-\epsilon\nabla f(\mathbf{x_k})$ decreases $f$.  \item Iterate until convergence.  \end{itemize}
 
-Problems if learning rate for gradient descent is too high or too low; \begin{itemize}
-	\item Too high: overshoots
-	\item Too low: convergence very slow
-	\item (Usually determie LR by experimenting with different values or learning schedules, adaptive methods.)
-\end{itemize}
+Problems if learning rate for gradient descent is too high or too low; \begin{itemize} \item Too high: overshoots \item Too low: convergence very slow \item (Usually determie LR by experimenting with different values or learning schedules, adaptive methods.) \end{itemize}
 
 Is there a significant difference between (almost) converging to the minimum function value and the optimum parameters?; Yes - we might have almost converged to the minimal value but still be a long way from the optimum parameters.
 
 Are there many local minima in neural networks?; Usually, yes. Auer, Herbster and Warmuth (1996) showed that 'for a single neuron with the logistic function as the transfer function, the number of local minima of the error function based on the square loss can grow exponentially in the dimension.' 
 
-Describe the formula for a generalised gradient update and why it works.; \begin{itemize}
-	\item Update: $\mathbf{x_{t+1}}=\mathbf{x_t}-\epsilon \mathbf{C^{-1}g}$, $\mathbf{C}$ symmmetric and positive definite, $\epsilon > 0$.
-	\item Taylor $f(\mathbf{x_{t+1}})\approx f(\mathbf{x_t})-\epsilon \mathbf{g^TC^{-1}g}+\frac{\epsilon^2}{2}\mathbf{g^TC^{-1}HC^{-1}g}$
-	\item The first term $-\epsilon \mathbf{g^TC^{-1}g}$ reduces the fn value (inverse of pd matrix is pd). Provided $\epsilon$ is small, the second term will be small and will not affect the function reduction. \item i.e. up to second order, we'd get a reduction in the function value provided $\epsilon < \frac{2\mathbf{g^TC^{-1}g}}{\mathbf{g^TC^{-1}HC^{-1}g}}$.
-\end{itemize}
+Describe the formula for a generalised gradient update and why it works.; \begin{itemize} \item Update: $\mathbf{x_{t+1}}=\mathbf{x_t}-\epsilon \mathbf{C^{-1}g}$, $\mathbf{C}$ symmmetric and positive definite, $\epsilon > 0$.  \item Taylor $f(\mathbf{x_{t+1}})\approx f(\mathbf{x_t})-\epsilon \mathbf{g^TC^{-1}g}+\frac{\epsilon^2}{2}\mathbf{g^TC^{-1}HC^{-1}g}$ \item The first term $-\epsilon \mathbf{g^TC^{-1}g}$ reduces the fn value (inverse of pd matrix is pd). Provided $\epsilon$ is small, the second term will be small and will not affect the function reduction. \item i.e. up to second order, we'd get a reduction in the function value provided $\epsilon < \frac{2\mathbf{g^TC^{-1}g}}{\mathbf{g^TC^{-1}HC^{-1}g}}$.  \end{itemize}
 
-State the result for the convergence rate for the gradient descent algorithm for convex functions.; Assuming \begin{itemize}
-	\item Convexity: $f$ is convex and finite over the path $\mathbf{x_1...x_T}$ that the gradient descent algorithm will take.
-	\item Finite solution: the optimum $\mathbf{x^*}$ exists and is finite
-	\item $\nabla f$ Lipschitz continuous: The gradient is Lipschitz with constant L. We further assume $f$ is twice differentiable. i.e. $\mathbf{H(x)}\succeq L\mathbf{I}$.
-	\item Learning rate: at each step, the learning rate $\epsilon \leq 1/L$.
-\end{itemize}
-Then, \begin{itemize}
-	\item $f(\mathbf{x_T})-f (\mathbf{x^*})\leq \frac{1}{2\epsilon T}(\mathbf{x_1-x^*})^2$.
-	\item i.e. the error goes down as $O(1/T)$ where $T$ is the number of iterations in the gradient descent algorithm.
-\end{itemize}
+State the result for the convergence rate for the gradient descent algorithm for convex functions.; Assuming \begin{itemize} \item Convexity: $f$ is convex and finite over the path $\mathbf{x_1...x_T}$ that the gradient descent algorithm will take.  \item Finite solution: the optimum $\mathbf{x^*}$ exists and is finite \item $\nabla f$ Lipschitz continuous: The gradient is Lipschitz with constant L. We further assume $f$ is twice differentiable. i.e. $\mathbf{H(x)}\succeq L\mathbf{I}$.  \item Learning rate: at each step, the learning rate $\epsilon \leq 1/L$.  \end{itemize} Then, \begin{itemize} \item $f(\mathbf{x_T})-f (\mathbf{x^*})\leq \frac{1}{2\epsilon T}(\mathbf{x_1-x^*})^2$.  \item i.e. the error goes down as $O(1/T)$ where $T$ is the number of iterations in the gradient descent algorithm.  \end{itemize}
 
-Describe momentum.\begin{itemize}
-	\item Make an update in the (moving) average direction of the previous updates.
-	\item $\mathbf{x_{k+1}=x_k+\tilde{g}_{k+1}}$
-	\item $\mathbf{\tilde{g}_{k+1}}=\mu_k\mathbf{\tilde{g}_k}-\epsilon \mathbf{g_k(x_k)}$
-	\item i.e. use moving average of update $\mathbf{\tilde{g}_{k+1}}$ to form the new update
-\end{itemize}
+Describe momentum.;\begin{itemize} \item Make an update in the (moving) average direction of the previous updates.  \item $\mathbf{x_{k+1}=x_k+\tilde{g}_{k+1}}$ \item $\mathbf{\tilde{g}_{k+1}}=\mu_k\mathbf{\tilde{g}_k}-\epsilon \mathbf{g_k(x_k)}$ \item i.e. use moving average of update $\mathbf{\tilde{g}_{k+1}}$ to form the new update \end{itemize}
 
-Benefits of momentum; \begin{itemize}
-	\item Can increase the speed of convergence since, for smooth objectives, as we get close to the minimum the gradient decreases and standard gradient descent starts to slow down.
-	\item If learning rate is too large, standard GD may oscillate, but momentum may reduce oscillations by going in the average direction.
-	\item But momentum param $\mu$ may need to be reduced with iteration count to ensure convergence.
-	\item Particularly useful when the gradient is noisy. 
-	\begin{itemize}
-		\item By averaging over previous gradients, the noise 'averages' out and the moving average dir can be much less noisy.
-	\end{itemize}
-\item Useful to avoid saddles (a big problem!) since momentum will typically carry you over the saddle.
-\end{itemize}
+Benefits of momentum; \begin{itemize} \item Can increase the speed of convergence since, for smooth objectives, as we get close to the minimum the gradient decreases and standard gradient descent starts to slow down.  \item If learning rate is too large, standard GD may oscillate, but momentum may reduce oscillations by going in the average direction.  \item But momentum param $\mu$ may need to be reduced with iteration count to ensure convergence.  \item Particularly useful when the gradient is noisy.  \begin{itemize} \item By averaging over previous gradients, the noise 'averages' out and the moving average dir can be much less noisy.  \end{itemize} \item Useful to avoid saddles (a big problem!) since momentum will typically carry you over the saddle.  \end{itemize}
 
-Describe Nesterov's Accelerated Gradient; \begin{itemize}
-	\item Similar to momentum, but different in that we use the gradient of the point we will move to rather than the current point:
-		\begin{itemize}
-			\item $\mathbf{\tilde{g}_{k+1}}=\mu_k\mathbf{\tilde{g}_k}-\epsilon \mathbf{g_k(x_k+\mu_k\tilde{{g}}_k}$
-				\item $\mathbf{x_{k+1}=x_k+\tilde{g}_{k+1}}$ (same)
-			\end{itemize}
-		\item Achieves optimal rate of convergence for convex functions.
-		\item Need to choose schedule for $\mu_k$. Nesterov suggests $\mu_k = 1 - 3/(k+5)$.
-		\item Not clear why this works, but it works very well.
-	\end{itemize}
+Describe Nesterov's Accelerated Gradient; \begin{itemize} \item Similar to momentum, but different in that we use the gradient of the point we will move to rather than the current point: \begin{itemize} \item $\mathbf{\tilde{g}_{k+1}}=\mu_k\mathbf{\tilde{g}_k}-\epsilon \mathbf{g_k(x_k+\mu_k\tilde{g}_k})$ \item $\mathbf{x_{k+1}=x_k+\tilde{g}_{k+1}}$ (same) \end{itemize} \item Achieves optimal rate of convergence for convex functions.  \item Need to choose schedule for $\mu_k$. Nesterov suggests $\mu_k = 1 - 3/(k+5)$.  \item Not clear why this works, but it works very well.  \end{itemize}
 
-
-NAG Rate of convergence to the optimum for convex functions (NAG = Nesterove's Accelerated Gradient); \begin{itemize}
-	\item $f(\mathbf{x_k})-f^*\leq \frac{c}{k^2}$ for some constant $c$, compared to $\frac{1}{k}$ convergence for gradient descent.
-\end{itemize}
+NAG Rate of convergence to the optimum for convex functions (NAG = Nesterov's Accelerated Gradient); \begin{itemize} \item $f(\mathbf{x_k})-f^*\leq \frac{c}{k^2}$ for some constant $c$, compared to $\frac{1}{k}$ convergence for gradient descent.  \end{itemize}
 
 Describe how you might interpret NAG (why it works); TODO, slides 17-18.
 
-Why might convex optimisation be useful for NNs?; \begin{itemize}
-	\item NNs not convex, but
-	\item locally often convex, want convergence to local optima to be fast.
-\end{itemize}
+Why might convex optimisation be useful for NNs?; \begin{itemize} \item NNs not convex, but \item locally often convex, want convergence to local optima to be fast.  \end{itemize}
 
 Is a NN usually deterministic?; No.
 
-Discuss the advantages and disadvantages of gradient descent.; \begin{itemize}
-	\item Good: Simple, easy to implement
-	\item Bad: 
-	\begin{itemize}
-		\item Only improves solution at each stage by a small amount.
-		\item If $\epsilon$ is not small enough, the function may not decrease in value (Taylor not valid). \item In practice one needs to find a suitably small $\epsilon$ to guarantee convergence.
-	\end{itemize}
-\item Ugly: \begin{itemize}
-	\item Method is coordinate system dependent (except for orthogonal transformations). Get to different solutions (accounting for transformations) if you transform the data.
-\end{itemize}
+Discuss the advantages and disadvantages of gradient descent.; \begin{itemize} \item Good: Simple, easy to implement \item Bad: \begin{itemize} \item Only improves solution at each stage by a small amount.  \item If $\epsilon$ is not small enough, the function may not decrease in value (Taylor not valid). \item In practice one needs to find a suitably small $\epsilon$ to guarantee convergence.  \end{itemize} \item Ugly: \begin{itemize} \item Method is coordinate system dependent (except for orthogonal transformations). Get to different solutions (accounting for transformations) if you transform the data.  \end{itemize} \end{itemize}
 
-\end{itemize}
-Show that gradient descent is coordinate system dependent.; \begin{itemize}
-	\item Let $\mathbf{x=My}$, define $\hat{f}(\mathbf{y})=f(\mathbf{x})$.
-	\item GD on $\hat{f}(\mathbf{y})$: $[\mathbf{y_{k+1}}]_i = [\mathbf{y_k}]_i - \epsilon \sum_j \frac{\partial f}{\partial x_j}\frac{\partial x_j}{\partial y_i}$ \item $\rightarrow \mathbf{y_{k+1}} = \mathbf{y_k} - \epsilon \mathbf{M^T}\nabla f(\mathbf{x_k})$.
-	\item Hence $\mathbf{My_{k+1}=My_k}-\epsilon \mathbf{MM^T}\nabla f(x_k)$ \item $\rightarrow \mathbf{x_{k+1}}=\mathbf{x_k}-\epsilon\mathbf{MM^T}\nabla f(\mathbf{x_k})$
-	\item Coordinate system dependent: transformed by $\mathbf{MM^T}$.
-	\item Implications: strictly speaking better to choose coordinate system for best convergence, but typically don't do this because it's a pain
-\end{itemize}
+Show that gradient descent is coordinate system dependent.; \begin{itemize} \item Let $\mathbf{x=My}$, define $\hat{f}(\mathbf{y})=f(\mathbf{x})$.  \item GD on $\hat{f}(\mathbf{y})$: $[\mathbf{y_{k+1}}]_i = [\mathbf{y_k}]_i - \epsilon \sum_j \frac{\partial f}{\partial x_j}\frac{\partial x_j}{\partial y_i}$ \item $\rightarrow \mathbf{y_{k+1}} = \mathbf{y_k} - \epsilon \mathbf{M^T}\nabla f(\mathbf{x_k})$.  \item Hence $\mathbf{My_{k+1}=My_k}-\epsilon \mathbf{MM^T}\nabla f(x_k)$ \item $\rightarrow \mathbf{x_{k+1}}=\mathbf{x_k}-\epsilon\mathbf{MM^T}\nabla f(\mathbf{x_k})$ \item Coordinate system dependent: transformed by $\mathbf{MM^T}$.  \item Implications: strictly speaking better to choose coordinate system for best convergence, but typically don't do this because it's a pain \end{itemize} 
 
-Why use SGD?; \begin{itemize}
-	\item Taking gradient of loss across entire dataset takes too long. (O(N) operations usually.)
-	\item Stochastic nature makes algo robust to synchronisation issues in parallel implementations. \begin{itemize}
-		\item Since OK if gradient is slightly miscalculated since SG is noisy anyway.
-	\end{itemize}
-\item Works for online applications
-\end{itemize}
+Why use SGD?; \begin{itemize} \item Taking gradient of loss across entire dataset takes too long. (O(N) operations usually.) \item Stochastic nature makes algo robust to synchronisation issues in parallel implementations. \begin{itemize} \item Since OK if gradient is slightly miscalculated since SG is noisy anyway.  \end{itemize} \item Works for online applications \end{itemize}
 
-Describe SGD; \begin{itemize}
-	\item Replace true gradient with approximation 
-	\item $\hat{G}(\mathcal{M}) = \frac{1}{M}\sum_{m\in\mathcal{M}} g(x^m)$
-	\item where $\mathcal{M}$ is a minibatch, a set of $M\ll N$ randomly selected datapoints from the training set.
-	\item $g(x^n)$ is the gradient on datapoint $x^n$.
-	\item Unbiased, variance $V=\frac{1}{M}(E[g(x^m)^2]-E[g(x^m)]^2)$ goes down quickly. (need maybe < 200 members to get good estimate.)
-\end{itemize}
+Describe SGD; \begin{itemize} \item Replace true gradient with approximation \item $\hat{G}(\mathcal{M}) = \frac{1}{M}\sum_{m\in\mathcal{M}} g(x^m)$ \item where $\mathcal{M}$ is a minibatch, a set of $M\ll N$ randomly selected datapoints from the training set.  \item $g(x^n)$ is the gradient on datapoint $x^n$.  \item Unbiased, variance $V=\frac{1}{M}(E[g(x^m)^2]-E[g(x^m)]^2)$ goes down quickly. (need maybe $< 200$ members to get good estimate.) \end{itemize}
 
-Show that the minibatch gradient estimate is unbiased.; \begin{itemize}
-	\item $\hat{G}(\mathcal{M}) = \frac{1}{M}\sum_{m\in\mathcal{M}} g(x^m)$, $G$ is average over all $N$ datapoints.
-	\item $E[\hat{G}] = \sum_{m_1,...,m_M} p(m_1,...,m_M)\frac{1}{M}\sum_{i=1}^M g(x^{m_i})$
-	\item $= \frac{1}{M}\sum_{i=1}^M\sum_{m_i} p(m_i)g(x^{m_i})$
-	\item $=\frac{1}{M}\sum_{i=1}^M\frac{1}{N}\sum_{m_i}g(x^{m_i})$
-	\item $=\frac{1}{M}\sum_{i=1}^M\frac{1}{N}\sum_{n}g(x^{n})=G$
-\end{itemize}
+Show that the minibatch gradient estimate is unbiased.; \begin{itemize} \item $\hat{G}(\mathcal{M}) = \frac{1}{M}\sum_{m\in\mathcal{M}} g(x^m)$, $G$ is average over all $N$ datapoints.  \item $E[\hat{G}] = \sum_{m_1,...,m_M} p(m_1,...,m_M)\frac{1}{M}\sum_{i=1}^M g(x^{m_i})$ \item $= \frac{1}{M}\sum_{i=1}^M\sum_{m_i} p(m_i)g(x^{m_i})$ \item $=\frac{1}{M}\sum_{i=1}^M\frac{1}{N}\sum_{m_i}g(x^{m_i})$ \item $=\frac{1}{M}\sum_{i=1}^M\frac{1}{N}\sum_{n}g(x^{n})=G$ \end{itemize}
 
-Derive the variance of the minibatch gradient estimate.; \begin{itemize}
-	\item $E[\hat{G}^2] = \frac{1}{M^2}\sum_{i,j}E[g(x^{m_i})g(x^{m_j})]$
-	\item $=\frac{1}{M^2}(\sum_{i\ne j}E[g(x^{m_i})g(x^{m_j})]+\sum_i E[g(x^{m_i})^2])$
-	\item $=\frac{1}{M^2}((M^2-M)E[g(x^{m})]^2 + M E[g(x^{m})^2])$
-	\item so that $V=E[\hat{G}^2]-E[\hat{G}]^2 = \frac{1}{M}(E[g(x^{m})^2]- E[g(x^{m})]^2)$
-\end{itemize}
+Derive the variance of the minibatch gradient estimate.; \begin{itemize} \item $E[\hat{G}^2] = \frac{1}{M^2}\sum_{i,j}E[g(x^{m_i})g(x^{m_j})]$ \item $=\frac{1}{M^2}(\sum_{i\ne j}E[g(x^{m_i})g(x^{m_j})]+\sum_i E[g(x^{m_i})^2])$ \item $=\frac{1}{M^2}((M^2-M)E[g(x^{m})]^2 + M E[g(x^{m})^2])$ \item so that $V=E[\hat{G}^2]-E[\hat{G}]^2 = \frac{1}{M}(E[g(x^{m})^2]- E[g(x^{m})]^2)$ \end{itemize}
 
-Briefly discuss the proposed motivation of using SGD to avoid overfitting. \begin{itemize}
-	\item Maybe, not as well understood, more hacky.
-	\item Objective fn shifting as you change the minibatch so the minimum changes, but using this to `avoid overfitting' is not well understood.
-\end{itemize}
+Briefly discuss the proposed motivation of using SGD to avoid overfitting.; \begin{itemize} \item Maybe, not as well understood, more hacky.  \item Objective fn shifting as you change the minibatch so the minimum changes, but using this to `avoid overfitting' is not well understood.  \end{itemize}
 
-Briefly describe adaptive learning methods (vs SGD) and give two examples; \begin{itemize}
-	\item Changing learning rate as we go, mostly hacks
-	\item e.g. Adam, fixed length updates, 
-\end{itemize}
+Briefly describe adaptive learning methods (vs SGD) and give two examples; \begin{itemize} \item Changing learning rate as we go, mostly hacks \item e.g. Adam, fixed length updates, \end{itemize} 
 
-Describe fixed length updates (learning rate schedule); \begin{itemize}
-	\item Recall Taylor expansion motivates GD update, so $x_{k+1}-x_k = -\epsilon g(x_k)$ must be small. 
-	\item So if gradient is large, this may not hold.
-	\item Idea: require size of update $x_{k+1}-x_k$ to be fixed, `guaranteeing' its size. i.e. something like 
-	\item $x_{k+1}-x_k = -\epsilon sign (g(x_k))=-\epsilon \frac{g(x_k)}{\sqrt{g(x_k)^2}}$.
-	\item Can view as gradient descent with adaptive learning rate $\frac{\epsilon}{\sqrt{g(x_k)^2}}$.
-	\item said intuition was like looking in $\epsilon$ radius sphere and seeing what dir gives the largest decrease in fn val, not sure if this is the case since we're using gradients that change across the sphere...?
-\end{itemize}
+Describe fixed length updates (learning rate schedule); \begin{itemize} \item Recall Taylor expansion motivates GD update, so $x_{k+1}-x_k = -\epsilon g(x_k)$ must be small.  \item So if gradient is large, this may not hold.  \item Idea: require size of update $x_{k+1}-x_k$ to be fixed, `guaranteeing' its size. i.e. something like \item $x_{k+1}-x_k = -\epsilon sign (g(x_k))=-\epsilon \frac{g(x_k)}{\sqrt{g(x_k)^2}}$.  \item Can view as gradient descent with adaptive learning rate $\frac{\epsilon}{\sqrt{g(x_k)^2}}$.  \item said intuition was like looking in $\epsilon$ radius sphere and seeing what dir gives the largest decrease in fn val, not sure if this is the case since we're using gradients that change across the sphere...?  \end{itemize}
 
-Describe Adam (optimiser); \begin{itemize}
-	\item Adaptive Moment: Use fixed length update intuition in a stochastic (minibatch) setting.
-	\item (Scalar case below, do in each dim.)
-	\item Moving average of gradient and squared gradient: \begin{itemize}
-		\item $m_k = \beta_1m_{k-1}+(1-\beta_1)g_k$
-		\item $\nu_k = \beta_2\nu_{k-1} + (1-\beta_2)g_k^2$.
-		\item Moving average of num and denom separately, likely more numerically stable than ratio but dk
-	\end{itemize}
-	\item Correct bias (dk if this makes a difference, dk why don't initialise to true gradient)
-	\item Use update $x_{k+1}=x_k - \frac{\epsilon}{\sqrt{\hat{\nu_k}++\gamma}}\hat{m}_k$.
-	\item $gamma$ for numerical stability (else if zero gradient, have problems.) Tends to work robustly for training NNs using $\beta_1 = 0.9, \beta_2 = 0.999, \gamma = 10^{-8}$.
-	\item thousands of similar things you can do
-\end{itemize}
+Describe Adam (optimiser); \begin{itemize} \item Adaptive Moment: Use fixed length update intuition in a stochastic (minibatch) setting.  \item (Scalar case below, do in each dim.) \item Moving average of gradient and squared gradient: \begin{itemize} \item $m_k = \beta_1m_{k-1}+(1-\beta_1)g_k$ \item $\nu_k = \beta_2\nu_{k-1} + (1-\beta_2)g_k^2$.  \item Moving average of num and denom separately, likely more numerically stable than ratio but dk \end{itemize} \item Correct bias (dk if this makes a difference, dk why don't initialise to true gradient) \item Use update $x_{k+1}=x_k - \frac{\epsilon}{\sqrt{\hat{\nu_k}++\gamma}}\hat{m}_k$.  \item $\gamma$ for numerical stability (else if zero gradient, have problems.) Tends to work robustly for training NNs using $\beta_1 = 0.9, \beta_2 = 0.999, \gamma = 10^{-8}$.  \item thousands of similar things you can do \end{itemize}
 
-Adam bias correction; (wtv) \begin{itemize}
-	\item $\hat{m}_k = \frac{m_k}{1-\beta^k_1}$
-	\item $\hat{\nu}_k = \frac{\nu_k}{1-\beta^k_2}$.
-\end{itemize}
+Adam bias correction; (wtv) \begin{itemize} \item $\hat{m}_k = \frac{m_k}{1-\beta^k_1}$ \item $\hat{\nu}_k = \frac{\nu_k}{1-\beta^k_2}$.  \end{itemize}
 
 State the Newton update.; $\mathbf{x_{k+1} = x_k} - \epsilon\mathbf{H^{-1}_f}\nabla f$.
 
-Derive the Newton update; \begin{itemize}
-	\item Taylor: $f(x+\Delta) = f(\mathbf{x}) + \Delta^T\nabla f + \frac{1}{2}\mathbf{\Delta^T H_f \Delta} + O(|\Delta|^3)$.
-	\item RHS has lowest value when $\nabla f = -\mathbf{H}_f\Delta \Rightarrow \Delta = -\mathbf{H}^{-1}_f \nabla f$.
-	\item set update quantity to $\Delta$
-	\item Upd: $\mathbf{x_{k+1} = x_k} - \epsilon\mathbf{H^{-1}_f}\nabla f$.
-	\item Check: change in fn is $\epsilon (-1+\frac{\epsilon}{2}\nabla f^T H^{-1}_f\nabla f)$, which is negative for small $\epsilon$ if H is pd.
-\end{itemize}
+Derive the Newton update; \begin{itemize} \item Taylor: $f(x+\Delta) = f(\mathbf{x}) + \Delta^T\nabla f + \frac{1}{2}\mathbf{\Delta^T H_f \Delta} + O(|\Delta|^3)$.  \item RHS has lowest value when $\nabla f = -\mathbf{H}_f\Delta \Rightarrow \Delta = -\mathbf{H}^{-1}_f \nabla f$.  \item set update quantity to $\Delta$ \item Upd: $\mathbf{x_{k+1} = x_k} - \epsilon\mathbf{H^{-1}_f}\nabla f$.  \item Check: change in fn is $\epsilon (-1+\frac{\epsilon}{2}\nabla f^T H^{-1}_f\nabla f)$, which is negative for small $\epsilon$ if H is pd.\end{itemize}
 
-Using the Newton update \begin{itemize}
-	\item Converges in one step for quadratic functions, $\epsilon = 1$.
-	\item Generally one uses a value $\epsilon < 1$ to avoid overshooting.
-\end{itemize}
+Using the Newton update; \begin{itemize} \item Converges in one step for quadratic functions, $\epsilon = 1$.  \item Generally one uses a value $\epsilon < 1$ to avoid overshooting.  \end{itemize}
 
-Advs and disadvs of using Newton's method; \begin{itemize}
-	\item Adv: \begin{itemize}
-	\item Decrease in objective function is invariant under a linear change in coordinates $x=My$ (vs GD not).
-\end{itemize}
-\item Disadv: \begin{itemize}
-	\item Storing the Hessian (TB for moderate-sized NN) and solving the linear system $\mathbf{H}_f^{-1}\nabla f$ is expensive. (in practice use conjugate gradient)
-	\item Not guaranteed to produce a downhill step: only downhill if $\epsilon$ small, H pd.
-	\item If H is pd, we can use line search in the direction $\mathbf{H}^{-1}\nabla f$ to ensure we go downhill and make a non-trivial jump.
-\end{itemize}
-\end{itemize}
+Advs and disadvs of using Newton's method; \begin{itemize} \item Adv: \begin{itemize} \item Decrease in objective function is invariant under a linear change in coordinates $x=My$ (vs GD not).  \end{itemize} \item Disadv: \begin{itemize} \item Storing the Hessian (TB for moderate-sized NN) and solving the linear system $\mathbf{H}_f^{-1}\nabla f$ is expensive. (in practice use conjugate gradient) \item Not guaranteed to produce a downhill step: only downhill if $\epsilon$ small, H pd.  \item If H is pd, we can use line search in the direction $\mathbf{H}^{-1}\nabla f$ to ensure we go downhill and make a non-trivial jump.  \end{itemize} \end{itemize}
 
-In practice, how might we solve the linear system $\mathbf{H\Delta}=\nabla f$?; \begin{itemize}
-	\item Conjugate gradient
-	\item Min $\mathbf{\Psi(\Delta)\equiv \frac{1}{2}\Delta^TH\Delta -\Delta^T\nabla f}$. 
-	\item Typically much faster than calling standard linear solvers (such as Gaussian elimination).
-\end{itemize}
+In practice, how might we solve the linear system $\mathbf{H\Delta}=\nabla f$?; \begin{itemize} \item Conjugate gradient \item Min $\mathbf{\Psi(\Delta)\equiv \frac{1}{2}\Delta^TH\Delta -\Delta^T\nabla f}$.  \item Typically much faster than calling standard linear solvers (such as Gaussian elimination).  \end{itemize}
 
-Briefly describe Quasi-Newton methods and give an example of one.; \begin{itemize}
-	\item Approximate inverse Hessian is formed iteratively.
-	\item E.g.: BFGS, or LBGFS (limits memory requirement of BFGS).
-	\item (Recall Newton update is $\mathbf{x_{k+1} = x_k} - \epsilon\mathbf{H^{-1}_f}\nabla f$.)
-\end{itemize}
+Briefly describe Quasi-Newton methods and give an example of one.; \begin{itemize} \item Approximate inverse Hessian is formed iteratively.  \item E.g.: BFGS, or LBGFS (limits memory requirement of BFGS).  \item (Recall Newton update is $\mathbf{x_{k+1} = x_k} - \epsilon\mathbf{H^{-1}_f}\nabla f$.) \end{itemize}
 
-Describe the Gauss Newton method; \begin{itemize}
-	\item Motivation: Fix problem of H not necessarily being positive definite in Newton's method (then not necc downhill step)
-	\item Hessian for squared loss: $\frac{\partial^2 E}{\partial w_i \partial w_j}=2\sum_n (-[y^n-f(\mathbf{x^n, w})]\frac{\partial ^2 f^n}{\partial w_i \partial w_j}+\frac{\partial f^n}{\partial w_j}\frac{\partial f^n}{\partial w_j})$, $f^n\equiv f(\mathbf{x^n, w})$.
-	\item Intuition: suppose close to min, then residual $y^n-f(\mathbf{x^n,w})$ is small, can ignore first term in Hessian. 
-	\item Second term in Hessian is positive definite (outer product of two vectors), use that instead of the Hessian in the Newton update.
-	\item i.e. $\mathbf{C}=2\sum_n\nabla f^n(\nabla f^n)^T$
-	\item Generalised Gauss Newton method generalises this to convex loss functions, e.g. classification.
-\end{itemize}
+Describe the Gauss Newton method; \begin{itemize} \item Motivation: Fix problem of H not necessarily being positive definite in Newton's method (then not necc downhill step) \item Hessian for squared loss: $\frac{\partial^2 E}{\partial w_i \partial w_j}=2\sum_n (-[y^n-f(\mathbf{x^n, w})]\frac{\partial ^2 f^n}{\partial w_i \partial w_j}+\frac{\partial f^n}{\partial w_j}\frac{\partial f^n}{\partial w_j})$, $f^n\equiv f(\mathbf{x^n, w})$.  \item Intuition: suppose close to min, then residual $y^n-f(\mathbf{x^n,w})$ is small, can ignore first term in Hessian.  \item Second term in Hessian is positive definite (outer product of two vectors), use that instead of the Hessian in the Newton update.  \item i.e. $\mathbf{C}=2\sum_n\nabla f^n(\nabla f^n)^T$ \item Generalised Gauss Newton method generalises this to convex loss functions, e.g. classification.  \end{itemize} 
+            
+Describe the Levenberg-Marquardt algorithm; \begin{itemize} \item Motivation: Gauss-Newton update requires us to solve $\mathbf{C\Delta} = \nabla E$.  \item But if don't have many training datapoints, $\mathbf{C}$ will be rank deficient (non-invertible). Even if invertible, in practice C may be ill-conditioned (large range of eigenvalues), which makes solving the system numerically unstable.  \item Idea: Regularise the problem and solve (using conjugate gradients): $(\mathbf{C+\lambda I})\mathbf{\Delta}=\nabla E$ for some scalar $\lambda > 0$.  \item $\lambda \mathbf{I}$ is stabiliser limiting size of update.  \item Effectively defines a `trust region' since this in equiv to minimising (wrt $\Delta$) \begin{itemize} \item $E(\mathbf{w}) + \mathbf{\Delta}^T\nabla E + \frac{1}{2}\mathbf{\Delta^TC\Delta} + \frac{\lambda}{2}\mathbf{\Delta^T\Delta}$, \end{itemize} \item where the final regularising terms constrain the scale of the update $\mathbf{\Delta}$.  \item makes sense since we only trust the Taylor expansion in the vicinity of $\mathbf{w}$.  \item (Not particularly impt't to know for this course, GN methods still a bit unstable.) \end{itemize}
 
-Describe the Levenberg-Marquardt algorithm; \begin{itemize}
-	\item Motivation: Gauss-Newton update requires us to solve $\mathbf{C\Delta} = \nabla E$. 
-	\item But if don't have many training datapoints, $\mathbf{C}$ will be rank deficient (non-invertible). Even if invertible, in practice C may be ill-conditioned (large range of eigenvalues), which makes solving the system numerically unstable.
-	\item Idea: Regularise the problem and solve (using conjugate gradients): $(\mathbf{C+\lambda I})\mathbf{\Delta}=\nabla E$ for some scalar $\lambda > 0$.
-	\item $\lambda \mathbf{I}$ is stabiliser limiting size of update.
-	\item Effectively defines a `trust region' since this in equiv to minimising (wrt $\Delta$) \begin{itemize}
-		\item $E(\mathbf{w}) + \mathbf{\Delta}^T\nabla E + \frac{1}{2}\mathbf{\Delta^TC\Delta} + \frac{\lambda}{2}\mathbf{\Delta^2\Delta}$,
-	\end{itemize} \item where the final regularising terms constrain the scale of the update $\mathbf{\Delta}$.
-\item makes sense since we only trust the Taylor expansion in the vicinity of $\mathbf{w}$.
-\item (Not particularly impt't to know for this course, GN methods still a bit unstable.)
-\end{itemize}
-
-One big tradeoff between first and second order methods; Number of iterations and amount of computation per iteration. \begin{itemize}
-	\item GN converges in smaller number of iterations that e.g. momentum on some problems, but each update much more expensive.
-\end{itemize}
+One big tradeoff between first and second order methods; Number of iterations and amount of computation per iteration. \begin{itemize} \item GN converges in smaller number of iterations that e.g. momentum on some problems, but each update much more expensive.  \end{itemize}
 
 \end{document}

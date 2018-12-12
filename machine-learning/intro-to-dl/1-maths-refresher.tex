@@ -51,7 +51,7 @@ Trace-log formula; \begin{itemize} \item For a positive definite matrix $A$, \it
 
 Definition of the derivative; \begin{itemize} \item $\frac{df}{dx} = \lim_{\delta\rightarrow 0}\frac{f(x+\delta)-f(x)}{\delta}$ \item Rate of change of function \end{itemize}
 
-Taylor series; $f(x) = f(0) + x\frac{df}{dx}\vert_{x=0} + \frac{x^2}{2}\frac{d^f}{dx^2}\vert_{x=0}+...$
+Taylor series; $f(x) = f(0) + x\frac{df}{dx}\vert_{x=0} + \frac{x^2}{2!}\frac{d^f}{dx^2}\vert_{x=0}+...$
 
 Is taking derivatives a linear operator?; Yes.
 
@@ -69,27 +69,27 @@ Graphical representation of total derivative of f with respect to x; \begin{item
 
 Interpreting the gradient vector; The direction along which the function is changing most rapidly.
 
-Show that the direction along which a function f(x) changes the most rapidly is $\nabla f(x)$.; \begin{itemize} \item Consider a direction $\mathbf{\hat p}$, a unit vector. Then a displacement $\delta$ units along this direction changes the function value to  \item $f(\mathbf{x}+\delta\mathbf{\hat p} \simeq f(\mathbf{x})+\delta\grad f(\mathbf{x})\dot \hat{\mathbf{p}}$. \item Dir $\hat\mathbf{p}$ for which fn has largest change is that which maximises the overlap: \item $\grad f(\mathbf{x})\dot \mathbf{\hat{p}} = |\gradf(\mathbf{x})||\hat{\mathbf{p}}|\cos\theta = |\grad f(\mathbf{x})|\cos\theta$. \item where $\theta$ is the angle between $\mathbf{\hat p}$ and $\grad f(\mathbf{x})$, which is maximised when $\theta=0$.  \item Hence, the direction along which the function changes the most rapidly is along $\grad f(\mathbf{x})$. \end{itemize}
+Show that the direction along which a function f(x) changes the most rapidly is $\nabla f(x)$.; \begin{itemize} \item Consider a direction $\mathbf{\hat p}$, a unit vector. Then a displacement $\delta$ units along this direction changes the function value to  \item $f(\mathbf{x}+\delta\mathbf{\hat p}) \approx f(\mathbf{x})+\delta\nabla f(\mathbf{x})^T \mathbf{\hat p}$. \item Dir $\mathbf{\hat{p}}$ for which fn has largest change is that which maximises the overlap: \item $\nabla f(\mathbf{x})^T \mathbf{\hat{p}} = |\nabla f(\mathbf{x})||\hat{\mathbf{p}}|\cos\theta = |\nabla  f(\mathbf{x})|\cos\theta$. 	\item where $\theta$ is the angle between $\mathbf{\hat p}$ and $\nabla  f(\mathbf{x})$, which is maximised when $\theta=0$.  \item Hence, the direction along which the function changes the most rapidly is along $\nabla f(\mathbf{x})$. \end{itemize}
 
 Hessian matrix; square, symmetric matrix of second partial derivatives $\frac{\partial^2 f}{\partial x_i \partial x_j}$.
 
-Geometric interpretation of definite-ness of Hessian of a function f evaluated at \mathbf{x}; \begin{itemize} \item Positive definite: function looks locally like a bowl $\cup$ around the point $\mathbf{x}$. \item Negative definite: function looks locally like $\cap$ around the point $\mathbf{x}$. \item Non-definite: fn looks like $\cup$ along some directions and like $\cap$ along others. \end{itemize} 
+Geometric interpretation of definite-ness of Hessian of a function f evaluated at $\mathbf{x}$; \begin{itemize} \item Positive definite: function looks locally like a bowl $\cup$ around the point $\mathbf{x}$. \item Negative definite: function looks locally like $\cap$ around the point $\mathbf{x}$. \item Non-definite: fn looks like $\cup$ along some directions and like $\cap$ along others. \end{itemize} 
 
 $\frac{\partial}{\partial A}trace(AB) =$;$B^T$.
 
-$\partial \log \det (A) =;$ $\partial trace(\log A) = trace(A^{-1}\partial A)$
+$\partial \log \det (A) =$; $\partial trace(\log A) = trace(A^{-1}\partial A)$
 
 $\frac{\partial}{\partial A}\log\det(A)=$; $A^{-T}$
 
 For an invertible matrix $A$, $\partial A^{-1}=$; $-A^{-T}\partial A (A^{-1})$
 
-Definition of a convex function (x2); \begin{itemize} \item if for any two points $\mathbf{x, y}$ and $0<\lambda < 1$, $f(\lambda\mathbf{x}+(1-\lambda)\mathbf{y}\leq \lambdaf(\mathbf{x})+(1-\lambdaf)f(\mathbf{y})$ \item if f is twice  differentiable, $f(\mathbf{x})$ is convex if its Hessian $\mathbf{H(x)}$ is positive definite for all points $\mathbf{x}$. \end{itemize}
+Definition of a convex function (x2); \begin{itemize} \item if for any two points $\mathbf{x, y}$ and $0<\lambda < 1$, $f(\lambda\mathbf{x}+(1-\lambda)\mathbf{y}\leq \lambda f(\mathbf{x})+(1-\lambda f)f(\mathbf{y})$ \item if f is twice  differentiable, $f(\mathbf{x})$ is convex if its Hessian $\mathbf{H(x)}$ is positive definite for all points $\mathbf{x}$. \end{itemize}
 
 What strictly convex functions are like geometrically; Look like $\cup$ and have only one minimum.
 
 Is optimisation easy?; No, it's very hard. Convex optimisation is much easier than non-covex optimisation.
 
-Log convexity; A functino g s.t. $f(x)=\log g(x)$ is convex.
+Log convexity; A function g s.t. $f(x)=\log g(x)$ is convex.
 
 Norms and convexity; All norms are convex, including the p-norm $||x||_p \equiv (\sum_i |x_i|^p)^{1/p}, p\geq 1$.
 
@@ -101,13 +101,13 @@ Show $f(x) = -\log \sigma(x), \sigma(x)=1/(1+\exp(-x))$ is convex.; TODO
 
 Show $f(\mathbf{x}) = \mathbf{x^TAx}$ for positive definite $\mathbf{A}$ is convex.; TODO
 
-Show $f(\mathbf{x}) = -\log\sigma(\mathbf{x^Tw}),sigma(x)=1/(1+\exp(-x))$ is convex.; TODO 
+Show $f(\mathbf{x}) = -\log\sigma(\mathbf{x^Tw}),\sigma(x)=1/(1+\exp(-x))$ is convex.; TODO 
 
 Why rounding error matters in ML; \begin{itemize} \item Often have a large number of terms to sum, e.g. when computing the log likelihood for a large number of datapoints. \end{itemize}
 
 Double floats have a relative error of around; $10^{-16}$.
 
-How can we compute log(S), where $S=\exp(a)+\exp(b)$, a and b large?; logsumexp. \begin{itemize} \item Let $m=\max(a,b$$. \item \$\log S = m+\log(\exp(a-m)+\exp(b-m))$ \item Suppose m = a. Then $\log S = a + \log(1+\exp(b-a))$ \item Since a > b, then $\exp(b-a)<1$ and $\log(1+\exp(b-a))<\log 2$. We can compute $\log S$ more accurately this way. \item In general, $logsumexp(\mathbf{x})=m+\log(\sum_{i=1}^N\exp(x_i-m)), m=\max(x_1,...,x_N)$$ \end{itemize}
+How can we compute log(S), where $S=\exp(a)+\exp(b)$, a and b large?; logsumexp. \begin{itemize} \item Let $m=\max(a,b)$. \item $\log S = m+\log(\exp(a-m)+\exp(b-m))$ \item Suppose m = a. Then $\log S = a + \log(1+\exp(b-a))$ \item Since a > b, then $\exp(b-a)<1$ and $\log(1+\exp(b-a))<\log 2$. We can compute $\log S$ more accurately this way. \item In general, $logsumexp(\mathbf{x})=m+\log(\sum_{i=1}^N\exp(x_i-m)), m=\max(x_1,...,x_N)$ \end{itemize}
 
 General formula for log S, where $S=\exp(x_1)+...+\exp(x_N)$; $logsumexp(\mathbf{x})=m+\log(\sum_{i=1}^N\exp(x_i-m)), m=\max(x_1,...,x_N)$
 
@@ -117,8 +117,8 @@ What are the axes of probability density contours (ellipse) of a bivariate Gauss
 
 Geometric picture of a multivariate Gaussian; \begin{itemize} \item Can be transformed under $y=\Lambda^{-1/2}E^T(x-\mu)$ to be a product of D univariate zero-mean unit variance Gaussians. \item i.e. multivariate Gaussian as a shifted, scaled and rotated version of N(0,I),  \item where the centre is given by the mean $\mu$, the rotation is given by the eigenvectors, and the scaling by the square root of the eigenvalues. \item Steps: decompose covariance $\Sigma = E\Lambda E^T$ (since real, symmetric).  \item Note all eigenvalues $\lambda_i$ are positive in a covariance matrix since positive definite. And in eigendecomposition, $E^TE=I$. \end{itemize}
 
-Linear transform of a Gaussian; \begin{itemize} \item Let y be linearly related to x through $\mathbf{y = Mx + \eta}$ \item where $\eta \sim N(\mu, \Sigma)$ and $x\sim N(\mu_x, \Sigma_X)$. \item Then the marginal $p(y)=\int_X p(y|x)p(x)$ is a Gaussian \item $p(y) = N(y|M\mu_X + \mu, M\Sigma_XM^T+\Sigma)$. \end{itemize}
+Linear transform of a Gaussian. \begin{itemize} \item Let y be linearly related to x through $\mathbf{y = Mx + \eta}$ \item where $\eta \sim N(\mu, \Sigma)$ and $x\sim N(\mu_x, \Sigma_X)$. \end{itemize}; \begin{itemize}\item Then the marginal $p(y)=\int_X p(y|x)p(x)$ is a Gaussian \item $p(y) = N(y|M\mu_X + \mu, M\Sigma_XM^T+\Sigma)$. \end{itemize}
 
-Decorrelating (whitening); \begin{itemize} \item If x has covariance matrix $\Sigma_X$ and mean $\mu_X$, then  \item then $y=\Sigma_X^{-1/2}(x-\mu_X)$ has mean 0 and identity covariance matrix. \item A commonly used initial transformation on data. \item note: can find $\Sigma_X^{-1/2} through eigendecomposition.$ \end{itemize}
+Decorrelating (whitening); \begin{itemize} \item If x has covariance matrix $\Sigma_X$ and mean $\mu_X$, then  \item then $y=\Sigma_X^{-1/2}(x-\mu_X)$ has mean 0 and identity covariance matrix. \item A commonly used initial transformation on data. \item note: can find $\Sigma_X^{-1/2}$ through eigendecomposition. \end{itemize}
 
 \end{document}

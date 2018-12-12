@@ -5,108 +5,48 @@
 \usepackage{amsmath}
 \begin{document}
 
-What is AutoDiff?; \begin{itemize}
-	\item Takes a function $f(\mathbf{x})$ and returns an exact value (up to machine accuracy) for the gradient 
-	\item $g_i(\mathbf{x})=\frac{\partial}{\partial x_i}f\vert_{\mathbf{x}}$
-	\item not the same as numerical approx or symbolic diff
-	\item If done efficiently, one can always calculate the gradient in less than 5x the time it takes to compute $f(\mathbf{x})$.
-\end{itemize}
+What is AutoDiff?; \begin{itemize} \item Takes a function $f(\mathbf{x})$ and returns an exact value (up to machine accuracy) for the gradient \item $g_i(\mathbf{x})=\frac{\partial}{\partial x_i}f\vert_{\mathbf{x}}$ \item not the same as numerical approx or symbolic diff \item If done efficiently, one can always calculate the gradient in less than 5x the time it takes to compute $f(\mathbf{x})$.  \end{itemize}
 
-Two problems with symbolic differentation; \begin{itemize}
-	\item May not be computationally efficient: it may contain many terms and some repeats. (Better to label repeats as $y$, say.)
-	\item Computational subroutines that contain loops and conditional if statements do not correspond to simple closed algebraic expressions (so don't have closed algebraic expressions for the gradient).
-\end{itemize}
+Naively, how many operations may it take to calculate the gradient?; $O(NF)$, N= num dims (params), F = ops needed per function evaluation. \begin{itemize} \item Method: numerical approx $\tilde{g}_i(x) \approx \frac{f(x+\epsilon \delta_i)-f(x)}{\delta}$ for small $\delta$, $\epsilon$ cartesian (direction?).  \item Autodiff can do it in $<O(5F)$ accounting for complexity of calculating derivatives, else within $O(2F)$.  \end{itemize} 
 
-Briefly discuss forward differentiation.; \begin{itemize}
-	\item Calculate derivative along a single specified direction using a snigle forward pass.
-	\item Generally not computationally efficient: Takes $O(nf)$ time evals to calculate a full gradient (f = fn eval time).
-	\item Low memory requirements.
-	\item Usually easy to implement
-\end{itemize}
+Compare forward and backward autodiff in terms of time and memory requirements.; \begin{itemize} \item Fwd: $O(NF)$ time, low memory requirements (since use running product). N= num params.  \item Backward: $O(2F)$ time (or $<O(5F)$ accounting for complexity of calculating derivatives) \end{itemize} 
 
-Briefly discuss reverse differentiation; \begin{itemize}
-	\item Calculates full gradient using a single forward and backward pass.
-	\item Exact
-	\item Computationally efficient: $O(f)$ time to calculate full gradient.
-	\item Needs more memory.
-	\item Harder to code, requires a parse tree of the subroutine.
-	\item Note: Backprop special case of reverse diff. If possible, one should always attempt to do reverse diff.
-\end{itemize}
+Name an area where forward autodiff is often used.; Partial DEs.
 
-Name two methods of forward differentiation; \begin{itemize}
-	\item Complex arithmetic
-	\item Dual arithmetic
-\end{itemize}
+Two problems with symbolic differentation; \begin{itemize} \item May not be computationally efficient: it may contain many terms and some repeats. (Better to label repeats as $y$, say.) \item Computational subroutines that contain loops and conditional if statements do not correspond to simple closed algebraic expressions (so don't have closed algebraic expressions for the gradient).  \end{itemize}
 
-Describe complex arithmetic as a form of forward differentiation; \begin{itemize}
-	\item $f'(x)=\lim_{\epsilon\rightarrow 0}\frac{1}{\epsilon}Im(f(x+i\epsilon))$
-	\item Holds for any smooth function (i.e. one that can be expressed as a Taylor series)
-	\item Approximation only for finite $\epsilon$
-	\item Need to overload all fns so they can deal with complex arithmetic
-	\item (More accurate than std finite diffs since we do not subtract two small quantities and divide by a small quantity - the complex arithmetic approach is more numerically stable.)
-\end{itemize}
+Briefly discuss forward differentiation.; \begin{itemize} \item Calculate derivative along a single specified direction using a single forward pass.  \item Generally not computationally efficient: Takes $O(nf)$ time evals to calculate a full gradient (f = fn eval time).  \item Low memory requirements.  \item Usually easy to implement \end{itemize}
+
+Briefly discuss reverse differentiation; \begin{itemize} \item Uses fact that two products up to a point are the same. \item Calculates full gradient using a single forward and backward pass.  \item Exact \item Computationally efficient: $O(f)$ time to calculate full gradient.  \item Needs more memory: have to store values as edges, could be expensive, could be problematic for GPUs.  \item Harder to code, requires a parse tree of the subroutine.  \item Note: Backprop special case of reverse diff. If possible, one should always attempt to do reverse diff.  \end{itemize}
+
+What can you use from autodiff to calculate Hessian vector products?; Reverse diff apparently. Best to check this.
+
+Name two methods of forward differentiation; \begin{itemize} \item Complex arithmetic \item Dual arithmetic \end{itemize}
+
+Describe complex arithmetic as a form of forward differentiation; \begin{itemize} \item $f'(x)=\lim_{\epsilon\rightarrow 0}\frac{1}{\epsilon}Im(f(x+i\epsilon))$ \item Holds for any smooth function (i.e. one that can be expressed as a Taylor series) \item Approximation only for finite $\epsilon$ \item Need to overload all fns so they can deal with complex arithmetic \item (More accurate than std finite diffs since we do not subtract two small quantities and divide by a small quantity - the complex arithmetic approach is more numerically stable.) \end{itemize}
 
 Is the complex arithmetic or finite differences approach for calculating gradients? Why?; Complex arithmetic is more accurate than std finite diffs since we do not subtract two small quantities and divide by a small quantity - the complex arithmetic approach is more numerically stable.
 
-Describe dual arithmetic as a form of forward differentiation; \begin{itemize}
-	\item Define idempotent variable $\epsilon$ s.t. $\epsilon^2 = 0$.
-	\item Then $f'(x) = DualPartf(x+\epsilon)$. (i.e. coefficient of $\epsilon$).
-	\item Numerically exact
-	\item Holds for any smooth function $f(x)$ and non-zero $\epsilon$.
-	\item Not necessarily efficient.
-\end{itemize}
+Describe dual arithmetic as a form of forward differentiation; \begin{itemize} \item Define idempotent variable $\epsilon$ s.t. $\epsilon^2 = 0$.  \item Then $f'(x) = DualPartf(x+\epsilon)$. (i.e. coefficient of $\epsilon$).  \item Numerically exact \item Holds for any smooth function $f(x)$ and non-zero $\epsilon$.  \item Not necessarily efficient.  \end{itemize}
 
 Is the complex arithmetic method for forward differentiation exact?; Not for finite $\epsilon$, but (should be) exact for $\epsilon\rightarrow 0$.
 
 Is the dual arithmetic method for forward differentiation exact?; Yes.\\
 
-How would you represent the total derivative of f with respect to x graphically?; \begin{itemize}
-	\item the sum over all path values from $x$ to $f$, 
-	\item where each path value is the product of the partial derivatives of the functions on the edges.
-\end{itemize} TODO: add image
+How would you represent the total derivative of f with respect to x graphically?; \begin{itemize} \item the sum over all path values from $x$ to $f$, \item where each path value is the product of the partial derivatives of the functions on the edges.  \end{itemize} TODO: add image
 
-Abstract Syntax Tree for $f(x_1, x_2)=\cos(\sin(x_1x_2))$; TODO add image \begin{itemize}
-	\item $f_1(x_1,x_2)=x_1x_2$
-	\item $f_2(x)=\sin(x)$
-	\item $f_3(x) = \cos(x)$
-	\item structure: x1, x2 to f1, f1 to f2, f2 to f3.
-\end{itemize}
+Abstract Syntax Tree for $f(x_1, x_2)=\cos(\sin(x_1x_2))$; TODO add image \begin{itemize} \item $f_1(x_1,x_2)=x_1x_2$ \item $f_2(x)=\sin(x)$ \item $f_3(x) = \cos(x)$ \item structure: x1, x2 to f1, f1 to f2, f2 to f3.  \end{itemize}
 
-Describe how one would calculate the derivative of $f$ wrt a variable $x$ using forward mode on a computation tree.; \begin{itemize}
-	\item Define a valid forward schedule $n_1,...$ so that node $n_i$ can be calculated provided that previous nodes $n_j (j<i)$ have already been calculated.
-	\item Set $t_n=0$ for all nodes that have no parents (except node $x$).
-	\item Set $t_x = 1$.
-	\item Starting from the first (in the ancestral sense) child of node $x$, for each node $n$ in the forward schedule define \begin{itemize}
-		\item $t_n = \sum_{p\in pa(n)}\frac{\partial f_n}{\partial f_p}t_p$
-	\end{itemize}
-\item Repeat the above until the tree is descended to node $f$.
-\item The total derivatives of $f$ wrt $x$ is then given by $t_f$.
-\item (Can keep track of only qties needed later in the graph, freeing up memory. Memory req roughly same as required to compute function itself.)
-\end{itemize}
+Describe how one would calculate the derivative of $f$ wrt a variable $x$ using forward mode on a computation tree.; \begin{itemize} \item Define a valid forward schedule $n_1,...$ so that node $n_i$ can be calculated provided that previous nodes $n_j (j<i)$ have already been calculated.  \item Set $t_n=0$ for all nodes that have no parents (except node $x$).  \item Set $t_x = 1$.  \item Starting from the first (in the ancestral sense) child of node $x$, for each node $n$ in the forward schedule define \begin{itemize} \item $t_n = \sum_{p\in pa(n)}\frac{\partial f_n}{\partial f_p}t_p$ \end{itemize} \item Repeat the above until the tree is descended to node $f$.  \item The total derivatives of $f$ wrt $x$ is then given by $t_f$.  \item (Can keep track of only qties needed later in the graph, freeing up memory. Memory req roughly same as required to compute function itself.) \end{itemize}
 
-Perform forward pass on this computation tree to calculate $\frac{\partial f_5}{\partial f_2}$ (TODO add image); \begin{itemize}
-	\item Set $t_{f_1}=0, t_{f_2}=1$.
-	\item $t_{f_3} = \frac{partial f_3}{\partial f_2}t_{f_2}$. Set $t_{f_4} = \frac{partial f_4}{\partial f_3}t_{f_3} + \frac{partial f_4}{\partial f_2}t_{f_2}$.
-	\item Set $t_{f_5} = \frac{partial f_5}{\partial f_3}t_{f_3} + \frac{partial f_5}{\partial f_4}t_{f_4}$.
-\end{itemize}
-
+Perform forward pass on this computation tree to calculate $\frac{\partial f_5}{\partial f_2}$ (TODO add image); \begin{itemize} \item Set $t_{f_1}=0, t_{f_2}=1$.  \item $t_{f_3} = \frac{partial f_3}{\partial f_2}t_{f_2}$. Set $t_{f_4} = \frac{partial f_4}{\partial f_3}t_{f_3} + \frac{partial f_4}{\partial f_2}t_{f_2}$.  \item Set $t_{f_5} = \frac{partial f_5}{\partial f_3}t_{f_3} + \frac{partial f_5}{\partial f_4}t_{f_4}$.  \end{itemize} 
+            
 Memory needed for forward mode using a computation tree to calculate gradients; Roughly same as required to compute fn itself.
 
-Describe the procedure for reverse differentiation on a computational graph; \begin{itemize}
-	\item Find the reverse ancestral (backwards) schedule of nodes (from final to its parent, to its parent etc.)
-	\item Start with first node $n_1$ in the reverse schedule and define $t_{n_1}=1$.
-	\item For the next node $n$ in the reverse schedule, find the child nodes $ch(n)$. Then define
-	\begin{itemize}
-		\item $t_n = \sum_{c\in ch(n)}\frac{\partial f_c}{\partial f_n}t_c$
-	\end{itemize}
-\item the total derivatives of $f$ wrt the root nodes of the tree (e.g. $x_1, x_2$) are given by the values of $t$ at those nodes.
-\item Efficient because info is collected at nodes in the tree and split between parents only when required.
-\end{itemize}
+Describe the procedure for reverse differentiation on a computational graph; \begin{itemize} \item Find the reverse ancestral (backwards) schedule of nodes (from final to its parent, to its parent etc.) \item Start with first node $n_1$ in the reverse schedule and define $t_{n_1}=1$.  \item For the next node $n$ in the reverse schedule, find the child nodes $ch(n)$. Then define \begin{itemize} \item $t_n = \sum_{c\in ch(n)}\frac{\partial f_c}{\partial f_n}t_c$ \end{itemize} \item the total derivatives of $f$ wrt the root nodes of the tree (e.g. $x_1, x_2$) are given by the values of $t$ at those nodes.  \item Efficient because info is collected at nodes in the tree and split between parents only when required.  \end{itemize}
 
-Briefly discuss the Hessian-Vector product; \begin{itemize}
-	\item Can compute Hessian-vector product in $O(W)$ time and space (e.g. for function $E(\theta)$) (vs $O(W^2)$ time and space to compute and store the Hessian directly e.g. for Newton update.
-	\item Use directional derivative
-	\item TODO can add more
-\end{itemize}
+Briefly discuss the Hessian-Vector product; \begin{itemize} \item Can compute Hessian-vector product in $O(W)$ time and space (e.g. for function $E(\theta)$) (vs $O(W^2)$ time and space to compute and store the Hessian directly e.g. for Newton update.  \item Use directional derivative \item TODO can add more \end{itemize}
+
+Describe two approaches to implementing AutoDiff.; \begin{itemize} \item Static computational graph (e.g. TF) \begin{itemize} \item Optimise when pre-compiling: remove edges that don't do anything to make calculations more efficient.  \item May have issues with branching (graph may have different paths depending on what input x is).  \end{itemize} \item Dynamic computational graph (e.g. Autograd) \begin{itemize} \item No problems with branching, unlike static graph \item May be slower \end{itemize} \end{itemize} 
 
 \end{document}
