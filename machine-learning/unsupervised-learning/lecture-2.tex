@@ -155,7 +155,7 @@ Is $s_i\sim_{iid}Discrete[\pi]$ a multinomial distribution?; No, it is a categor
 
 What is a Gaussian scale mixture model? (intuitively); \begin{itemize} \item Combining Gaussians with different variances, e.g. all mean 0.  \item Often for flexible prior e.g. for count values(?) \item Want underlying to be tractable but also to have heavier tails.  \end{itemize}
 
-An example of a class of methods we approach as the number of components in a muxture model approaches infinity; Bayesian nonparametrics
+An example of a class of methods we approach as the number of components in a mixture model approaches infinity; Bayesian nonparametrics
 
 MoG responsibility (no need to expand component density); $P(s_i=m|x_i) = \frac{P(x|s_i=m)\pi_m}{\sum_m P(x|s_i=m)\pi_m}$
 
@@ -167,11 +167,11 @@ Log likelihood for a mixture model; $l=\sum_{i=1}^N\log \sum_{m=1}^k \pi_mP_m(x_
 
 Partial derivative $\frac{\partial \mathcal{L}}{\partial \theta_m}$ for a mixture model; $\sum_{i=1}^N r_{im} \frac{\partial\log P_m(x_i, \theta_m)}{\partial\theta_m}$ using $\frac{\partial P}{\partial \theta} = P \times \frac{\partial\log P}{\partial \theta}$
 
-Partial derivative $\frac{\partial \mathcal{L}}{\partial \pi_m}$ for a mixture model; $\sum_{i=1}^N \frac{r_{im}}{\pi_m}$
+Partial derivative $\frac{\partial \mathcal{L}}{\partial \pi_m}$ for a mixture model; $\sum_{i=1}^N \frac{r_{igit m}}{\pi_m}-\lambda = 0$, $\pi_m = \frac{1}{N}\sum_{i=1}^N r_{im}$.
 
 MoG derivatives: $\frac{\partial \mathcal{L}}{\partial \mathbf{\mu_m}} =$; $\sum_{i=1}^n r_{im}\Sigma^{-1}_m(x_i-\mu_m)$
 
-MoG derivatives: $\frac{\partial \mathcal{L}}{\partial \mathbf{\Sigma^{-1}_m}} =$; $\frac{1}{2}\sum_{i=1}^n r_{im}(\Sigma_m-(x_i-\mu_m)(x_i-\mu_m)^T$. \newline Remember to use Lagrange multiplier for $\pi_m$ because prob mass needs to sum to 1.
+%MoG derivatives: $\frac{\partial \mathcal{L}}{\partial \mathbf{\Sigma^{-1}_m}} =$; $\frac{1}{2}\sum_{i=1}^n r_{im}(\Sigma_m-(x_i-\mu_m)(x_i-\mu_m)^T$. \newline Remember to use Lagrange multiplier for $\pi_m$ because prob mass needs to sum to 1.
 
 Describe K means; \begin{itemize} \item Limiting case of the mixture of Gaussians: $\pi_m = 1/k, \Sigma_m=\sigma^2I, \sigma^2\rightarrow 0$.  \item Then the responsibilities become binary: $r_{im}\rightarrow\delta(m, \arg\min ||x_i-\mu_i||^2)$.  \item i.e. 1 for component with closest mean, 0 for all other components. -> Solve directly for means by setting gradient to 0.  \item Iterate: \begin{itemize} \item Assign each point to closest mean (assign $r_{im}=$limit.) \item Update means to average of assigned points (set $\mathbf{\mu_m}=\frac{\sum_i r_{im}\mathbf{x_i}}{\sum_i r_{im}}$ \end{itemize} \item Usually converges within a few iterations, although fixed point depends on initial values chosen for $\mu_m$.  \item No learning rate, but assumptions limiting.  \end{itemize}
 
