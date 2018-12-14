@@ -13,7 +13,9 @@ Why is it hard to maximise the joint data likelihood for latent variable models?
 Describe EM algorithm in words; \begin{itemize}
 	\item Start from arbitrary parameters and iterate two steps:
 	\item E step (inference): fill in values of latent variables $q$ according to posterior given data.
+	\item (Or:optimise F wrt dist over hidden var holding parameters fixed)
 	\item M step (learning): Maximime likelihood wrt $\theta$ as if latent variables were not hidden.
+	\item (Or: max F wrt parameters holding hidden dist fixed)
 \end{itemize} 1977 with significant earlier precedents.
 
 Jensen's inequality; \begin{itemize}
@@ -29,8 +31,8 @@ Derive the expression for the free energy.; \begin{itemize}
 \end{itemize}
 
 Formulae for E and M steps of EM algorithm; \begin{itemize}
-	\item E step: $q^(k)(\mathcal{Y}):=\arg\max_{q(\mathcal{Y})}  F(q(\mathcal{Y}),\theta^{(k-1)}) = P(\mathcal{Y}|\mathcal{X},\theta^{(k-1)})$
-	\item M step: $\theta^{(k)}:=\arg\max_\theta F(q^(k)(\mathcal{Y}),\theta)=\arg\max_{\theta}\langle \log P(\mathcal{Y}, \mathcal{X}|\theta)\rangle_{q^{(k)}(\mathcal{Y})}$.
+	\item E step: $q^{(k)}(\mathcal{Y}):=\arg\max_{q(\mathcal{Y})}  F(q(\mathcal{Y}),\theta^{(k-1)}) = P(\mathcal{Y}|\mathcal{X},\theta^{(k-1)})$
+	\item M step: $\theta^{(k)}:=\arg\max_\theta F(q^{(k)}(\mathcal{Y}),\theta)=\arg\max_{\theta}\langle \log P(\mathcal{Y}, \mathcal{X}|\theta)\rangle_{q^{(k)}(\mathcal{Y})}$.
 	\item where $F(q,\theta)=\langle \log P(\mathcal{Y}, \mathcal{X}|\theta)\rangle_{q^{(k)}(\mathcal{Y})}+H(q)$
 \end{itemize}
 
@@ -40,6 +42,8 @@ Rewrite free energy for the E-step; \begin{itemize}
 	\item where $KL(q||p) = \int q(y)\log\frac{q(y)}{p(y)}dy$.
 \end{itemize}
 
-Why does EM never decrease the likelihood?; TODO
+Why does EM never decrease the likelihood?; TODO 
+
+(slide 9 'The E-step')
 
 \end{document}
