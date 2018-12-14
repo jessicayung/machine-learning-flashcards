@@ -165,4 +165,143 @@ Derive the q distributions for a structured FHMM (factor the chains); $q(s^{1:M}
     \item Iterate / cycle through multiple forward-backward passes, updating likelihood terms each time.
     \item Opt commentary: Fuller dist of all states in chain. Take E(X)s wrt current setting of dist in all other chains. Second term in final expr is p(x) of single chain in context of all other chains. Looks like transition process for single chain.
 \end{itemize}
+
+Write down the joint $P(\mathcal{X, Y})$ for a DAG; $P(\mathcal{X, Y}) = \prod_k P(Z_k|\text{pa}(Z_k))$, where $k$ are the nodes.
+
+Derive the general form of messages passed between nodes in the graph (derivation from a variational perspective).; Notation: $\{\mathcal{Y}_i\}$ are disjoint sets.
+Let $q(\mathcal{Y}_i) = \prod_iq_i(\mathcal{Y}_i)$ for disjoint sets $\{\mathcal{Y}_i\}$. Then
+\begin{align*}
+    q_i^*(\mathcal{Y}_i) &\propto \exp \langle \log P(\mathcal{Y, X}) \rangle_{q_{\neg i}(\mathcal{Y})} \\
+    \Rightarrow \log q^*_i(\mathcal{Y}) &= \langle \sum_k \log P(Z_k |\text{pa}(Z_k)) \rangle_{q_{\neg i}(\mathcal{Y})} + C\\
+    &= \sum_{j\in \mathcal{Y}_i} \langle\log P(Y_j |\text{pa}(Y_j)) \rangle_{q_{\neg i}(\mathcal{Y})} +  \sum_{j\in \text{ch}(\mathcal{Y}_i)} \langle \log P(Z_j |\text{pa}(Z_j)) \rangle_{q_{\neg i}(\mathcal{Y})} + C 
+\end{align*} Each node receives messages from its Markov boundary: parents, children and parents of children (all neighbours in the corresponding factor graph).
+
+What information do we need to calculate $q_i^*(\mathcal{Y}_i)$ for some disjoint set $\{\mathcal{Y}_i\}$ on a DAG?; Messages from the nodes' Markov boundary (parents, children, parents of children, i.e. neighbours in corresponding factor graph).
+
+When is the term variational approximation used?; \begin{itemize}
+    \item Whenever a bound on the likelihood (on another est cost function) is optimised
+    \item but does not necessarily become tight. 
+    \item (e.g. vs var opt in E-step F = likelihood, bound becomes tight.)
+\end{itemize}
+
+What are majorising and minorising bounds?; \begin{itemize}
+    \item Majorising: upper bound
+    \item Minorising: lower bound
+    \item (Just FYI)
+\end{itemize}
+
+What is variational Bayes?; \begin{itemize}
+    \item Q over both latents and parameters: $Q(\mathcal{Y}, \bm{theta})$.
+    \item Constraint: dist Q must factor into $Q_y(\mathcal{Y})Q_\theta(\bm{theta})$.
+\end{itemize}
+
+Compare Variational Bayes with plain EM.; \begin{itemize}
+    \item Q over parameters as well as latents.
+    \item Approx (vs opt): Constraint: dist Q must factor into $Q_y(\mathcal{Y})Q_\theta(\bm{theta})$.
+    \item Goal: max bound on $P(\mathcal{X}|m)$ wrt $Q_\theta$ vs max $P(\bm{\theta}|\mathcal{X},m)$ wrt $\bm{\theta}$.
+    \item E-step: compute $Q_{\mathcal{Y}}(\mathcal{Y})\leftarrow p(\mathcal{Y}|\mathcal{X},\bm{\bar{phi}})$ vs $\bm{\theta}$ instead of $\bar{\bm{\phi}}$.
+    \item M-step: $Q_\theta(\bm{\theta}) \leftarrow \exp \int d\mathcal{Y}Q_\mathcal{Y}(\mathcal{Y}\log P(\mathcal{Y, X}, \bm{\theta})$ 
+    \begin{itemize}
+        \item vs $\bm{\theta} \leftarrow \arg\max_{\bm{\theta}}\int d\mathcal{Y}Q_{\mathcal{Y}}(\mathcal{Y})\log P(\mathcal{Y, X}, \bm{\theta})$.
+    \end{itemize}
+    \item VB reduces to EM if $Q_{\theta}(\bm{\theta})=\delta(\bm{\theta-\theta^*})$.
+    \item VB F increases monotonically, and incorporates the model complexity penalty. Since working with evidence directly, hope is that somehow it'd be robust to ovefitting. (TODO: how?)
+\end{itemize} 
+
+Write down the F for variational Bayesian EM.; $F(Q_\mathcal{Y}, Q_{\bm{\theta}}) = \int \int d\mathcal{Y}d\bm{\theta}Q_{\mathcal{Y}}(\mathcal{Y})Q_\theta(\bm{\theta)}\log\frac{p(\mathcal{X, Y}, \bm{\theta}|\mathcal{M})}{Q_{\mathcal{Y}}(\mathcal{Y})Q_\theta(\bm{\theta})}}$
+
+Write down the Q updates for Variational Bayesian EM; \begin{itemize}
+    \item $Q^*_{\mathcal{Y}}(\mathcal{Y})\propto \exp \langle \log P(\mathcal{Y, X}|\bm{\theta})\rangle_{Q_\theta(\bm{\theta)}}$
+    \item $Q^*_{\theta}(\bm{\theta})\propto P(\bm{\theta})\exp \langle \log P(\mathcal{Y, X}|\bm{\theta})\rangle_{Q_\mathcal{Y}(\mathcal{Y})}$
+\end{itemize}
+
+Show that the variational Bayesian free energy is a lower bound of the log likelihood.; \begin{align*}
+    \log P(\mathcal{X}) - F(Q_{\mathcal{Y}},Q_{\bm{\theta}}) &= \log P(\mathcal{X}) - \int \int d\mathcal{Y}d\bm{\theta}Q_{\mathcal{Y}}(\mathcal{Y})Q_\theta(\bm{\theta)}\log\frac{p(\mathcal{X, Y}, \bm{\theta}|\mathcal{M})}{Q_{\mathcal{Y}}(\mathcal{Y})Q_\theta(\bm{\theta})}} \\
+    &=  \int \int d\mathcal{Y}d\bm{\theta}Q_{\mathcal{Y}}(\mathcal{Y})Q_\theta(\bm{\theta)}\log\frac{Q_{\mathcal{Y}}(\mathcal{Y})Q_\theta(\bm{\theta})}{p(\mathcal{Y}, \bm{\theta}|\mathcal{X})}\\
+    &= KL(Q||P) \geq 0
+\end{align*}
+
+State the conditions for a latent variable model to be conjugate-exponential. \begin{itemize}
+    \item Joint probability over latent variables is in the exponential family
+    \begin{itemize}
+        \item $P(\mathcal{Z, X}|\bm{\theta}) = f(\mathcal{Z, X})g(\bm{\theta})\exp\{\bm{\phi(\theta)}^T\bm{T}(\mathcal{Z,X})\}$
+        \item $\bm{\phi(\theta)}$ is the vector of natural params
+        \item $\bm{T}$ are sufficient statistics
+        \item note marginal $P(\mathcal{X})$ is not necessarily in the exponential family (and usually isn't).
+    \end{itemize}
+    \item Prior over parameters is conjugate to the joint probability
+\end{itemize}
+
+Are the following models in the conjugate exponential family? If not, why not? 
+\begin{itemize}
+    \item Gaussian mixtures
+    \item factor analysis, PPCA
+    \item Boltzmann machines, MRFs
+    \item Logistic regression
+    \item HMM, factorial HMM
+    \item Linear dynamical systems, switching models
+    \item Sigmoid belief networks
+    \item Discrete-var belief networks (e.g. DAGs)
+    \item Independent components analysis
+\end{itemize}; \begin{itemize}
+    \item Gaussian mixtures
+    \item factor analysis, PPCA
+    \item Boltzmann machines, MRFs: no, no simple conjugacy, don't know how to normalise. but expfam.
+    \item Logistic regression: no simple conjugacy. nonlinearities linking latent at one step to ?? of next
+    \item HMM, factorial HMM
+    \item Linear dynamical systems, switching models
+    \item Sigmoid belief networks: not exponential: nonlinearities linking latent at one step to ?? of next
+    \item Discrete-var belief networks (e.g. DAGs)
+    \item Independent components analysis: not exponential, nonlin implicitly in it
+\end{itemize} Note: one can often approx not-in-CE family models with a suitable choice from the CE family, e.g. MoGs.
+
+Describe conjugate-exponential VB.; \begin{itemize}
+    \item $Q_\theta(\bm{\theta})$ is also conjugate (to the log joint)
+    \item $Q_\mathcal{Y}(\mathcal{Y}) = \prod_{i=1}^n Q_{\bm{y_i}}(\bm{y_i})$ takes the same form as in the E-step of regular EM.
+\end{itemize}
+
+Show that in Conjugate-exponential VB, $Q_\theta(\bm{\theta})$ is also conjugate.; TODO, L8 slide 26
+
+Show the form $Q_\mathcal{Y}(\mathcal{Y})$ takes in conjugate-exponential VB.; TODO, L8 slide 26
+
+What is the VB-E step doing?; \begin{itemize}
+    \item Minimising the KL between $Q_\thetaQ_{\mathcal{Z}}$ and $Q(\mathcal{Z},\bm{\theta})$.
+\end{itemize}
+
+Can we use algorithms such as the junction tree, belief propagation and the Kalman filter in the VB-E step? If so, how?; Yes, using expected natural parameters.
+
+What are the benefits and costs of using hierarchical models under an assumption that the Q distribution is factored? (L8 asides); \begin{itemize}
+    \item Don't do more work even though model is hierarchical because of factored assumption
+    \item More flexible: increases range of marginals you can model
+    \item But decreased accuracy: Q is not actually factored
+    \item Hoping resistant to overfitting because of complexity penalty
+\end{itemize}
+
+How can you do model selection with VB? List two ways.; \begin{itemize}
+    \item Hyperparameter selection (Hyper-M) step: $\bm{\eta} \leftarrow \arg\max_{\eta} F(Q_\mathcal{Z}, Q_\theta, \bm{\eta})$
+    \begin{itemize}
+        \item $F(Q_\mathcal{Z}, Q_\theta, \bm{\eta}) = \int \int d\mathcal{Z}d\theta Q_{\mathcal{Z}}(\mathcal{Z})Q_\theta(\bm{\theta})\log\frac{P(\mathcal{X, Z},\bm{\theta}|\bm{\eta})}{Q_\mathcal{Z}(\mathcal{Z})Q_\theta(\bm{\theta})}$
+        \item Includes ARD for learning the latent dimensionality.
+    \end{itemize}
+    \item Add to factored Q dist: $Q(\bm{eta})$. Blurs lines between latent variables and parameters.
+\end{itemize}
+
+What is ARD?; (Automatic relevance determination) \begin{itemize}
+    \item Hyperparameter method to select relevant or useful inputs in regression.
+\end{itemize} 
+
+How can we learn a latent dimensionality in VB? (Example: factor analysis); \begin{itemize}
+    \item Give the weights matrix a column-wise prior $\Lambda_i \sim N(0, \alpha_i^{-1}I)$.
+    \item So hyperparameter optimisation requires $\alpha \leftarrow \arg\max_{\alpha} F(Q_\mathcal{Z}, Q_\theta, \alpha) = \arg\max_\alpha \langle \log P(\Lambda |\alpha)\rangle_{Q_\Lambda}$.
+    \item $Q_\Lambda$ is Gaussian with the same form as in linreg, but with expected moments of y appearing in place of the inputs.
+    \item Opt wrt $\Psi$ (x noise) and $\alpha$ in turn cause some $\alpha_i$ to diverge (get v large) as in regression ARD. Those that diverge: irrelevant dimensions.
+\end{itemize}
+
+When might it be useful to introduce additional latent variables? Name two examples. (Augmented variational methods); \begin{itemize}
+    \item To achieve computational tractability.
+    \item E.g. GP regression and GP latent var model.
+\end{itemize}
+
+TODO: add slides on sparse GP approximations and variational sparse GP approximations (slide 33 onwards)
+
 \end{document}
