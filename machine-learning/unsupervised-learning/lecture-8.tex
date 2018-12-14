@@ -128,6 +128,41 @@ What is the expectation over a fully factored q for a Boltzmann machine ($P(X,Y)
 	\item So can update each $q_i$ in turn given the means (/in gen mean suff stats of others). Since all that affects one var from other var are the means.
 \end{itemize}
 
-Mean-field FHMM; TODO, big cchunk slides 16-17 of L8.
+Derive the q-distributions for the fully factored mean-field factorial HMM.; \begin{align*}
+    q^m_t(s^m_t) &\propto \exp \langle \log P(\bm{s}^{1:M}_{1:T}, \bm{x}_{1:T})\rangle_{\prod_{\neg (m, t)}q^{m'}_{t'}(s^{m'}_{t'})} \\
+    &= \exp \langle \sum_{\mu}\sum_\tau\log P(s^\mu_\tau|s^\mu_{\tau-1}) + \sum_\tau\log P(\bm{x}_\tau|s^{1:M}_\tau)\rangle_{\prod_{\neg (m, t)}q^{m'}_{t'}} \\
+    &\propto \exp [\langle \log p(s^m_t|s^m_{t-1})\rangle_{q^m_{t-1}} + \langle \log p(\bm{x}_t|s^{1:M}_t)\rangle_{\prod_{\neg(m)}q^{m'}_{t'}} + \langle \log P(s^m_{t+1}|s^m_t)\rangle_{q^m_{t+1}} ]\\
+    &= \alpha^m_t(i)\beta^m_t(i).
+\end{align*} (alpha first two terms (forward message), beta last term (backward message))
 
+Describe the q-distributions for fully mean-field FHMM.; \begin{itemize}
+    \item Yields a message-passing algorithm like forward-backward
+    \item Updates depend only on immediate neighbours in chain
+    \item Chains couple only through joint output $p(\bm{x}_t|s^{1:M}_t)$.
+    \item Need to have multiple passes to converge since changing one q changes all other qs. (Messages depend on approximate marginals (qs?))
+    \item Evidence $\log p(\bm{x}_t|s_t^{1:M}$ does not appear explicitly in backward message. (Think does not appear in Kalman smoothing bkwd message either.)
+\end{itemize}
+
+Discuss explaining away in the fully mean-field FHMM; TODO check (think through \begin{itemize}
+    \item Previously (assuming this means either Kalman smoothing or non-mean-field FHMM?) explaining away on explicit coupling (? what is coupling)
+    \item Now explaining away part of observations s.t. only what was not explained away by others (is...? 
+\end{itemize}
+
+Does $q(\mathcal{Y})$ need to be completely factorised for a variational approx? If not, what is needed or sufficient?; No. \begin{itemize}
+    \item if s.t. computing expected sufficient statistics under $P(\mathcal{Y_i}|\mathcal{Y_{\neg i}, X})$ would be tractable, factored approx is tractable.
+    \item And any factorisation of $q(\mathcal{Y}$ into a product of distributions on trees yields a tractable approx. (so don't need junction tree. And no explaining away then.)
+\end{itemize}
+
+Derive the q distributions for a structured FHMM (factor the chains); $q(s^{1:M}_{1:T}) = \prod_mq^m(s^m_{1:T})$, so 
+\begin{align*}
+    q^m(s^m_{1:T})&\propto \exp \langle 
+    \log P(\bm{s}^{1:M}_{1:T}, \bm{x}_{1:T})\rangle_{\prod_{\neg (m)}q^{m'}(s^{m'}_{1:T})} \\
+    &= \exp \langle \sum_{\mu}\sum_t\log P(s^\mu_t|s^\mu_{t-1}) + \sum_t\log P(\bm{x}_t|s^{1:M}_t)\rangle_{\prod_{\neg (m)}q^{m'}(s^{m'}_{1:T})} \\
+    &\propto \exp [ \sum_t\log P(s^m_t|s^m_{t+1}) + \sum_t\langle\log P(\bm{x}_t|s^{1:M}_t)\rangle_{\prod_{\neg (m)}q^{m'}(s^{m'}_{t})}] \\
+    &= \prod_t P(s^m_t|s^m_{t-1})\prod_t \exp{[\langle \log P(\bm{x}_t|s^{1:M}_t)\rangle_{\prod_{\neg (m)}q^{m'}(s^{m'}_{t})}] \\
+\end{align*} \begin{itemize}
+    \item This looks like a standard HMM joint with a modified likelihood term.
+    \item Iterate / cycle through multiple forward-backward passes, updating likelihood terms each time.
+    \item Opt commentary: Fuller dist of all states in chain. Take E(X)s wrt current setting of dist in all other chains. Second term in final expr is p(x) of single chain in context of all other chains. Looks like transition process for single chain.
+\end{itemize}
 \end{document}
