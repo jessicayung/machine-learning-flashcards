@@ -1,0 +1,138 @@
+\documentclass{article}
+\begin{document}
+
+What does 'Markov' refer to (in Markov models)?; \begin{itemize}
+    \item A conditional independence relationship. 
+    \item Markov property: given the present observation, the future is independent of the past.
+\end{itemize}
+
+State one overall and three more specific goals of latent variable models for time series.; \begin{itemize}
+    \item Gen: built joint probabilistiic model of the data $p(\mathbf{x_1,...x_n}$.
+    \item Predict $p(x_t|x_1,...,x_{t-1})$
+    \item Detect abnormal changed behaviour (if $p(x_t, x_{t+1}, ...|x_1,...,x_{t-1})$ small)
+    \item Recover underlying / latent / hidden causes linking entire sequence.
+\end{itemize}
+
+Write an expression for the joint of latent chain (Markov) models.; \begin{itemize}
+    \item $P(z_{1:T}, x_{1:T}) = P(z_t)P(x_t|z_t)\prod_{t=2}^TP(z_t|z_{t-1})P(x_t|z_t)$
+    \item $x$ and $z$ real-valued vectors.
+\end{itemize}
+
+Name two frequently-used tractable latent chain models.; \begin{itemize}
+    \item Linear Gaussian state-space models
+    \item Hidden Markov models.
+\end{itemize}
+
+Describe the setup of a LGSSM; \begin{itemize}
+    \item All conditional distributions are linear and gaussian.
+    \item Output eqn: $\mathbf{x_t}=C\mathbf{z}_t+\mathbf{v}_t$
+    \item State dynamics equation $\mathbf{z}_t=A\mathbf{z}_{t-1}+\mathbf{w}_t$
+    \item $\mathbf{v}_t \sim N(0,\sigma^2_v)$
+    \item $\mathbf{w}_t \sim N(0,\sigma^2_w)$
+    \item $\mathbf{z}_t$ is multivariate Gaussian. So joint $p(\mathbf{x}_{1:T}, \mathbf{z}_{1:T})$ is one big multivariate Gaussian.
+\end{itemize}
+
+Compare factor analysis and time-series state-space models.; \begin{itemize}
+    \item Very similar, with $z_{t,j}$ (SSM) replacing $z_j$ in FA.
+    \item Sim: observations confined near low-dim subspace.
+    \item Diff: Successive observations generated from correlated points in the latent space (vs iid).
+    \item Diff: FA requires latent dim $K<D$ and $\Psi$ diagonal. SSM may have $K\geq D$ and arbitrary output noise. Because number of elements in covariance matrix (across time, TODO is x?) is much larger.
+    \item Thus ML estimates of subspace FA and SSM may differ.
+\end{itemize}
+
+Will ML estimates of subspaces (same K) necessarily be the same?; \begin{itemize}
+    \item No.
+    \item Diff: FA requires latent dim $K<D$ and $\Psi$ diagonal. SSM may have $K\geq D$ and arbitrary output noise. Because number of elements in covariance matrix (across time, TODO is x?) is much larger.
+    \item Thus ML estimates of subspace FA and SSM may differ.
+\end{itemize}
+
+Name two ways of interpreting SSMs (i.e. linking them to other models).; \begin{itemize}
+    \item Factor analysis where successive observations are generated from correlated points in the latent space.
+    \item Markov chain with linear (perturbed) dynamics in latents and linear projection to observations.
+\end{itemize}
+Describe the interpretation of SSMs relating to Markov chains.; \begin{itemize}
+    \item Markov chain with linear dynamics in latents, 
+    \item Markov chain in latents perturbed by Gaussian innovations noise (may describe stochasticity, unknown control, or model mismatch.)
+    \item Obs are a linear projection of the dynamical state, with additive iid Gaussian noise.
+\end{itemize}
+
+In a SSM, can the observations be of higher dimension than the latents? How about in factor analysis? \begin{itemize}
+    \item Yes for SSM, no for FA.
+\end{itemize}
+
+Write down an example of equations for a state space model with control inputs.; \begin{itemize}
+    \item Inputs $u_t$, Outputs $x_t$.
+    \item State dynamics equation: $z_t=Az_{t-1}+Bu_{t-1}+w_t$
+    \item Output equation: $x_t=Cz_t+Du_t+v_t$
+\end{itemize}
+
+Describe the setup of Hidden Markov Models. (including equations); \begin{itemize}
+    \item Discrete hidden state $s_t\in \{1,...,K\}$
+    \item Joint $p(s_{1:T}, \mathbf{x}_{1:T})=P(s_1)P(\mathbf{x}_1|s_1)\prod_{t=2}^TP(s_t|s_{t-1})P(\mathbf{x_t}|s_t)$
+    \item Initial state probs $\pi_j = P(s_1=j)$
+    \item Transition matrix $\Phi_{ij}=P(s_{t+1}=j|s_t=i)$
+    \item Emission (output) dists $A_i(\mathbf{x})=P(\mathbf{x}_t=\mathbf{x}|s_t=j)$ (continuous $\mathbf{x}_t$)
+    \item or $A_{jk}=P(\mathbf{x}_t=k|s_t=j)$ for discrete $\mathbf{x}_t$.
+\end{itemize}
+
+Write down the joint for input-outut HMMs.;
+\begin{itemize}
+    \item $p(s_{1:T}, \mathbf{x}_{1:T}|u_{1:T})=P(s_1|u_1)P(\mathbf{x}_1|s_1, u_1)\prod_{t=2}^TP(s_t|s_{t-1}, u_{t-1})P(\mathbf{x_t}|s_t, u_t)$
+\end{itemize}
+
+Briefly discuss the practicality and modelling capacity of input-output HMMs.; \begin{itemize}
+    \item Can capture arbitrarily complex input-output relationships
+    \item but number of states required is often impractical.
+\end{itemize}
+Briefly discuss input-output HMMs.; \begin{itemize}
+    \item Can capture arbitrarily complex input-output relationships
+    \item But number of states required is often impractical.
+\end{itemize}
+
+State one advantage and one disadvantage of LGSSMs compared to HMMs.; \begin{itemize}
+    \item Adv: Continuous vector state is a powerful representation: a real-valued state vector can store an arbitrary number of bits in principle (vs $2^N$ states to comm N bits of information for an HMM (since states discrete, i.e. bin).)
+    \item Disadv: LG output/dynamics are very weak: can capture v limted dynamics. HMMs can in principle represent arbitrary stochastic dynamics and output mappings.
+\end{itemize}
+
+Name at least one HMM with richer state representation than a plain HMM.; \begin{itemize}
+    \item Factorial HMMs
+    \item Dynamic Bayesian networks. (TODO: what is this?)
+\end{itemize}
+
+Do observations $x_t$ in a HMM need to be Markov?; No.
+
+In a HMM, is $x_1$ independent of $x_3$ conditioned on $x_2$?; Not necessarily.
+
+Why use the Markov assumption in the latents in HMMs? \begin{itemize}
+    \item Cond indep makes computation much easier.
+    \item Because data may be partially observed: e.g. classical physics local in time(?), working out what's really out there in the world
+\end{itemize}
+
+Name two interpretations of HMMs; \begin{itemize}
+    \item Markov chain with stochastic measurements (focus on latents $s_{1:T}$
+    \item Mixture model with states coupled over time ($s_t, x_t$ together)
+\end{itemize}
+
+For an HMM, is the output process Markov of some order?; Not necessarily.
+
+Can we use discrete state, discrete output models (HMMs) to approximate nonlinear continuous dynamics and observation mappings?; Yes, but this is usually not practical. 
+
+TODO: what are stochastic finite state machines / automata?; (mentioned in a one-liner)
+
+Briefly discuss the  information one (continuous) state can hold.; Depends on the noise magnitude. 
+
+Compare the modelling capacity of HMM dynamics and linear Gaussian dynamics with respect to fixed points.; \begin{itemize}
+    \item HMM can converge to >1 fixed points e.g. with cycles.
+    \item LGSSM can only converge to one or a line of fixed points.
+\end{itemize}
+
+Name one extension of HMMs; \begin{itemize}
+    \item (*) Switching state space models
+    \item Hierarchical models
+    \item Constrained HMMs
+    \item Continuous state models with discrete outputs for time series and static data
+    \item (as long as you remember the first one it's fine)
+\end{itemize}
+
+
+\end{document}
