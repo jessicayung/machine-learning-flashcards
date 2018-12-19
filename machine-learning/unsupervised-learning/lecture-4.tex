@@ -134,5 +134,13 @@ Name one extension of HMMs; \begin{itemize}
     \item (as long as you remember the first one it's fine)
 \end{itemize}
 
+Describe the setup of Linear Gaussian SSMs. (including equations); \begin{itemize}
+    \item Gaussian hidden state $z_t /sim N(\mathbf{mu_0}, Q_0)$
+    % \item Joint $p(s_{1:T}, \mathbf{x}_{1:T})=P(s_1)P(\mathbf{x}_1|s_1)\prod_{t=2}^TP(s_t|s_{t-1})P(\mathbf{x_t}|s_t)$
+    \item Transition dynamics $\mathbf{z_t|z_{t-1}}\sim  N(A\mathbf{z_{t-1}}, Q)$
+    \item Emission (output) dists $\mathbf{x_t|z_t}\sim N(C\mathbf{z}_t, R)$. 
+\end{itemize}
+
+Side: 16: Chain models: ML learning with EM.
 
 \end{document}
