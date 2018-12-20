@@ -1,129 +1,53 @@
+Front; Back
 \documentclass{article}
 \usepackage{amsmath}
 \begin{document}
 
-Why is it hard to maximise the joint data likelihood for latent variable models?; \begin{itemize}
-	\item latent z is not known
-	\item Usually no closed form optima
-	\item often multiple local maxima
-	\item direct numerical optimisation may be possibly but infrequently easy
-	\item Note log still has sum or integral inside it even though in exp family, since we don't know the latent y.
-\end{itemize}
+Why is it hard to maximise the joint data likelihood for latent variable models?; \begin{itemize} \item latent z is not known \item Usually no closed form optima \item often multiple local maxima \item direct numerical optimisation may be possibly but infrequently easy \item Note log still has sum or integral inside it even though in exp family, since we don't know the latent y.  \end{itemize}
 
-Describe EM algorithm in words; \begin{itemize}
-	\item Start from arbitrary parameters and iterate two steps:
-	\item E step (inference): fill in values of latent variables $q$ according to posterior given data.
-	\item (Or:optimise F wrt dist over hidden var holding parameters fixed)
-	\item M step (learning): Maximime likelihood wrt $\theta$ as if latent variables were not hidden.
-	\item (Or: max F wrt parameters holding hidden dist fixed)
-\end{itemize} 1977 with significant earlier precedents.
+Describe EM algorithm in words; \begin{itemize} \item Start from arbitrary parameters and iterate two steps: \item E step (inference): fill in values of latent variables $q$ according to posterior given data.  \item (Or:optimise F wrt dist over hidden var holding parameters fixed) \item M step (learning): Maximime likelihood wrt $\theta$ as if latent variables were not hidden.  \item (Or: max F wrt parameters holding hidden dist fixed) \end{itemize} 1977 with significant earlier precedents.
 
-Jensen's inequality; \begin{itemize}
-	\item For concave function $f(x)$ and probability measure $\alpha$,
-	\item $f(E_{\alpha}(x))\geq E_\alpha[f(x)]$.
-	\item Equality iff $f(x)$ is almost surely constant or linear on convex support of $\alpha$.
-\end{itemize}
+Jensen's inequality; \begin{itemize} \item For concave function $f(x)$ and probability measure $\alpha$, \item $f(E_{\alpha}(x))\geq E_\alpha[f(x)]$.  \item Equality iff $f(x)$ is almost surely constant or linear on convex support of $\alpha$.  \end{itemize}
 
 EM free energy; $F(q,\theta) = \langle \log P(\mathcal{Y, X}|\theta)\rangle_{q(\mathcal{Y})}+H(q)$.
 
-Derive the expression for the free energy.; \begin{itemize}
-	\item $l(\theta) = \log \int P(\mathcal{X, Y}|\theta)d\mathcal{Y}$ \item $= \log \int q(\mathcal{Y})\frac{P(\mathcal{X, Y}|\theta)}{q(\mathcal{Y})}d\mathcal{Y}$ \item $\geq \int q(\mathcal{Y})\log \frac{P(\mathcal{X, Y}|\theta)}{q(\mathcal{Y})}d\mathcal{Y} = F(q,\theta)$ \item Inequality by Jensen's inequality.
-\end{itemize}
+Derive the expression for the free energy.; \begin{itemize} \item $l(\theta) = \log \int P(\mathcal{X, Y}|\theta)d\mathcal{Y}$ \item $= \log \int q(\mathcal{Y})\frac{P(\mathcal{X, Y}|\theta)}{q(\mathcal{Y})}d\mathcal{Y}$ \item $\geq \int q(\mathcal{Y})\log \frac{P(\mathcal{X, Y}|\theta)}{q(\mathcal{Y})}d\mathcal{Y} = F(q,\theta)$ \item Inequality by Jensen's inequality.  \end{itemize} 
+            
+Formulae for E and M steps of EM algorithm; \begin{itemize} \item E step: $q^{(k)}(\mathcal{Y}):=\arg\max_{q(\mathcal{Y})}  F(q(\mathcal{Y}),\theta^{(k-1)}) = P(\mathcal{Y}|\mathcal{X},\theta^{(k-1)})$ \item M step: $\theta^{(k)}:=\arg\max_\theta F(q^{(k)}(\mathcal{Y}),\theta)=\arg\max_{\theta}\langle \log P(\mathcal{Y}, \mathcal{X}|\theta)\rangle_{q^{(k)}(\mathcal{Y})}$.  \item where $F(q,\theta)=\langle \log P(\mathcal{Y}, \mathcal{X}|\theta)\rangle_{q^{(k)}(\mathcal{Y})}+H(q)$ \end{itemize}
 
-Formulae for E and M steps of EM algorithm; \begin{itemize}
-	\item E step: $q^{(k)}(\mathcal{Y}):=\arg\max_{q(\mathcal{Y})}  F(q(\mathcal{Y}),\theta^{(k-1)}) = P(\mathcal{Y}|\mathcal{X},\theta^{(k-1)})$
-	\item M step: $\theta^{(k)}:=\arg\max_\theta F(q^{(k)}(\mathcal{Y}),\theta)=\arg\max_{\theta}\langle \log P(\mathcal{Y}, \mathcal{X}|\theta)\rangle_{q^{(k)}(\mathcal{Y})}$.
-	\item where $F(q,\theta)=\langle \log P(\mathcal{Y}, \mathcal{X}|\theta)\rangle_{q^{(k)}(\mathcal{Y})}+H(q)$
-\end{itemize}
+Rewrite free energy for the E-step; \begin{itemize} \item $F(q,\theta) = \int q(\mathcal{Y})\log \frac{P(\mathcal{X, Y}|\theta)}{q(\mathcal{Y})}d\mathcal{Y}$ \item $= l(\theta) - KL[q(\mathcal{Y})||P(\mathcal{Y}|\mathcal{X},\theta)]$ \item where $KL(q||p) = \int q(y)\log\frac{q(y)}{p(y)}dy$.  \end{itemize}
 
-Rewrite free energy for the E-step; \begin{itemize}
-	\item $F(q,\theta) = \int q(\mathcal{Y})\log \frac{P(\mathcal{X, Y}|\theta)}{q(\mathcal{Y})}d\mathcal{Y}$
-	\item $= l(\theta) - KL[q(\mathcal{Y})||P(\mathcal{Y}|\mathcal{X},\theta)]$
-	\item where $KL(q||p) = \int q(y)\log\frac{q(y)}{p(y)}dy$.
-\end{itemize}
+Why does EM never decrease the likelihood?; \begin{itemize} \item (F lower bound of l, F never decreases.) \item E-step brings F to $l(\theta^{(k-1)}$ \item M-step maximises F wrt theta \item But F $\leq$ l by Jensen or because of non-negativity of KL.  \end{itemize}
 
-Why does EM never decrease the likelihood?; \begin{itemize}
-    \item (F lower bound of l, F never decreases.)
-    \item E-step brings F to $l(\theta^{(k-1)}$
-    \item M-step maximises F wrt theta 
-    \item But F $\leq$ l by Jensen or because of non-negativity of KL.
-\end{itemize}
+Show that the free energy is a lower bound of the likelihood; \begin{itemize} \item $F(q,\theta) = \int q(\mathcal{Y})\log \frac{P(\mathcal{X, Y}|\theta)}{q(\mathcal{Y})}d\mathcal{Y}$ \item $= l(\theta) - KL[q(\mathcal{Y})||P(\mathcal{Y}|\mathcal{X},\theta)]$ \item and KL is non-negative.  \end{itemize} 
 
-Show that the free energy is a lower bound of the likelihood; \begin{itemize}
-	\item $F(q,\theta) = \int q(\mathcal{Y})\log \frac{P(\mathcal{X, Y}|\theta)}{q(\mathcal{Y})}d\mathcal{Y}$
-	\item $= l(\theta) - KL[q(\mathcal{Y})||P(\mathcal{Y}|\mathcal{X},\theta)]$
-	\item and KL is non-negative.
-\end{itemize}
-
-Describe the path taken to maximise the free energy in EM.; \begin{itemize}
-    \item Coordinate ascent in q and theta (orthogonal)
-    \item At each step, go to mode in that slice (holding either q or theta constant).
-\end{itemize}
+Describe the path taken to maximise the free energy in EM.; \begin{itemize} \item Coordinate ascent in q and theta (orthogonal) \item At each step, go to mode in that slice (holding either q or theta constant).  \end{itemize}
 
 Show that fixed points of EM generally correspond to (local) maxima of the likelihood; TODO appendices
 
-Describe what EM achieves (without explaining the E and M steps separately or using the term F); \begin{itemize}
-    \item An iterative algorithm that finds 
-    \item (local) maxima of
-    \item the likelihood of a latent variable model.
-\end{itemize}
+Describe what EM achieves (without explaining the E and M steps separately or using the term F); \begin{itemize} \item An iterative algorithm that finds \item (local) maxima of \item the likelihood of a latent variable model.  \end{itemize}
 
-Describe how one might do partial M steps ;\begin{itemize}
-    \item (proof holds even if we just) Inc F wrt $\theta$ rather than max. ('gen EM')
-\end{itemize}
+Describe how one might do partial M steps ;\begin{itemize} \item (proof holds even if we just) Inc F wrt $\theta$ rather than max. ('gen EM') \end{itemize}
+
 TODO: what is E-step can be used to construct other gradient-based optimisation schemes? Slide 14 partial M; TODO, using EM to calculate gradient in a more efficient way? There's an equation in the slides.
 
-Describe how one might do partial E steps.; \begin{itemize}
-    \item Increase F wrt just some of the qs. \begin{itemize}
-        \item (bc q usually dist over many latents.)
-        \item Sparse/online EM computes posterior for a subset of the data points or as the data arrives.
-        \item Or upd posterior over a subset of the hidden variables, holding others fixed.
-    \end{itemize}
-\end{itemize}
+Describe how one might do partial E steps.; \begin{itemize} \item Increase F wrt just some of the qs. \begin{itemize} \item (bc q usually dist over many latents.) \item Sparse/online EM computes posterior for a subset of the data points or as the data arrives.  \item Or upd posterior over a subset of the hidden variables, holding others fixed.  \end{itemize} \end{itemize}
   
-In a univariate MoG model, we have $p(x|\theta)=\sum_{m=1}^k p(s=m|\theta)p(x|s=m, \theta)\propto \sum^k_{m=1}\frac{\pi_m}{\sigma_m}\exp\{-\frac{1}{2\sigma^2_m}(x-\mu_m)^2\}$. Write down the equation for the E-step update.; \begin{itemize}
-    \item $r_{im}=_{def}q(s_i=m)\propto$...with the normalisation s.t. $\sum_mr_{im}=1$.
-\end{itemize}
-In a univariate MoG model, we have $p(x|\theta)=\sum_{m=1}^k p(s=m|\theta)p(x|s=m, \theta)\propto \sum^k_{m=1}\frac{\pi_m}{\sigma_m}\exp\{-\frac{1}{2\sigma^2_m}(x-\mu_m)^2\}$. Write down the equations for the M-step of a univariate MoG model.; Same as MoG updates to parameters, except $r_{im}$ is the q ver. \begin{itemize}
-    \item Max $\langle \log p(x,s|\theta) \rangle_{q(s)} = \sum_s q(s)\log (x,s|\theta)$.
-    \item $\mu_m = \frac{\sum_i r_{im}x_i}{\sum_i r_{im}}$
-    \item $\sigma^2_m = \frac{\sum_i r_{im}(x_i-\mu_m)^2}{\sum_ir_{im}}$
-    \item $\pi_m = \frac{1}{n}\sum_ir_{im}$
-\end{itemize}
+In a univariate MoG model, we have $p(x|\theta)=\sum_{m=1}^k p(s=m|\theta)p(x|s=m, \theta)\propto \sum^k_{m=1}\frac{\pi_m}{\sigma_m}\exp\{-\frac{1}{2\sigma^2_m}(x-\mu_m)^2\}$. Write down the equation for the E-step update.; \begin{itemize} \item $r_{im}=_{def}q(s_i=m)\propto$...with the normalisation s.t. $\sum_mr_{im}=1$.  \end{itemize}
 
-Write down the E-step for Factor analysis.; \begin{itemize}
-    \item $q_n(\mathbf{z}_n) = p(\mathbf{z_n|x_n}, \theta)$. Write $p(\mathbf{z}_n, \mathbf{x}_n|\theta)$, consider $\mathbf{x}_n$ to be fixed: 
-        \item $p(\mathbf{z}_n, \mathbf{x}_n = N(\mathbf{z}_n | \Sigma\Lambda^T\Psi^{-1}\mathbf{x}_n, (I+\Lambda^T\Psi^{-1}\Lambda)^{-1})$.
-        \item or $\Sigma = I - \beta\Lambda$, $\muu = \beta\mathbf{x}_n$, where $\beta=\Sigma\Lambda^T\Psi^{-1}$.
-        \item Note $\mu_n$ is a linear function of $\mathbf{x}_n$ and $\Sigma$ does not depend on $\mathbf{x}_n$.
-        \item (Interpreting sigma: y precision + mean precision of x mapped back to y)
-\end{itemize}
+In a univariate MoG model, we have $p(x|\theta)=\sum_{m=1}^k p(s=m|\theta)p(x|s=m, \theta)\propto \sum^k_{m=1}\frac{\pi_m}{\sigma_m}\exp\{-\frac{1}{2\sigma^2_m}(x-\mu_m)^2\}$. Write down the equations for the M-step of a univariate MoG model.; Same as MoG updates to parameters, except $r_{im}$ is the q ver. \begin{itemize} \item Max $\langle \log p(x,s|\theta) \rangle_{q(s)} = \sum_s q(s)\log (x,s|\theta)$.  \item $\mu_m = \frac{\sum_i r_{im}x_i}{\sum_i r_{im}}$ \item $\sigma^2_m = \frac{\sum_i r_{im}(x_i-\mu_m)^2}{\sum_ir_{im}}$ \item $\pi_m = \frac{1}{n}\sum_ir_{im}$ \end{itemize}
 
-Derive the M-step for Factor analysis.; \begin{itemize}
-    \item Max $\theta$ that max $F=\sum_n \langle (\mathbf{x_n, y_n}|\theta)$.
-    \item $\hat\Lambda = (\sum_n \mathbf{x}_n\mu_n^T)(N\Sigma+\sum_n\mathbf{\mu_n\mu_n}^T)^{-1}$
-    \item $\hat{\Psi} = \Lambda\Sigma\Lambda^T + \frac{1}{N}\sum_n(\mathbf{x}_n-\Lambda\mu_n)(\mathbf{x_n}-\Lambda\mu_n)^T$. (squared residuals)\begin{itemize}
-        \item Note: should only take derivatives wrt $\Psi_{dd}$ since $\Psi$ is diagonal.
-        \item As $\Sigma\rightarrow 0$ these become the equations for ML linear regression.
-    \end{itemize}
-\end{itemize} (slide 20 L3)
+Write down the E-step for Factor analysis.; \begin{itemize} \item $q_n(\mathbf{z}_n) = p(\mathbf{z_n|x_n}, \theta)$. Write $p(\mathbf{z}_n, \mathbf{x}_n|\theta)$, consider $\mathbf{x}_n$ to be fixed: \item $p(\mathbf{z}_n, \mathbf{x}_n = N(\mathbf{z}_n | \Sigma\Lambda^T\Psi^{-1}\mathbf{x}_n, (I+\Lambda^T\Psi^{-1}\Lambda)^{-1})$.  \item or $\Sigma = I - \beta\Lambda$, $\muu = \beta\mathbf{x}_n$, where $\beta=\Sigma\Lambda^T\Psi^{-1}$.  \item Note $\mu_n$ is a linear function of $\mathbf{x}_n$ and $\Sigma$ does not depend on $\mathbf{x}_n$.  \item (Interpreting sigma: y precision + mean precision of x mapped back to y) \end{itemize}
+
+Derive the M-step for Factor analysis.; \begin{itemize} \item Max $\theta$ that max $F=\sum_n \langle (\mathbf{x_n, y_n}|\theta)$.  \item $\hat\Lambda = (\sum_n \mathbf{x}_n\mu_n^T)(N\Sigma+\sum_n\mathbf{\mu_n\mu_n}^T)^{-1}$ \item $\hat{\Psi} = \Lambda\Sigma\Lambda^T + \frac{1}{N}\sum_n(\mathbf{x}_n-\Lambda\mu_n)(\mathbf{x_n}-\Lambda\mu_n)^T$. (squared residuals)\begin{itemize} \item Note: should only take derivatives wrt $\Psi_{dd}$ since $\Psi$ is diagonal.  \item As $\Sigma\rightarrow 0$ these become the equations for ML linear regression.  \end{itemize} \end{itemize} (slide 20 L3)
 
 What do we need to know about $q(\mathbf{y}_n$ to calculate the M-step for Factor Analysis?; Expected sufficient statistics $\langle \mathbf{y}_n \rangle$, $\langle \mathbf{y_ny_n}^T \rangle$. Dist and expected sufficient statistics equivalent for all exp fam dists.
 
-Do we always need all the parameters that fully determine the distribution q for the M-step?; \begin{itemize}
-    \item No.
-    \item In some cases with conditional independence structure between latent vars, we need less than the params that fully describe the dist.
-    \item (Prior and conditional see Gaussian? TODO give proper e.g.?)
-\end{itemize}
+Do we always need all the parameters that fully determine the distribution q for the M-step?; \begin{itemize} \item No.  \item In some cases with conditional independence structure between latent vars, we need less than the params that fully describe the dist.  \item (Prior and conditional see Gaussian? TODO give proper e.g.?) \end{itemize}
 
-Write down the likelihood for mixtures of factor analysers.; \begin{itemize}
-    \item $p(\mathbf{x}|\theta) = \sum_k \pi_k N(\mathbf{\mu_k}, \Lambda_k\Lambda_k^T + \Psi)$
-\end{itemize}
+Write down the likelihood for mixtures of factor analysers.; \begin{itemize} \item $p(\mathbf{x}|\theta) = \sum_k \pi_k N(\mathbf{\mu_k}, \Lambda_k\Lambda_k^T + \Psi)$ \end{itemize}
 
-Describe the EM alagorithm for mixtures of factor analysers.; \begin{itemize}
-    \item E-step: need moments of $p(\mathbf{z}|s_n, \mathbf{x}_n, \theta)$, specifically $\langle \delta_{s_n=m}\rangle, \langle\delta_{s_n=m}\mathbf{z}_n\rangle$ and $\langle \delta_{s_n=m}\mathbf{z_nz_n^T}\rangle$.
-    \item M-step: similar to M-step for FA with responsibility weighted moments.
-\end{itemize}
+Describe the EM alagorithm for mixtures of factor analysers.; \begin{itemize} \item E-step: need moments of $p(\mathbf{z}|s_n, \mathbf{x}_n, \theta)$, specifically $\langle \delta_{s_n=m}\rangle, \langle\delta_{s_n=m}\mathbf{z}_n\rangle$ and $\langle \delta_{s_n=m}\mathbf{z_nz_n^T}\rangle$.  \item M-step: similar to M-step for FA with responsibility weighted moments.  \end{itemize} 
 
 EM for exponential families E-step; TODO: it says we need only expected suff stats under q but it seems wrong, under p?
 
@@ -133,24 +57,15 @@ Write the free energy dependence on $\theta$ for exponential family p(x,z).; $F(
 
 What is it helpful to do to derive Em formally for models with discrete latents?; Introduce an indicator (one-hot) vector $\mathbf{s}$ in place of the discrete $s$.
 
-What are the expected sufficient statistics we need to calculate for EM for exponential family mixtures?; \begin{itemize}
-    \item $\sum_i \langle s_i \rangle_{q}$
-    \item $\sum_i T(\mathbf{x}_i)\langle \mathbf{s}_i^T \rangle_q$. (responsibility-weighted sufficient stats)
-\end{itemize}
+What are the expected sufficient statistics we need to calculate for EM for exponential family mixtures?; \begin{itemize} \item $\sum_i \langle s_i \rangle_{q}$ \item $\sum_i T(\mathbf{x}_i)\langle \mathbf{s}_i^T \rangle_q$. (responsibility-weighted sufficient stats) \end{itemize}
 
-Write the expfam form of a distribution and a prior.; \begin{itemize}
-    \item $p(z|\theta) = f(z)\exp\{\theta^T T(z)/Z(\theta)\}$
-    \item $p(\theta) = F(\nu, \tau)\exp\{\theta^T\tau\}/Z(\theta)^\nu$
-\end{itemize}
+Write the expfam form of a distribution and a prior.; \begin{itemize} \item $p(z|\theta) = f(z)\exp\{\theta^T T(z)/Z(\theta)\}$ \item $p(\theta) = F(\nu, \tau)\exp\{\theta^T\tau\}/Z(\theta)^\nu$ \end{itemize}
 
 Write down the free energy for exponential families for MAP. (first line only);  $F_{MAP}(q,\theta) = \langle \log P(\mathcal{X, Z, \theta}|\theta)\rangle_{q(\mathcal{Z})}+H(q)$.
 
 Write down the MAP free energy for exponential families wrt theta.;  $F(\theta) = \theta^T(\langle \sum_i T(z_i) \rangle_{q(z)} + \tau)- (N+\nu) \log Z(\theta) + C$.
 
-How can we find MAP values using the free energy?; \begin{itemize}
-    \item After the E-step, the augmented free energy (F with $p(Z, X, \theta)$) is equal to the log-joint $P(X, Z, \theta)$.
-    \item So free energy maxima are log-joint maxima (MAP values).
-\end{itemize}
+How can we find MAP values using the free energy?; \begin{itemize} \item After the E-step, the augmented free energy (F with $p(Z, X, \theta)$) is equal to the log-joint $P(X, Z, \theta)$.  \item So free energy maxima are log-joint maxima (MAP values).  \end{itemize}
 
 Can we find posteriors $p(z|x, \theta)$ using EM?; Only approximately (VB) (TODO wait why only approx?)
 
