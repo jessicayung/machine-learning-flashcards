@@ -1,6 +1,8 @@
 \documentclass{article}
 \usepackage{graphicx}
 \newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+\newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+\newcommand{\nCI}{\centernot{\CI}}
 
 \begin{document}
 	
@@ -107,10 +109,108 @@ Give an example of an undirected graph that a DAG cannot represent.; Square-like
 	\item No matter how we direct the arrows there will always be two non-adjacent parents sharing a common child $\Leftarrow$ dependence in DAG but independence in undirected graph.
 \end{itemize}
 
-Give an example of a DAG that an undirected or factor graph cannot represent.; A -> C <- B. \begin{itemize}
-	\item One three-way factor, but this does not encode marginal independence.	
+Give an example of a DAG that an undirected or factor graph cannot represent.; $A \rightarrow C \leftarrow B$. \begin{itemize}
+	\item Can try to represent using one three-way factor, but this does not encode marginal independence.	
 \end{itemize}
 
+Discuss how graphs define families of distributions, especially relating to conditional independence.; \begin{itemize}
+    \item Each graph G implies a set of conditional independence statements $\mathcal{C}(G)=\{X_i\CI Y_i|\mathcal{V}_i\}$.
+    \item Each such set of CI statements $\mathcal{C}$ defines a family of dists $\mathcal{P}_{\mathcal{C}(G)}$ that satisfy all the statements in $\mathcal{C}$. 
+    \item G may also encode a family of dists $\mathcal{P}_{G}$ by their functional form.
+\end{itemize}
+
+Compare $P_G$ and $P_{C(G)}$, the families of distributions encoded by functional form and (separately) that satisfy all the CI statements implied by a graph, in directed graphs, undirected graphs and factor graphs.;
+\begin{itemize}
+    \item For directed graphs, $P_G = P_{C(G)}$.
+    \item For undirected graphs, $P_G = P_{C(G)}$ if all dists are positive, i.e. $P(\mathcal{X})>0$ for all values of $\mathcal{X}$ (Hammersley-Clifford Theorem).
+    \item There are factor graphs for which $P_G \ne P_{C(G)}$.
+\end{itemize}
 (slide 35 Expressive power of directed and undirected graphs)
+
+Are factor graphs or undirected graphs more expressive? Explain.; \begin{itemize}
+    \item Factor graphs are more expressive than undirected graphs: for every undirected graph $G_1$ there is a factor graph $G_2$ with $P_{G_1}=P_{G_2}$ but not vice versa.
+\end{itemize}
+
+What does adding edges to graphs mean?; \begin{itemize}
+    \item Adding edges to a graph means REMOVING conditional independency statements.
+    \item i.e. enlarging the family of dists the graph encodes.
+\end{itemize}
+
+If the edges are the same (between the same pairs of nodes), where do the differences between directed and undirected graphs come from?; Collider nodes, i.e. $A\rightarrow C \leftarrow B$.
+
+If a tree only has one root, can there be marginal independence? How about if there is more than one root?; \begin{itemize}
+    \item one root: no marginal independence.
+    \item More than one root: can have marginal independence (e.g. between two of the roots).
+\end{itemize}
+
+How can you see if a graph is tree structured? (heuristic-y answer, not in slides); \begin{itemize}
+    \item No loops
+    \item For every pair of nodes, there exists exactly one (undirected) path between them.
+    \item also called `singly connected' graphs.
+\end{itemize}
+
+Do directed polytrees correspond to their (corresponding) undirected trees?; \begin{itemize}
+    \item Not necessarily. 
+    \item E.g. if the directed polytree has more than one root, there is marginal independence (e.g. between the two roots), but this likely won't be clear from the undirected tree.
+\end{itemize}
+
+Name and briefly describe four types of tree-structured graphical models.; \begin{itemize}
+    \item Rooted directed tree (one root, directed graph)
+    \item Directed polytree (tree-structured DAGs with more than one root)
+    \item Undirected tree (undirected graph so don't know how many roots there are)
+    \item Tree-structured factor graph (tbh don't know precise definition, guessing it means without loops / exactly one path from node i to node j for all i,j).
+\end{itemize}
+
+Write the form of a joint for a directed polytree; \begin{itemize}
+    \item $P(\mathcal{X})=\prod_i P(X_i|X_{pa(i)} = \prod_i f_i(X_{C_i})$
+    \item where $C_i \ i\cup pa(i)$, $f_i(X_{C_i})=P(X_i|X_{pa(i)}$.
+    \item The marginal distribution on the roots is absorbed into an adjacent factor because you don't have a factor of the root node itself.
+\end{itemize}
+
+How do you go from polytrees to tree-structured factor graphs?; Write the joint in terms of factors. \begin{itemize}
+    \item $P(\mathcal{X})=\prod_i P(X_i|X_{pa(i)} = \prod_i f_i(X_{C_i})$
+    \item where $C_i \ i\cup pa(i)$, $f_i(X_{C_i})=P(X_i|X_{pa(i)}$.
+    \item The marginal distribution on the roots is absorbed into an adjacent factor because you don't have a factor of the root node itself.
+\end{itemize}
+
+Write the form of a joint for a single-rooted directed tree.; \begin{itemize}
+    \item Can be written as a product of pairwise factors (like an undirected tree)
+    \item $P(\mathcal{X})=P(X_r)\prod_{i\ne r} P(X_i|X_{pa(i)} = \prod_{edges(ij)} f_{ij}(X_{i}, X_j)$
+\end{itemize}
+
+How do you go from single-rooted directed trees to undirected trees?; \begin{itemize}
+    \item If you write out the joint, you get pairwise factors, which is like an undirected tree.
+    \item basically make directed edges undirected.
+\end{itemize}
+
+How do you go from undirected trees to (singly) rooted directed trees?; \begin{itemize}
+    \item Choose an arbitrary node $X_r$ to be the root and point all the arrows away from it
+    \item Compute the marginal distributions on single nodes $P(X_i)$ and on edges $P(X_i, X_j)$ implied by the undirected graph. (By belief propagation).
+    \item Compute conditionals in the DAG: $P(X_i|X_{pa(i)}) = \frac{P(X_i, X_{pa(i)}}{P(X_{pa(i)}}$.
+    \item (Related: joint is then $P(\mathcal{X})=P(X_r)\prod_{i\ne r}P(X_i|X_{pa(i)})=\frac{\prod_{edges(ij)}P(X_i, X_j)}{\prod_{nodes i}P(X_i)^{deg(i)-1}}$
+    \item $deg(i) - 1$ = num times a parent. For root, have $-1$ because cancels with the $P(X_r)$ in the numerator.
+\end{itemize}
+
+Derive the form of messages in undirected trees. (No need to show recursion); \begin{itemize}
+    \item Undirected tree $Rightarrow$ pairwise factored joint distribution $P(\mathcal{X})= \frac{1}{Z}\prod_{ij \in edges(T)}f_{ij}(X_i, X_j)$
+    \item Each neighbour $X_j$ of $X_i$ defines a disjoint subtree $T_{j\rightarrow i}$. So we can split up the product:
+    \item $P(X_i) = \sum_{\mathcal{X}\backslash\{X_i\}} P(\mathcal{X}) \propto \sum_{\mathcal{X}\backslash\{X_i\}}\prod_{(ij)\in \mathcal{E}_T} f_{(ij)}(X_i, X_j)$
+    \begin{itemize}
+        \item $\mathcal{E}_T$ = edges in tree.
+    \end{itemize}
+    \item $= \sum_{\mathcal{X}\backslash\{X_i\}}\prod_{X_j\in ne(X_i)}f_{(ij)}(X_i, X_j)\prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j')$
+    \item $= \prod_{X_j\in ne(X_i)}(\sum_{\mathcal{X}_{T_{j\rightarrow i}}}f_{(ij)}(X_i, X_j)\prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j'))$
+    \item $= \prod_{X_j\in ne(X_i)}M_{j\rightarrow i}(X_i)$
+\end{itemize}
+
+Show why the definition of messages in undirected trees makes sense (recursion);  \begin{itemize}
+    \item Defn: $M_{j\rightarrow i}(X_i) =\sum_{\mathcal{X}_{T_{j\rightarrow i}}}f_{(ij)}(X_i, X_j)\prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j')$
+    \item $=\sum_{X_j}f_{(ij)}(X_i, X_j)\sum_{\mathcal{X}_{T_{j\rightarrow i}}\backslash X_j}\prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j')$
+    \item Thing from second sum onwards (including the sum) is $\propto P_{T\rightarrow i}(X_j)\propto \prod_{X_k\in ne(X_j)\backslash X_i} M_{k\rightarrow j}(X_j)$
+    \item so $M_{j\rightarrow i}(X_i) \propto \sum_{X_j}f_{(ij)}(X_i, X_j)\prod_{X_k\in ne(X_j)\backslash X_i} M_{k\rightarrow j}(X_j)$
+    \begin{itemize}
+        \item Slides says $=$ instead of $\propto$, think it's because messages can be unnormalised. but I don't really get why you can say they're equal because the (relative) normalising constants may be different across messages. (maybe write this out more clearly TODO).
+    \end{itemize}
+\end{itemize}
 
 \end{document}
