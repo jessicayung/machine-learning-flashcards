@@ -203,6 +203,10 @@ Derive the form of messages in undirected trees. (No need to show recursion); \b
     \item $= \prod_{X_j\in ne(X_i)}M_{j\rightarrow i}(X_i)$
 \end{itemize}
 
+Write down the definition of a messsage in an undirected tree.; \begin{itemize}
+    \item  $M_{j\rightarrow i}(X_i) =\sum_{\mathcal{X}_{T_{j\rightarrow i}}}f_{(ij)}(X_i, X_j)\prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j')$
+\end{itemize}
+
 Show why the definition of messages in undirected trees makes sense (recursion);  \begin{itemize}
     \item Defn: $M_{j\rightarrow i}(X_i) =\sum_{\mathcal{X}_{T_{j\rightarrow i}}}f_{(ij)}(X_i, X_j)\prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j')$
     \item $=\sum_{X_j}f_{(ij)}(X_i, X_j)\sum_{\mathcal{X}_{T_{j\rightarrow i}}\backslash X_j}\prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j')$
@@ -212,5 +216,201 @@ Show why the definition of messages in undirected trees makes sense (recursion);
         \item Slides says $=$ instead of $\propto$, think it's because messages can be unnormalised. but I don't really get why you can say they're equal because the (relative) normalising constants may be different across messages. (maybe write this out more clearly TODO).
     \end{itemize}
 \end{itemize}
+
+Derive how to calculate pairwise marginals in an undirected tree; \begin{itemize}
+    \item $P(X_i, X_j) = $ 
+    \item $P(X_i, X_j) = \sum_{\mathcal{X}\backslash\{X_i, X_j\}} P(\mathcal{X}) \propto \sum_{\mathcal{X}\backslash\{X_i, X_j\}}\prod_{(ij)\in \mathcal{E}_T} f_{(ij)}(X_i, X_j)$
+    \begin{itemize}
+        \item $\mathcal{E}_T$ = edges in tree.
+    \end{itemize}
+    % \item $=f_{(ij)}(X_i, X_j)\prod_{X_k\in ne(X_j)\backslash X_i}M_{k\rightarrow j}(X_j)\prod_{X_k\in ne(X_i)\backslash X_j}M_{k\rightarrow i}(X_i)$
+    \item $= f_{(ij)}(X_i, X_j)
+    (\sum_{\mathcal{X}_{T_j\rightarrow i}\backslash X_j} \prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j'))
+    (\sum_{\mathcal{X}_{T_i\rightarrow j}\backslash X_i} \prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j'))$
+    \item $= f_{(ij)}(X_i, X_j) 
+    \prod_{X_k\in ne(X_j)\backslash X_i}M_{k\rightarrow j}(X_j)
+    \prod_{X_k\in ne(X_i)\backslash X_j}M_{k\rightarrow i}(X_i)$
+\end{itemize}
+
+What is the message $M_{a\rightarrow i }$ when computing $P(X_i|X_a = a)$ as opposed to computing $P(X_i)$?; \begin{itemize}
+    \item $P(X_i|X_a=a): M_{a\rightarrow i} = f_{ai}(X_a = a, X_i)$
+    \item $P(X_i): M_{a\rightarrow i} = \sum_{X_a}f_{ai}(X_a, X_i)$
+\end{itemize}
+
+Write down how to calculate pairwise marginals in an undirected tree; \begin{itemize}
+    \item $P(X_i, X_j) = f_{(ij)}(X_i, X_j)\prod_{X_k\in ne(X_j)\backslash X_i}M_{k\rightarrow j}(X_j)\prod_{X_k\in ne(X_i)\backslash X_j}M_{k\rightarrow i}(X_i)$
+\end{itemize}
+
+Write down how to calculate a singleton (?) marginal in an undirected tree; \begin{itemize}
+    \item $P(X_i) = \prod_{X_j\in ne(X_i)}M_{j\rightarrow i}(X_i)$
+\end{itemize}
+
+How do you propagate messages across observed internal nodes?; \begin{itemize}
+    \item Observed internal nodes partition the graph, and so messages propaget independently across parts of the graph (stop at observed internal nodes).
+\end{itemize}
+
+What can we say about the message $M_{i\rightarrow j}$ if some variables $\mathcal{O}$ are observed?; \begin{itemize}
+    \item Proportional to likelihood of observed variables within message subtree, possible scaled by a prior factor (depending on factorisation)
+    \item i.e. $M_{i\rightarrow j}(X_j) \propto P(\mathcal{X}_{T_{i\rightarrow j}}\cap \mathcal{O}|X_j)P(X_i)$
+\end{itemize}
+
+Describe how one might do BP on a latent chain model; \begin{itemize}
+    \item A latent chain model is a rooted directed tree (which you can then treat as an undirected tree when doing BP).
+    \item Forward-backward algorithm is BP on this graph.
+\end{itemize}
+
+Write down how the forward-backward algorithm corresponds to BP on a latent chain model.; \begin{itemize}
+    \item $\alpha_t(i)\Leftrightarrow M_{s_{t-1}\rightarrow s_t}(s_t = i)\propto P(\mathbf{x}_{1:t},s_t)$ (prior on $s_t$ included)
+    \item $\beta_t(i)\Leftrightarrow M_{s_{t+1}\rightarrow s_t}(s_t = i)\propto P(\mathbf{x}_{t+1:T}|s_t)$ (just likelihood)
+    \item $\alpha_t(i)\beta_t(i) =  \prod_{j\in ne(s_t)} M_{j\rightarrow s_t}(s_t = i)\propto P(s_t=i|\mathcal{O})$ (posterior, marginal)
+\end{itemize}
+
+Is doing BP in non-trees problematic? Why or why not?; \begin{itemize}
+    \item Yes it's problematic.
+    \item Neighbours of a node don't necessarily belong to disjoint subtrees, so the influence of other nodes can't always be separated into messages.
+\end{itemize}
+
+Describe two strategies for BP in non-trees; \begin{itemize}
+    \item Loopy BP: propagate messages anyway and hope for the best (a powerful approximation)
+    \item Junction tree: group variables together into multivariate nodes until the resulting graph is a tree.
+\end{itemize}
+
+How do you remove conditional independencies in a graph?; Add edges.
+
+What is one key thing to consider when transforming a loopy graph to a tree-like graph so we can do BP on it?; \begin{itemize}
+    \item New graph $G'$ needs to be able to represent $P(\mathcal{X})$
+    \item Can ensure this if we only remove conditional independencies (i.e. add edges)
+    \item (Factor potentials on new graph $G'$ built from those given on original graph $G$ so as to encode the same distribution. Then inference on $G'$ with the appropriate potentials acts on $P(\mathcal{X})$.)
+\end{itemize}
+
+In what way may the factorisation of a graph be conservative? (not super important); we have factors for all maximal cliques when these factors could perhaps be finer.
+
+List the steps of the Junction Tree Algorithm; \begin{itemize}
+    \item DAG to
+    \item (factor graph)
+    \item Undirected graph (may DAG $\rightarrow$ this, `moralising')
+    \item Chordal or triangulated undirected graph
+    \item Junction tree (cliques of chordal graph)
+    \item Message passing on junction tree
+\end{itemize}
+
+How do you go from DAGs to factor graphs?; Factors are simply the conditional distributions in the DAG. \begin{itemize}
+    \item $P(\mathcal{X})=\prod_i P(X_i|X_{pa(i)})= \prod_i f_i(X_{C_i})$
+    \item where $C_i \ i\cup pa(i)$, $f_i(X_{C_i})=P(X_i|X_{pa(i)})$.
+    \item The marginal distribution on the roots is absorbed into an adjacent factor because you don't have a factor of the root node itself.
+\end{itemize}
+
+How do you incorporate observations into factor graphs? (formally); \begin{itemize}
+    \item Add singleton factors adjacent to observed nodes (drawn as a stick with a square on the end extending from the node) or
+    \item Modify factors linked to observed nodes
+\end{itemize}
+
+How do you convert a factor graph to an undirected graph?; \begin{itemize}
+    \item Replace each factor by an undirected clique (i.e. place undir edge between each pair of nodes in each factor)
+    \item Construct the potentials on each maximal clique by multiplying together factor potentials that fall within it (that haven't been included in cliques already), ensuring each factor potential only appears once.
+\end{itemize}
+
+How do you convert DAGs into undirected graphs?; \begin{itemize}
+    \item `Moralisation'
+    \item `Marry' all unmarried parents of each node by adding an undirected edge between each pair of parents
+\end{itemize}
+
+Are we losing much information when we go from a factor graph to an undirected graph?; \begin{itemize}
+    \item Not really.
+\end{itemize}
+
+What is the motivation behind triangulating a graph?; \begin{itemize}
+    \item To get rid of loops in the graph.
+\end{itemize}
+
+How can we triangulate a graph?; \begin{itemize}
+    \item Add edges to the graph so every loop of size $\geq 4$ has at least one chord.
+    \item becomes a chordal / triangulated graph.
+    \item Many ways to add chords: in general finding the best triangulation is NP-complete. 
+    \item One approach (of finding triangulation) is variable elimination (using some heuristic).
+    \begin{itemize}
+        \item Minimimum deficiency search: choose var that induces fewest new edges (empirically seems better).
+        \item Max cardinality search: choose var with most previously visited neighbours.
+    \end{itemize}
+\end{itemize}
+
+When is belief propagation valid?; As long as the graph is a tree.
+
+What would constitute a good triangulation of a graph?; \begin{itemize}
+    \item One where clique sizes are small.
+    \item (Because? TODO type.)
+\end{itemize}
+
+Describe a method of triangulating a graph.; \begin{itemize}
+    \item Variable elimination.
+    \item Theorem: A garph including all edges that would be induced by elimination is chordal.
+    \item Elimination: marginalising the distribution one variable at a time.
+    \item Finding a good triangulation depends on finding a good order of elimination, which is also NP-complete.
+    \item Can use heuristics (both greedy): \begin{itemize}
+        \item Minimimum deficiency search: choose var that induces fewest new edges (empirically seems better).
+        \item Max cardinality search: choose var with most previously visited neighbours.
+    \end{itemize}
+\end{itemize}
+
+Describe two heuristics for variables to eliminate (when triangulating a graph); \begin{itemize}
+        \item Minimimum deficiency search: choose var that induces fewest new edges (empirically seems better).
+        \item Max cardinality search: choose var with most previously visited neighbours.
+    \end{itemize}
+    
+What is the intuition behind maximum cardinality search for picking variables to eliminate (re triangulating graphs)?; \begin{itemize}
+        \item Max cardinality search: choose var with most previously visited neighbours.
+    \item So already have edges between neighoubrs, less likely have to add more edges. (TODO: clarify?) 
+\end{itemize}
+
+Name one case where triangulation may not be obvious by inspection.; \begin{itemize}
+    \item Pentagon with a node in the middle split into five triangles.
+    \item Not triangulated because chords must be direct connections - they cannot step through an intermediate node.
+    \item Missing two chords across the pentagon.
+    \item Detecting unchorded loops by inspection becomes difficult in large graphs.
+\end{itemize}
+
+What is a chordal / triangulated graph?; \begin{itemize}
+    \item An undirected graph where every loop of size $\geq 4$ has at least one chord.
+\end{itemize}
+
+What is a junction tree and what do its components represent? Name a key property of junction trees.;\begin{itemize}
+    \item  A tree whose nodes and edges are labelled with sets of variables.;
+    \item Each node represents a (maximal) clique.
+    \item Edges are labelled by the intersections of cliques, called separators.
+    \item (Property: Cliques contain all adjacent separators.)
+    \item Running intersection property: If two cliques contain variable X, all cliques and separators on the path between the two cliques contain X. This property is required to do BP consistently.
+\end{itemize}
+
+What is the running intersection property and why does it matter?; \begin{itemize}
+    \item A property of junction trees
+    \item If two cliques contain variable X, all cliques and separators on the path between the two cliques contain X.
+    \item This property is required to do BP consistently.
+\end{itemize}
+
+How do you convert a chordal graph into a junction tree?; \begin{itemize}
+    \item Find the maximal cliques $C_1,...,C_k$ of the chordal undirected graph.
+    \item Construct a weighted graph, with nodes labelled by the maximal cliques and edges connecting each pair of cliques that shares vars (labelled by the vars in the intersection).
+    \item Define the weight of an edge to be the size (number of variables in) the separator (edge).
+    \item Find the max-weight spanning tree of the weighted graph. This is a junction tree. (i.e. delete extra edges with few vars.) (NOTE: doing this greedily may not satisfy the running intersection property.)
+\end{itemize}
+
+What should you do after you've constructed a junction tree to check it's correct?; \begin{itemize}
+    \item Verify it satisfies the running intersection property.
+    \item If two cliques contain variable X, all cliques and separators on the path between the two cliques contain X.
+    \item This property is required to do BP consistently.
+\end{itemize}
+
+What is a maximal clique?; A clique that is not a subset of another clique.
+
+Derive Shafer-Shenoy propagation.; TODO
+
+Write down the expression for messages in Shafer-Shenoy propagation.; $M_{i\rightarrow j}(X_{S_{ij}})=\sum_{X_{C_i}\backslash s_{ij}}f_i(X_{C_i})\prod_{k\in ne(i)\backslash j}M_{k\rightarrow i}(X_{S_{ki}})$, where \begin{itemize}
+    \item $s_ij$ are variables that nodes (cliques) $i, j$ have in common and
+    $X_{S_{ki}}$ are variables nodes (cliques) $k, i$ have in common.
+\end{itemize}
+
+Write down the expressions for marginal distributions for cliques and separators when using Shafer-Shenoy propagation.; TODO
+
+(Shafer-SHenoy slide)
 
 \end{document}
