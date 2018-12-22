@@ -402,15 +402,76 @@ What should you do after you've constructed a junction tree to check it's correc
 
 What is a maximal clique?; A clique that is not a subset of another clique.
 
-Derive Shafer-Shenoy propagation.; TODO
+Derive Shafer-Shenoy propagation.; \begin{itemize}
+    \item Introduce copy variables on each side of the separator so factors on nodes no longer overlap.
+    \item Make factors on separators delta functions to enforce consistency amongst copies.
+    \item Messages become $M_{i\rightarrow j}(X^{(2)}_{S_{ij}})=\sum_{X^{(-)}_{C_i},\{X_{S_{ki}}^{(2)}\},X^{(1)}_{S_{ij}}}f_i(X^{(-)}_{C_i},\{X_{S_{ki}}^{(2)}\},X^{(1)}_{S_{ij}})$\newline$f_{ij}(X^{(1)}_{S_{ij}},X^{(2)}_{S_{ij}})
+    \prod_{k\in ne(i)\backslash j}M_{k\rightarrow i}(X^{(2)}_{S_{ki}})$
+    \item $\Rightarrow M_{i\rightarrow j}(X^{(2)}_{S_{ij}})=\sum_{X_{C_i}\backslash s_{ij}}f_i(X_{C_i})\prod_{k\in ne(i)\backslash j}M_{k\rightarrow i}(X_{S_{ki}})$, where \begin{itemize}
+    \item $s_ij$ are variables that nodes (cliques) $i, j$ have in common and
+    \end{itemize}
+\end{itemize}
 
 Write down the expression for messages in Shafer-Shenoy propagation.; $M_{i\rightarrow j}(X_{S_{ij}})=\sum_{X_{C_i}\backslash s_{ij}}f_i(X_{C_i})\prod_{k\in ne(i)\backslash j}M_{k\rightarrow i}(X_{S_{ki}})$, where \begin{itemize}
     \item $s_ij$ are variables that nodes (cliques) $i, j$ have in common and
     $X_{S_{ki}}$ are variables nodes (cliques) $k, i$ have in common.
 \end{itemize}
 
-Write down the expressions for marginal distributions for cliques and separators when using Shafer-Shenoy propagation.; TODO
+Write down the expressions for marginal distributions for cliques and separators when using Shafer-Shenoy propagation.; \begin{itemize}
+    \item Clique marginal: $P(X_{C_i})=f_i(X_{C_i})\prod_{k\in ne(i)}M_{k\rightarrow i}(X_{S_{ki}})$
+    \item Separator marginal: $P(X_{S_{ij}})=M_{i\rightarrow j}(X_{S_{ij}})M_{j\rightarrow i}(X_{S_{ji}})$
+    \item where $X_{C_i}$ are variables in the clique, $X_{S_{ki}}$ are variables in the clique that are also in neighbour $C_k$ (i.e. in separator $S_{ki}$) (message coming inward towards $C_i$.) Whereas $S_{ij}$ are variables in common with $C_j$, the node we're sending a message to.
+\end{itemize}
 
-(Shafer-SHenoy slide)
+What can we say about consistency in Shafer-Shenoy propagation?; \begin{itemize}
+    \item BP enforces local consistency between adjacent nodes
+    \item Running intersection property and tree structure of the junction tree implies that local consistency between cliques and separator marginals guarantees global consistency.
+    \item i.e.: if $q_i(X_{C_i})$ (dist on cliques), $r_{ij}(X_{S_{ij}})$ (dist on separators) are dists s.t. $\sum_{X_{C_i}\backslash s_{ij}}q_i(X_{C_i})=r_{ij}(X_{S_{ij}})$,
+    \item then $P(\mathcal{X})=\frac{\prod_{cliques i}q_i(X_{C_i})}{\prod_{seps ij}r_{ij}(X_{S_{ij}}}$ is also a dist s.t.
+    \item $q_i(X_{C_i})=\sum_{\mathcal{X}\backslash X_{C_i}}P(\mathcal{X})$, 
+    $r_{ij}(X_{S_{ij}})=\sum_{\mathcal{X}\backslash X_{S_{ij}}}P(\mathcal{X})$.
+    \item THis is a non-trivial result. (slide 76)
+    \item (Generally factors are not marginals. But if have locally consistent factors of this form, they are marginals given s(?) is a tree.)
+\end{itemize}
+
+Describe Hugin propagation; \begin{itemize}
+    \item Different (to Shafer-Shenoy) but equivalent message passing algorithm (for undirected trees)
+    \item Based on idea of reparameterisation
+    \item Initialise $q_i(X_{C_i})\propto f_i(X_{C_i})$. (init dist on each node prop to singleton factor on each node), $r_{ij}(X_{S_{ij}})\propto 1$ (unif dist on separators)
+    \item then p dist is initially $P(\mathcal{X})\propto\frac{\prod_{cliques i}q_i(X_{C_i})}{\prod_{seps ij}r_{ij}(X_{S_{ij}}}$ is also a dist s.t.
+    \item Hugin prop update for $i\rightarrow j$: $r_{ij}^{new}(X_{S_{ij}})=\sum_{X_{C_i}\backslash s_{ij}}q_i(X_{C_i})$, $q_j^{new}(X_{C_j})=q_j(X_{C_j})\frac{r_{ij}^{new}(X_{S_{ij}}}{r_{ij}(X_{S_{ij}})}$
+    \item i.e. update i to get update for sep between i and j. (change tgt node?) marginalise out var not in ending separator.
+    \item upd q for updated value of r. i.e. qnew/rnew = q/r.
+    \item (Keep track of marginals on cliques and marginals on separators individually? not sure.)
+\end{itemize}
+
+Properties of Hugin propagation; \begin{itemize}
+    \item Defined dist $P(\mathcal{X})$ is unchanged by the updates.
+    \item Each update introduces a local consistency constraint
+    $q_i(X_{C_i})$ (dist on cliques), $r_{ij}(X_{S_{ij}})$ (dist on separators) are dists s.t. $\sum_{X_{C_i}\backslash s_{ij}}q_i(X_{C_i})=r_{ij}(X_{S_{ij}})$,
+    \item If eaech update $i\rightarrow j$ is carried out only after incoming updates $k\rightarrow i$ have been carried out (i.e. in a particular order e.g. in/out), then each update needs only be carried out once. (And graph is tree)
+    \item Each Hugin update (on tgt node) is equivalent to the corresponding Shafer-Shenoy update (pass from one side to another).
+    \item (Also converges in a tree after 1 pass in 1 dir and another pass in another dir, similar to in/out pass in SS, converges to approx marginal.)
+\end{itemize}
+
+Describe the computational costs of the junction tree algorithm.; \begin{itemize}
+    \item Most cost incurred during the message passing phase: running and memory costs both $O(\sum_i|\mathcal{X}_{C_i}|)$, can be exponentially more efficient than brute force.
+    \item Var elim ordering heuristic can have a significant impact on MP costs (since may alter size of cliques).
+    \item (can hand-craft efficient ordering of var elim for certain classes of graphical models, e.g. 2D lattice Markov Random Field.)
+\end{itemize}
+
+Briefly discuss learning in graphical models.; \begin{itemize}
+    \item Factorised structure implied by graph makes learning easy.
+    \item Assuming normaliser is tractable.
+    \item ML learning on a graph means adjusting parameters in maximise the likelihood (of observed datapoints), i.e. marginalise over unobserved.
+    \item By EM, need to maximise (under q of unobserved): $\mathcal{(F}(q,\theta)=\langle \log P(X_{obs}, X_{unobs}|\theta) - \log q(X_{unobs})\rangle_{q(X_{unobs})}$
+    \begin{itemize}
+        \item $=\langle \sum_i\log f_i(X_{C_i}|\theta_i)-\log Z(\theta)\rangle_{q(X_{unobs})} + H(q)$
+        \item $=\sum_i\langle \log f_i(X_{C_i}|\theta_i)\rangle_{q(X_{unobs})} -\log Z(\theta)+H(q)$
+    \end{itemize}
+    \item So learning only requires posterior maarginals on cliques (obtained by MP) and updates on cliques (cf Baum-Welch procedure for HMMs.)
+    \item If normaliser is tractable, can update params just by one local clique
+    \item Normaliser usually tractable for DAGs (where each f is a conditional dist, usually exp fam)
+\end{itemize}
 
 \end{document}
