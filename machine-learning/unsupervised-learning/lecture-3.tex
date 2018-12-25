@@ -3,9 +3,9 @@ Front; Back
 \usepackage{amsmath}
 \begin{document}
 
-Why is it hard to maximise the joint data likelihood for latent variable models?; \begin{itemize} \item latent z is not known \item Usually no closed form optima \item often multiple local maxima \item direct numerical optimisation may be possibly but infrequently easy \item Note log still has sum or integral inside it even though in exp family, since we don't know the latent y.  \end{itemize}
+Why is it hard to maximise the joint data likelihood for latent variable models?; \begin{itemize} \item latent z is not known \item Usually no closed form optima \item often multiple local maxima \item direct numerical optimisation may be possibly but infrequently easy \item Note log still has sum or integral inside it even though in exp family, since we don't know the latent z: $l(\theta_x, \theta_z) = \sum_n \log\int dz p(x|z,\theta_x)p(z|\theta_z)$  \end{itemize} (TODO: add expression with sum in log?)
 
-Describe EM algorithm in words; \begin{itemize} \item Start from arbitrary parameters and iterate two steps: \item E step (inference): fill in values of latent variables $q$ according to posterior given data.  \item (Or:optimise F wrt dist over hidden var holding parameters fixed) \item M step (learning): Maximime likelihood wrt $\theta$ as if latent variables were not hidden.  \item (Or: max F wrt parameters holding hidden dist fixed) \end{itemize} 1977 with significant earlier precedents.
+Describe EM algorithm in words; \begin{itemize} \item Start from arbitrary parameters and iterate two steps: \item E step (inference): fill in values of latent variables $q$ according to posterior given data.  \item (Or:optimise F wrt dist over hidden var holding parameters fixed) \item M step (learning): Maximise likelihood wrt $\theta$ as if latent variables were not hidden.  \item (Or: max F wrt parameters holding hidden dist fixed) \end{itemize} 1977 with significant earlier precedents.
 
 Jensen's inequality; \begin{itemize} \item For concave function $f(x)$ and probability measure $\alpha$, \item $f(E_{\alpha}(x))\geq E_\alpha[f(x)]$.  \item Equality iff $f(x)$ is almost surely constant or linear on convex support of $\alpha$.  \end{itemize}
 

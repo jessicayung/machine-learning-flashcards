@@ -27,7 +27,7 @@ Conditional independence relationship between x, $\theta_y$ in latent variable m
 
 Likelihood vs likelihood over latents; \begin{itemize}	\item Likelihood: $p(x|\theta)$,	\item Likelihood over latents: $p(x|y, \theta)$ \end{itemize}
 
-Why might we use latent variable models?; \begin{itemize} \item Describe structured distributions \begin{itemize} \item correlations in high-dim x may be captured by fewer parameters.  \end{itemize} \item Capture an underlying generative process \begin{itemize} \item y may describe causes of x.  \item help to separate signal from noise.  \end{itemize} \item Combine exponential family dists into richer, more flexible forms.  \begin{itemize} \item P(y), P(x|y) and even P(x,y) may be in the exponential family \item P(x) rarely is. (Exception: linear Gaussian models) \end{itemize} \end{itemize}
+Why might we use latent variable models?; \begin{itemize} \item Describe structured distributions \begin{itemize} \item correlations in high-dim x may be captured by fewer parameters.  \end{itemize} \item Capture an underlying generative process \begin{itemize} \item y may describe causes of x.  \item help to separate signal from noise.  \end{itemize} \item Combine exponential family dists into richer, more flexible forms.  \begin{itemize} \item P(y), $P(x|y)$ and even P(x,y) may be in the exponential family \item P(x) rarely is. (Exception: linear Gaussian models) \end{itemize} \end{itemize}
 
 If $P(y)$ and $P(x|y)$ live in the exponential family, does $P(x,y)$ live in the exponential family?; Not necessarily - x-y coupling in product may mean this doesn't live in the exp family.
 
