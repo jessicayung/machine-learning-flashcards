@@ -4,7 +4,7 @@
 
 Describe merge sort.; \begin{itemize} \item Split list into halves until you get list of length 1. \item Merge two (sorted) lists at a time. \end{itemize}
 
-Implement merge sort.; Merge sort fn: \begin{itemize} \item def merge\_sort(array, start, end2): \item if start < end: \begin{itemize} \item 	end1 = (start + end) // 2 \item (in-place or arr1=) merge\_sort(array, start, end1) \item (in-place or arr2=) merge\_sort(array) \item (ip or return) merge(array, start, end1, end2) \end{itemize} \end{itemize} Merge fn: \begin{itemize} \item def merge(arr, start, end1, end2): \begin{itemize} \item temp = [0]*(end2-start+1) \item i, j, k = start, end1 + 1, 0 \# k = index in temp \item  while (i <= end1 or j <= end2): \begin{itemize} \item if (i <= end1 and (arr[i] <= arr[j] or j > end2): \item temp[k] = arr[i] \item i += 1 \item else: \item temp[k] = arr[j] \item j += 1 \item k += 1 \end{itemize} \item \# copy temp to original array \item for m in range(start, end2+1): array[m] = temp[m-start] \end{itemize} \end{itemize}
+Implement merge sort.; Merge sort fn: \begin{itemize} \item def merge\_sort(array, start, end2): \item if start $<$ end: \begin{itemize} \item 	end1 = (start + end) // 2 \item (in-place or arr1=) merge\_sort(array, start, end1) \item (in-place or arr2=) merge\_sort(array) \item (ip or return) merge(array, start, end1, end2) \end{itemize} \end{itemize} Merge fn: \begin{itemize} \item def merge(arr, start, end1, end2): \begin{itemize} \item temp = [0]*(end2-start+1) \item i, j, k = start, end1 + 1, 0 \# k = index in temp \item  while (i$<=$ end1 or j $<=$ end2): \begin{itemize} \item if (i $<=$ end1 and (j $>$ end2 or arr[i] $<=$ arr[j]): \item temp[k] = arr[i] \item i += 1 \item else: \item temp[k] = arr[j] \item j += 1 \item k += 1 \end{itemize} \item \# copy temp to original array \item for m in range(start, end2+1): array[m] = temp[m-start] \end{itemize} \end{itemize}
 
 Describe quicksort; \begin{itemize} \item Partition an array around a pivot (first, last, random el) \item such that elements smaller than pivot are to the left of pivot, larger els are to the right of pivot \item Quicksort array to left and array to right of pivot till array sizes = 1 el \end{itemize}
 
@@ -34,9 +34,32 @@ Can we use counting sort when our input items aren’t integers bound by constan
 
 Balanced binary trees; \begin{itemize} \item If every subtree is balanced and \item the height of the two subtrees differs by at most one.  \item Red-black trees impose softer constraints.  \end{itemize}
 
-Red-black tree properties; \begin{itemize} \item Nodes are either red or black \item The root and its leaves (NIL) are black \item If a node is red, then its children are black \item All paths from a node to its NIL descendants contain the same number of black nodes.  \item 'black height': don't count root node.  \end{itemize}
+Why might we want balanced binary trees?; \begin{itemize} \item Binary search trees:if not balanced, e.g. extreme case like a list, loses useful properties (e.g. number of nodes to traverse when looking up or searching for a node).
+\end{itemize}
 
-Insert and removing on red-black trees; \begin{itemize} \item May violate structure of red-black trees \item so ROTATE: alter structure of \end{itemize}
+% Source:Michael Sambol's videos on red-black trees
+
+Red-black tree properties; \begin{itemize} \item (Less strict, self-balancing binary search tree) \item Nodes are either red or black \item The root and its leaves (NIL) are black \item If a node is red, then its children are black (rmb by name:RED(parent)-black(children))\item All paths from a node to its NIL descendants contain the same number of black nodes.  \item 'black height': don't count root node.  \item Length of longest path is at most twice of length of shortest path. \end{itemize}
+
+Describe rotations on red-black trees; \begin{itemize} \item Alters the structure of a tree by rearranging subtrees \item Goal: decrease the height of the tree \begin{itemize} \item Red-black trees: max height of $O(\log n)$ \item Larger subtrees up, smaller subtrees down \end{itemize} \item Does not affect the order of elements \item Left-rotation (e.g. on root): Root's right child becomes root,  root becomes left child. root's right child's left child becomes previous root's (i.e. current left child's) right child.  \item Right-rotation on root: root's left child becomes root. root becomes right child. root's left child's right child becomes prev root (i.e. right child's) left child.  \end{itemize}
+
+Describe a left rotation on the root of a red-black tree; \begin{itemize} \item Root's right child becomes root,  \item root becomes left child. (since LEFT-rotation.) \item Root's right child's left child becomes previous root's (i.e. current left child's) right child.  \end{itemize}
+
+Describe a right rotation on the root of a red-black tree.; \begin{itemize} \item Root's left child becomes root.  \item Root becomes right child. (since RIGHTrotation).  \item Root's left child's right child becomes prev root (i.e. right child's) left child.  \end{itemize}
+
+Code a left rotation on a node of a red-black tree; def left\_rot(x, x\_parent, tree):\begin{itemize} \item r = x.right \item c = r.left \item if x\_parent is None: r = tree.root \item elif x\_parent.left == x: x\_parent.left = r \item else: x\_parent.right = r \item r.left = x \item x.right = c \item return tree...? but be careful x, x\_parent should be in tree hm.  \end{itemize}
+
+Time complexity of a rotation on a red-black tree; O(1) (change fixed number of pointers)
+
+Briefly describe issues with inserting and removing nodes on red-black trees; \begin{itemize} \item May violate structure of red-black trees \item so ROTATE: alter structure of TODO\end{itemize}
+
+Three key operations on binary search trees; \begin{itemize} \item Search \item Insert \item Remove \end{itemize}
+
+Time complexity of insertions on red-black trees; $O(\log n)$, n=number of nodes.
+
+Time complexity of operations on red-black trees; \begin{itemize} \item Search, insert and remove all $O(\log n)$.  \end{itemize}
+
+Strategies for Insertions on red-black trees; \begin{itemize} \item Z=root: colour it black \item Z.uncle is red: recolour Z's parent, uncle and grandparent \item Z.uncle is black (triangle): rotate Z.parent (opp dir as Z) \item Z.uncle is black (line): rotate Z.grandparent and recolour (opp dir as Z) \end{itemize}
 
 Search on red-black trees; TODO
 
@@ -50,16 +73,65 @@ Advs and disadvs of tries (vs hash tables); \begin{itemize} \item Advs: \begin{i
 
 Define an k-ary tree; a tree where no node has more than k children.
 
-Define in-order, pre-order and post-order traversal for trees; \begin{itemize} \item In-order: left subtree, then root, then right subtree \item Pre-order: root, then left subtree, then right subtree \item Post-order: left subtree, then right subtree, then root \end{itemize}
+Define in-order, pre-order and post-order traversal for trees. What are they used in?; \begin{itemize} \item In-order: left subtree, then root, then right subtree \item Pre-order: root, then left subtree, then right subtree \item Post-order: left subtree, then right subtree, then root \item Usually used in depth-first search. \end{itemize}
+
+Write pseudocode for pre-order tree traversal; def preorder(node): \begin{itemize} \item if node is None:return \item visit(node) \item preorder(node.left) \item preorder(node.right) \end{itemize}
+
+Write pseudocode for in-order tree traversal; def inorder(node): \begin{itemize} \item if node is None:return \item inorder(node.left) \item visit(node) \item inorder(node.right) \end{itemize}
+
+Write pseudocode for post-order tree traversal; def postorder(node): \begin{itemize} \item if node is None:return \item postorder(node.left) \item postorder(node.right) \item visit(node) \end{itemize}
+
+What is the time complexity of pre-order tree traversal?; O(n) since call visit on each node once.
+
+% Source: Eric Leschinski on StackOverflow
+Tradeoffs between pre-order, in-order and post-order tree traversal; \begin{itemize} \item Goal is speed:choose strategy that brings you nodes you need the fastest.  \item Pre-order: explore roots before inspecting any leaves. E.g. copy of a BS tree or print hierarchy of tree. (Top-down) \item Post-order: explore leaves before any nodes. E.g. delete tree from leaf to root. (Bottom-up) \item In-order: Flatten tree back into original sequence when tree has inherent sequence in the nodes. (pre or post order may not unwind the tree back into the sequence which was used to create it.)	E.g. get values of nodes in increasing order for a BST. (Left to right?) \end{itemize} 
+
+Tradeoffs of object-pointer representation of a graph; \begin{itemize} \item Similar to adjacency list if keep array or hashmap of nodes.  \item $O(n+e)$ memory including edges \item Search through nodes difficult if only keep reference to root, but O(n) if you keep a separate array or hashmap of nodes \item Natural for e.g. BSTs where there's extra structure.  \item Better for directed vs undirected graphs (undirected require pointers to be maintained in pairs, can become unsynchronised.) \end{itemize}
+
+Tradeoffs of adjacency matrix representation of a graph; \begin{itemize} \item Good for weighted edges \item Memory $O(n^2)$, can be better with sparse matrix \item Make problems easier by using tools from algebraic graph theory \end{itemize}
+
+Tradeoffs of edge list representation of a graph; \begin{itemize} \item Poss most space efficient $O(e)$.  \item Makes finding all the edges of a given node $O(e)$ though.  \item Natural for Kruskals algorithm (for each edge, do a lookup in union-find (TODO??)) \item (Apparently natural for Mathematica combinatorial models if you're interested, see Skiena) \end{itemize} 
+
+Describe an incidence matrix; \begin{itemize} \item 2D Boolean matrix. Rows = vertices, columns = edges.  \item Entries = whether vertex at a row is incident to edge at a column.  \item Memory $O(VE)$ \item Operations (add or remove vertex or edge) $O(VE)$ bc matrix must be resized or copied.  \end{itemize} 
+
+When might you prefer an adjacency list to an adjacency matrix and vice versa?; \begin{itemize} \item Lists: generally preferred bc they efficiently represent sparse graphs.  \item Matrix: preferred if graph is dense, i.e. E close to $V^2$, or if one needs to be able to quickly look up if there is an edge connecting two vertices.  \end{itemize} 
+            
+Time complexity of removing edges and vertices in an adjacency list; \begin{itemize} \item Remove vertex: O(E) \item Remove edge: O(V) \end{itemize} 
+
+Time complexity of finding out whether vertices are adjacent (assuming their storage positions are known); \begin{itemize} \item Adj list: O(V) \item Adj matrix:O(1) \item Incidence matrix: O(E) (go through all edges) \end{itemize} 
 
 Dijkstra's Algorithm tells you; \begin{itemize} \item shortest path from one node to every other node \item (vs Min spanning tree Prim's etc?) \end{itemize}
 
-Describe Dijkstra's Algorithm; \begin{itemize} \item Goal: find shortest path from one node to every other node \item Init distance = infinity \item Start from starting node \item Update tentative distances (min(len of path through current node, prev marked dist)) to each node \item Repeat with unclosed neighbour with shortest tentative distance till all nodes closed \item Time complexity: O(E + VlogV) (queue of distance values, looping through edges of each node) \end{itemize}
+Describe Dijkstra's Algorithm (including time complexity); \begin{itemize} \item Goal: find shortest path from one node to every other node \item Init distance = infinity \item Start from starting node \item Update tentative distances (min(len of path through current node, prev marked dist)) to each node \item Repeat with unclosed neighbour with shortest tentative distance till all nodes closed \item Time complexity: O(E(decrease key for Q) + V(extract min of Q) (Q = min priority queue. for fib heap hv  O(1), O(logV), for binary heap have O(logV), O(logV). For queue implemented with unsorted array, O(1), $O(V^2)$, E from looping through edges of each node) \end{itemize}
+
+Time complexity of Dijkstra's Algorithm (general case and specifics for three diff data structures); \begin{itemize} \item Time complexity: O(E(decrease key for Q) + V(extract min of Q) \item (Q = min priority queue. \item for fib heap hv  O(1), O(logV), \item for binary heap have O(logV), O(logV). \item For queue implemented with unsorted array, O(1), $O(V^2)$, E from looping through edges of each node) \end{itemize}
+
+Implement Dijkstra's Algorithm; def dijkstra(adj\_list, nodes, source, dest):\begin{itemize} \item inf=float('inf') \item dists = \{n: inf for n in nodes\} \item dists[source] = 0 \item prev\_nodes = \{n: None for n in nodes\} \item unvisited = nodes.copy() \item while unvisited: \begin{itemize} \item current = min(unvisited, key=lambda x: dists[x]) \item current\_dist = dists[current] \item if current\_dist == inf: break \item for nb, edge\_len in adj\_list[current]: \begin{itemize} \item new\_dist = current\_dist + edge\_len \item if new\_dist $<$ dists[nb]: \begin{itemize} \item dists[nb] = new\_dist \item prev\_nodes[nb] = current \end{itemize} \end{itemize} \item unvisited.remove(current) \end{itemize} \item reversed\_path = [] \item current = dest \item while prev\_nodes[current] is not None: \begin{itemize} \item reversed\_path.append(current) \item current = prev\_nodes[current] \end{itemize} \item if reversed\_path: reversed\_path.append(current) \item return reversed\_path[::-1], dists[dest] \end{itemize}
 
 Problems with Dijkstra; \begin{itemize} \item If graph is dense: e.g. if grid, flood fills. Not optimal e.g. if we want to go straight down. Want to build in intuition we're going towards our goal.  \item Will go down shortest edges possibly unnecessarily (e.g. not in direction of goal at all) \item A* vs Dijkstra: builds in intuition that we're going towards our goal.  \end{itemize}
 
 Briefly compare A* with Dijkstra (main difference); A* builds in intuition that we're going towards our goal.
 
 Advs and disadvs of A* vs Dijkstra\begin{itemize} \item A* can use less memory and compute since doesn't expand all nodes \item If heuristic is bad then in trouble, may not get good solution \end{itemize} Describe the A* algorithm; \begin{itemize} \item Goal: Find shortest path from start node to target node \item Picks node with lowest f(n) = g(n) + h(n) at each step \begin{itemize} \item g(n) = cost of path from start node to n \item h(n) = heuristic than ests cost of cheapest path from n to target node \end{itemize} \item H calc varies, e.g. euclidean distance between nodes on a drawn graph \end{itemize}
+
+Changes in code when converting Dijkstra to A*; \begin{itemize} \item init: add priority = dists.copy() \item current = min(unvisited, key=lambda x: priority[x]) (instead of dists[x]) \item in for loop over neighbours, if new\_dist $<$ dists[nb]: \begin{itemize} \item priority[nb] = dists[nb] + heuristic(nb, goal) \end{itemize} \end{itemize}
+
+Implement A*; def a\_star(adj\_list, nodes, source, dest, heuristic):\begin{itemize} \item inf=float('inf') \item dists = \{n: inf for n in nodes\} \item dists[source] = 0 \item priority = dists.copy() \item prev\_nodes = \{n: None for n in nodes\} \item unvisited = nodes.copy() \item while unvisited: \begin{itemize} \item current = min(unvisited, key=lambda x: priority[x]) \item current\_dist = dists[current] \item if current\_dist == inf: break \item for nb, edge\_len in adj\_list[current]: \begin{itemize} \item new\_dist = current\_dist + edge\_len \item if new\_dist $<$ dists[nb]: \begin{itemize} \item dists[nb] = new\_dist \item prev\_nodes[nb] = current \item \item priority[nb] = dists[nb] + heuristic(nb, goal) \end{itemize} \end{itemize} \item unvisited.remove(current) \end{itemize} \item reversed\_path = [] \item current = dest \item while prev\_nodes[current] is not None: \begin{itemize} \item reversed\_path.append(current) \item current = prev\_nodes[current] \end{itemize} \item if reversed\_path: reversed\_path.append(current) \item return reversed\_path[::-1], dists[dest] \end{itemize}
+
+Describe the travelling salesman problem; \begin{itemize} \item Given a set of cities and distances between every pair of cities, \item find the shortest possible route that visits every city exactly once and returns to the starting point.  \item i.e. minimum weight Hamiltonian cycle.  \item NP hard.  \end{itemize}
+
+Opt: State the Hamiltonian cycle problem.; \begin{itemize} \item Find if there EXISTS a tour that visits every city exactly once.  \item (Vs travelling salesman know existence, need to find minimum weight hamiltonian cycle).  \end{itemize}
+
+Describe an exact DP solution to the travelling salesman problem and state the time complexity of this solution.; \begin{itemize} \item Define $C(S,i)$ to be the cost of the min cost path visiting each vertex in set S exactly once, starting at 1 and ending at i. (1 = starting point of travelling salesman problem.) \item Calculate $C(S,i)$ for all subsets of size 2, then 3 till size n. All S must have the starting point 1 in them.  \item Recursion: $C(S, i)=\min( C(S \backslash i, j) + dist(j, i), for j in S, j \ne i, j \ne 1)$. for S of size $>2$, else equal to dist.  \item $O(n2^n)$ time complexity (at most $2^n$ subproblems, O(n) time for each.) \end{itemize} 
+
+Describe the knapsack problem; \begin{itemize} \item Given a set of items, each with a weight and a value, \item Determine the number of each item to include in a collection so that the total weight $\leq$ some limit, and max value.  \item NP hard.  \end{itemize}
+
+Describe an exact DP solution to the unbounded knapsack problem and state its time complexity (unbounded version: can have an unlimited number of each item); \begin{itemize} \item Let $maxval(W)$ be the max val given max weight of W. Then \item $maxval(W) = \max([v_i + maxval(W-w_i) for i in range(N) if w_i <W])$ \item Time complexity $O(NW)$, note $W$ is not polynomial in $N$.  \end{itemize}
+
+Describe an exact DP solution to the 0-1 knapsack problem and state its time complexity. (0-1 version: one of each item); \begin{itemize} \item Let $maxval(i, W)$ be the max val that can be attained with weight less than or equal to w using items up to i (first i items).  \item $maxval(i, w)=maxval(i-1, w)$ if $w_i > w$ (new item more than current weight limit) \item $maval(i, w)=\max(m(i-1, w), maxval(i-1, w-w_i)+v_i)$ if $w_i \leq w$.  \item Time complexity: $O(NW)$, note $W$ is not polynomial in $N$. Also less than $O(2^n)$.  \end{itemize}
+
+Implement an exact DP solution  to the 0-1 knapsack problem and state its time complexity.; def calcmax(i, w): \begin{itemize} \item if i$<$0: return 0 \item if w$<=$0: return 0 \item if $m[i-1,w] != -1$: temp1 = $m[i-1,w]$ \item else: temp1 = calcmax(i-1, w) \item if $wt[i] <= w$: \begin{itemize} \item if $m[i-1,w-wt[i]] != -1$: temp2 = $m[i-1, w-wt[i]]$ \item else: temp2 = $calcmax(i-1, w-wt[i])$ \end{itemize} \item else: temp2 = 0 \item $m[i,w]=max(temp1, temp2)$ \item return $m[i,w]$ \end{itemize} $O(nW)$ and less than $O(2^n)$.
+
+Describe how to implement a hash table using arrays in Python.; \begin{itemize} \item self.table = [[] for \_ in range(size)] \item self.keys = self.table.copy() \item insert: \begin{itemize} \item index = hash(key) \item for i, entry in enumerate(self.table[index]): if entry[0] == key: del self.table[index][i] \item self.table[index].append((key, value)) \end{itemize} \end{itemize}
 
 \end{document}
