@@ -1,0 +1,22 @@
+%Front; Back
+\documentclass{article}
+\begin{document}
+	
+Two key properties of binary heaps; \begin{itemize}
+	\item Shape: nearly perfectly balanced binary tree. Complete tree. (fill in from bottom left)
+	\item (Max) Heap property: every node has a value at least as large as those of its children.
+\end{itemize}
+
+Is there a left-right orientation as to which child of a node is larger in a max heap?; No.
+
+Can a node on a lower level of a max heap have a larger value than a node on a higher level?; Yes, as long as that node is not a direct descendant of the node on the higher level.
+
+What data structure do you use to implement a heap?; An array. Index top to bottom, left to right. (Root is index 0/1 depending on if you're using a 0-indexed or 1-indexed language.)
+
+What is the index of the parent, left and right children of node i in a heap?; If 1-indexed: \begin{itemize}
+	\item parent: floor(i/2), i.e. i // 2.
+	\item left child: 2i
+	\item right child: 2i + 1
+\end{itemize}
+
+\end{document}
