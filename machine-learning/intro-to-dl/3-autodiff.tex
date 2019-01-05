@@ -7,7 +7,7 @@
 
 What is AutoDiff?; \begin{itemize} \item Takes a function $f(\mathbf{x})$ and returns an exact value (up to machine accuracy) for the gradient \item $g_i(\mathbf{x})=\frac{\partial}{\partial x_i}f\vert_{\mathbf{x}}$ \item not the same as numerical approx or symbolic diff \item If done efficiently, one can always calculate the gradient in less than 5x the time it takes to compute $f(\mathbf{x})$.  \end{itemize}
 
-Naively, how many operations may it take to calculate the gradient?; $O(NF)$, N= num dims (params), F = ops needed per function evaluation. \begin{itemize} \item Method: numerical approx $\tilde{g}_i(x) \approx \frac{f(x+\epsilon \delta_i)-f(x)}{\delta}$ for small $\delta$, $\epsilon$ cartesian (direction?).  \item Autodiff can do it in $<O(5F)$ accounting for complexity of calculating derivatives, else within $O(2F)$.  \end{itemize} 
+Naively, how many operations may it take to calculate the gradient?; $O(NF)$, N= num dims (params), F = ops needed per function evaluation. \begin{itemize} \item Method: numerical approx $\tilde{g}_i(x) \approx \frac{f(x+\epsilon_i \delta)-f(x)}{\delta}$ for small $\delta$, $\epsilon$ cartesian (direction?).  \item Autodiff can do it in $<O(5F)$ accounting for complexity of calculating derivatives, else within $O(2F)$.  \end{itemize} 
 
 Compare forward and backward autodiff in terms of time and memory requirements.; \begin{itemize} \item Fwd: $O(NF)$ time, low memory requirements (since use running product). N= num params.  \item Backward: $O(2F)$ time (or $<O(5F)$ accounting for complexity of calculating derivatives) \end{itemize} 
 
@@ -25,7 +25,7 @@ Name two methods of forward differentiation; \begin{itemize} \item Complex arith
 
 Describe complex arithmetic as a form of forward differentiation; \begin{itemize} \item $f'(x)=\lim_{\epsilon\rightarrow 0}\frac{1}{\epsilon}Im(f(x+i\epsilon))$ \item Holds for any smooth function (i.e. one that can be expressed as a Taylor series) \item Approximation only for finite $\epsilon$ \item Need to overload all fns so they can deal with complex arithmetic \item (More accurate than std finite diffs since we do not subtract two small quantities and divide by a small quantity - the complex arithmetic approach is more numerically stable.) \end{itemize}
 
-Is the complex arithmetic or finite differences approach for calculating gradients? Why?; Complex arithmetic is more accurate than std finite diffs since we do not subtract two small quantities and divide by a small quantity - the complex arithmetic approach is more numerically stable.
+Is the complex arithmetic or finite differences approach for calculating gradients more accurate? Why?; Complex arithmetic is more accurate than std finite diffs since we do not subtract two small quantities and divide by a small quantity - the complex arithmetic approach is more numerically stable.
 
 Describe dual arithmetic as a form of forward differentiation; \begin{itemize} \item Define idempotent variable $\epsilon$ s.t. $\epsilon^2 = 0$.  \item Then $f'(x) = DualPartf(x+\epsilon)$. (i.e. coefficient of $\epsilon$).  \item Numerically exact \item Holds for any smooth function $f(x)$ and non-zero $\epsilon$.  \item Not necessarily efficient.  \end{itemize}
 
