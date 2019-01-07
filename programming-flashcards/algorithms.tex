@@ -47,7 +47,7 @@ Describe a left rotation on the root of a red-black tree; \begin{itemize} \item 
 
 Describe a right rotation on the root of a red-black tree.; \begin{itemize} \item Root's left child becomes root.  \item Root becomes right child. (since RIGHTrotation).  \item Root's left child's right child becomes prev root (i.e. right child's) left child.  \end{itemize}
 
-Code a left rotation on a node of a red-black tree; def left\_rot(x, x\_parent, tree):\begin{itemize} \item r = x.right \item c = r.left \item if x\_parent is None: r = tree.root \item elif x\_parent.left == x: x\_parent.left = r \item else: x\_parent.right = r \item r.left = x \item x.right = c \item return tree...? but be careful x, x\_parent should be in tree hm.  \end{itemize}
+Code a left rotation on a node of a red-black tree; def left\_rot(x, x\_parent, tree):\begin{itemize} \item r = x.right \item c = r.left \item if x\_parent is None: tree.root = r \item elif x\_parent.left == x: x\_parent.left = r \item else: x\_parent.right = r \item r.left = x \item x.right = c \item return tree...? but be careful x, x\_parent should be in tree hm.  \end{itemize}
 
 Time complexity of a rotation on a red-black tree; O(1) (change fixed number of pointers)
 
@@ -59,7 +59,7 @@ Time complexity of insertions on red-black trees; $O(\log n)$, n=number of nodes
 
 Time complexity of operations on red-black trees; \begin{itemize} \item Search, insert and remove all $O(\log n)$.  \end{itemize}
 
-Strategies for Insertions on red-black trees; \begin{itemize} \item Z=root: colour it black \item Z.uncle is red: recolour Z's parent, uncle and grandparent \item Z.uncle is black (triangle): rotate Z.parent (opp dir as Z) \item Z.uncle is black (line): rotate Z.grandparent and recolour (opp dir as Z) \end{itemize}
+Strategies for Insertions on red-black trees; Insert as you would for a binary search tree and colour the node red. \begin{itemize} \item Z=root: colour it black \item Z.uncle is red: recolour Z's parent, uncle and grandparent \item Z.uncle is black (triangle): rotate Z.parent (opp dir as Z) \item Z.uncle is black (line): rotate Z.grandparent and recolour (opp dir as Z) \end{itemize}
 
 Search on red-black trees; TODO
 
