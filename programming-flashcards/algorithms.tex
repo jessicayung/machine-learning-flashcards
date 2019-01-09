@@ -59,7 +59,6 @@ Time complexity of insertions on red-black trees; $O(\log n)$, n=number of nodes
 
 Time complexity of operations on red-black trees; \begin{itemize} \item Search, insert and remove all $O(\log n)$.  \end{itemize}
 
-Strategies for Insertions on red-black trees; Insert as you would for a binary search tree and colour the node red. \begin{itemize} \item Z=root: colour it black \item Z.uncle is red: recolour Z's parent, uncle and grandparent \item Z.uncle is black (triangle): rotate Z.parent (opp dir as Z) \item Z.uncle is black (line): rotate Z.grandparent and recolour (opp dir as Z) \end{itemize}
 
 Search on red-black trees; TODO
 
@@ -90,7 +89,7 @@ Tradeoffs of object-pointer representation of a graph; \begin{itemize} \item Sim
 
 Tradeoffs of adjacency matrix representation of a graph; \begin{itemize} \item Good for weighted edges \item Memory $O(n^2)$, can be better with sparse matrix \item Make problems easier by using tools from algebraic graph theory \end{itemize}
 
-Tradeoffs of edge list representation of a graph; \begin{itemize} \item Poss most space efficient $O(e)$.  \item Makes finding all the edges of a given node $O(e)$ though.  \item Natural for Kruskals algorithm (for each edge, do a lookup in union-find (TODO??)) \item (Apparently natural for Mathematica combinatorial models if you're interested, see Skiena) \end{itemize} 
+Tradeoffs of edge list representation of a graph; \begin{itemize} \item Poss most space efficient $O(e)$.  \item Makes finding all the edges of a given node $O(e)$ though.  \item Natural for Kruskals algorithm (for each edge, do a lookup in union-find (TODO??)) \item (Apparently natural for Mathematica combinatorial models. If you're interested, see Skiena) \end{itemize} 
 
 Describe an incidence matrix; \begin{itemize} \item 2D Boolean matrix. Rows = vertices, columns = edges.  \item Entries = whether vertex at a row is incident to edge at a column.  \item Memory $O(VE)$ \item Operations (add or remove vertex or edge) $O(VE)$ bc matrix must be resized or copied.  \end{itemize} 
 
@@ -122,16 +121,18 @@ Describe the travelling salesman problem; \begin{itemize} \item Given a set of c
 
 Opt: State the Hamiltonian cycle problem.; \begin{itemize} \item Find if there EXISTS a tour that visits every city exactly once.  \item (Vs travelling salesman know existence, need to find minimum weight hamiltonian cycle).  \end{itemize}
 
-Describe an exact DP solution to the travelling salesman problem and state the time complexity of this solution.; \begin{itemize} \item Define $C(S,i)$ to be the cost of the min cost path visiting each vertex in set S exactly once, starting at 1 and ending at i. (1 = starting point of travelling salesman problem.) \item Calculate $C(S,i)$ for all subsets of size 2, then 3 till size n. All S must have the starting point 1 in them.  \item Recursion: $C(S, i)=\min( C(S \backslash i, j) + dist(j, i), for j in S, j \ne i, j \ne 1)$. for S of size $>2$, else equal to dist.  \item $O(n2^n)$ time complexity (at most $2^n$ subproblems, O(n) time for each.) \end{itemize} 
+Describe an exact DP solution to the travelling salesman problem and state the time complexity of this solution.; \begin{itemize} \item Define $C(S,i)$ to be the cost of the min cost path visiting each vertex in set S exactly once, starting at 1 and ending at i. (1 = starting point of travelling salesman problem.) \item Calculate $C(S,i)$ for all subsets of size 2, then 3 till size n. All S must have the starting point 1 in them.  \item Recursion: $C(S, i)=\min( C(S_{\backslash i}, j) + dist(j, i)$, for $j$ in $S, j \ne i, j \ne 1)$. for S of size $>2$, else equal to dist.  \item $O(n2^n)$ time complexity (at most $2^n$ subproblems, O(n) time for each.) \end{itemize} 
 
 Describe the knapsack problem; \begin{itemize} \item Given a set of items, each with a weight and a value, \item Determine the number of each item to include in a collection so that the total weight $\leq$ some limit, and max value.  \item NP hard.  \end{itemize}
 
-Describe an exact DP solution to the unbounded knapsack problem and state its time complexity (unbounded version: can have an unlimited number of each item); \begin{itemize} \item Let $maxval(W)$ be the max val given max weight of W. Then \item $maxval(W) = \max([v_i + maxval(W-w_i) for i in range(N) if w_i <W])$ \item Time complexity $O(NW)$, note $W$ is not polynomial in $N$.  \end{itemize}
+Describe an exact DP solution to the unbounded knapsack problem and state its time complexity (unbounded version: can have an unlimited number of each item); \begin{itemize} \item Let $maxval(W)$ be the max val given max weight of W. Then \item $maxval(W) = \max([v_i + maxval(W-w_i)$ for $i$ in range($N$) if $w_i <W])$ \item Time complexity $O(NW)$, note $W$ is not polynomial in $N$.  \end{itemize}
 
 Describe an exact DP solution to the 0-1 knapsack problem and state its time complexity. (0-1 version: one of each item); \begin{itemize} \item Let $maxval(i, W)$ be the max val that can be attained with weight less than or equal to w using items up to i (first i items).  \item $maxval(i, w)=maxval(i-1, w)$ if $w_i > w$ (new item more than current weight limit) \item $maval(i, w)=\max(m(i-1, w), maxval(i-1, w-w_i)+v_i)$ if $w_i \leq w$.  \item Time complexity: $O(NW)$, note $W$ is not polynomial in $N$. Also less than $O(2^n)$.  \end{itemize}
 
-Implement an exact DP solution  to the 0-1 knapsack problem and state its time complexity.; def calcmax(i, w): \begin{itemize} \item if i$<$0: return 0 \item if w$<=$0: return 0 \item if $m[i-1,w] != -1$: temp1 = $m[i-1,w]$ \item else: temp1 = calcmax(i-1, w) \item if $wt[i] <= w$: \begin{itemize} \item if $m[i-1,w-wt[i]] != -1$: temp2 = $m[i-1, w-wt[i]]$ \item else: temp2 = $calcmax(i-1, w-wt[i])$ \end{itemize} \item else: temp2 = 0 \item $m[i,w]=max(temp1, temp2)$ \item return $m[i,w]$ \end{itemize} $O(nW)$ and less than $O(2^n)$.
+Implement an exact DP solution  to the 0-1 knapsack problem and state its time complexity.; def calcmax(i, w): \begin{itemize} \item if i$<$0: return 0 \item if w$<=$0: return 0 \item if $m[i-1,w] != -1$: temp1 = $m[i-1,w]$ \item else: temp1 = calcmax(i-1, w) \item if $wt[i] <= w$: \begin{itemize} \item if $m[i-1,w-wt[i]] != -1$: temp2 = $m[i-1, w-wt[i]] + v[i]$ \item else: temp2 = $calcmax(i-1, w-wt[i]) + v[i]$ \end{itemize} \item else: temp2 = 0 \item $m[i,w]=max(temp1, temp2)$ \item return $m[i,w]$ \end{itemize} $O(nW)$ and less than $O(2^n)$.
 
 Describe how to implement a hash table using arrays in Python.; \begin{itemize} \item self.table = [[] for \_ in range(size)] \item self.keys = self.table.copy() \item insert: \begin{itemize} \item index = hash(key) \item for i, entry in enumerate(self.table[index]): if entry[0] == key: del self.table[index][i] \item self.table[index].append((key, value)) \end{itemize} \end{itemize}
+
+Describe Kruskal's algorithm; \begin{itemize} \item Goal: find minimum spanning tree of graph. \item Iteratively find the smallest edge that connects nodes that are not already connected. (So result has no cycles.) \end{itemize}
 
 \end{document}
