@@ -95,7 +95,7 @@ Describe an incidence matrix; \begin{itemize} \item 2D Boolean matrix. Rows = ve
 
 When might you prefer an adjacency list to an adjacency matrix and vice versa?; \begin{itemize} \item Lists: generally preferred bc they efficiently represent sparse graphs.  \item Matrix: preferred if graph is dense, i.e. E close to $V^2$, or if one needs to be able to quickly look up if there is an edge connecting two vertices.  \end{itemize} 
             
-Time complexity of removing edges and vertices in an adjacency list; \begin{itemize} \item Remove vertex: O(E) \item Remove edge: O(V) \end{itemize} 
+Time complexity of removing edges and vertices in an adjacency list; \begin{itemize} \item Remove vertex: O(E) \item Remove edge: O(V) (to remove, but I think going through it is O(E))\end{itemize} 
 
 Time complexity of finding out whether vertices are adjacent (assuming their storage positions are known); \begin{itemize} \item Adj list: O(V) \item Adj matrix:O(1) \item Incidence matrix: O(E) (go through all edges) \end{itemize} 
 
