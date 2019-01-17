@@ -3,10 +3,7 @@
 \begin{document}
 
 % Heaps cards from Youtube videos by David Scot Taylor (Algorithms with Attitude)
-Two key properties of binary heaps; \begin{itemize}
-	\item Shape: nearly perfectly balanced binary tree. Complete tree. (fill in from bottom left)
-	\item (Max) Heap property: every node has a value at least as large as those of its children.
-\end{itemize}
+Two key properties of binary heaps; \begin{itemize} \item Shape: nearly perfectly balanced binary tree. Complete tree. (fill in from bottom left) \item (Max) Heap property: every node has a value at least as large as those of its children.  \end{itemize}
 
 Is there a left-right orientation as to which child of a node is larger in a max heap?; No.
 
@@ -14,49 +11,17 @@ Can a node on a lower level of a max heap have a larger value than a node on a h
 
 What data structure do you use to implement a heap?; An array. Index top to bottom, left to right. (Root is index 0/1 depending on if you're using a 0-indexed or 1-indexed language.)
 
-What is the index of the parent, left and right children of node i in a heap?; If 1-indexed: \begin{itemize}
-	\item parent: floor(i/2), i.e. i // 2.
-	\item left child: 2i
-	\item right child: 2i + 1
-\end{itemize}
+What is the index of the parent, left and right children of node i in a heap?; If 1-indexed: \begin{itemize} \item parent: floor(i/2), i.e. i // 2.  \item left child: 2i \item right child: 2i + 1 \end{itemize}
 
-Describe the time complexities of operations in a heap; \begin{itemize}
-    \item Find max: O(1) (index 0/1)
-    \item Insert: O(1) + bubble worst case O(logN) (O(1) per level)
-    \item Deletion: worst case O(logN). (Swap root with last node, then max-heapify, O(1) per level.)
-    \item Max-heapify: two perfect heaps with a top node that may not have a value larger than those of its children. (compare root with L, R children and swap with the larger child if root val $<$ max of children's values)
-\end{itemize}
+Describe the time complexities of operations in a heap; \begin{itemize} \item Find max: O(1) (index 0/1) \item Insert: O(1) + bubble worst case O(logN) (O(1) per level) \item Deletion: worst case O(logN). (Swap root with last node, then max-heapify, O(1) per level.) \item Max-heapify: two perfect heaps with a top node that may not have a value larger than those of its children. (compare root with L, R children and swap with the larger child if root val $<$ max of children's values) \end{itemize}
 
-Describe max-heapify.; \begin{itemize}
-    \item Two correct heaps with a top node that may not have a value larger than those of its children. 
-    \item Compare root with L, R children and swap with the larger child if root val $<$ max of children's values. Continue down the tree with swapped nodes till no swaps or reached leaves.
-\end{itemize}
+Describe max-heapify.; \begin{itemize} \item Two correct heaps with a top node that may not have a value larger than those of its children.  \item Compare root with L, R children and swap with the larger child if root val $<$ max of children's values. Continue down the tree with swapped nodes till no swaps or reached leaves.  \end{itemize} 
 
-What is the time complexity of iterative heap building?; \begin{itemize}
-    \item Worst case $O(n\log n)$. (n nodes x bubble up $\log n$ levels)
-    \item Usually less bc most values end up near the bottom of the heap. (Expected: O(n))
-\end{itemize}
+What is the time complexity of iterative heap building?; \begin{itemize} \item Worst case $O(n\log n)$. (n nodes x bubble up $\log n$ levels) \item Usually less bc most values end up near the bottom of the heap. (Expected: O(n)) \end{itemize}
 
-Describe how to build a heap efficiently and the time complexity.; \begin{itemize}
-    \item Use max-heapify to fix subtrees of height 1, then those of height 2, ...
-    \item Runtime O(n).
-    \item Proof: At most $floor(n/2^h)$ nodes of height $\geq h$ in the binary heap. Height $\geq 1$: at most 1 swap. Height $\geq 2$: at most 2 swaps but already counted one swap. So number of swaps is at most $n/2+n/4+...\leq n$.
-\end{itemize}
+Describe how to build a heap efficiently and the time complexity.; \begin{itemize} \item Use max-heapify to fix subtrees of height 1, then those of height 2, ...  \item Runtime O(n).  \item Proof: At most $floor(n/2^h)$ nodes of height $\geq h$ in the binary heap. Height $\geq 1$: at most 1 swap. Height $\geq 2$: at most 2 swaps but already counted one swap. So number of swaps is at most $n/2+n/4+...\leq n$.  \end{itemize}
 
-Describe heap sort.; \begin{itemize}
-    \item Build heap (linear time)
-    \item Delete max n times (each time delete max and swap it with the last leaf and re-sort the heap.)
-    \item At the end the heap is gone but elements still stored in the array, now sorted (min to max).
-    \Runtime: $O(n\log n)$. delete max n times, $O(\log n)$ each. Build heap $O(n)$.
-    \item In-place
-    \item Not stable (elements with equal keys might change order)
-    \item People say slower in practice than quicksort
-    \item Goal is to sort all elements in the heap. (from max to min if max-heap)
-\end{itemize}
+Describe heap sort.; \begin{itemize} \item Build heap (linear time) \item Delete max n times (each time delete max and swap it with the last leaf and re-sort the heap.) \item At the end the heap is gone but elements still stored in the array, now sorted (min to max).  \Runtime: $O(n\log n)$. delete max n times, $O(\log n)$ each. Build heap $O(n)$.  \item In-place \item Not stable (elements with equal keys might change order) \item People say slower in practice than quicksort \item Goal is to sort all elements in the heap. (from max to min if max-heap) \end{itemize}
 
-Implement a priority queue using a heap. (TODO this is meh); \begin{itemize}
-    \item changekey: change key of node, then may move down as in heapify op, or bubble up as in insert op.
-    \item delete: exchange node with last node, then may need to move up (like insert) or down (like heapify)
-    \item BUT can't find node (index) easily.
-\end{itemize}
+Implement a priority queue using a heap. (TODO this is meh); \begin{itemize} \item changekey: change key of node, then may move down as in heapify op, or bubble up as in insert op.  \item delete: exchange node with last node, then may need to move up (like insert) or down (like heapify) \item BUT can't find node (index) easily.  \end{itemize}
 \end{document}
