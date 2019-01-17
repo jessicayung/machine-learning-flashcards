@@ -1,0 +1,26 @@
+%Front;
+\documentclass{article}
+\begin{document}
+What is a thread?; One thread of control coursing through the program \begin{itemize} \item Like a person reading a e.g. sports section of the newspaper. \item Another thread is like another person reading the business section of the newspaper \end{itemize}
+
+Process; Program + state of all threads executing in the program. \begin{itemize} \item Note that a program may have multiple threads executing in it. \item E.g. in web browser: one thread fetching page requested, another rendering screen. \end{itemize}
+
+Mutex locks; Mutually exclusive locks. \begin{itemize} \item call mutex lock before acting on variable, \item then call mutex unlock after. \end{itemize}
+
+Give an example of asynchronous computation in the browser; e.g. browser sends asynchronous requests even if single core \begin{itemize} \item browser sends http requests for CSS stylesheet, images,... \item these in new thread(s), \item so original can continue to process file instead of waiting for response from server (pausing) \item since one core, still have to take turns. but since didn't idle, still faster than waiting. \end{itemize}
+
+Briefly describe the structure of multi-threaded processing (does it have its own stack, heap etc?); \begin{itemize} \item Each thread has its own stack, shares other elements with process (heap, globals, constants, code) \begin{itemize} \item Note global variables are in globals (shared) \end{itemize} \item Easy for threads to communicate, but take care that threads communicate when using shared memory. \begin{itemize} \item Can also communicate via message passing, e.g. on different clusters. \end{itemize} \end{itemize}
+
+Compare joinable and detached threads.; \begin{itemize} \item detached threads: what makes threads terminate: \begin{itemize} \item if any thread makes an exit call, or main reaches the end of its code \item if own thread returns or calls pthread\_exit(...)  \end{itemize} \item Joinable threads: stick around till another thread joins them \begin{itemize} \item (pthread\_join(...,eval=address\_where\_return\_value\_goins)) (TODO: what's goin?) \item i.e. pthread\_join(thread1,...) completes when thread1 is completed.  \end{itemize} \end{itemize}
+
+Compare mutex and sychronisation; \begin{itemize} \item Mutex: preventing 2+ threads accessing the same resource at the same time \item Synchronisation: control where threads are and the flow of their executions \item may be important that thread A complete task 1 before thread B starts task 2 \end{itemize}
+
+What is dead lock?; There's no thread to run.
+
+What is no concurrency?; Only one thread running at a time.
+
+Briefly descrbe memory used by a process. \begin{itemize} \item Stack: contains info local to a procedure (thread). Grows downwards. \item Heap: grows upwards \item Globals \item Constants \item Code \end{itemize}
+
+Name three things to check with multi-threaded processes; \begin{itemize} \item There is concurrency (not always just one thread running at a time) \item No deadlock (no thread to run) \item Mutual exclusion (mutex) on shared memory \begin{itemize} \item check each variable used by multiple threads \end{itemize} \end{itemize}
+
+\end{document}
