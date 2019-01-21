@@ -135,24 +135,10 @@ Describe how to implement a hash table using arrays in Python.; \begin{itemize} 
 
 Describe Kruskal's algorithm; \begin{itemize} \item Goal: find minimum spanning tree of graph. \item Iteratively find the smallest edge that connects nodes that are not already connected. (So result has no cycles.) \end{itemize}
 
-Describe radix sort.; \begin{itemize}
-    \item Only used to sort (positive?) numbers with finite precision.
-    \item Sort from least significant digit to most significant digit.
-    \item Use counting sort for each digit.
-    \item Reorder numbers based on value of current digit (and order in which they were placed previously).
-\end{itemize}
+Describe radix sort.; \begin{itemize} \item Only used to sort (positive?) numbers with finite precision. \item Sort from least significant digit to most significant digit. \item Use counting sort for each digit. \item Reorder numbers based on value of current digit (and order in which they were placed previously). \end{itemize}
 
-Compare radix and counting sort; \begin{itemize}
-    \item Counting sort: often higher memory use (num possible values)
-    \item Radix sort: slower, O(N) static memory 
-\end{itemize}
+Compare radix and counting sort; \begin{itemize} \item Counting sort: often higher memory use (num possible values) \item Radix sort: slower, O(N) static memory  \end{itemize}
 
-Describe insertion sort.; \begin{itemize}
-    \item Split the array into sorted (first element to the left) and unsorted arrays (all teh other elements).
-    \item Select the first unsorted element.
-    \item Shift this unsorted element to its sorted position in the sorted array to the left.
-    \item Repeat with the first element in the unsorted array to the right till entire array is sorted.
-    \item Seems to be $O(N^2)$.
-\end{itemize}
+Describe insertion sort.; \begin{itemize} \item Split the array into sorted (first element to the left) and unsorted arrays (all the other elements). \item Select the first unsorted element. \item Shift this unsorted element to its sorted position in the sorted array to the left. \item Repeat with the first element in the unsorted array to the right till entire array is sorted. \item Seems to be $O(N^2)$. \end{itemize}
 
 \end{document}
