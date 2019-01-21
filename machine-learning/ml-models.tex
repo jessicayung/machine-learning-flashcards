@@ -16,14 +16,62 @@ Describe Support Vector Machines; \begin{itemize} \item Minimise $\frac{1}{2}||w
 
 Briefly describe logistic regression; \begin{itemize} \item $h_{\theta}(x) = g(\theta^Tx)$ ,where $g(x)=\frac{1}{1+e^{-x}}$.  \end{itemize}
 
-Describe boosting; \begin{itemize} \item A variety of bagging where \item data for the next model is sampled not uniformly at random, but \item \textbf{weighted according to the error of the predictions of the models so far}, \item so future models focus on getting examples previous models got wrong right \end{itemize}
+Describe boosting; \begin{itemize} \item A variety of bagging where \item data for the next model is sampled not uniformly at random, but \item \textbf{weighted according to the error of the predictions of the models so far}, \item so future models focus on getting examples previous models got wrong right
+\item (Actually data is often not sampled - this is stochastic boosting. Data can just be weighted when calculating the loss. \end{itemize}
 
-Decscribe random forests; \begin{itemize} \item At each node, $m<M$ (total number of features) selected at random, best split (info gain max) on this subset of features is used \item Each tree grown to largest extent possible (or max depth), no pruning \item Aggregate predictions of trees \item num features used per node m is constant as we grow trees \end{itemize}
+Describe random forests; \begin{itemize} \item At each node, $m<M$ (total number of features) selected at random, best split (info gain max) on this subset of features is used \item Each tree grown to largest extent possible (or max depth), no pruning \item Aggregate predictions of trees \item num features used per node m is constant as we grow trees \end{itemize}
 
 Floating point benefits \begin{itemize} \item Speed: \item Efficient (space): \item Does not understand recurring numbers, stops after x digits.  \end{itemize}
 
 How many significant figures do 32-bit computers store? (and); about 7 decimal (23 bits). 8 bits for exponent. 1 sign bit.
 
 How many significant figures do 64-bit computers store? (and); about 16 decimal (52 bits). 11 bits for exponent. 1 sign bit.
+
+Which components in SVD correspond to an empirical covariance matrix's eigenvalues and eigenvectors?; \begin{itemize} \item Consider empirical cov matrix $\frac{1}{n-1}\mathbf{X^TX}$ ($\mathbf{X}$ is zero-centred). \item Eigenvectors of this = $U$, eigenvalues = $\frac{s_i^2}{n-1}$. \end{itemize}
+
+Describe PCA; Assume data have zero mean. \begin{itemize} \item Find direction of greatest variance $\mathbf{\lambda}_{(1)}=\arg\max\limits_{||\mathbf{v}||=1}\sum_n(\mathbf{x^T_nv})^2$ \item Find direction orthogonal to $\mathbf{\lambda}_{n}$ with greatest variance, call this  $\mathbf{\lambda}_{n+1}$.  \item Terminate when remaining variance drops below a threshold.  \item These turn out to be the eigenvectors of the empirical covariance matrix $S=\langle \mathbf{xx^T} \rangle$ \end{itemize}
+
+Express in algebraic terms the fact that the D eigenvectors form an orthonormal basis.; $\sum_i\mathbf{u_{i}u_{i}^T}=I$.
+
+Rewrite a vector $v$ in terms of the orthonormal basis vectors $u$.; \begin{itemize} \item $\mathbf{v}=(\sum_i \mathbf{u_{(i)}u_{(i)}^T})\mathbf{v}$ \item $=\sum_i (\mathbf{u_{(i)}^Tv)u_{(i)}}$ \item $=\sum_i v_{(i)}\mathbf{u_{(i)}}$ \end{itemize}
+
+Rewrite the empirical covariance matrix $S=\langle \mathbf{xx^T} \rangle$ in terms of the orthogonal basis vectors $\mathbf{u}_i$.; $S=\sum_i \omega_{(i)}\mathbf{u}_{(i)}\mathbf{u}_{(i)}^T = UWU^T$, where \begin{itemize} \item $U=[\mathbf{u_{1}}...]$ collects the eigenvectors and \item $W = diag[(\omega_{(1)}, \omega_{(2)},...,\omega_{(D)})]$.  \end{itemize}
+
+Write in matrix form for all eigenvectors $Su = \omega u$.; $SU=UW$.
+
+How many eigenvalue-eigenvector pairs does the covariance matrix $S_{DXD}$ have?; \begin{itemize} \item Usually D pairs, \item except if two or more eigenvectors share the same eigenvalue (in which case the eigenvectors are degenerate - any linear combination is also an eigenvector).  \end{itemize}
+
+Variance of empirical data in direction $\mathbf{u}_{(i)}$ (PCA); \begin{itemize} \item $\langle (\mathbf{x^Tu_{(i)}})^2\rangle $ \item $= \langle \mathbf{u_{(i)}^Txx^Tu_{(i)}}\rangle $ \item $=\mathbf{u_{(i)}^TSu_{(i)}}$ \item $=\mathbf{u_{(i)}^T\omega_{(i)}u_{(i)}}$ \item $=\omega_{(i)}$ \end{itemize}
+
+Variance of empirical data in an arbitrary direction $\mathbf{v}$; \begin{itemize} \item $\langle (\mathbf{x^Tv})^2\rangle $ \item $= \langle (\mathbf{x^T(\sum_i v_{(i)}\mathbf{u}_{(i)})})^2\rangle $ \item $=\sum_{ij}v_{(i)}\mathbf{u_{(i)}^TSu_{(j)}}v_{(j)}$ \item $=\sum_{ij}v_{(i)}\omega_{(i)}v_{(j)}\mathbf{u_{(i)}^Tu_{(j)}}v_{(j)}$ \item $=\sum_i v_{(i)}^2\omega_{(i)}$ \end{itemize}
+
+Explain how the PCs can be obtained from the empirical data.; \begin{itemize} \item PCs are the eigenvectors of the empirical covariance matrix $S=\langle\mathbf{xx^T}\rangle=\frac{\mathbf{X^TX}}{n-1}$ with the largest eigenvalues.  \item Variance in arbitrary direction is $\langle (\mathbf{x^Tv})^2\rangle =\sum_i v_{(i)}^2\omega_{(i)}$.  \item If $\mathbf{v^Tv}=1$, then $\sum_i v_{(i)}^2=1$ and so $\arg\max_{||v||=1} \langle (\mathbf{x^Tv})^2\rangle = \mathbf{u}_{(max)}$. ($v_{(i)}=1$ corresponding to largest eigenvalue, zero otherwise.) \item i.e. the direction of greatest variance is the eigenvector with the largest eigenvalue.  \end{itemize}
+
+Implement PCA in code given data $\mathbf{X}$.; \begin{itemize} \item Calculate covariance matrix: \begin{itemize} \item \texttt{X_std} is a standardised ver of X. (in range 0,1). \item \texttt{mean_vec = np.mean(X_std, axis=0)} \item \texttt{cov_mat = (X_std - mean_vec).T.dot((X_std - mean_vec)) / (N-1)} \item or \textt{np.cov(X_std.T)} \end{itemize} \item Find eigenvectors and eigenvalues \begin{itemize} \item u, s, v = np.linalg.svd \item \textt{evals = s**2/(N-1), evecs = u} \item OR \textt{evals, evecs = np.linalg.eig(cov_mat)} \end{itemize} \item Sort eigenpairs in descending order of eigenvalue \begin{itemize} \item \textt{eig_pairs = [(np.abs(eig_vals[i]), eig_vecs[:,i]) for i in range(len(eig_vals))]} \item \textt{eig_pairs.sort()} \item \textt{eig_pairs.reverse()} \item \texttt{pca_epairs = eig_pairs[:K]} \end{itemize} \end{itemize}
+
+Definition of softmax; \begin{itemize} \item $\sigma(\mathbf{z})_j = \frac{e^{\beta z_j}}{\sum_{k=1}^Ke^{\beta z_k}}$ for any real $\beta$. \end{itemize}
+
+Define $R^2$.; \begin{itemize} \item $1-\frac{RSS}{TSS} = \frac{ESS}{TSS}$ \item $RSS = \sum_i(y_i-\hat{y}_i)^2$ \item $TSS=\sum_i(y_i-\Bar{y}_i)^2$ \item $ESS=\sum_i(\hat{y}_i - \bar{y})^2$ \end{itemize}
+
+Describe the ROC curve; \begin{itemize} \item Illustrates diagnostic ability of a binary classifier as its discrimination threshold is varied. \item Plots true pos rate against false positive rate at various threshold setting. \end{itemize} 
+
+What is type I error?; False positives. 
+
+What is type II error?; False negatives.
+
+Describe AUC for ROC; \begin{itemize} \item Metric for classification. \item Area under ROC curve (plots true pos rate against false pos rate for different threshold settings of a binary classifier) \item AUC close to 1: ideal. 0.5: model not better than random. 0: model does opposite of perfect classification.  \item Like percentage chance model will be able to correctly distinguish between pos and neg classes (TODO: verify.) \end{itemize}
+
+How do you use AUROC for multi-class classification?; \begin{itemize} \item Plot one ROC curve for each class classified against all the others. \end{itemize}
+
+Define true positive rate in binary classification.; \begin{itemize} \item True Pos/(True Pos + False Negs) = (Classified as Pos and Pos)/(Num Pos) \end{itemize}
+
+% TODO: move to CS deck
+What is a Turing machine?; \begin{itemize} \item A general way of capturing how programs would work \item Given: information in coded form: an infinitely long tape divided into discrete cells with 1s, 0s or spaces in them. \item Machine looks at tape one cell at a time. \item Machine has log book of rules: if in state X and see Y, do Z (e.g. rewrite value as A and move to square B. or halt.) \item Program finishes when machine reaches a halting state. \end{itemize}
+
+What is a t-statistic?; \begin{itemize} \item For testing if pop mean from sampling dist of sample mean is equal to a quantity \item if pop stdev unknown \item $t = \frac{\hat{\beta}-\beta_0}{s.e.(\hat{\beta}}$ \item where $\beta_0$ is a hypothesised value, often zero. \item poss also need $\hat{\beta}$ with normally dist and homoscedastic (dist of error doesn't change as X changes) error terms \item for t stat to be dist acc to t-dist \end{itemize} 
+
+Two examples of applications of F-test; \begin{itemize} \item Means of a given set of normally distributed pops, all with the same sd, are equal. \item Proposed regression model fits the data well. \end{itemize}
+
+Estimate of sample covariance; (unbiased) $\hat{\sigma^2} = \frac{1}{N-1}\sum_n (X_n-\hat{\mu})^2$
 
 \end{document}
