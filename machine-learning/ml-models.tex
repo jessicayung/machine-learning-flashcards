@@ -26,7 +26,7 @@ How many significant figures do 32-bit computers store? (and); about 7 decimal (
 
 How many significant figures do 64-bit computers store? (and); about 16 decimal (52 bits). 11 bits for exponent. 1 sign bit.
 
-Which components in SVD correspond to an empirical covariance matrix's eigenvalues and eigenvectors?; \begin{itemize} \item Consider empirical cov matrix $\frac{1}{n-1}\mathbf{X^TX}$ ($\mathbf{X}$ is zero-centred). \item Eigenvectors of this = $U$, eigenvalues = $\frac{s_i^2}{n-1}$. \end{itemize}
+Which components in SVD correspond to an empirical covariance matrix's eigenvalues and eigenvectors?; \begin{itemize} \item Consider SVD of $\mathbf{X}.T$, where empirical cov matrix is $\frac{1}{n-1}\mathbf{X^TX}$ ($\mathbf{X}$ is zero-centred). \item Eigenvectors of this = $U$, eigenvalues = $\frac{s_i^2}{n-1}$. \end{itemize}
 
 Describe PCA; Assume data have zero mean. \begin{itemize} \item Find direction of greatest variance $\mathbf{\lambda}_{(1)}=\arg\max\limits_{||\mathbf{v}||=1}\sum_n(\mathbf{x^T_nv})^2$ \item Find direction orthogonal to $\mathbf{\lambda}_{n}$ with greatest variance, call this  $\mathbf{\lambda}_{n+1}$.  \item Terminate when remaining variance drops below a threshold.  \item These turn out to be the eigenvectors of the empirical covariance matrix $S=\langle \mathbf{xx^T} \rangle$ \end{itemize}
 
