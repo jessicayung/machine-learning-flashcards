@@ -67,7 +67,9 @@ Define true positive rate in binary classification.; \begin{itemize} \item True 
 % TODO: move to CS deck
 What is a Turing machine?; \begin{itemize} \item A general way of capturing how programs would work \item Given: information in coded form: an infinitely long tape divided into discrete cells with 1s, 0s or spaces in them. \item Machine looks at tape one cell at a time. \item Machine has log book of rules: if in state X and see Y, do Z (e.g. rewrite value as A and move to square B. or halt.) \item Program finishes when machine reaches a halting state. \end{itemize}
 
-What is a t-statistic?; \begin{itemize} \item For testing if pop mean from sampling dist of sample mean is equal to a quantity \item if pop stdev unknown \item $t = \frac{\hat{\beta}-\beta_0}{s.e.(\hat{\beta}}$ \item where $\beta_0$ is a hypothesised value, often zero. \item poss also need $\hat{\beta}$ with normally dist and homoscedastic (dist of error doesn't change as X changes) error terms \item for t stat to be dist acc to t-dist \end{itemize} 
+What is a t-statistic?; \begin{itemize} \item For testing if pop mean from sampling dist of sample mean is equal to a quantity \item if pop stdev unknown \item $t = \frac{\hat{\beta}-\beta_0}{s.e.(\hat{\beta}}$ \item where $\beta_0$ is a hypothesised value, often zero. \item poss also need $\hat{\beta}$ with normally dist and homoscedastic (dist of error doesn't change as X changes) error terms \item for t stat to be dist acc to t-dist \item DoF: n-1 (one use to calc mean) \end{itemize} 
+
+Describe how you would carry out a t-test.; \begin{itemize} \item Calculate T-stat: $t=Z/s = (X-\mu)/\frac{s}{\sqrt(n)}$. \item Degrees of freedom = n-1 (one less because avg needs to equal mean used in t stat calc) \item see if t-stat is in e.g. 95\% confidence interval of t-dist with this DoF. \end{itemize}
 
 Two examples of applications of F-test; \begin{itemize} \item Means of a given set of normally distributed pops, all with the same sd, are equal. \item Proposed regression model fits the data well. \end{itemize}
 
@@ -84,5 +86,9 @@ Describe SVD of a matrix; \begin{itemize} \item $USV^*$, where $*$ refers to the
 List three (arguably four) main types of loss functions you might use.; \begin{itemize} \item (Negative) Likelihood loss: $-p(\mathbf{x})$. \item Negative Log likelihood: Cross entropy loss / log loss: $-\sum_i y_i\log(\hat{p}_i)$ \end{itemize}
 
 Describe how you'd implement decision trees; \begin{itemize} \item def build\_decision\_tree(self): \begin{itemize} \item self.root = self.get\_best\_split(self.data) \item split(self.root, depth=1) \item return self.root \end{itemize} \item def get\_best\_split(self, data): \begin{itemize} \item get class labels, create best\_groups etc variables \item for feat\_index in range(num\_features):  \begin{itemize} \item for row in data: \begin{itemize} \item feat\_val = row[feat\_index] \item left, right = self.split\_dataset(data, feat\_index, feat\_val) \item gini = calc\_gini(left, right, class\_labels) \item if gini < best\_gini: replace best\_[...] vals \end{itemize} \end{itemize} \item return dict with best groups, feat\_index, feat\_val (corr to split) \end{itemize} \item def split(node, depth **kwargs): \begin{itemize} \item left, right = node['groups'] \item if not left or not night: node['left'] = node['right'] = to\_terminal(left + right) \item # to\_terminal gives a prediction for the group \item if depth $>=$ max\_depth: left right individually to\_terminal \item if len(left) $<=$ min\_size: node['left'] = to\_terminal(left) \item else:  \begin{itemize} \item node['left'] = get\_split(left) \item split(node['left'],depth+1, **kwargs) \end{itemize} \end{itemize} \end{itemize}
+
+Do Random Forests use boosting?; Not usually.
+
+
 
 \end{document}
