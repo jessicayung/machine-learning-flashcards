@@ -69,9 +69,13 @@ What is a Turing machine?; \begin{itemize} \item A general way of capturing how 
 
 What is a t-statistic?; \begin{itemize} \item For testing if pop mean from sampling dist of sample mean is equal to a quantity \item if pop stdev unknown \item $t = \frac{\hat{\beta}-\beta_0}{s.e.(\hat{\beta}}$ \item where $\beta_0$ is a hypothesised value, often zero. \item poss also need $\hat{\beta}$ with normally dist and homoscedastic (dist of error doesn't change as X changes) error terms \item for t stat to be dist acc to t-dist \item DoF: n-1 (one use to calc mean) \end{itemize} 
 
-Describe how you would carry out a t-test.; \begin{itemize} \item Calculate T-stat: $t=Z/s = (X-\mu)/\frac{s}{\sqrt(n)}$. \item Degrees of freedom = n-1 (one less because avg needs to equal mean used in t stat calc) \item see if t-stat is in e.g. 95\% confidence interval of t-dist with this DoF. \end{itemize}
+Describe how you would carry out a t-test to check if a pop mean is equal to some value $\mu$.; \begin{itemize} \item Calculate T-stat: $t=Z/s = (X-\mu)/\frac{s}{\sqrt(n)}$. \item Degrees of freedom = n-1 (one less because avg needs to equal mean used in t stat calc) \item see if t-stat is in e.g. 95\% confidence interval of t-dist with this DoF. \end{itemize}
 
-Two examples of applications of F-test; \begin{itemize} \item Means of a given set of normally distributed pops, all with the same sd, are equal. \item Proposed regression model fits the data well. \end{itemize}
+T-statistic for testing if two populations have the same mean (assume same unknown standard deviation); \begin{itemize} \item $t=\frac{\bar{x}_1 - \bar{x}_2}{\sqrt{\frac{s_p^2}{n_1} + \frac{s_p^2}{n_2}}}$. \end{itemize}
+
+Two examples of applications of F-test; Test whether the: \begin{itemize} \item Means of a given set of normally distributed pops, all with the same sd, are equal. \item Proposed regression model fits the data well. \end{itemize}
+
+Describe how to test if more than two populations have the same mean; ANOVA \begin{itemize} \item F-ratio: Between-group var/Within-group var. $\frac{MS_{between}}{MS_{within}} = \frac{n\sum_k (x_k-x_G)^2/(k-1)}{\sum_{i, k}(x_i-x_k)^2/(N-k)}$ \item $x_G$ is mean of means, n is num datapoints per sample, N total num datapoints. \item F-dist sort of like chi squared, never negative, peaks at 1 (between and within group var the same when things differ by chance). \item Non-directional test (unlike t-, Z-tests.) \end{itemize}
 
 Estimate of sample covariance; (unbiased) $\hat{\sigma^2} = \frac{1}{N-1}\sum_n (X_n-\hat{\mu})^2$
 
