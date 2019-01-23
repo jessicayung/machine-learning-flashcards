@@ -52,11 +52,11 @@ Definition of softmax; \begin{itemize} \item $\sigma(\mathbf{z})_j = \frac{e^{\b
 
 Define $R^2$.; \begin{itemize} \item $1-\frac{RSS}{TSS} = \frac{ESS}{TSS}$ \item $RSS = \sum_i(y_i-\hat{y}_i)^2$ \item $TSS=\sum_i(y_i-\Bar{y}_i)^2$ \item $ESS=\sum_i(\hat{y}_i - \bar{y})^2$ \end{itemize}
 
-Describe the ROC curve; \begin{itemize} \item Illustrates diagnostic ability of a binary classifier as its discrimination threshold is varied. \item Plots true pos rate against false positive rate at various threshold setting. \end{itemize} 
+Describe the ROC curve; \begin{itemize} \item Illustrates the diagnostic ability of a binary classifier as its discrimination threshold is varied. \item Plots true pos rate against false positive rate at various threshold settings. \end{itemize} 
 
-What is type I error?; False positives. 
+What is type I error?; False positives. (think: 1: first place, fp.) 
 
-What is type II error?; False negatives.
+What is type II error?; False negatives. (think: 2: DOUBLE negative, false negative.)
 
 Describe AUC for ROC; \begin{itemize} \item Metric for classification. \item Area under ROC curve (plots true pos rate against false pos rate for different threshold settings of a binary classifier) \item AUC close to 1: ideal. 0.5: model not better than random. 0: model does opposite of perfect classification.  \item Like percentage chance model will be able to correctly distinguish between pos and neg classes (TODO: verify.) \end{itemize}
 
@@ -81,13 +81,13 @@ Estimate of sample covariance; (unbiased) $\hat{\sigma^2} = \frac{1}{N-1}\sum_n 
 
 Analytical solution for linear regression; \begin{itemize} \item for $\mathbf{Xw} = \mathbf{y}$: \item $\mathbf{w}=(\mathbf{X^TX})^{-1}\mathbf{X}^T\mathbf{y}$ \end{itemize} 
 
-Three ways of calculating (implementing) analytical solution for linear regression; \begin{itemize} \item Recall analytical solution to $Xw = y$ is $w = (X^TX)^{-1}X^Ty$. \item Can solve directly \item Can use QR decomposition: $w=R^{-1}Q^Ty$ \begin{itemize} \item If X is mxn, \item Q is mxm orthogonal, R is mxn upper triangular. \end{itemize} \item Can use SVD: $w=VS^{-1}Uy$. \end{itemize}
+Three ways of calculating (implementing) analytical solution for linear regression; \begin{itemize} \item Recall analytical solution to $Xw = y$ is $w = (X^TX)^{-1}X^Ty$. \item Can solve directly \item Can use QR decomposition: $w=R^{-1}Q^Ty$ \begin{itemize} \item If X is mxn, \item Q is mxm orthogonal, R is mxn upper triangular. \end{itemize} \item Can use SVD: $w=VS^{-1}U^Ty$. \end{itemize}
 
-Describe QR factorisation of a matrix; \begin{itemize} \item If matrix to be factorised is $X_{m\times n}=QR$, \item Q is orthogonal mxm, \item R is upper triangular mxn \item last abs(m-n) rows of R are zero so can simplify further.  \end{itemize}
+Describe QR factorisation of a matrix; \begin{itemize} \item If matrix to be factorised is $X_{m\times n}=QR, m\geq n$, \item Q is orthogonal mxm, \item R is upper triangular mxn \item last $m-n$ rows of R are zero so can simplify further.  \end{itemize}
 
 Describe SVD of a matrix; \begin{itemize} \item $USV^*$, where $*$ refers to the conjugate transpose. \item Applies to any matrix. \item U, V orthogonal, square matrices. \item S diagonal matrix. \item (TODO: refine this, I just typed it off the top of my head) \end{itemize}
 
-List three (arguably four) main types of loss functions you might use.; \begin{itemize} \item (Negative) Likelihood loss: $-p(\mathbf{x})$. \item Negative Log likelihood: Cross entropy loss / log loss: $-\sum_i y_i\log(\hat{p}_i)$ \end{itemize}
+List three (arguably four) main types of loss functions you might use.; \begin{itemize} \item (Negative) Likelihood loss: $-p(\mathbf{x})$. \item Negative Log likelihood: Cross entropy loss / log loss: $-\sum_i y_i\log(\hat{p}_i)$ \item L1 \ite L2 \end{itemize}
 
 Describe how you'd implement decision trees; \begin{itemize} \item def build\_decision\_tree(self): \begin{itemize} \item self.root = self.get\_best\_split(self.data) \item split(self.root, depth=1) \item return self.root \end{itemize} \item def get\_best\_split(self, data): \begin{itemize} \item get class labels, create best\_groups etc variables \item for feat\_index in range(num\_features):  \begin{itemize} \item for row in data: \begin{itemize} \item feat\_val = row[feat\_index] \item left, right = self.split\_dataset(data, feat\_index, feat\_val) \item gini = calc\_gini(left, right, class\_labels) \item if gini < best\_gini: replace best\_[...] vals \end{itemize} \end{itemize} \item return dict with best groups, feat\_index, feat\_val (corr to split) \end{itemize} \item def split(node, depth **kwargs): \begin{itemize} \item left, right = node['groups'] \item if not left or not night: node['left'] = node['right'] = to\_terminal(left + right) \item # to\_terminal gives a prediction for the group \item if depth $>=$ max\_depth: left right individually to\_terminal \item if len(left) $<=$ min\_size: node['left'] = to\_terminal(left) \item else:  \begin{itemize} \item node['left'] = get\_split(left) \item split(node['left'],depth+1, **kwargs) \end{itemize} \end{itemize} \end{itemize}
 
