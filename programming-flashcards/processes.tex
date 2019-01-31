@@ -23,4 +23,6 @@ Briefly descrbe memory used by a process. \begin{itemize} \item Stack: contains 
 
 Name three things to check with multi-threaded processes; \begin{itemize} \item There is concurrency (not always just one thread running at a time) \item No deadlock (no thread to run) \item Mutual exclusion (mutex) on shared memory \begin{itemize} \item check each variable used by multiple threads \end{itemize} \end{itemize}
 
+Describe the differences between a thread and a process.; \begin{itemize} \item Processes own threads.  \item CPU scheduler handles processes (not threads directly).  \item Threads within the same process share address space (but have their own stack), whereas different processes do not.  \end{itemize} 
+
 \end{document}

@@ -1,0 +1,6 @@
+\documentclass[article]
+\begin{document}
+% Source: https://stackoverflow.com/questions/3265357/compiled-vs-interpreted-languages
+What are the differences between compiled vs interpreted languages? \begin{itemize} \item Compiled: once compiled, program is expressed in the instructions of the target machine.  \begin{itemize} \item Often faster perf \item Can optimise during compile stage \end{itemize} \item Interpreted: Instructions not directly executed by the target machine, but instead read and executed by some other program, i.e. the interpreter (which is normally written in the language of the target machine.) \item \begin{itemize} \item Easier to implement (writing good compilers is hard) \item Don't need to compile (and link), can read source code and gen machine code / execute code on the fly \end{itemize} \item Distinction more blurry now: many compiled languages call on run-time services that are not completely machine-code based, and most interpreted languages are `compiled' into byte-code before execution. Byte-code interpreters can be v efficient and rival some compiler generated code from an execution speed PoV.  \end{itemize}
+
+\end{document}
