@@ -1,9 +1,9 @@
 %Front;
 \documentclass{article}
 \begin{document}
-What is a thread?; One thread of control coursing through the program \begin{itemize} \item Like a person reading a e.g. sports section of the newspaper. \item Another thread is like another person reading the business section of the newspaper \end{itemize}
+What is a thread?; One thread of control coursing through the program \begin{itemize} \item Like a person reading a e.g. sports section of the newspaper. \item Another thread is like another person reading the business section of the newspaper \item Are owned by (and are thus smaller than) processes. \item Have their own stacks, but threads owned by the same process can share a heap. \end{itemize}
 
-Process; Program + state of all threads executing in the program. \begin{itemize} \item Note that a program may have multiple threads executing in it. \item E.g. in web browser: one thread fetching page requested, another rendering screen. \end{itemize}
+Process; Program + state of all threads executing in the program. \begin{itemize} \item A process owns threads and thus is a larger `unit' than a thread. \item Procesess run in separate memory spaces. \item Note that a program may have multiple threads executing in it. \item E.g. in web browser: one thread fetching page requested, another rendering screen. \end{itemize}
 
 Mutex locks; Mutually exclusive locks. \begin{itemize} \item call mutex lock before acting on variable, \item then call mutex unlock after. \end{itemize}
 
