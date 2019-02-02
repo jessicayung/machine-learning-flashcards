@@ -1,7 +1,18 @@
 %Front;
-\documentclass[article]
+\documentclass{article}
 \begin{document}
 % Source: https://stackoverflow.com/questions/3265357/compiled-vs-interpreted-languages
 What are the differences between compiled vs interpreted languages?;\begin{itemize} \item Compiled: once compiled, program is expressed in the instructions of the target machine.  \begin{itemize} \item Often faster perf \item Can optimise during compile stage \end{itemize} \item Interpreted: Instructions not directly executed by the target machine, but instead read and executed by some other program, i.e. the interpreter (which is normally written in the language of the target machine.) \item \begin{itemize} \item Easier to implement (writing good compilers is hard) \item Don't need to compile (and link), can read source code and gen machine code / execute code on the fly \end{itemize} \item Distinction more blurry now: many compiled languages call on run-time services that are not completely machine-code based, and most interpreted languages are `compiled' into byte-code before execution. Byte-code interpreters can be v efficient and rival some compiler generated code from an execution speed PoV.  \end{itemize}
+
+% Source: http://net-informations.com/faq/net/stack-heap.htm
+What is the difference between a stack and a heap (memory)?; \begin{itemize} \item Stack: static memory allocation, faster access (bc access pattern makes it easy to allocate and deallocate memory). Used for function calls. Less memory. Stack structure. \item Use if you know exactly how much data you need to allocate before compile time and it's not too big. \item Heap: dynamic memory allocation, slower access (bc access pattern makes bookkeeping involved in allocating and deallocating harder). Memory allocated at runtime. Heap size only limited by the size of the virtual memory. No stack structure: any element can be accessed randomly at any time. \item Use if don't know how much data you'll need at runtime, or if you need to allocate a lot of data. \item Stack is thread specific, heap is application / process specific. \item Both stored in computer's RAM \end{itemize}
+
+What is underflow?; \begin{itemize} \item Number is smaller in magnitude (that is, closer to zero) than the smallest value representable as a normal floating point number in the target datatype. \item E.g Java loops to min int. (huh this is not neg, but zero then? or wtv?) \end{itemize}
+
+What does UML stand for (and what is it in brief?); UML (Unified Modeling Language) is a standard language for specifying, visualizing, constructing, and documenting the artifacts of software systems. 
+
+Describe a scheduler and give an example of a Linux scheduling algorithm.; \begin{itemize} \item Assigns work (processes) to resources to complete that work. \item Linux O(1) scheduler: Run queue with fixed number of buckets in priority order, bitmap that flags which buckets have processes available. \item Read bitmap to find first bucket with processes, pick first process off the bucket's queue. \item Decides where (in run queue) processes should go by considering a process's `nice level', processor affinity (don't want to move running processes around). \item O(1) refers to time scheduler uses to choose next process to run. \end{itemize}
+
+What is throughput?; The total amount of work completed per time unit.
 
 \end{document}

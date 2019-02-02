@@ -1,0 +1,21 @@
+%Front;
+\documentclass{article}
+\begin{document}
+
+MDP; \begin{itemize} \item Discrete time stochastic control process/environment described as a tuple $(S, A, P_a, R_a)$ such that the Markov property is satisfied. \item S: a set of states \item A: a set of actions (possibly state-specific $A_s$) \item $P_a(s,s')=Pr(s_{t+1}=s'|s_t=s, a_t=a)$: the probability that action $a$ in state $s$ at time $t$ will lead to state $s'$ at time $t+1$. \item $R_a(s,s')$: the (expected or dist of) immediate reward received after transitioning from state $s$ to $s'$ due to action a. \item Algorithms often assume sets S, A are finite. \end{itemize}
+
+Value function; \begin{itemize} \item $V^\pi(s) = E[G|s, \pi]$ \item where G is the return associated with following $\pi$ from the initial state $s$. \item i.e. $G_t=R_{t+1}+\gammaR_{t+2}+\gamma^2R_{t+3}...$. \item note $G_t=R_{t+1}+\gamma G_{t+1}$ \end{itemize}
+
+Bellman equation (for value functions); $v_\pi(s)=E[R_{t+1}+\gamma v_{\pi}(S_{t+1})|S_t=s, A_t\sim \pi(s)]$
+
+Policy gradient; \begin{itemize} \item Directly parameterise policy \item Update policies e.g. by stochastic gradient ascent on reward \end{itemize}
+
+Policy gradient theorem; \begin{itemize} \item For any differentiable policy $\pi_\theta(s, a)$, for any of the policy objective functions $J$< the policy gradient is \item $\nabla_\theta J(\theta) = E_{\pi_\theta}[\nabla_\theta\log \pi_\theta(s, a)Q^{\pi_\theta}(s,a)]$. \end{itemize}
+
+Q-learning; \begin{itemize} \item Update action-value function $Q(s, a)=(1-\alpha)Q(s,a)+\alpha(r+\gamma\max_a Q(s', a))$ \item And pick actions according to Q-value. \item (unsure if this is the formal defn) \end{itemize}
+
+Actor-critic (describe and give a simple example);\begin{itemize} \item Critic estimates $Q$-val fn, updates fn parameters $w$. (e.g. update w by linear TD(0) in $Q_w(s,a)=\phi(s,a)^Tw$). \item Actor: Updates policy parameters $\theta$ in direction suggested by the critic. (e.g. policy gradient) \item Follow approximate (since estimating Q) policy gradient: $\nabla\theta = \alpha\nabla_{\theta}\log\pi_\theta(s,a)Q_w(s,a)$ \item Be careful of bias in approximation (see compatible function approx theorem to avoid bias). \item Critic should really estimate advantage function to reduce variance of policy gradient \end{itemize}
+
+Advantage function; $A(s,a)=Q(s,a)-V(s)$
+
+\end{document}
