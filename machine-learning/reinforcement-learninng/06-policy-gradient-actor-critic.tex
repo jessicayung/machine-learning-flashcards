@@ -1,0 +1,38 @@
+% Front;
+% 
+\documentclass{article}
+\begin{document}
+
+Briefly describe general actor critic methods.; \begin{itemize} \item Both value-based and policy-based (directly parameterise policy). \item Actor: policy \item Critic: Values (to critique actor) \end{itemize}
+
+Prove the REINFORCE trick for the contextual bandit case; TODO (For cases where states depend on policy: depends on summation into past of this quantity)
+
+State the REINFORCE trick; $\nabla_\theta E[R(S,A)]=E[\nabla_\theta\log\pi_{\theta}(A|S)R(S,A)]$
+
+State and describe the policy-gradient update; $\theta_{t+1}=\theta_t + \alpha R_{t+1}\nabla_\theta\log\pi_{\theta_t}(A_t|S_t)$. \begin{itemize}
+    \item Probability goes up for every single action if always have reward. But goes up more for actions with more rewards.
+    \item Note policy is normalised.
+\end{itemize}
+
+Describe the effects of bootstrapping on bias and variance; Increases bias, decreases variance.
+
+State the updates for a TD(0) A2C; \begin{itemize}
+    \item Critic updates parameters of $v_w$ by n-step TD: \begin{itemize}
+        \item e.g. TD(0) $\mathbf{w}\leftarrow\mathbf{w}+\beta\delta_t\nabla_wv_w(S_t)$, \item TD error $\delta_t=R_{t+1}+\gamma v_w(S_{t+1}) - v_w(S_t)$
+    \end{itemize} 
+    \item Actor: update $\theta$ by policy gradient: $\theta \leftarrow \theta + \alpha\delta_t\nabla_\theta \log \pi_\theta (A_t|S_t)$
+\end{itemize}
+
+Describe a full A2C; \begin{itemize}
+    \item Critic (values to critique actor) n-step TD loss on $v_w$: $I(\mathbf{w}) = \frac{1}{2}(G_t^{(n)}-v_w(S_t))^2$ \begin{itemize}
+        \item $G_t^{(n)}=R_{t+1}+\gammaR_{t+2}+...+\gamma^{n-1}v_w(S_{t+n})$
+    \end{itemize}
+    \item Actor (policy): n-step REINFORCE 'loss' on $\pi_\theta$ \begin{itemize}
+        \item $I(\theta) = [G_t^{(n)} - v_w(S_t)]\log\pi_{\theta}(A_t|S_t)$
+    \end{itemize}
+    \item Representation (e.g. LSTM): $(S_{t-1}, O_t) \rightarrow S_t)$
+    \item Copies $\pi^m$ of $\pi_\theta$ to use as policies.
+\end{itemize}
+
+
+\end{document}

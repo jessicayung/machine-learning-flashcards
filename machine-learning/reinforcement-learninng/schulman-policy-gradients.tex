@@ -1,0 +1,52 @@
+% Front;
+\documentclass{article}
+\begin{document}
+
+% From Deep RL Bootcamp Lecture 5, August 2017 
+% Link: https://www.youtube.com/watch?v=xvRrgxcpaHY
+
+% Direction: how to update policy with advantage estimate (vs improving advantage estimates)
+
+Describe two limits of vanilla policy gradient methods; \begin{itemize}
+    \item Hard to choose step size (esp one that will work across whole of learning bc data is nonstationary, policy-dep): 
+    \begin{itemize}
+        \item can try normalisation techniques, but still a problem
+        \item also if too big, bad policy, which means bad data (visit different 'bad' part of state dist) collected at next step, may lead to collapse in performance bc data is continually from 'bad' part of state dist
+    \end{itemize}
+    \item Sample efficiency: only one gradient step per env sample
+    \begin{itemize}
+        \item If gradients on some components are orders of magnitude smaller than others, then you'll make v little progress with those gradients
+    \end{itemize}
+\end{itemize}
+
+% Claim optimisation problem is less well-define for policy gradients, vs supervised learning or even Q-learning. But Q-learning may be optimising wrong objective (optimising for Bellman error vs trying to have policy that performs well. VS Policy gradients directly optimise for thing you care about but more ?? on using all the data you've collected.)
+
+Why might you not want to optimise (via differentiating) the policy gradient loss $L^{PG}(\theta) = \hat(E_t[\log\pi_\theta(a_t|s_t)\hat{A_t}]$ too far?; \begin{itemize}
+    \item If advantage $A>0$, will drive log prob to infinity or 1 (dep on cont/discrete action space).
+    \item Advantage estimate is noisy - shouldn't radically change policy based on a single advantage estimate.
+    \item note: can Use this instead: $\L^{IS}_{\theta_{old}}(\theta) = \hat{E}_t[\frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t)}\hat{A_t}]$ at $\theta=\theta_{old}$, state-actions sampled using $\theta_{old}$ (i.e. collect data using that policy) (IS=importance sampling).
+    \item But still doesn't solve optimising objective fully problems
+\end{itemize}
+
+% Interpret as want to maximise advantage of new policy $pi_\theta$. 
+% Importance sampling: expectation under dist a even if collect samples from dist B
+
+Describe TRPO; \begin{itemize}
+    \item Maximise wrt $\theta$ $\L^{IS}_{\theta_{old}}(\theta) = \hat{E}_t[\frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t)}\hat{A_t}]$ (which gives PG when you differentiate it), 
+    \item subject to $\hat{E}_t[KL[\pi_{\theta_{old}}(\cdot|s_t), \pi_{\theta}(\cdot|s_t)]]\leq \delta$
+    \item Motivation: large updates change policy radically based on noisy advantage estimate, and may eventually drive log prob to pos inf or neginf.
+    \item KL nice vs using Euclidean distance which would be problem dependent 
+    \item lol apparently KL ordering doesn't matter here and will use approx later
+    \item Can use penalty (equiv using Lagrange multipliers)
+    \item Distance on prob dist doesn't make a big difference because policy dists over actions usually simple like Gaussians
+\end{itemize}
+
+Describe PPO compared to TRPO; \begin{itemize}
+    \item TRPO but with KL penalty instead of dealing with constraint with conjugate gradient
+    \item But hard to find $\beta$ that works for entire learning period. If KL is too high, increase $\beta$ and vice versa.
+    \item Similar performance as TRPO, but only first-order optimisation.
+\end{itemize}
+
+% stopped at 16:19
+
+\end{document}
