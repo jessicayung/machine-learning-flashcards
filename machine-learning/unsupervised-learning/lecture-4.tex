@@ -1,4 +1,4 @@
-Front; Back
+%Front; Back
 \documentclass{article}
 \begin{document}
 
@@ -56,8 +56,33 @@ Compare the modelling capacity of HMM dynamics and linear Gaussian dynamics with
 
 Name one extension of HMMs; \begin{itemize} \item (*) Switching state space models \item Hierarchical models \item Constrained HMMs \item Continuous state models with discrete outputs for time series and static data \item (as long as you remember the first one it's fine) \end{itemize}
 
-Describe the setup of Linear Gaussian SSMs. (including equations); \begin{itemize} \item Gaussian hidden state $z_t /sim N(\mathbf{mu_0}, Q_0)$ % \item Joint $p(s_{1:T}, \mathbf{x}_{1:T})=P(s_1)P(\mathbf{x}_1|s_1)\prod_{t=2}^TP(s_t|s_{t-1})P(\mathbf{x_t}|s_t)$ \item Transition dynamics $\mathbf{z_t|z_{t-1}}\sim  N(A\mathbf{z_{t-1}}, Q)$ \item Emission (output) dists $\mathbf{x_t|z_t}\sim N(C\mathbf{z}_t, R)$.  \end{itemize}
+Describe the setup of Linear Gaussian SSMs. (including equations); \begin{itemize} \item Gaussian hidden state $z_t \sim N(\mathbf{\mu_0}, Q_0)$ 
+\item Transition dynamics $\mathbf{z_t|z_{t-1}}\sim  N(A\mathbf{z_{t-1}}, Q)$ \item Emission (output) dists $\mathbf{x_t|z_t}\sim N(C\mathbf{z}_t, R)$.  
+\item Joint $P(\mathbf{x_1,...,x_T,z_1,...,z_T})=P(\mathbf{z_1})\prod_{t=2}^T P(\mathbf{z_t|z_{t-1}})\prod_{t=1}^T P(\mathbf{x_t|z_t})$
+\end{itemize}
 
-Side: 16: Chain models: ML learning with EM.
+What information do we need when doing maximum likelihood learning with EM for LGSSMs?; \begin{itemize}
+    \item Expectations needed in E-step are derived from singleton and pairwise marginals
+    \item (Likewise only need singleton and pairwise expectations on q for M-step? TODO check)
+    \item Since we can break down the log joint into pieces (since the joint has a factored structure.)
+\end{itemize}
+
+Discuss how factored structure helps reduce computational cost in LGSSM models.; \begin{itemize}
+    \item Don't need to invert matrix $(TK^3)$ cost (TODO: what matrix? Cov?)
+    \item Only need subpieces
+    \item And matrix has structure, can invert without explicit inversion.
+    \item (from notes, slide 16 ML learning with EM)
+\end{itemize}
+
+Name three general inference problems (and one more problem) in chain models; \begin{itemize}
+    \item Filtering: $P(\mathbf{z_t|x_1,...,x_t})$
+    \item Smoothing: $P(\mathbf{z_t|x_1,...,x_T})$ 
+    \item (Also $P(\mathbf{z_t, z_{t-1}|x_1,...,x_T})$ for learning)
+    \item Prediction: $P(\mathbf{z_t|x_1,...,x_{t-\Delta t}})$
+\end{itemize}
+
+Describe filtering; TODO
+
+% On slide 17
 
 \end{document}
