@@ -156,8 +156,24 @@ Describe a practical thing to do when doing EM for HMMs.; Numerical scaling \beg
         \item $\tilde{alpha}_t(i)=\bar{\alpha}_t(i)/\rho_t$
         \item Can show that $\rho_t=P(\mathbf{x_t|x_{1:t-1}}, \theta)$
         \item and $\prod_{t=1}^T\rho_t = P(\mathbf{x_{1:T}}|\theta)$
+        \item TODO: what does this make $\tilde{\alpha}_t(i)$?
     \end{itemize}
     \item Can also represent as log
+\end{itemize} Other issues: \begin{itemize}
+    \item Multiple observed sequences (can average num and denoms in the ratios of updates. Be careful of seqs with diff lengths: should not give them equal weights. Should be sum across transitions of diff seqs (?))
+    \item Local optima (use random resstarts, annealing, more on this later)
 \end{itemize}
+
+Write pseudocode for the E-step for an HMM; TODO slide 38 (didn't go through this in lecture)
+
+Write pseudocode for the M-step for an HMM (Baum-welch); TODO slide 39 (didn't go through this in lecture)
+
+What kind of transform of the latent conserves the LGSSM likelihood?; Any invertible transform of the latent. TODO: expand
+
+What kinds of transform of the latent conserves the FA likelihood?; Orthogonal transformations of the latent $\mathbf{y}$. TODO: expand
+
+What kinds of transform of the latent conserves the mixture model likelihood?; Permutations of the latent.
+
+% slide 40 degeneracies, wip (above 3 points)
 
 \end{document}
