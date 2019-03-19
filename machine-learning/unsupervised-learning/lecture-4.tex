@@ -120,60 +120,60 @@ How do the M-steps for C (maps $y_t$ to $x_t$) and A (maps $y_t$ to $y_{t+1}$) i
 
 Describe how you might update the parameters of an LGSSM model online as observations arrive.; \begin{itemize} \item Differentiate conditional log likelihoods at each timestep $l_t=\ln p(\mathbf{x_t|x_1,...x_{t-1}})$ to obtain gradient rules for parameters $A, C, Q, R$ \item Note $l=\sum_{t=1}^T\ln  p(\mathbf{x_t|x_1,...x_{t-1}})=\sum_{t=1}^Tl_t$. \item An approximate version of the filtering version of q (in notes, haven't verified). Unclear what this mismatch means. \item Interpretation (from notes): instead of just max likelihood, maximising additive terms (one at a time?), may be advantageous when dynamics are nonstationary (why?) \item Size of the gradient step (lr) reflects our expectation about nonstationarity (more nonstationary, smaller step?) \end{itemize}
 
-Describe how you'd learn HMMs using EM and state what it's called.; \begin{itemize}
-\item Baum-Welch
-    \item E-step: $q^*(s_{1:T})=P(s_{1:T}|\mathbf{x_{1;T}}, \theta)$
-    \begin{itemize}
-        \item Only need marginal probabilities $q(s_t, s_{t+1})$, which can also be obtained from the forward-backward algorithm.
-    \end{itemize}
-    \item M-step: Re-estimate the parameters by computing the expected number of times the HMM was in state i, emitted symbol k and transitioned to state j. (TODO?)
-\end{itemize}
+Describe how you'd learn HMMs using EM and state what it's called.; \begin{itemize} \item Baum-Welch \item E-step: $q^*(s_{1:T})=P(s_{1:T}|\mathbf{x_{1;T}}, \theta)$ \begin{itemize} \item Only need marginal probabilities $q(s_t, s_{t+1})$, which can also be obtained from the forward-backward algorithm. \end{itemize} \item M-step: Re-estimate the parameters by computing the expected number of times the HMM was in state i, emitted symbol k and transitioned to state j. (TODO?) \end{itemize}
 
-State the M-step updates for HMM.; \begin{itemize}
-    \item $\hat{\pi}_i = \gamma_1(i) = P(s_t=i|x_{1:T})$
-    \item Expected number of transitions from state i to j which begin at time t
-    \begin{itemize}
-        \item $\xi_t(i\rightarrow j) \equiv P(s_t=i, s_{t+1}=j|\mathbf{x_{1:T}})$
-        \item $=\alpha_t(i)\Phi_{ij}A_j(\mathbf{x_{t+1}})\beta_{t
-        1}(j)/P(x_{1:T})$
-    \end{itemize}
-    \item So the estimated transition probabilities are
-    \begin{itemize}
-        \item $\hat{\Phi_{ij}}=\sum_{t=1}^{T-1}\xi_t(i\rightarrow j)/\sum_{t=1}^{T-1}\gamma_t(i)$
-    \end{itemize}
-    \item Output dists are expected number of times we observe a particular symbol in a particular state:
-    \begin{itemize}
-        \item $\hat{A}_{ik}=\sum_{t:\mathbf{x}_t=k}\gamma_t(i)\big / \sum_{t=1}^T\gamma_t(i)$
-        \item = number of times made obs k and state was i (joint) div by (prob state was i)
-        \item (or the state-probability weighted mean and variance for a Gaussian output model)
-    \end{itemize}
-\end{itemize}
+State the M-step updates for HMM.; \begin{itemize} \item $\hat{\pi}_i = \gamma_1(i) = P(s_t=i|x_{1:T})$ \item Expected number of transitions from state i to j which begin at time t \begin{itemize} \item $\xi_t(i\rightarrow j) \equiv P(s_t=i, s_{t+1}=j|\mathbf{x_{1:T}})$ \item $=\alpha_t(i)\Phi_{ij}A_j(\mathbf{x_{t+1}})\beta_{t 1}(j)/P(x_{1:T})$ \end{itemize} \item So the estimated transition probabilities are \begin{itemize} \item $\hat{\Phi_{ij}}=\sum_{t=1}^{T-1}\xi_t(i\rightarrow j)/\sum_{t=1}^{T-1}\gamma_t(i)$ \end{itemize} \item Output dists are expected number of times we observe a particular symbol in a particular state: \begin{itemize} \item $\hat{A}_{ik}=\sum_{t:\mathbf{x}_t=k}\gamma_t(i)\big / \sum_{t=1}^T\gamma_t(i)$ \item = number of times made obs k and state was i (joint) div by (prob state was i) \item (or the state-probability weighted mean and variance for a Gaussian output model) \end{itemize} \end{itemize}
 
-Describe a practical thing to do when doing EM for HMMs.; Numerical scaling \begin{itemize}
-    \item The conventional message definition is in terms of a large joint: $\alpha_t(i)=P(\mathbf{x_{1:t}},s_t=i)\rightarrow 0$ as t grows, and so can easily underflow.
-    \item Rescale: $\bar{\alpha}_t=A_i(\mathbf{x_t})\sum_j\tilde{\alpha}_{t-1}(j)\Phi_{ji}$, \begin{itemize}
-        \item $\rho_t = \sum_{i=1}^K\bar{\alpha}_t(i)$
-        \item $\tilde{alpha}_t(i)=\bar{\alpha}_t(i)/\rho_t$
-        \item Can show that $\rho_t=P(\mathbf{x_t|x_{1:t-1}}, \theta)$
-        \item and $\prod_{t=1}^T\rho_t = P(\mathbf{x_{1:T}}|\theta)$
-        \item TODO: what does this make $\tilde{\alpha}_t(i)$?
-    \end{itemize}
-    \item Can also represent as log
-\end{itemize} Other issues: \begin{itemize}
-    \item Multiple observed sequences (can average num and denoms in the ratios of updates. Be careful of seqs with diff lengths: should not give them equal weights. Should be sum across transitions of diff seqs (?))
-    \item Local optima (use random resstarts, annealing, more on this later)
-\end{itemize}
+Describe a practical thing to do when doing EM for HMMs.; Numerical scaling \begin{itemize} \item The conventional message definition is in terms of a large joint: $\alpha_t(i)=P(\mathbf{x_{1:t}},s_t=i)\rightarrow 0$ as t grows, and so can easily underflow. \item Rescale: $\bar{\alpha}_t=A_i(\mathbf{x_t})\sum_j\tilde{\alpha}_{t-1}(j)\Phi_{ji}$, \begin{itemize} \item $\rho_t = \sum_{i=1}^K\bar{\alpha}_t(i)$ \item $\tilde{alpha}_t(i)=\bar{\alpha}_t(i)/\rho_t$ \item Can show that $\rho_t=P(\mathbf{x_t|x_{1:t-1}}, \theta)$ \item and $\prod_{t=1}^T\rho_t = P(\mathbf{x_{1:T}}|\theta)$ \item TODO: what does this make $\tilde{\alpha}_t(i)$? \end{itemize} \item Can also represent as log \end{itemize} Other issues: \begin{itemize} \item Multiple observed sequences (can average num and denoms in the ratios of updates. Be careful of seqs with diff lengths: should not give them equal weights. Should be sum across transitions of diff seqs (?)) \item Local optima (use random resstarts, annealing, more on this later) \end{itemize}
 
 Write pseudocode for the E-step for an HMM; TODO slide 38 (didn't go through this in lecture)
 
 Write pseudocode for the M-step for an HMM (Baum-welch); TODO slide 39 (didn't go through this in lecture)
 
-What kind of transform of the latent conserves the LGSSM likelihood?; Any invertible transform of the latent. TODO: expand
+What kind of transform of the latent conserves the LGSSM likelihood?; Any invertible transform of the latent. 
+
+Show that any invertible transform of the latent conserves the LGSSM likelihood.; \begin{itemize} \item Have \begin{itemize} \item $P(\mathbf{y_{t+1}|y_t})=N(A\mathbf{y_t}, Q)$ \item $P(\mathbf{x_{t}|y_t})=N(C\mathbf{y}, R)$  \end{itemize} \item transform $\tilde{\mathbf{y}}=G\mathbf{y}$ \item $\tilde{Q}=GQG^T, \tilde{A}=GAG^{-1}, \tilde{C}=CG^{-1}$ \item so we have $P(\mathbf{\tilde{y}_{t+1}|\tilde{y}_t})=N(GAG^{-1}G\mathbf{y}_t, GQG^T)=N(\tilde{A}\tilde{\mathbf{y}}_t, \tilde{Q})$ \item and $P(\mathbf{x}_t, \mathbf{\tilde{y}}_t)=N(CG^{-1}G\mathbf{y}, R)=N(\tilde{C}\tilde{\mathbf{y}}, R)$ \end{itemize}
 
 What kinds of transform of the latent conserves the FA likelihood?; Orthogonal transformations of the latent $\mathbf{y}$. TODO: expand
 
 What kinds of transform of the latent conserves the mixture model likelihood?; Permutations of the latent.
 
-% slide 40 degeneracies, wip (above 3 points)
+What kinds of transform of the states is the HMM likelihood invariant to?; \begin{itemize} \item Permutations of the states \item (and to relaxations into something called an observable operator model, wtv bc dk what this is) \end{itemize}
+
+Do LGSSM and HMM likelihood functions tend to have a single or multiple local maxima?; \begin{itemize} \item Multiple local maxima \end{itemize}
+
+Should we worry much if the parameters of a model are not identifiable?; (Opinion-ish q, it depends) Not necessarily - if we need to identify the parameters exactly, we'd presumably have a loss function to select a soluttion. Generally we just fand to find a good set of parameters.
+
+What strategies might one use to deal with the fact that LGSSM and HMM likelihood functions tend to have multiple local maxima? (x5); \begin{itemize} \item Restart EM/gradient ascent from different (often random) initial param values. $\rightarrow$ likely to find diff results. \item Initialise output params with a stationary model and go from there. E.g. PCA to FA to LGSSM, or k-means to mixture model to HMM. \item Stochastic gradient methods and momentum (to avoid shallow local optima), `overstepping' EM. (M-step stepping past max) \item Deterministic annealing (what is this? TODO I wrote sth about doing this vs true posterior may use higher temp?) \item Non-ML learning (spectral methods) \end{itemize}
+
+Describe slow feature analysis (SFA); \begin{itemize} \item Zero-noise limit for LGSSM analogous to PCA. \item Params: \begin{itemize} \item $A=diag[a_1,...,a_k]\rightarrow I, a_1\leq a_2 \leq ...\leq a_K\leq 1$ \item $Q=I-AA^T\rightarrow 0$ (set stationary latent cov to $I$) \item $R\rightarrow 0$ \end{itemize} \item Conventionally defined as slowness pursuit: given zero-mean series $\{\mathbf{x_1,...,x_T}\}$, find a $K\times D$ matrix $W(=C^T)$ such that $\mathbf{y}_T=W\mathbf{x}_t$ changes as slowly as possible. \begin{itemize} \item Specifically, find $W=\arg\min_W\sum_t||\mathbf{y}_t-\mathbf{y}_{t-1}||^2$ subject to $\sum_t\mathbf{y_ty_t^T}=TI$. \item i.e. make sure $yy^T$ conveys info about $x_t$? Or that W is var-preserving in some sense (TODO check) \end{itemize} \end{itemize}
+
+Describe slowness pursuit.; \begin{itemize} \item Given zero-mean series $\{\mathbf{x_1,...,x_T}\}$, find a $K\times D$ matrix $W(=C^T)$ such that $\mathbf{y}_T=W\mathbf{x}_t$ changes as slowly as possible. given zero-mean series $\{\mathbf{x_1,...,x_T}\}$, find a $K\times D$ matrix $W(=C^T)$ such that $\mathbf{y}_T=W\mathbf{x}_t$ changes as slowly as possible. \item Specifically, find $W=\arg\min_W\sum_t||\mathbf{y}_t-\mathbf{y}_{t-1}||^2$ subject to $\sum_t\mathbf{y_ty_t^T}=TI$. \begin{itemize} \item i.e. make sure $yy^T$ conveys info about $x_t$? Or that W is var-preserving in some sense (TODO check) \item Var constraint prevents trivial solutions $W=0$, $W=\mathbf{1w}^T$. \end{itemize} \end{itemize}
+
+How do you find the W in slowness pursuit?; (likely not important to know) \begin{itemize} \item By solving the generalised eigenvalue problem $WA=\Omega WB$,  \item where $A=\sum_t (\mathbf{x}_t - \mathbf{x}_{t-1})(\mathbf{x_t - x_{t-1}})^T$ (sq of diff of x) and $B=\sum_t\mathbf{x_tx_t^T}$ (var on x) \end{itemize} 
+
+% TODO: slide 42 side notes on RHS
+
+Describe general MoM estimators and their relationship with maximum likelihood estimation.; \begin{itemize} \item Estimates $\theta^*$ with \item $\langle T(\mathbf{x}) \rangle_{\theta^*} = \frac{1}{N}\sum_i T(\mathbf{x_i})$ \item or $\arg\min_\theta ||\langle T(\mathbf{x})\rangle_\theta - \frac{1}{N}\sum_i T(\mathbf{x}_i)||_\mathcal{C}$ \begin{itemize} \item arbitrary cost C \end{itemize} \item Judicious choice of T and metric $\mathcal{C}$ might make the solution unique (no local optima) and consistent (correct given infinite within-model data). \item From: $\theta^*=\theta^{ML}$ if $P$ is in the exponential family. So casts $\theta^{ML}$ as a kind of moment-matching pursuit within the exponential family. \end{itemize}
+
+Describe Ho-Kalman SSID for LGSSMs; TODO (have equations later)
+
+State the equations for Ho-Kalman SSID for LGSSMs; \begin{itemize} \item $M_\tau \equiv \langle \mathbf{x_{t+\tau}x^T_t}=\langle \mathbf{x}_{t+\tau}\mathbf{y}^T_t \langle C^T$ \item $=CA^\tau \langle \mathbf{y_ty_t^T}\rangle C^T=CA^\tau \Pi C^T$ \begin{itemize} \item Lagged covariance \end{itemize} \item $H\equiv \langle \mathbf{x_t^+ x_t^{-T}}=\big [ M_1\text{ to }M_L\text{in each row and col} \big]$ $= [C CA ... CA^{L-1}]^T [A\Pi C^T...A^L\Pi C^T] = \Xi\Upsilon$ \begin{itemize} \item Matrix of Ms is $LD\times LD$, row i is $M_i, M_{i+1},...,M_{L+i-1}$. \item $\Xi$ is $LD\times K$ \item $\Upsilon$ is $K\times LD$. \item $\mathbf{x}^+_t = [\mathbf{x}_{t:t+L-1}]$, $\mathbf{x}_t^- = [\mathbf{x}_{t-1:t-L}]$. \end{itemize} \item Off-diagonal correlation unaffected by noise. \item $SVD(\frac{1}{T}\sum\mathbf{x}_t^+\mathbf{x}_t^{-T})$ yields least-squares estimates of $\Xi, \Gamma$. \item Regression between blocks of $\Xi$ yields $\hat{A}, \hat{C}$. \item TODO: process properly and understand slide (44) \end{itemize}
+
+Describe the observable operator model (OOM) representation; \begin{itemize} \item from HMMs with discrete output symbols \item Rewrite likelihood as $P(x_{1:T}|\pi, \mathbf{\Phi}, A)=\sum_i[\pi_iA_i(x_1)\sum_j\Phi{ji}A_j(x_2)\sum_k\Phi_{kj}A_K(x_3)...$ \begin{itemize} \item $=\mathbf{\pi}^TA_{x_1}\Phi^TA_{x_2}\Phi^T A_{x_3}...\mathbf{1}$ [$A_{x_1}=diag[A_1(x_1), A_2(x_1),...]]$ \item $=\mathbf{1^T}O_{x_T}O_{x_{T-1}}...O_{x_1}\mathbf{\pi}$, \item where $O_a = \PhiA_a$ is a `propagation operator' on the latent belief that depends on observation. \end{itemize} \item Notes \begin{itemize} \item OOMs with arbitrary O matrices describe a larger class of distributions than HMMs \item Not easy to normalise or even guarantee all assigned `probabilities' are positive \item Degenerate wrt similarity transform $\tilde{O}=GOG^{-1}$. (similar to LGSSM in terms of degeneracy). \end{itemize} \end{itemize}
+
+Describe spectral learning for HMMs (no need equations, stated no need to learn to reproduce); \begin{itemize} \item Derivation similar to Ho-kalman SSID \item Instead of obs being $\mathbf{x}$, treat $\mathbf{x}$ as discrete, represent as a one-hot vector \item TODO: add brief description of ho-kalman SSID. \end{itemize}
+
+Is it possible to project to HMM space from a spectral learning HMM?; \begin{itemize} \item Yes, but this amplifies estimation errors. (something on recount estimates correlated to valued(?) $\Phi, A$.) \end{itemize} 
+
+What is spectral learning?; \begin{itemize} \item Have a big matrix, take the SVD. \end{itemize}
+
+Describe the pros and cons of spectral learning (vs maximum likelihood); \begin{itemize} \item Pros \begin{itemize} \item Efficient closed-form solution finds global optimum / unique soln. \item Consistent (recovers true params up to degeneracies from infinite within-model data) \item Eigen/singular value spectrum clue to latent dim \item Often valuable as initialisation for max likelihood methods. (e.g Ho-Kalman as init for EM, since spectral methods avoid many pitfalls of local optima.) \end{itemize} \item Cons \begin{itemize} \item Assumes stationarity, may be inappropriate for short sequences \item HMM learning returns OOM parameters: may not correspond to any HMM or indeed to a proper probabilistic model \item Not easily generalised to non-linear or more complex models \item In practice, error in recovered parameters is often large.  \item Not data efficient, especially relative to max likelihood. \end{itemize} \end{itemize}
+
+Describe the pros and cons of maximum likelihood learning; \begin{itemize} \item Pros: \begin{itemize} \item Consistent (caveat next line) \item Asymptotically efficient (if the global maximum can be found) \item Generalises to `principled' approx algorithms for nonlinear or complex models  \end{itemize} \item Cons \begin{itemize} \item Requires iterative maximisation \item Many local optima \end{itemize} \end{itemize}
+
+How do you perform classification with HMMs?; \begin{itemize} \item Have multiple HMM models, one for each class (requires each seq to have a class label) \item Eval probability of unknown sequence (being a certain class) under each HMM \item Classify the unknown seq by the HMM which gave it the highest likelihood \item Or single HMM: compute posterior over label sequences (labels as s), return label seq either with the highest expected number of correct states or highest probability under the posterior (Viterbi, entire seq) \begin{itemize} \item Note here we model whole joint but only use $P(s_{1:T}|x_{1:T})$ - can model that directly using a conditional random field (CRF). \end{itemize} \end{itemize}
+
+% TODO: slide 50 onwards, not sure if we covered this.
 
 \end{document}
