@@ -5,4 +5,41 @@
 \usepackage{amsmath}
 \begin{document}
 
+What kinds of functions (characteristics) o we usually use for the non-linearity in a NN layer?; \begin{itemize}
+    \item Invertible monotonic functions
+    \item e.g. sigmoid, tanh
+\end{itemize}
+
+What are the advantages of GPUs?; \begin{itemize}
+    \item Calculating matrix products like \mathbf{Wh} quickly
+    \begin{itemize}
+        \item bc graphics involves a lot of projecting from 3D to 2D, requires fast matmuls
+    \end{itemize}
+    \item Can calculate nonlinearities in parallel
+\end{itemize}
+
+Describe how one might allocate work between CPUs and GPUs.; \begin{itemize}
+    \item Run message-passing on CPU (instruct GPU what operations to carry out) but
+    \item do operations on GPU
+\end{itemize}
+
+What are GPUs slow at?; \begin{itemize}
+    \item Communication between RAM on machine and GPU (shifting memory): \begin{itemize}
+        \item Getting values off GPU back to CPU (e.g. error values, plotting)
+    \end{itemize}
+    \item So try to keep everything on GPU (but it doesn't have much memory). \item Scheduling on CPU is fine because don't need fetching.
+\end{itemize}
+
+Prove that if the transfer function is linear, the neural network collapses to a linear layer; TODO
+
+Briefly compare statistics and neural networks (TODO wording? but that's what I have in my written notes); \begin{itemize}
+    \item Stats MSE loss $E(\mathbf{w})$ is convex vs NN MSE loss is non-convex.
+    \begin{itemize}
+        \item $f(\mathbf{x, w})=\mathbf{w^T\phi(x)}$.
+    \end{itemize}
+    \item Stats mapping $\mathbf{\phi}$ is usually fixed (e.g. GLMs) vs NN mapping is learnable.
+\end{itemize}
+
+
+
 \end{document}

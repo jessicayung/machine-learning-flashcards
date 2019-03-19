@@ -205,6 +205,109 @@ What is innovations noise in a LGSSM?; \begin{itemize}
     \item i.e. Q in $\mathbf{y_t|y_{t-1}}\sim N(A\mathbf{y_{t-1}, Q})$.
 \end{itemize}
 
+Give two motivations for `Bayesian smoothing', i.e. finding the marginal posterior $P(\mathbf{y_t|x_{1:T}})$.; \begin{itemize}
+    \item Finding the entire trajectory of a plane given radar data
+    \item Learning
+\end{itemize}
+
+Write down the general formula to find the marginal posterior $P(\mathbf{y_t|x_{1:T}})$ via Bayesian smoothing; \begin{itemize}
+    \item $\frac{P(\mathbf{y_t, x_{t+1:T}|x_{1:t}})}{P(\mathbf{x_{t+1:T}|x_{1:t}})}$
+    \item $=\frac{P(\mathbf{x_{t+1:T}|y_t})P(\mathbf{y_t|x_{1:t}})}{P(\mathbf{x_{t+1:T}|x_{1:t}})}$
+    \item num = (bwkd x fwd). Split out $y_t$.
+\end{itemize}
+
+Describe the HMM forward-backward algorithm for smoothing;
+\begin{itemize}
+    \item State estimation: $\gamma_t(i)\equiv P(s_t=i|\mathbf{x_{1:T}})$
+    \item $=\frac{P(s_t=i, \mathbf{x_{1:t}})P(\mathbf{x_{t+1:T}|s_t=i}}{P(\mathbf{x_{1:T}}}$
+    \begin{itemize}
+        \item Trick: breaking up x by time
+        \item num = fwd x bkwd
+    \end{itemize}
+    \item $=\frac{alpha_t(i)\beta_t(i)}{\sum_j\alpha_t(j)\beta_t(j)}$
+    \item forward and backward recursions for $\alpha, \beta$
+    \item $\alpha_t(i)$ gives total inflow of probabilities to node (t, i), $\beta_t(i)$ gives total outflow of probabilities
+\end{itemize}
+State / derive the backward recursion formula for $\beta_t(i)$ in the HMM forward-backward algorithm.; \begin{itemize}
+    \item $\beta_t(i)=P(\mathbf{x_{t+1:T}|s_t=i})$
+    \item $=\sum_{j=1}^K P(s_{t+1}=j, \mathbf{x_{t+1},  x_{t+2:T}}|s_t=i)$
+    \item = $\sum_{j=1}^K P(s_{t+1}=j, s_t=i) P(\mathbf{x_{t+1}}|s_{t+1}=j)P(\mathbf{x_{t+2:T}}|s_{t+1}=j)$
+    \item $=\sum_{j=1}^K\Phi_{ij}A_j(\mathbf{x_{t+1}})\beta_{t+1}(j)$.
+\end{itemize}
+
+Does the forward-backward algorithm give the path with the highest probability of generating the data?; \begin{itemize}
+    \item No. 
+    \item It gives the path with the maximum expected number of correct states.
+    \item i.e. grade timepoint by timepoint which state has highest probability vs a single continuous path.
+    \item Viterbi finds most probable state sequence. $\arg\max_{s_{1:T}}P(s_{1:T}|\mathbf{x_{1:T},\theta})$
+\end{itemize}
+
+Describe Viterbi decoding; \begin{itemize}
+    \item max-product $\arg\max_{s_{1:T}}P(s_{1:T}|\mathbf{x_{1:T},\theta})$ 
+    \item (vs fwd-bkwd sum-product)
+    \item Computes most probably state sequence
+    \item (bug-wise: at each step, kill all bugs except for the one with the highest value at the node.
+\end{itemize}
+
+TODO: Describe modified EM training based ont he Viterbi decoder and what it's good for; \begin{itemize}
+    \item Act as though most likely path was an observed path (in practice, not in principle)
+    \item Good bc for some models it's easier to find the max than to find the full posterior marginals
+\end{itemize}
+
+Compare the forward-backward algorithm and Viterbi decoding in one sentence.; \begin{itemize}
+    \item forward-backward: Sum-product $\arg\max_{i}P(s_t=i|\mathbf{x}_{1:T})$ vs
+    \item Viterbi: max-product $\arg\max_{s_{1:T}}P(s_{1:T}|\mathbf{x_{1:T},\theta})$
+\end{itemize}
+
+Write down the formulae for Kalman Smoothing for the LGSSM (general x and y, no need for matrices); \begin{itemize}
+    \item $P(\mathbf{y_t|x_{1:T}})=\int P(\mathbf{y_t, y_{t+1}|x_{1:T}}d\mathbf{y_{t+1}}$
+    \item $=\int P(\mathbf{y_t|y_{t+1},x_{1:T}}P(\mathbf{y_{t+1}|x_{1:T}}) d\mathbf{y_{t+1}}$
+    \item $=\int P(\mathbf{y_t|y_{t+1},x_{1:t}}P(\mathbf{y_{t+1}|x_{1:T}}) d\mathbf{y_{t+1}}$
+    \begin{itemize}
+        \item by the Markov property.
+    \end{itemize}
+\end{itemize}
+
+Compare (in words) the smoothing algorithms for HMMs (fwd-bkwd) vs the LGSSM; \begin{itemize}
+    \item HMM: calculate forward, backward and multiply together at the end
+    \item LGSSM: don't bring future xs to other side (TODO?)
+    \begin{itemize}
+        \item  $P(\mathbf{y_t|x_{1:T}})=\int P(\mathbf{y_t|y_{t+1},x_{1:t}}P(\mathbf{y_{t+1}|x_{1:T}}) d\mathbf{y_{t+1}}$
+    \end{itemize}
+\end{itemize}
+
+State the matrices for backward recursion for Kalman smoothing; TODO how use? guessing $N(\mathbf{\hat{y}^T_t},\hat{V}^T_t)$? 
+\begin{itemize}
+    \item $J_t=\hat{V}^t_tA^T(\hat{V}^t_{t+1})^{-1}$
+    \begin{itemize}
+        \item Like regression coefficient
+        \item A maps $y_t$ to $y_{t+1}$
+    \end{itemize}
+    \item $\mathbf{\hat{y}^T_t}=\hat{\mathbf{y}}^t_t+J_t(\hat{\mathbf{y}}^T_{t+1}-A\hat{\mathbf{y}}^t_t)$
+    \begin{itemize}
+        \item Mean + regr coeff * (deviation?)
+    \end{itemize}
+    \item $\hat{V}^T_t=\hat{V}^t_t+J_t(\hat{V}^T_{t+1}-\hat{V}^t_{t+1})J_t^T$
+\end{itemize}
+
+Describe how you'd do maximum likelihood learning for SSMs (LGSSM) using batch EM.; \begin{itemize}
+    \item E-step (max F wrt q with $\theta$ fixed): two-state extension of Kalman smoother $q^*(\mathbf{y})=p(\mathbf{y|x}, \theta)$
+    \item M-step: solving a few weighted least squares problems, since all the variables in $p(\mathbf{y, x}|\theta)=p(\mathbf{y_1})p(\mathbf{x_1|y_1})\prod_{t=2}^Tp(\mathbf{y_t|y_{t-1}})p(\mathbf{x_t|y_t})$ form a multivariate Gaussian.
+    \item FYI difficulty: E-step usually harder, M-step usually easier (usually standard exponential family updates)
+\end{itemize}
+
+Derive the M-step for C (maps $y_t$ to $x_t$) in the LGSSM.; (TODO expand question? not clear?) \begin{itemize}
+    \item TODO 
+\end{itemize}
+
+Derive the M-step for A (maps $y_t$ to $y_{t+1}$) in the LGSSM; TODO expand q not clear wt M-step is for?
 % Bayesian Smoothing slide 27
+
+How do the M-steps for C (maps $y_t$ to $x_t$) and A (maps $y_t$ to $y_{t+1}$) in the LGSSM model compare to factor analysis?; \begin{itemize}
+    \item C: same as (WHAT) in factor analysis
+    \item A: analogous to factor analysis, with expected correlations (FA has what instead?) TODO
+\end{itemize}
+
+
 
 \end{document}
