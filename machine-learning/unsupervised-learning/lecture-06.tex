@@ -2,7 +2,8 @@
 % Probabilistic and Unsupervised Learning
 % Lectured by Maneesh Sahani at the Gatsby Computational Neuroscience Unit, UCL, Fall 2018
 % Link to course info and slides: http://www.gatsby.ucl.ac.uk/teaching/courses/ml1/
-
+\usepackage{amsmath}
+\usepackage{amssymb}
 \documentclass{article}
 \begin{document}
 
@@ -224,6 +225,222 @@ Describe how we can choose between models in a family of continuously parameteri
 
 % Now do calculations exactly vs approximations
 
+Describe the setup of Bayesian linear regression and the solution approach (with equations but not soln eqn); \begin{itemize}
+    \item $\mathbf{w}\sim N(\mathbf{0}, C)$
+    \item $y_i\sim N(\mathbf{w^Tx}_i, \sigma^2)$
+    \item Solve by maximising the evidence $P(y_1,...,y_N|\mathbf{x_1,...,x_N}, C, \sigma^2)=\int P(y_1,...,y_N|\mathbf{x_1,...,x_N,w}, \sigma^2)P(\mathbf{w}|C)d\mathbf{w}$.
+    \item to find optimal values of $C, \sigma$.
+    \item Compute the posterior $P(\mathbf{w}|y_1,...,y_N,\mathbf{x_1},...,\mathbf{x}_N, C, \sigma^2)$ given these optimal values.
+\end{itemize}
 
+Write down the posterior on $\mathbf{w}$ in Bayesian linear regression.; \begin{itemize}
+    \item $\Sigma_w = (\frac{XX^T}{\sigma^2}+C^{-1})^{-1}$, $\mathbf{\bar{w}}=\Sigma_w\frac{XY^T}{\sigma^2}$.
+    \begin{itemize}
+        \item X is a matrix where columns are input vectors, Y is a row vector of corresponding predicted oututs.
+    \end{itemize}
+    \item (X like $\Lambda$ in FA, but only have one obs of y?)
+\end{itemize}
+
+Write out the evidence for Bayesian linear regression in closed form.; (optional, dk if necc to know, but think could be an exam question) \begin{itemize}
+    \item $\mathcal{E}(C,\sigma^2)=p(\mathbf{y|x_1,...,x_N}, C, \sigma^2)=\int P(Y|X, \mathbf{w}, \sigma^2)P(\mathbf{w}|C)d\mathbf{w}$
+    \item $=\sqrt{\frac{|2\pi\Sigma_w|}{|2\pi\sigma^2I||2\pi C|}}\exp(-\frac{1}{2}Y(\frac{I}{\sigma^2}-\frac{X^T\Sigma_w X}{\sigma^4})Y^T)$
+\end{itemize}
+
+Given the evidence for Bayesian linear regression is $\mathcal{E}(C,\sigma^2)=\sqrt{\frac{|2\pi\Sigma_w|}{|2\pi\sigma^2I||2\pi C|}}\exp(-\frac{1}{2}Y(\frac{I}{\sigma^2}-\frac{X^T\Sigma_w X}{\sigma^4})Y^T)$. Find the general forms of the gradients wrt $\theta$ and $\sigma^2$.; \begin{itemize}
+    \item $\frac{\partiall}{\partial\theta}\log\mathcal{E}(C,\sigma^2)=\frac{1}{2}Tr[(C-\Sigma_w-\mathbf{\bar{w}\bar{w}}^T)\frac{\partial}{\partial\theta}C^{-1}]$
+    \item $\frac{\partial}{\partial\sigma^2}\log\mathcal{E}(C,\sigma^2)=\frac{1}{\sigma^2}\big(-N+Tr[I-\Sigma_wC^{-1}]+\frac{1}{\sigma^2}(Y-\mathbf{\bar{w}}X)(Y-\mathbf{\bar{w}}^TX)^T\big )$
+\end{itemize}
+
+Describe Automatic Relevance Determination; \begin{itemize}
+    \item Take $C^{-1}=diag(\mathbf{\alpha})$ (i.e. $w_i\sim N(0, \alpha_i^{\1}))$ and then optimises the precisions $\{\alpha_i\}$.
+    \item by setting gradients wrt $\alpha, \sigma^2$ (for Bayesian regression) equal to zero and solving.
+    \item During optimisation, $\alpha_i$s either go to infinity for irrelevant inputs $x_i$ or remain finite for relevant input.
+    \begin{itemize}
+        \item note $\alpha_i^{new}=\frac{1-\alpha_i[\Sigma_w]_{ii}}{\mathbf{\bar{w}}^2_i}$
+        \item so $\alpha_i\rightarrow\infty\Rightarrow w_i = 0$
+    \end{itemize}
+    \item ARD yields sparse solutions that improve on ML regression.
+\end{itemize}
+
+% some more notes on things related to ARD on slide 16/34
+
+What is the Bayesian approach if our goal is not to learn the model structure or parameters but to predict the conditional density at a new data point?; Prediction averaging: \begin{itemize}
+    \item  $p(\mathbf{y|x}, \mathcal{D}, m)=\int d\theta p(\mathbf{y|x}, \theta, m)p(\theta|\mathcal{D}, m)$.
+    \item (Integral naturally favours predictions associated with  large volumes in the posterior, and so incorporates an Occam-like factor.)
+    \item In principle, prediction smay resist overfitting even with an infinitely complex model (bc integrate over theta vs suing a single theta) $\rightarrow$ Bayesian nonparametrics.
+\end{itemize}
+
+Describe how Gaussian Processes relate to Bayesian model selection.; \begin{itemize}
+    \item Goal: predict conditional density at new datapoint (vs learn model structure or params)
+    \item Applied to (non)linear regression
+\end{itemize}
+
+What is the predicted output y given a new input vector $\mathbf{x}$ in Bayesian regression? Given we have found the distribution of $\mathbf{w}\simN(\mathbf{\bar{w}}, \Sigma_w)$; $y|\mathbf{x}\sim N(\mathbf{\bar{w}^Tx}^T, \mathbf{x^T\Sigma_w x}+\sigma^2)$. \begin{itemize}
+    \item Added variance $\mathbf{x^T\Sigma_w x}$ comes from posterior uncertainty in $\mathbf{w}$.
+\end{itemize}
+
+Describe marginalised linear regression; \begin{itemize}
+    \item Integrate out $\mathbf{w}$ in the model.
+    \item Joint of $Y|X$ is Gaussian.
+    \item Calculate mean and covariances of $y_i, y_j$, get $Y^T\sim N(\mathbf{0}, \tau^2X^TX+\sigma^2I)$.
+    \item include test vector input and output, so get dist of $[\begin{bmatrix}
+    Y^T\\
+    y
+  \end{bmatrix}]|X, \mathbf{x}\sim N(\begin{bmatrix}\mathbf{0} \\ 0 \end{bmatrix}, \begin{bmatrix}\tau^2X^TX +\sigma^2I & \tau^2X^T\mathbf{x} \\ \tau^2\mathbf{x}^TX & \tau^2\mathbf{x^Tx}+\sigma^2 \end{bmatrix})=N(\begin{bmatrix}\mathbf{0} \\ 0 \end{bmatrix}, \begin{bmatrix}\tilde{K}_{XX} & \tilde{K}_{Xx} \\ \tilde{K}_{xX} & \tilde{K}_{xx} \end{bmatrix})
+  \item and use standard multivariate gaussian result to find $y|Y$.
+$
+\end{itemize}
+
+State the standard multivariate Gaussian result to find $b|a$ from $N(\begin{bmatrix}\mathbf{0} \\ \mathbf{0} \end{bmatrix}, \begin{bmatrix}\tilde{K}_{AA} & \tilde{K}_{AB} \\ \tilde{K}_{BA} & \tilde{K}_{BB} \end{bmatrix})$.; $\mathbf{b|a}\sim N(K_{BA}K_{AA}^{-1}\mathbf{a}, K_{BB}-K_{BA}K_{AA}^{-1}K_{AB})$.
+
+Interpret the standard multivariate Gaussian result to find $b|a$ from $N(\begin{bmatrix}\mathbf{0} \\ \mathbf{0} \end{bmatrix}, \begin{bmatrix}\tilde{K}_{AA} & \tilde{K}_{AB} \\ \tilde{K}_{BA} & \tilde{K}_{BB} \end{bmatrix})$.; \begin{itemize}
+    \item $\mathbf{b|a}\sim N(K_{BA}K_{AA}^{-1}\mathbf{a}, K_{BB}-K_{BA}K_{AA}^{-1}K_{AB})$.
+    \item $K_{AA}$ is autocorrelation of input (todo: interpret better?)
+    \item $K_{BB}$ is marginal var over output if we don't know what other variables are.
+    \item Posterior variance less than that bc know what other vars are
+\end{itemize}
+
+Derive Bayesian linear regression from a jointt, parameter-free distribution on all the outputs conditioned on all the inputs.; \begin{itemize}
+    \item Answer: $N(\mathbf{x^T}\frac{1}{\sigma^2}\Sigma XY^T, \mathbf{x^T\Sigma x}+\sigma^2)$, $\Sigma=(\frac{1}{\sigma^2}XX^T+\frac{1}{\tau^2}I)^{-1}$.
+    \item Method: dist over $[Y^T y]$ and use standard Multivariate Gaussian result (eqn for $b|a$ when have dist of [a b]).
+\end{itemize}
+
+Compare marginalised nonlinear vs linear regression.; \begin{itemize}
+    \item Regression function is now $f(\mathbf{x})=\mathbf{w^T\phi(x)}$ (nonlinear), but outputs $Y^T|X$ are still jointly Gaussian.
+    \item $Y^T|X\sim N(0_N, \tau^2\Phi^T\Phi+\sigma^2I_N)$
+    \item vs prev $Y^T|X\sim N(0, \tau^2X^TX+\sigma^2I)$
+    \item and then proceed as before
+\end{itemize}
+
+Define a covariance kernel function.; \begin{itemize}
+    \item $\tilde{K}:\mathbb{X}\times \mathbb{X}\mapsto \mathbb{R}$ s.t. if $\mathbf{x, x'} \in \mathbb{X}$ are two input vectors with corresponding outputs $y, y'$, then
+    \item $\tilde{K}(\mathbf{x, x'})=Cov[y, y']=E[yy']-E[y]E[y']$
+\end{itemize} 
+
+What is the covariance kernel in the nonlinear regression example?; $\tilde{K}(\mathbf{x, x'})=\tau^2\phi(\mathbf{x})^T\phi(\mathbf{x}')+\sigma^2\delta_{\mathbf{x}=\mathbf{x}'}$
+
+Properties of any covariance kernel.; \begin{itemize}
+    \item Symmetric: $K(x, x')=K(x', x)$ for all $x, x'$.
+    \item Positive semidefinite: the matrix $[K(\mathbf{x_i, x_j}]$ formed by any finite set of input vectors $\mathbf{x_1, ..., x_N}$ is positive semidefinite.
+\end{itemize}
+
+What is the condition for a covariance kernel to be symmetric and positive definite?; \begin{itemize}
+    \item iff there is a feature map $\phi:\mathbb{X}\mapsto\mathbb{H}$ s.t. 
+    \item $K(\mathbf{x, x'})=\phi(\mathbf{x})^T\phi(\mathbf{x'})$
+    \item the feature space $\mathbb{H}$ might be an infinite-dimensional Hilbert space.
+\end{itemize}
+
+When doing regression using the covariance kernel, what does the term $[\tilde{K}_{XX}]_{ij}$ correspond to?; $\tilde{K}(\mathbf{x_i, x_j})$.
+
+What is the evidence for regression using the covariance kernel and how do we optimise it?; \begin{itemize}
+    \item Evidence is given by the Gaussian likelihood $P(Y|X, \tilde{K})=|2\pi\tilde{K}_{XX}|^{-\frac{1}{2}}e^{-\frac{1}{2}Y\tilde{K}_{XX}^{-1}Y^T}$.
+    \item Optim (hyper)parameters of covariance kernel $\tilde{K}$ by gradient ascent in $\log P(Y|X, \tilde{K})$.
+\end{itemize}
+
+What is the kernel trick?; \begin{itemize}
+    \item Don't need to define $\phi(x)$ explicitly (and feature mapping may be infinite dim), only need to evaluate dot product, i.e. kernel.
+    \item (own paraphrase)
+\end{itemize}
+
+Define a Gaussian process.; \begin{itemize}
+    \item Defined by a covariance kernel $K(\mathbf{x, x'})$ (and mean function $m(\mathbf{x})$ on a domain $\mathbb{X}$.
+    \item A GP is a stochastic process (collection of RVs) on $\mathbb{R}$ indexed by $\mathbf{x}\in \mathbb{X}$, any finite subset of which have consistent Gaussian distributions.
+    \item Let $f(\mathbf{x})$ be the RV indexed by $\mathbf{x}$. Then a draw from the whole GP (i.e. for all $\mathbf{x}$) is a random function $f:\mathbb{X}\mapsto\mathbb{R}$, written as $f(\cdot)\sim GP(m(\cdot), K(\cdot, \cdot))$. (dot to emphasise these are all functions.)
+    \item Given a finite list of points $\{\mathbf{x_1,...,x_N}\}$, the joint distribution of the function values $\mathbf{f}=[f(\mathbf{x_1}),...,f(\mathbf{x_N})]^T$ is $\mathbf{f}|X, K\sim N(\mathbf{m}, K_{XX})$.
+    \begin{itemize}
+        \item Where, as usual, $[K_{XX}]_{ij}=K(\mathbf{x_i, x_j})$ and $[\mathbf{m}]_i=m(\mathbf{x_i})$.
+    \end{itemize}
+\end{itemize}
+
+Compare the non-GP analog to the GP solution for nonlinear regression.; \begin{itemize}
+    \item non-GP: could define $f(\cdot)$ by drawing the weight vector $\mathbf{w}\in \mathbb{H}$ from the prior.
+    \item But $\mathbb{H}$ may be infinite dimensional, so need an infinite-size object w to make even a single prediction.
+    \item vs in the GP view, each $f(\mathbf{x})$ can be drawn separately (and doesn't require drawing infinite-dim objects).
+\end{itemize}
+
+How do you do regression with GPs?; \begin{itemize}
+    \item Approach: observations as noisy versions of almost surely continuous latent $f(\mathbf{x}_i)$: $y_i|\mathbf{x}_i, f(\cdot)\sim N(f(\mathbf{x}_i), \sigma^2)$
+    \item So predictions are $y|X, Y, \mathbf{x}\sim N(E[f(\mathbf{x})|X, Y], Var[f(\mathbf{x})|X, Y]+\sigma^2)$
+    \begin{itemize}
+        \item where posterior on latent $f$ is also a GP: $f(\cdot)|X,Y\sim GP(K_{\cdot X}(K_{XX}+\sigma^2I)^{-1}Y^T, K(\cdot, \cdot)-K_{\cdot X}(K_{XX}+\sigma^2I)^{-1}K_{X\cdot})$
+        \item $\cdot$ is location of prediction
+    \end{itemize}
+    \item Evidence $P(Y|X)=|2\pi(K_{XX}+\sigma^2I)|^{-\frac{1}{2}}e^{-\frac{1}{2}Y(K_{XX}+\sigma^2I)^{-1}Y^T}$
+    \begin{itemize}
+        \item Evidence optimisation: gradient ascent in $\log P(Y|X)$.
+    \end{itemize}
+\end{itemize}
+
+How to draw samples from a Gaussian Process; \begin{itemize}
+    \item Fix a set of input vectors $\mathbf{x_1, ..., x_N}$ and draw a sample $f(\mathbf{x_1}),...,f(\mathbf{x_N})$ from the corresponding multivariate Gaussian.
+    \item or sample $f(\mathbf{x}_1)$ first and then sample $f(\mathbf{x_{i+1}})|f(\mathbf{x_1}),...,f(\mathbf{x_i})$.
+\end{itemize}
+
+Name and briefly describe at least three kinds of covariance kernels.; \begin{itemize}
+    \item Polynomial (f is poly of degree m)
+    \item Squared-exponential/ exponentiated-quadratic/RBF (f smooth on length scale $\eta$)
+    \item Periodic (exp-sine) (f smooth and periodic)
+    \item Rational quadratic (f smooth over multiple scales)
+\end{itemize}
+
+What is the squared-exponential/exponentiated-quadratic kernel?; \begin{itemize}
+    \item $K(x, x')=\theta^2e^{-\frac{||\mathbf{x}-\mathbf{x'}||^2}{2\eta^2}}$
+    \item ($f$ is smooth ($C^\infty$ almost surely) on length scale $\eta$)
+\end{itemize}
+
+Give four examples of combinations of covariance kernels that are also covariance kernels.; \begin{itemize}
+    \item Rescaling: $\alpha K_1$ for $\alpha > 0$
+    \item Addition: $K_1+K_2$
+    \item Elementwise prod: $K_1K_2$
+    \item Mapping: $K_1(\phi(\mathbf{x}), \phi(\mathbf{x'}))$ for some $\phi$.
+\end{itemize}
+
+How might you create a kernel to model a function that is not perfectly periodic using a GP?; Sum periodic kernel for period and squared exp (RBF) kernel to learn scale.
+
+Define translation-invariance for a kernel.; $K(\mathbf{x, x'})=h(\mathbf{x-x'})$.
+
+If a GP has a translation-invariant covariance kernel, it is; stationary. i.e. if $f(\cdot)\sim GP(0, K)$, then so is $f(\cdot - \mathbf{x})\sim GP(0, K)$ for each $\mathbf{x}$.
+
+What does it mean for a kernel to be radial or radially symmetric?; $K(\mathbf{x, x'})=h(||\mathbf{x-x'}||)$. Can be useful for higher dim (inputs?).
+
+If a GP has a radial covariance kernel, it; is stationary wrt translations, rotations and reflections of the input space.
+
+How can we have a non-Gaussian mapping from f to y using GPs?; Approximation
+
+Name at least two ways in which functions in more complex hierarchical models can be drawn from GP priors.; \begin{itemize}
+    \item GP Lavent var model (GPLVM)
+    \item Stacked GPs
+    \item Deep GP networks
+\end{itemize}
+
+What are computational limits of GPs?; \begin{itemize}
+    \item Inferenec and learning require inversion of $K_{XX}$: scales as $N^3$. 
+    \item Sparse approximation methods reduce this to order N.
+\end{itemize}
+
+In what cases (name one) are GPs particularly useful or SOTA?; When data is limited.
+
+Why is it that even though the parameter (function f) is infinite-dimensional for GPs, it doesn't overfit the data?; \begin{itemize}
+    \item Bayesian treatment integrates over these params: never identify a single best fit f, just a posterior and posterior mean. 
+    \item So f cannot be adjusted to overfit the data.
+\end{itemize}
+
+Describe nonparametric Bayesian models.; \begin{itemize}
+    \item Infinite number of parameters
+    \item Often constructed as the infinite limit of a nested family of finite models (sometimes equivalent to infinite model averaging)
+    \item Params integrated out, so effective number of params to overfit is zero or small (hyperparameters)
+    \item No need for model selection, just average over models. \begin{itemize}
+        \item Bayesian posterior on parameters will concentrate on `submodel' with largest integral automatically.
+    \end{itemize}
+    \item No explicit need for Occam's razor, validation or added regularisation penalty.
+\end{itemize}
+
+Give at least two examples of nonparametric Bayesian models.; \begin{itemize}
+    \item Gaussian Processes (params transferred to kernels)
+    \item Dirichlet process (infinite mixtures)
+    \item Infinite Binary Prior ( infinite binary factor models)
+    \item Infinite HMM
+    \item /chinese restaurant process
+\end{itemize}
 
 \end{document}
