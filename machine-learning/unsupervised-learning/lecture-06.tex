@@ -1,0 +1,229 @@
+%Front;
+% Probabilistic and Unsupervised Learning
+% Lectured by Maneesh Sahani at the Gatsby Computational Neuroscience Unit, UCL, Fall 2018
+% Link to course info and slides: http://www.gatsby.ucl.ac.uk/teaching/courses/ml1/
+
+\documentclass{article}
+\begin{document}
+
+Give examples of questions you may come across during model selection. (learning model structure from data); \begin{itemize}
+    \item No. of clusters
+    \item How smooth the function should be (e.g. non-linear regression degree of poly)
+    \item Is this input relevant to predicting that output, or correl by chance?
+    \item (Order of a dynamical system)
+    \item No. of states in an HMM
+    \item Number of auditory sources in the input (/how many PCs or independent components)
+\end{itemize}
+
+Briefly describe two approaches to model selection; \begin{itemize}
+    \item Learn composite parameter $(m, \theta_m)$
+    \item Separate model selection step: $P(\theta_m, m|\mathcal{D})=P(\theta_m|m, \mathcal{D})\cdot P(m|\mathcal{D})$
+    \begin{itemize}
+        \item = model-specific posterior x model selection
+    \end{itemize}
+\end{itemize}
+
+Describe difficulties of model selection as learning a composite parameter $(m, \theta_m)$.; \begin{itemize}
+    \item Max likelihood learning will overfit: favours more flexible model with more parameters, even if the data come from a simpler one
+    \item Density fn on composite parameter space (union of manifolds of different dims, e.g. diff number of parameters for diff degree poly regressions) difficult to define, so MAP learning is ill-posed. (though if ML large, MAP may also be large)
+    \item Joint posterior difficulty to compute - dim of composite parameters varies (though Monte-Carlo methods may be able to sample from such a posterior.)
+\end{itemize}
+
+Contrast discrete latent variables with the model as a discrete latent variable (one key difference).; \begin{itemize}
+    \item Discrete latents usually have one value per datapoint
+    \item Model latent has one value per dataset.
+\end{itemize}
+
+Name three concrete methods for model selection.; \begin{itemize}
+    \item Neyman-Pearson hypothesis testing
+    \item Likelihood validation
+    \item Bayesian model selection
+\end{itemize}
+
+Describe Neyman-Pearson hypothesis testing.; \begin{itemize}
+    \item For nested models (e.g. mixture models of diff order). 
+    \item Procedure: \begin{itemize}
+        \item Start with simplest model $(m=1)$, compare $H_0: m$ to $H_1: m+1$. (e.g. by likelihood ratio test)
+        \item Continue until $m+1$ is rejected.
+    \end{itemize}
+    \item Tests often only exact asymptotically in the number of datapoints.
+    \item Conservative (likely to choose simpler model) (N-P hypothesis tests asymmetric by design.)
+\end{itemize}
+
+TODO: what is the likelihood ratio test?
+
+Describe likelihood validation; \begin{itemize}
+    \item Partition data into disjoint training and validation sets.
+    \item Choose model with largest $P(\mathcal{D}_{vld}|\theta_m^{ML})$, with $\theta_m^{ML}=\arg\max P(\mathcal{D}_{tr}|\theta)$.
+    \begin{itemize}
+        \item Or, better, greatest $P(\mathcal{D}_{vld}|\mathcal{D}_{tr},m)$.
+    \end{itemize}
+    \item Consistent. Selects most useful model (the one that describes the data best), even if all are incorrect.
+    \item May be biased towards simple models, often high-variance.
+    \begin{itemize}
+        \item high var bc diff for diff partitions of train-validation.
+    \end{itemize}
+    \item Cross-validation uses multiple partitions and averages likelihoods. \begin{itemize}
+        \item (complicates issues of bias?)
+    \end{itemize}
+\end{itemize}
+
+Describe Bayesian model selection; \begin{itemize}
+    \item Choose most likely model: $\arg\max P(m|\mathcal{D})$.
+    \item Consistent: probabilistically principled if true model is in set being considered, 
+    \item but sensitive to assumed priors etc.
+    \item Posterior probabilities can weight models for combined predictions (model averaging, avoiding selection).
+    \item (Note: even if we use Bayesian model selection, often use cross validation to choose model)
+    \item (Min description length approximates this?)
+\end{itemize}
+
+One big criticism of Bayesian model selection; Highly dependent on prior chosen.
+
+What is a model class $m$ in Bayesian model selection?; \begin{itemize}
+    \item A set of distributions parameterised by $\theta_m$
+    \item e.g. the set of all possible mixtures of $m$ Gaussians.
+\end{itemize}
+
+Write out the posterior distribution over parameters of a model in Bayesian model selection.; $P(\theta_m|\mathcal{D}, m) = \frac{P(\mathcal{D}|\theta_m, m)P(\theta_m|m)}{P(\mathcal{D}|m)}$. (Likelihood of data given parameters may require integrating out latents)
+
+What is the Bayesian evidence for a model $m$?; \begin{itemize}
+    \item $P(\mathcal{D}|m)=\int_{\Theta_m}P(\mathcal{D}|\theta_m, m)P(\theta_m|m)d\theta_m$
+    \item i.e. marginal probability of the data under the model class $m$ .
+\end{itemize}
+
+What is the Bayes factor?; \begin{itemize}
+    \item Ratio of two marginal probabilities (or sometimes its log
+    \item $\frac{P(\mathcal{D}|m}{P(\mathcal{D}|m')}=\frac{P(m|\mathcal{D})}{P(m'|\mathcal{D})}\frac{p(m')}{p(m)}$.
+    \item Used in Bayesian model selection
+\end{itemize}
+
+What is Occam's razor?; Of two explanations adequate to explain the same set of observations, the simpler should always be preferred.
+
+Describe the Bayesian Occam's Razor.; \begin{itemize}
+    \item Bayesian inference formalises and automatically implements a form of Occam's Razor.
+    \item $P(m|\mathcal{D})=\frac{P(\mathcal{D}|m)P(m)}{P(\mathcal{D})}$
+    \item $P(\mathcal{D}|m)=\int_{\Theta_m}P(\mathcal{D}|\theta_m, m)P(\theta_m, m)d\theta_m$
+    \item $P(\mathcal{D}|m)$ is the prob that randomly selected parameter values ($P(\theta_m|m)$) from the model class would generate dataset $\mathcal{D}$.
+    \item Model classes that are too simple are unlikely to generate the observed data set. 
+    \item Model classes that are too complex generate many possible data sets, so they are unlikely tog enerate that particular dataset at random.
+\end{itemize}
+
+Can we compute $P(\mathcal{D}|m)$?; Sometimes. \begin{itemize}
+    \item If $P(\mathcal{D}|\theta_m, m)$ is a member of the exp fam, and our prior on $\theta_m$ is conjugate, then the joint $P(\mathcal{D},\theta_m|m)$ is in the same family and we can calculate $P(\mathcal{D}|m)$ by integrating out $\theta_m$. (tractable bc exp fam).
+    \item Else may need to approximate.
+\end{itemize}
+
+TODO (opt): Derive $P(\mathcal{D}|m)$ when $P(\mathcal{D}|\theta_m, m)$ is a member of the exponential family and our prior on $\theta_m$ is conjugate. (slide 9/34)
+
+Briefly describe the expression (solution) we get for $P(\mathcal{D}|m)$ when $P(\mathcal{D}|\theta_m, m)$ is a member of the exponential family and our prior on $\theta_m$ is conjugate.; \begin{itemize}
+    \item Posterior volume divided by prior volume
+\end{itemize}
+
+Name at least four practical Bayesian approaches for approximating $P(\mathcal{D}|m)$.; \begin{itemize}
+    \item Laplace approximation
+    \item Bayesian Information Criterion (BIC)
+    \item Variational Bayes
+    \item Monte Carlo methods
+    \item (also Bethe approximation, Expectation Propagation among others)
+\end{itemize}
+
+Briefly describe Laplace approximation.; \begin{itemize}
+    \item Approximate the posterior by a Gaussian centred at the MAP parameter estimate.
+\end{itemize}
+
+Describe variational bayes in one phrase.; Gives a lower bound on the marginal probability. (TODO: check after typing VB lecture notes)
+
+Is Variational Bayes unbiased?; No.
+
+Compare Variational Bayes in terms of speed to the Laplace approx and BIC; \begin{itemize}
+    \item VB is easy and fast, and `often bettert han Laplace or BIC'.
+\end{itemize}
+
+Name and briefly describe two Monte Carlo methods for calculating $P(\mathcal{D}|m)$.; \begin{itemize}
+    \item (Annealed) importance sampling \begin{itemize}
+        \item Estimate evidence using samples $\theta^{(i)}$ from arbitrary $f(\theta)$.
+        \item $\sum_i \frac{P(\mathcal{D}|\theta^{(i)}, m)P(\theta^{(i)}|m)}{f(\theta^{(i)}}\rightarrow \int d\theta f(\theta)\frac{P(\mathcal{D},\theta|m)}{f(\theta)}=P(\mathcal{D}|m)$
+    \end{itemize}
+    \item `Reversible jump' Markov Chain Monte Carlo: 
+    \begin{itemize}
+        \item Sample from posterior on composite $(m, \theta_m)$, num of samples for each $m\propto p(m|\mathcal{D})$.
+    \end{itemize}
+    \item Both exact in the limit of infinite samples, but may have high variance with finite samples.
+\end{itemize}
+
+Describe the Laplace approximation to approx $P(\mathcal{D}|m)$ (no need for final expr or derivations).; \begin{itemize}
+    \item Assume the joint $P(\mathcal{D},\theta_m|m)\propto P(\theta_m|\mathcal{D},m)$ becomes more peaked on posterior mode $\theta^*_m$ as the number of datapoints $N\rightarrow\infty$.
+    \item Idea: Approx $\log P(\mathcal{D},\theta_m|m)$ to second order around $\theta^*$. (using Taylor expansion)
+    \item Equivalent to approx the posterior by a Gassian: an approx which is asymptotically correct.
+\end{itemize}
+
+Derive the Laplace approximation for $P(\mathcal{D}|m)$. \begin{itemize}
+    \item Recall: approx $\log P(\mathcal{D},\theta_m|m)$ to second order around $\theta^*$. (using Taylor expansion)
+    \item $\int P(\mathcal{D},\theta_m|m)d\theta_m = \int e^{\log P(\mathcal{D},\theta_m|m)}d\theta_m$
+    \item Exponent: expand as (approx) $\log P(\mathcal{D},\theta^*_m|m) + \nabla \log P(\mathcal{D},\theta^*_m|m)\cdot (\theta_m-\theta_m^*)+\frac{1}{2}(\theta_m-\theta_m^*)^T\nabla^2\log P(\mathcal{D},\theta^*_m|m)(\theta_m-\theta_m^*)$
+    \item integral $=\int P(\mathcal{D},\theta^*_m|m)e^{-\frac{1}{2}(\theta_m-\theta_m^*)^TA(\theta_m-\theta_m^*)}d\theta_m$
+    \item $=P(\mathcal{D}|\theta^*_m, m)P(\theta^*_m|m)(2\pi)^{d/2}|A|^{-\frac{1}{2}}$
+    \item where $A=-\nabla^2\log P(\mathcal{D},\theta^*_m|m)$ is the negative Hessian of $\log P(\mathcal{D},\theta_m|m)$ evaluated at $\theta^*_m$.
+    \item think this is $\theta_m \sim N(\theta_m^*, A)$ but need to check TODO
+\end{itemize}
+
+Briefly describe how to derive the Bayesian Information Criterion.; \begin{itemize}
+    \item From log of Laplace Approx $\log P(\mathcal{D}|m)$
+    \item Consider $N\approx\infty$ case (asymptotic approx): Retain only terms that grow with N
+    \begin{itemize}
+        \item $\mathcal{D}$ is iid.
+    \end{itemize}
+\end{itemize}
+
+State the Bayesian Information Criterion.; \begin{itemize}
+    \item $\log P(\mathcal{D}|m)\approx \log P(\mathcal{D}|\theta^*_m, m)-\frac{d}{2}\log N$ 
+\end{itemize}
+
+Derive the Bayesian Information Criterion; \begin{itemize}
+    \item From Laplace Approx 
+    $\log P(\mathcal{D}|m)=\log P(\mathcal{D}|\theta^*_m, m) + \log P(\theta^*_m|m) + \log (2\pi)^{d/2} + \log|A|^{-\frac{1}{2}}$
+    \item where $A=-\nabla^2\log P(\mathcal{D},\theta^*_m|m)$ is the negative Hessian of $\log P(\mathcal{D},\theta_m|m)$
+    \item so $A=-\nabla^2\log P(\mathcal{D}|\theta^*_m,m) -\nabla^2\log P(\theta^*_m|m)$
+    \item Dataset is iid, so as $N=|\mathcal{D}|\rightarrow\infty$, $A\rightarrowNA_0+C, A_0$ pd and fixed.
+    \item so $\log|A|\rightarrow\log|NA_0|=d\logN+\log|A_0|$
+    \item Retaining only terms that grow with N, we have $\log P(\mathcal{D}|m)\approx \log P(\mathcal{D}|\theta^*_m, m)-\frac{d}{2}\log N$.
+\end{itemize}
+
+Properties of Bayesian Information Criterion.; \begin{itemize}
+    \item Pros
+    \begin{itemize}
+        \item Quick and easy to compute
+    \item Does not depend on prior
+    \item Can use ML est of $\theta$ instead of MAP est (since = as $N\rightarrow\infty$.
+    \end{itemize}
+    \item Cons \begin{itemize}
+        \item Assumes that in the large sample limit, all the params are well-determined (i.e. that the model is identifiable, else $d$ should be the number of well-det params (so? wrote something about being careful about $A_0$ 'obvsap')
+        \item Neglects multiple modes (e.g. permutations in a MoG)
+        \item Assumes data is iid, i.e. not autocorrelated.
+    \end{itemize}
+    \item Neutral
+    \begin{itemize}
+        \item Related to min description length criterion
+    \end{itemize}
+\end{itemize}
+
+Interpret the Bayesian Information Criterion; TODO \begin{itemize}
+    \item $\log P(\mathcal{D}|m)\approx \log P(\mathcal{D}|\theta^*_m, m)-\frac{d}{2}\log N$.
+    \item notes atm:
+    \item first term scales with N, second one: $\log N$ is like width of (illegible word that looks like parameters?)
+\end{itemize}
+
+Describe how we can choose between models in a family of continuously parameterised models. (two main kinds of methods you can't really use on discretely parameterised models); \begin{itemize}
+    \item Can use the gradient, i.e. ascend the gradient in \begin{itemize}
+        \item The exact evidence (if tractable)
+        \item Approximated evidence (Laplace, EP, Bethe,...) as fns of hyperparameters $\eta$
+        \item Free-energy bound on the evidence (VB)
+    \end{itemize}
+    \item Or by placing a hyperprior on the hyperparameters $\eta$ and sampling from the posterior $P(\eta|\mathcal{D})=\frac{P(\mathcal{D}|\eta)P(\eta)}{P(\mathcal{D})}$ using Markov chain monte carlo sampling.
+\end{itemize}
+
+% Now do calculations exactly vs approximations
+
+
+
+\end{document}
