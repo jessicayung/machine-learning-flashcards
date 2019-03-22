@@ -1,0 +1,148 @@
+%Front;
+% Approximate Inference
+% Lectured by Maneesh Sahani at the Gatsby Computational Neuroscience Unit, UCL, Fall 2018
+% Link to course info and slides: http://www.gatsby.ucl.ac.uk/teaching/courses/ml1/
+
+\documentclass{article}
+\begin{document}
+
+% TODO: a generative model of generative models diagram
+
+Why do we need non-linear or non-Gaussian models? Give an example.; \begin{itemize}
+    \item Much of the world is neither linear nor Gaussian.
+    \item E.g. the joint distribution of pixel brightnesses in greyscale images of natural scenes is sparsely distributed.
+\end{itemize}
+
+Give one reason why hierarchical models may be useful.; \begin{itemize}
+    \item Many generative processes (e.g. biological ones) can be naturally described at different levels of detail. 
+    \item e.g. images: High to low level: objects, illumination, pose $\rightarrow$ object parts, surfaces $\rightarrow$ edges $\rightarrow$ retinal image, e.g. pixels
+    \item Biology seems to have developed hierarchical representations.
+\end{itemize}
+
+Briefly describe distributed representations; \begin{itemize}
+    \item Each observation is described by a vector of (discrete or continuous) attributes.
+    \item Some of these attributes may be latent.
+\end{itemize}
+
+Briefly discuss the efficiency of distributed representations; \begin{itemize}
+    \item Can be exponentially efficient: K binary factors $\Rightarrow 2^K$ bits of info.
+\end{itemize}
+
+Does it make sense for a linear Gaussian model to have hierarchicies with discrete or non-gaussian dependences?; No because this removes the benefits of having a linear Gaussian model in the first place (easy to calculate). (TODO check)
+
+Briefly describe blind source separation.; \begin{itemize}
+    \item Given signals from one or more receivers 
+    \item that mix signals from one or more sources,
+    \item recover the time series of the source signals.
+    \item Sometimes called the cocktail party problem.
+\end{itemize}
+
+How are pixel brightnesses of greyscale natural images distributed?; Sparse, like Laplace dist.
+
+Describe independent components analysis (ICA); \begin{itemize}
+    \item Graphical model identical to factor analysis: $\x_d=\sum_{k=1}^K\Lambda_{dk}y_k+\epsilon_d$
+    \begin{itemize}
+        \item I.e. linear combination of factors
+        \item Independent $\epsilon_d\sim N(0, \Psi_{dd})$ Gaussian noise
+    \end{itemize}
+    \item but with sources/factors $y_k\sim P_i$ non-Gaussian.
+\end{itemize}
+
+Name four differences between ICA and Factor Analysis; (things below are ICA) \begin{itemize}
+    \item Sources/factors in ICA are non-Gaussian (vs FA Gaussian)
+    \item ICA well-posed even with $K\geq D$| since there is no rotational symmetry
+    \item With non-zero noise, MAP inference is non-linear, and the full posterior is non-Gaussian (vs FA posterior Gaussian)
+    \item $\Rightarrow$ exact inference and learning in ICA difficult for most $P_y$.
+\end{itemize}
+
+Describe what graphs of ICA-generated data looks like with two sources $y$.; \begin{itemize}
+    \item Heavy-tailed sources: like two crossing lines with much data clustered in the intersection. Each line is a $\Lambda$ dim.
+    \item Light-tailed sources: like a parallelogram. Each `side' is a $\Lambda$ dim.
+    \item (vs Gaussian would be elliptical.
+\end{itemize}
+
+Describe square, noiseless ICA; \begin{itemize}
+    \item K=D, i.e. number of sources = number of observation dimensions.
+    \item AND zero observation noise.
+    \item equivalent to infomax ICA
+    \item have $\mathbf{x=\Lambda y}$, which implies $\mathbf{y=Wx}$ with $W=\Lambda^{-1}$. (if $\Lambda$ is full rank)
+    \begin{itemize}
+        \item W is the unmixing matrix
+    \end{itemize}
+    \item ($P(\mathbf{x}|W)=|W|\prod_kP_i([W\mathbf{x}]_k)$.) TODO: okay, so what? independent-seeming?
+\end{itemize}
+
+Derive the likelihood $P(\mathbf{x}|W)$ for square, noiseless ICA, where $W=\Lambda^{-1}$ is the unmixing matrix.; \begin{itemize}
+    \item Obtain likelihood by transforming the density of $\mathbf{y}$ to that of $\mathbf{x}$.
+    \begin{itemize}
+        \item If $F:\mathbf{y}\to\mathbf{x}$ is a differentiable bijection, and if $d\mathbf{y}$ is a small neighbourhood around $\mathbf{y}$, then
+        \item $P_X(\mathbf{x})d\mathbf{x}=P_y(\mathbf{y})d\mathbf{y}=P_y(F^{-1}(\mathbf{x}))|\frac{d\mathbf{y}}{d\mathbf{x}}|d\mathbf{x}=P_y(F^{-1}(\mathbf{x}))|\nabla F^{-1}|d\mathbf{x}$
+        \begin{itemize}
+            \item Transfer x to y
+            \item Size of volume 
+            \item note $P_y$ (marginal dist of factors )is given in the model
+            \item (Something illegible about not intract? y bc model datasets? so a delta fn)
+        \end{itemize}
+    \end{itemize}
+    \item $P(\mathbf{x}|W)=|W|\prod_kP_i([W\mathbf{x}]_k)$.
+\end{itemize}
+
+What is the log likelihood of data for ICA?; $\log P(\mathbf{x})=\log|W|+\sum_i \log P_y(W_i\mathbf{x})$
+
+How could you learn ICA? \begin{itemize}
+    \item Log likelihood: $\log P(\mathbf{x})=\log|W|+\sum_i \log P_y(W_i\mathbf{x})$ 
+    \item Learn by gradient ascent: $\Delta W\propto \nabla_W\log P(\mathbf{x}) = W^{-T}+g(\mathbf{y})\mathbf{x}^T$
+    \begin{itemize}
+        \item W map from x to y
+        \item units: y / x
+        \item $\mathbf{x}^T$ is $\frac{\partial W_ix}{\partial W}$
+        \item $g(y)=\frac{\partial \log P_y(y)}{\partial y}$
+    \end{itemize}
+    \item or learn by `natural' or `covariant' gradient $\Delta W\propto \nabla_W\log P(\mathbf{x})\cdot (W^TW) = W + g(\mathbf{y})\mathbf{y}^TW \approx \langle -\nabla\nabla\log P\rangle^{-1}$
+    \begin{itemize}
+        \item Naturally covariant to scaling and rotations
+        \item $\nabla\nabla$: Hessian
+        \item $W^TW$: average value of 2nd derivative, if exact then is Newton method
+        \item natural grad no units vs learning by gradient ascent have units y/x.
+        \item $g(y)=\frac{\partial \log P_y(y)}{\partial y}$
+    \end{itemize}
+\end{itemize}
+
+Write down the natural gradient for ICA; \begin{itemize}
+    \item or learn by `natural' or `covariant' gradient $\Delta W\propto \nabla_W\log P(\mathbf{x})\cdot (W^TW) = W + g(\mathbf{y})\mathbf{y}^TW \approx \langle -\nabla\nabla\log P\rangle^{-1}$
+    \begin{itemize}
+        \item Naturally covariant to scaling and rotations
+        \item $\nabla\nabla$: Hessian
+        \item $W^TW$: average value of 2nd derivative, if exact then is Newton method
+        \item natural grad no units vs learning by gradient ascent have units y/x.
+        \item $g(y)=\frac{\partial \log P_y(y)}{\partial y}$
+    \end{itemize}
+\end{itemize}
+
+Why is the natural gradient called natural gradient?; bc it's naturally covariant to scaling and rotations.
+
+% more illegible notes on learning in ICA slide (s19)
+
+Can we use EM in the square noiseless causal ICA model? Why?; 
+
+Describe Infomax ICA; \begin{itemize}
+    \item Consider a feedforward model $y_i=W_i\mathbf{x}$, $z_i=f_i(y_i)$
+    with a monotonic squashing function $f_i(\infty)=0, f_i(+\infty)+1$. (like sigmoid)
+    \item Infomax finds filtering weights W maximising the info carried by $\mathbf{z}$ about $\mathbf{x}$: \begin{itemize}
+        \item $\arg\max_W I(\mathbf{x, z}) = \arg\max_W H(\mathbf{z})-H(\mathbf{z|x})=\arg\max_WH(\mathbf{z})$.
+        \item $H(\mathbf{z})=0$ bc it's a deterministic mapping
+        \item so we just have to maximise entropy on z (make it as uniform as possible on [0, 1]
+    \end{itemize}
+    \item but if data were generated from a square noiseless causal ICA then best we can do is if $z_i=f_i(y_i)=cdf_i(y_i)$ and $W=\Lambda^{-1}$
+    \begin{itemize}
+        \item since cdf is uniform.
+        \item by defn, $x=\Lambda y$
+    \end{itemize}
+    \item so infomax ica is equivalent to square noiseless causal ICA
+    \item (Another view: redundancy reduction in the representation $\mathbf{z}$ of the data $\mathbf{x}$.
+    \begin{itemize}
+        \item $\arg\max_W H(\mathbf{z})=\arg\max_W\sum_i H(z_i)-I(z_1,...,z_D)$.
+    \end{itemize}
+\end{itemize}
+
+\end{document}
