@@ -35,6 +35,7 @@ Briefly describe blind source separation.; \begin{itemize}
     \item that mix signals from one or more sources,
     \item recover the time series of the source signals.
     \item Sometimes called the cocktail party problem.
+\item (Don't know where source is in room so don't know what transforms to apply)
 \end{itemize}
 
 How are pixel brightnesses of greyscale natural images distributed?; Sparse, like Laplace dist.
@@ -143,6 +144,74 @@ Describe Infomax ICA; \begin{itemize}
     \begin{itemize}
         \item $\arg\max_W H(\mathbf{z})=\arg\max_W\sum_i H(z_i)-I(z_1,...,z_D)$.
     \end{itemize}
+\end{itemize}
+
+Describe kurtosis; \begin{itemize}
+    \item Kurtosis measures how `peaky' or `heavy-tailed' a distribution is.
+    \item (FYI: $K=\frac{E((x-\mu)^5)}{E((x-\mu)^2)^2}-3$, where $\mu=E(x)$ is the mean of $x$.)
+\end{itemize}
+
+Describe positive vs negative kurtosis distributions.; \begin{itemize}
+    \item Positive kurtosis: heavy tailed (leptokurtic)
+    \item Negative kurtosis: light tailed (platykurtic, flat)
+\end{itemize}
+
+What is the kurtosis for Gaussian distributions?; Zero
+
+Name one kind of algorithm that takes a kurtosis pursuit approach.; ICA algorithms
+
+TODO: something about possibly ICA not being a limiting case of CLT: linear mixtures of independent non-Gaussian dists: more G, is K tending towards zero?
+
+Name at least two ways you can extend ICA.; \begin{itemize}
+    \item Non-zero output noise: intractable, so have to approximate posteriors and learning
+    \item Undercomplete $(K<D)$ or overcomplete $(K>D)$. (So not simple inverse rel but effectively like pseudoinverse)
+    \item Learning prior dists (on $\mathbf{y}$) \begin{itemize}
+        \item assumed know $p(\mathbf{y})$, but doesn't matter bc of kurtosis assumption. e.g. ML on high kurtosis usually ok (?)
+    \end{itemize}
+    \item Learning number of sources \begin{itemize}
+        \item Possible if full prob model with noise, else post hoc look at something and decide if it's signal or noise
+    \end{itemize}
+    \item Time-varying mixing matrix
+    \item Non-parametric, kernel ICA
+\end{itemize}
+
+Name one solution to blind source separation; ICA. Assumes no dependence across time, still works fine much of the time.
+
+Describe a nonlinear state-space model (NLSSM); \begin{itemize}
+    \item $\mathbf{y}_{t+1}=f(\mathbf{y}_t, \mathbf{u}_t)+\mathbf{w}_t$
+    \item $\mathbf{x}_t=g(\mathbf{y}_t, \mathbf{u}_t)+\mathbf{v}_t$
+    \item $\mathbf{w_t, v_t}$ usually still Gaussian.
+\end{itemize}
+
+Describe the Extended Kalman Filter (EKF) (with equations); \begin{itemize}
+    \item Linearise (taylor expand) nonlinear functions about current estimate, $\mathbf{\hat{y}}^t_t$:
+    \item $\mathbf{y}_{t+1}\approx f(\mathbf{\hat{y}}^t_t, \mathbf{u}_t) + \frac{\partial f}{\partial \mathbf{y}_t}|_{\hat{\mathbf{y}}^t_t}(\mathbf{y_t-\hat{y}^t_t})+\mathbf{w}_t$
+    \item $\mathbf{x}_{t}\approx g(\mathbf{\hat{y}}^{t-1}_t, \mathbf{u}_t) + \frac{\partial g}{\partial \mathbf{y}_t}|_{\hat{\mathbf{y}}^{t-1}_t}(\mathbf{y_t-\hat{y}^{t-1}_t})+\mathbf{v}_t$
+    \item Run the Kalman filter/smoother on non-stationary linearised system
+    \item Adaptively approximates non-Gaussian messages by Gaussians
+    \item Local linearisation depends on central point of distribution$\Rightarrow$ approx degrades with increased state uncertainty. May work acceptable for close-to-linear systems.
+\end{itemize}
+
+Describe the Extended Kalman Filter (without equations); \begin{itemize}
+     \item Linearise (taylor expand) nonlinear functions about current estimate, $\mathbf{\hat{y}}^t_t$:
+    \item Run the Kalman filter/smoother on non-stationary linearised system
+    \item Adaptively approximates non-Gaussian messages by Gaussians
+    \item Local linearisation depends on central point of distribution$\Rightarrow$ approx degrades with increased state uncertainty. May work acceptable for close-to-linear systems.
+\end{itemize}
+
+Describe how to do online parameter learning in NLSSMs; \begin{itemize}
+    \item Nonlinear message passing
+    \item E.g. for linear model (generalise to nonlinear by linearising), augment state vector to include model parameters: $\bar{\bar{\mathbf{y}}}=[\mathbf{y}_t A C]$
+    \item $\bar{\bar{y}}_{t+1}=[A\mathbf{y}_t A C]^T + [\mathbf{w}_t 0 0 ]^T$
+    \item $\mathbf{x}_t=C\mathbf{y}_t+\mathbf{v}_t$
+    \item Use EKF to compute online estimates of $E[\bar{\bar{\mathbf{y}}}_t|\mathbf{x_1,...,x_t}$ and $Cov[\bar{\bar{\mathbf{y}}}_t|\mathbf{x_1,...,x_t}$. (TODO: how?) These now include mean and posterior variance of parameter estimates.
+    \item Pseudo-Bayesian since gives Gaussian dists over params
+\end{itemize}
+
+Discuss the online EKF/joint-EKF approach.; \begin{itemize}
+    \item Can model nonstationarity by assuming non-zero innovations noise in A, C
+    \item Not simple to implement for Q and R (e.g. covariance constraints?) (todo: how do you even implement this for Q and R?)
+    \item May be faster than EM/gradient approaches
 \end{itemize}
 
 \end{document}
