@@ -214,4 +214,39 @@ Discuss the online EKF/joint-EKF approach.; \begin{itemize}
     \item May be faster than EM/gradient approaches
 \end{itemize}
 
+Name two binary (distributed) models; Boltzmann machines and sigmoid belief nets.
+
+Name a binary model that is a Markov network (i.e. undirected); Boltzmann machine
+
+Name a binary model that is a directed net.; Sigmoid belief nets
+
+What are Boltzmann machines?;\begin{itemize}
+    \item Undirected graphical model (Markov net)
+    \item over a vector of binary variables $s_i\in\{0, 1\}$.
+    \item Some variables may be hidden, some may be visible (observed).
+    \item $P(\mathbf{s}|W, \mathbf{b})=\frac{1}{Z}\exp\{\sum_{ij}W_{ij}s_is_j-\sum_ibSis_i\}$.
+    \item i.e. a jointly exponential-family model, with intractable normaliser Z.
+    \item also called Ising models (physics)?
+\end{itemize} 
+
+Explain the Boltzmann machine equation; \begin{itemize}
+    \item $P(\mathbf{s}|W, \mathbf{b})=\frac{1}{Z}\exp\{\sum_{ij}W_{ij}s_is_j-\sum_ibSis_i\}$.
+    \item $s_i$ are binary variables.
+    \item RHS is `energy'. $W_ij$ only comes into play if $s_i=s_j=1$.
+    \item $\sum_i b_is_i$ offset marginal $p(x)$.
+\end{itemize}
+
+What is the learning algorithm for Boltzmann machines?; Gradient version of EM \begin{itemize}
+\item Inference: E step involves computing averages wrt $P(\mathbf{s^H|s^V}, W, \mathbf{b})$ (`clamped phase').
+\item May be exact or (more usually) approximate using Gibbs sampling or loopy BP.
+\item Learning: The M step requires gradients wrt Z, which can be computed by averages under $P(\mathbf{s}|W, \mathbf{b})$ (`unclamped phase'). \begin{itemize}
+    \item $\nabla_W\log P(\mathbf{s}^V, \mathbf{s}^H)=\langle \mathbf{ss^T} \rangle_c - \langle \mathbf{ss^T} \rangle_u$.
+    \item diff Z wrt W, b..?
+\end{itemize}
+\end{itemize}
+
+
+
+What are sigmoid belief nets?; TODO
+
 \end{document}
