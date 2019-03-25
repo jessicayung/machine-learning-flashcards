@@ -381,7 +381,19 @@ Name one mixed membership model from statistics.; Latent dirichlet allocation
 
 % TODO: Nonlinear dimensionality reduction, from slide 49
 
-% TODO: s80 GP LVMs 
+% s80 GP LVMs 
+Describe how to go from probabilistic PCA to GP latent variable models; \begin{itemize}
+    \item Probabilistic PCA: $\mathbf{x}_i|\mathbf{y}_i, \Lambda \sim N(\Lambda\mathbf{x}_i, \beta^{\1}I)$, $\mathbf{x}_i\sim N(0, I)$
+    \item If we know the values of the latent Y, then we can integrate out $\Lambda$: $\Lambda\sim N(0, \alpha^{-1}I)$, $p(X|Y)\sim |2\pi K|^{-\frac{D}{2}}\exp(-\frac{1}{2}Tr[K^{-1}YY^T]), K=\alpha XX^T+\beta I$.
+    \item i.e. D indep GPs, one for each dimension of X (mapping from latent space $\mathbf{y}$ to one dim of \mathbf{x}.
+\end{itemize}
+
+How do we have a nonlinear mapping from latent space $\mathbf{y}$ to dimension of $\mathbf{x}$ in GP LVMs (or similar models)?; \begin{itemize}
+    \item Replace the linear kernel with nonlinear kernels
+    \item But now dependence on X is complicated: instead of computing a posterior over X, 
+    \item we must find point values that max the likelihood (jointly with hyperparameters), 
+    \item or use a var approx (cf also locally linear latent var modls. GP-like, but over neighbourhood vs full mapping?
+\end{itemize}
 
 Describe three (four) main reasons for intractability in probabilistic models.; \begin{itemize}
     \item Analytic intractability: Distributions may have complicated forms \begin{itemize}
