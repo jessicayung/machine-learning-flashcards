@@ -1,0 +1,30 @@
+%Front;
+% Approximate Inference
+% Lectured by Maneesh Sahani at the Gatsby Computational Neuroscience Unit, UCL, Fall 2018
+% Link to course info and slides: http://www.gatsby.ucl.ac.uk/teaching/courses/ml1/
+
+\documentclass{article}
+\begin{document}
+
+Name five ways of approximating the forward messages on a latent chain model / NLSSM.; \begin{itemize}
+    \item Linearisation
+    \item Laplace filter: use mode and curvature of integrand (Hessian)
+    \item Sigma-point (`unscented' filter) \begin{itemize}
+        \item 'Fit' Gaussian to 2K+1 points $f(\hat{\mathbf{y}}_{t-1}), f(\hat{\mathbf{y}}_{t-1}\pm \sqrt{lambda}\mathbf{v})$ for evs, evectors $\hat{V}_{t-1}\mathbf{v}=\lambda\mathbf{v}$ (mode of pred and set of 1 sigma pts along major axes of cov, which are called sigma points)
+        \item (assumes msgs are Gaussian, like moment matching)
+        \item bc pts equivalent to numerical evaluation of mean and cov by Gaussian quadrature
+        \item (one form of assumed density filtering and EP)
+    \end{itemize}
+    \item Parametric variational: $\arg\min KL [N(\mathbf{\hat{y}}_t, \hat{V}_t)||\int dy_{t-1}...]$. \begin{itemize}
+        \item Requires Gaussian expectations of $\log \int$, so may be challenging.
+    \end{itemize}
+    \item EP: other KL: $\arg\min KL[\int  dy_{t-1} ||N(\hat{\mathbf{y}}_t, \hat{V}_t)]$, needs only first and second moments of nonlinear message.
+    \begin{itemize}
+        \item Like moment matching in a more iterative way
+    \end{itemize}
+    \item Latter two approaches more principled than linearisation: look for an approx q that is closest to posterior P in some sense: $q=\arg\min_{q\in\mathcal{Q}}D(P\leftrightarrow q)$: D and $\mathcal{Q}$ open choices.
+\end{itemize}
+
+
+
+\end{document}
