@@ -25,6 +25,65 @@ Name five ways of approximating the forward messages on a latent chain model / N
     \item Latter two approaches more principled than linearisation: look for an approx q that is closest to posterior P in some sense: $q=\arg\min_{q\in\mathcal{Q}}D(P\leftrightarrow q)$: D and $\mathcal{Q}$ open choices.
 \end{itemize}
 
+% from s7 The other KL.
+Discuss in what ways minimising KL(p||q) may or may not be `correct'; TODO \begin{itemize}
+    \item 'for a factored approx the clique marginals obtained by minimising this KL are correct': $\arg\min_{q_i} KL[P(\mathcal{Y}|\mathcal{X}||\prod q_j(\mathcal{Y}_j|\mathcal{X})]=P(\mathcal{Y}_i|\mathcal{X})$
+    \item If do exactly, while (1) may lose correl (??) bc of factored fn,
+    \item marginals are exact
+\end{itemize} 
 
+Show that for a factored approximation, the clique marginals obtained by minimising $KL(p||q)$ are correct; i.e. show $\arg\min_{q_i} KL[P(\mathcal{Y}|\mathcal{X}||\prod q_j(\mathcal{Y}_j|\mathcal{X})]=P(\mathcal{Y}_i|\mathcal{X})$. Steps: \begin{itemize}
+    \item $\arg\min_{q_i}-\int d\mathcal{Y}P(\mathcal{Y}|\mathcal{X})\log \prod_iq_j(\mathcal{Y}_j|\mathcal{X})$
+    \begin{itemize}
+        \item Assume corr to cliques, not necc of joint?
+    \end{itemize}
+    \item $\arg\min_{q_i}-\sum_j \int d\mathcal{Y}P(\mathcal{Y}|\mathcal{X})\log q_j(\mathcal{Y}_j|\mathcal{X})$
+    \item $\arg\min_{q_i}-\int d\mathcal{Y_i}P(\mathcal{Y_i}|\mathcal{X})\log q_i(\mathcal{Y}_i|\mathcal{X})$
+    \begin{itemize}
+        \item bc expectation only depends on $\mathcal{Y}_i$ terms
+        \item doesn't necc assume $P(\mathcal{Y}|\mathcal{X})$ factors, just integrate over the rest?
+    \end{itemize}
+    \item (so finding the best q for this KL is intractable.)
+\end{itemize}
+
+How can we find $q=\arg\min KL(p||q)$?; it's intractable.
+
+Write the posterior distribution in a graphical model as a (normalised) product of factors.;\begin{itemize}
+    \item  $P(\mathcal{Y}|\mathcal{X})=\frac{P(\mathcal{Y}, \mathcal{X})}{P(\mathcal{X})}=\frac{1}{Z}\prod_i P(Y_i|pa(Y_i))\propto \prod_{i=1}^N f_i(\mathcal{Y}_i)$.
+    \item where the $\mathcal{Y}_i$ are not necessarily disjoint.
+\end{itemize}
+
+What are sites in EP?; Factors.
+
+What is the form of $q$ in EP?; $q(\mathcal{Y}):=\prod_{i=1}^N\tilde{f}_i(\mathcal{Y}_i)$, where $f_i$ are factors/sites. $\tilde{f}_i$ are approximated $f_i$.
+
+What do we minimise in EP to get $q$? Describe the intuition behind it.; \begin{itemize}
+    \item $\arg\min_{\tilde{f}_i}KL[f_i(\mathcal{Y}_i)\prod_{j\ne i}\tilde{f}_j(\mathcal{Y}_j)||\tilde{f}_i(\mathcal{Y}_i)\prod_{j\ne i}\tilde{f_j}(\mathcal{Y}_j)]$
+    \item $=\arg\min_{\tilde{f}_i}KL[f_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y})||\tilde{f}_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y})]$
+    \item local (opt $\tilde{f}_i$ each time), contextual (prod with other ests $\tilde{f}_j$): iterative, accurate
+    \item intuition: obs in one clique may say bump is at X, whereas all  other cliques may say bump is at Y, should factor that in.
+\end{itemize}
+
+Describe the two ideas behind EP.; \begin{itemize}
+    \item E: Approximation of factors: \begin{itemize}
+        \item Usually by `projection' to exponential families (proj bc info geom view of expfams)
+        \item This involves finding expected sufficient statistics, hence expectation
+    \end{itemize}
+    \item P: Local $(KL(p||q))$ divergence minimisation in the context of other factors (This leads to a message passing appraoch, hence propagation)
+\end{itemize}
+
+Simplify $\arg\min_{\tilde{f}_i}KL[f_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y})||\tilde{f}_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y})]$; \begin{itemize}
+    \item $=\arg\max_{\tilde{f}_i} \int d\mathcal{Y}_i d\mathcal{Y}_{\neg i} f_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y})\log \tilde{f}_i(\mathcal{Y}_i) q_{\neg i}(\mathcal{Y})$
+    \item $=\arg\max_{\tilde{f}_i} \int d\mathcal{Y}_i d\mathcal{Y}_{\neg i} f_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y}_{\neg i}|\mathcal{Y}_i)(\log \tilde{f}_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y}_i)+\log q_{\neg i}(\mathcal{Y}_{\neg i}|\mathcal{Y}_i))$
+    \item $=\arg\max_{\tilde{f}_i} \int d\mathcal{Y}_i f_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y}_i)(\log \tilde{f}_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y}_i)) \int d\mathcal{Y}_{\neg i} q_{\neg i}(\mathcal{Y}_{\neg i}|\mathcal{Y}_i)$
+    \item $=\arg\min_{\tilde{f}_i}KL[f_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y}_i)||\tilde{f}_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y}_i)]$
+\end{itemize}
+
+What is the cavity distribution in EP?; $q_{\neg i}(\mathcal{Y}_i)$
+
+Write the EP algorithm in pseudocode.; \begin{itemize}
+    \item Input $f_1(\mathcal{Y}_1), ..., f_N(\mathcal{Y}_N)$
+    \item Initialise 
+\end{itemize}
 
 \end{document}
