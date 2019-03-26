@@ -83,7 +83,65 @@ What is the cavity distribution in EP?; $q_{\neg i}(\mathcal{Y}_i)$
 
 Write the EP algorithm in pseudocode.; \begin{itemize}
     \item Input $f_1(\mathcal{Y}_1), ..., f_N(\mathcal{Y}_N)$
-    \item Initialise 
+    \item Initialise $\tilde{f}_1(\mathcal{Y}_1)=\arg\min_{f\in\{\tilde{f}\}} KL[\bar{f}_1(\mathcal{Y}_1||f_1(\mathcal{Y}_1)], \tilde{f}_i(\mathcal{Y}_i)=1$ for $i>1, q(\mathcal{Y})\propto\prod_i\tilde{f}_i(\mathcal{Y}_i)$.
+    \begin{itemize}
+        \item first term $\bar{f}_1$ is fixed, true one. Latter $f$ is one to opt over.
+        \item init to be uniform
+    \end{itemize}
+    \item repeat
+    \begin{itemize}
+        \item for $i=1,...,N$ do
+        \begin{itemize}
+            \item Delete $q_{\neg i}(\mathcal{Y})\leftarrow \frac{q(\mathcal{Y}}{\tilde{f}_i(\mathcal{Y}_i)}=\prod_{j\ne i}\tilde{f}_j(\mathcal{Y}_j)$
+            \item Project $\tilde{f}_i^{new}(\mathcal{Y})\leftarrow \arg\min_{f\in \{\tilde{f}\}} KL[f_i(\mathcal{Y}_iq_{\neg i}(\mathcal{Y}_i)||f(\mathcal{Y}_iq_{\neg i}(\mathcal{Y}_i)]$
+            \item Include: $q(\mathcal{Y}_i)\leftarrow \tilde{f}_i^{new}(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y})$
+        \end{itemize}
+        \item end for
+    \end{itemize}
+    \item until convergence
 \end{itemize}
+
+How can we calculate $q_{\neg i}(\mathcal{Y}_i)$ in EP more efficiently?; \begin{itemize}
+    \item break down into $\prod_{j\in ne(i)}M_{j\rightarrow i}(\mathcal{Y}_j \cap \mathcal{Y}_i)$
+    \item i.e. prod of terms from each neighbouring clique
+    \item (once the $i$th site has been approximated, the messages can be passed on to neighbouring cliques by marginalising the shared variables.
+    \item so don't have to marginalise over each combo of vars
+    \item TODO: not sure if there is a better ans to this q
+\end{itemize}
+
+Break down $q_{\neg i}(\mathcal{Y}_i)$ into messages; \begin{itemize}
+    \item $\prod_{j\in ne(i)}M_{j\rightarrow i}(\mathcal{Y}_j \cap \mathcal{Y}_i)$
+    \item i.e. prod of terms from each neighbouring clique
+    \item (once the $i$th site has been approximated, the messages can be passed on to neighbouring cliques by marginalising the shared variables.
+\end{itemize}
+
+% TODO: loopy graphs part on slide 12, may leave till after typing LBP notes
+
+% TODO s13: EP for a NLSSM equations, s14 more on that
+
+% TODO s14 moment matching sort of proof
+
+How do we calculate $\langle T(x) \rangle_p$ for EP?; \begin{itemize}
+    \item Often analytically tractable, 
+    \item but even if not, requires a relatively low dim integral 
+    \item (Numerical issues: mostly lack of posdef-ness)
+    \item can use \begin{itemize}
+        \item (1) Quadrature methods or 
+        \begin{itemize}
+            \item Classical Gaussian (not to do with dist) quadrature gives an iterative version of sigma-point methods
+            \item posdef joints, but not guaranteed posdef messages -> can skip non-posdef steps or damp msgs by interpolation or exponentiating to power < 1. (TODO how does exp/interpolating help?)
+            \item other quadrature methods like GP quadrature may be more accurate and  may allow formal constraint to posdef cone.
+        \end{itemize}
+        \item (2) Laplace approx: as long as msgs remain posdef, will converge to global Laplace approx
+    \end{itemize}
+\end{itemize}
+
+What does a GP provide a prior over?; Functions.
+
+Describe how to use EP for Gaussian Process classification.; \begin{itemize}
+    \item 
+\end{itemize}
+
+
 
 \end{document}
