@@ -10,472 +10,170 @@
 
 \begin{document}
 	
-Briefly describe what elements in a graph correspond to.; \begin{itemize}
-	\item Nodes: random variables
-	\item Edges: statistical dependence between the variables.
-\end{itemize}
+Briefly describe what elements in a graph correspond to.; \begin{itemize} \item Nodes: random variables \item Edges: statistical dependence between the variables.  \end{itemize}
 
-Define conditional independence between RVs X, Y; 
-\begin{itemize}
-	\item $X\indep Y|V \Leftrightarrow P(X|Y, V) = P(X|V)$ (provided, for events, $P(Y,V)>0$.
-	\item Thus, $X\indep Y|V \Leftrightarrow P(X,Y|V)=P(X|Y,V)P(Y|V)=P(X|V)P(Y|V)$.
-\end{itemize}
+Define conditional independence between RVs X, Y; \begin{itemize} \item $X\indep Y|V \Leftrightarrow P(X|Y, V) = P(X|V)$ (provided, for events, $P(Y,V)>0$.  \item Thus, $X\indep Y|V \Leftrightarrow P(X,Y|V)=P(X|Y,V)P(Y|V)=P(X|V)P(Y|V)$.  \end{itemize}
 
 Define conditional independence between sets of random variables; $\mathcal{X} \indep \mathcal{Y}|\mathcal{V} \Leftrightarrow \{X\indep Y | \mathcal{V}, \forall X \in \mathcal{X} \mathtt{ and }\forall Y \in \mathcal{Y}\}$.
 
 Marginal independence (graph); $X\indep Y \Leftrightarrow X \indep Y | \emptyset \Leftrightarrow P(X,Y) = P(X)P(Y)$.
 
-Factor graph; \begin{itemize}
-	\item Graphical repr of the factorised model structure
-	\item Each square indicates a factor that depends on the linked variables.
-	\item $P(\mathcal{X})=\frac{1}{Z}\prod_j f_j(\mathcal{X}_{C_j})$
-	\item where $\mathcal{X}=\{X_1,...,X_K\}, \mathcal{X}_S=\{X_i:i\in S\}$, $j$ indexes the factors, $C_j$ contains the indices of variables adjacent to factor $j$, $f_j$ is the factor function (also called the factor potential or clique potential) and $Z$ is the normalisation constant.
-\end{itemize}
+Factor graph; \begin{itemize} \item Graphical repr of the factorised model structure \item Each square indicates a factor that depends on the linked variables.  \item $P(\mathcal{X})=\frac{1}{Z}\prod_j f_j(\mathcal{X}_{C_j})$ \item where $\mathcal{X}=\{X_1,...,X_K\}, \mathcal{X}_S=\{X_i:i\in S\}$, $j$ indexes the factors, $C_j$ contains the indices of variables adjacent to factor $j$, $f_j$ is the factor function (also called the factor potential or clique potential) and $Z$ is the normalisation constant.  \end{itemize}
 
 Conditional independence in a graph; $X\indep Y|\mathcal{V}$ if every path between X and Y contains some $V\in\mathcal{V}$.
 
-State a condition where, when satisfied, there exists a factorisation of the probability distribution (graph); \begin{itemize}
-	\item If every path between X and Y contains some $V\in\mathcal{V}$, then
-	\item there exists a factorisation $P(X,Y,\mathcal{V})=\frac{1}{Z}g_X(X,\mathcal{V}_X, \mathcal{Q}_X)g_Y(Y,\mathcal{V}_Y, \mathcal{Q}_Y)g_R(\mathcal{V}_R, \mathcal{Q}_R)$
-	\item where $\mathcal{V}_X, \mathcal{V}_Y, \mathcal{V}_R \subseteq \mathcal{V}$ and the sets of remaining variables $\mathcal{Q}_X,\mathcal{Q}_Y,\mathcal{Q}_R$ are disjoint.
-\end{itemize}
+State a condition where, when satisfied, there exists a factorisation of the probability distribution (graph); \begin{itemize} \item If every path between X and Y contains some $V\in\mathcal{V}$, then \item there exists a factorisation $P(X,Y,\mathcal{V})=\frac{1}{Z}g_X(X,\mathcal{V}_X, \mathcal{Q}_X)g_Y(Y,\mathcal{V}_Y, \mathcal{Q}_Y)g_R(\mathcal{V}_R, \mathcal{Q}_R)$ \item where $\mathcal{V}_X, \mathcal{V}_Y, \mathcal{V}_R \subseteq \mathcal{V}$ and the sets of remaining variables $\mathcal{Q}_X,\mathcal{Q}_Y,\mathcal{Q}_R$ are disjoint.  \end{itemize}
 
 Variables in a factor graph are neighbours if; they share a common factor. 
 
 The neighbourhood ne(X) (in a factor graph) is;  the set of all neighbours of X. (Vars in a factor graph are neighbours if they share a common factor.)
 
-Markov blanket; \begin{itemize}
-	\item All the variables that shield the node from the rest of the network. 
-	\item $\to$ The only knowledge needed to predict the behavior of that node and its children.
-	\item $\mathcal{V}$ is a Markov blanket for X iff $X \indep Y |\mathcal{V}$ for all $Y \notin \{X\cup \mathcal{V} \}$.
-	\item ne(X) is  a Markov blanket for $X$.
-	\item since each variable $X$ is conditionally independent of all non-neighbours given its neighbours: $X\indep Y|ne(X), \forall Y \notin \{X\cup ne(X) \}$.
-\end{itemize}
+Markov blanket; \begin{itemize} \item All the variables that shield the node from the rest of the network.  \item $\to$ The only knowledge needed to predict the behavior of that node and its children.  \item $\mathcal{V}$ is a Markov blanket for X iff $X \indep Y |\mathcal{V}$ for all $Y \notin \{X\cup \mathcal{V} \}$.  \item ne(X) is  a Markov blanket for $X$.  \item since each variable $X$ is conditionally independent of all non-neighbours given its neighbours: $X\indep Y|ne(X), \forall Y \notin \{X\cup ne(X) \}$.  \end{itemize}
 
-Markov boundary; \begin{itemize}
-	\item If no proper subset of a Markov blanket M satisfies the definition of Markov blanket of T, then M is called a Markov boundary of T
-	\item i.e. the minimal Markov blanket.
-	\item equal to ne(X) for undirected graphs. 
-	\item DAGs: equal to $\{pa(X)\cup ch(X) \cup pa(ch(X)) \}$.
-\end{itemize}
+Markov boundary; \begin{itemize} \item If no proper subset of a Markov blanket M satisfies the definition of Markov blanket of T, then M is called a Markov boundary of T \item i.e. the minimal Markov blanket.  \item equal to ne(X) for undirected graphs.  \item DAGs: equal to $\{pa(X)\cup ch(X) \cup pa(ch(X)) \}$.  \end{itemize}
 
 Markov boundary in undirected graphs; equal to ne(X).
 
 Markov boundary in DAGs; equal to $\{pa(X)\cup ch(X) \cup pa(ch(X)) \}$.
 
-Undirected graphical model (Markov network); \begin{itemize}
-	\item A direct representation of conditional independence structure.
-	\item Nodes are connected iff they are conditionally dependent given all others.
-	\item Neighbours in a Markov net share a factor.
-	\item Non-neighbours in a Markov net cannot share a factor.
-	\item The joint probability factors over the maximal cliques $C_j$ of the graph: $P(\mathcal{X})=\frac{1}{Z}\prod_j f_j(\mathcal{X}_{C_j})$. It may also factor more finely.
-\end{itemize}
+Undirected graphical model (Markov network); \begin{itemize} \item A direct representation of conditional independence structure.  \item Nodes are connected iff they are conditionally dependent given all others.  \item Neighbours in a Markov net share a factor.  \item Non-neighbours in a Markov net cannot share a factor.  \item The joint probability factors over the maximal cliques $C_j$ of the graph: $P(\mathcal{X})=\frac{1}{Z}\prod_j f_j(\mathcal{X}_{C_j})$. It may also factor more finely.  \end{itemize}
 
 Cliques; fully connected subgraphs.
 
 Maximal cliques; Cliques not contained in other cliques.
 
-Limitations of undirected and factor graphs; \begin{itemize}
-	\item Fail to capture some useful independencies: a pair of variables may be connected merely because some other variable depends on them.
-	\item e.g. Rain - Sprinker - Ground Wet, but Rain -> Ground wet <- Sprinkler.
-	\item Seeing sprinkler when 'ground wet' has \bf{'explaining away'} effect.
-	\item $R \indep S|\emptyset$ but $R \not\indep S | G$.
-\end{itemize}
+Limitations of undirected and factor graphs; \begin{itemize} \item Fail to capture some useful independencies: a pair of variables may be connected merely because some other variable depends on them.  \item e.g. Rain - Sprinker - Ground Wet, but Rain -> Ground wet <- Sprinkler.  \item Seeing sprinkler when 'ground wet' has \bf{'explaining away'} effect.  \item $R \indep S|\emptyset$ but $R \not\indep S | G$.  \end{itemize}
 
-Directed acyclic graphical model (DAG); also called Bayesian networks. \begin{itemize}
-	\item Represents a factorisation of the joint probability distribution in terms of the conditionals.
-	\item $P(X_1,...,X_n)=\prod_{i=1}^n P(X_j|X_\mathtt{pa(i)})$, where pa(i) are the parent nodes of node $i$.
-\end{itemize}
+Directed acyclic graphical model (DAG); also called Bayesian networks. \begin{itemize} \item Represents a factorisation of the joint probability distribution in terms of the conditionals.  \item $P(X_1,...,X_n)=\prod_{i=1}^n P(X_j|X_\mathtt{pa(i)})$, where pa(i) are the parent nodes of node $i$.  \end{itemize}
 
-Conditional independence in DAGs;(TODO: clarify, add image) \begin{itemize}
-	\item Indep: conditioning nodes block paths
-	\item Indep: Other nodes block reflected paths
-	\item Not indep: Conditioning node creates a reflected path by explaining away
-	\item Not indep: Created path extends to E (target node) via D
-	\item Indep: but is blocked by observing D
-\end{itemize}
+Conditional independence in DAGs;(TODO: clarify, add image) \begin{itemize} \item Indep: conditioning nodes block paths \item Indep: Other nodes block reflected paths \item Not indep: Conditioning node creates a reflected path by explaining away \item Not indep: Created path extends to E (target node) via D \item Indep: but is blocked by observing D \end{itemize}
 
 How to find out if $X \not \indep Y | \mathcal{V}$ in a DAG (name method); Bayes-ball algorithm.
 
-Bayes-ball algorithm; Finding $X \not \indep Y | \mathcal{V}$. \newline Can you get a ball from X to Y without being blocked by $\mathcal{V}$? If so, $X \not \indep Y | \mathcal{V}$. Rules:
-\begin{itemize}
-	\item not in $\mathcal{V}$: pass balls down or up chains, bounce balls from children to children.
-	\item in $\mathcal{V}$: bounce balls from parents to parents (including returning the ball to whence it came.) (blocks all balls from children, stops balls from parents reaching children.)
-\end{itemize}
+Bayes-ball algorithm; Finding $X \not \indep Y | \mathcal{V}$. \newline Can you get a ball from X to Y without being blocked by $\mathcal{V}$? If so, $X \not \indep Y | \mathcal{V}$. Rules: \begin{itemize} \item not in $\mathcal{V}$: pass balls down or up chains, bounce balls from children to children.  \item in $\mathcal{V}$: bounce balls from parents to parents (including returning the ball to whence it came.) (blocks all balls from children, stops balls from parents reaching children.) \end{itemize}
 
-D-separation; Finding out when $X \indep Y | \mathcal{V}$. Consider every undirected path (i.e. ignoring arrows) between X and Y. The path is blocked by $\mathcal{V}$ if there is a node V on the path such that either: \begin{itemize}
-	\item V has convergent arrows on the path (i.e. collider node) and neither V nor its descendants are in $\mathcal{V}$.
-	\item V does not have convergente arrows on the path and $V\in\mathcal{V}$.
-\end{itemize}
-If all paths are blocked, we say $\mathcal{V}$ d-separates X from Y (d for directed), and $X \indep Y | \mathcal{V}$.
+D-separation; Finding out when $X \indep Y | \mathcal{V}$. Consider every undirected path (i.e. ignoring arrows) between X and Y. The path is blocked by $\mathcal{V}$ if there is a node V on the path such that either: \begin{itemize} \item V has convergent arrows on the path (i.e. collider node) and neither V nor its descendants are in $\mathcal{V}$.  \item V does not have convergente arrows on the path and $V\in\mathcal{V}$.  \end{itemize} If all paths are blocked, we say $\mathcal{V}$ d-separates X from Y (d for directed), and $X \indep Y | \mathcal{V}$.
 
-Give an example of an undirected graph that a DAG cannot represent.; Square-like undirected graph. \begin{itemize}
-	\item No matter how we direct the arrows there will always be two non-adjacent parents sharing a common child $\Leftarrow$ dependence in DAG but independence in undirected graph.
-\end{itemize}
+Give an example of an undirected graph that a DAG cannot represent.; Square-like undirected graph. \begin{itemize} \item No matter how we direct the arrows there will always be two non-adjacent parents sharing a common child $\Leftarrow$ dependence in DAG but independence in undirected graph.  \end{itemize}
 
-Give an example of a DAG that an undirected or factor graph cannot represent.; $A \rightarrow C \leftarrow B$. \begin{itemize}
-	\item Can try to represent using one three-way factor, but this does not encode marginal independence.	
-\end{itemize}
+Give an example of a DAG that an undirected or factor graph cannot represent.; $A \rightarrow C \leftarrow B$. \begin{itemize} \item Can try to represent using one three-way factor, but this does not encode marginal independence.	\end{itemize}
 
-Discuss how graphs define families of distributions, especially relating to conditional independence.; \begin{itemize}
-    \item Each graph G implies a set of conditional independence statements $\mathcal{C}(G)=\{X_i\CI Y_i|\mathcal{V}_i\}$.
-    \item Each such set of CI statements $\mathcal{C}$ defines a family of dists $\mathcal{P}_{\mathcal{C}(G)}$ that satisfy all the statements in $\mathcal{C}$. 
-    \item G may also encode a family of dists $\mathcal{P}_{G}$ by their functional form.
-\end{itemize}
+Discuss how graphs define families of distributions, especially relating to conditional independence.; \begin{itemize} \item Each graph G implies a set of conditional independence statements $\mathcal{C}(G)=\{X_i\CI Y_i|\mathcal{V}_i\}$.  \item Each such set of CI statements $\mathcal{C}$ defines a family of dists $\mathcal{P}_{\mathcal{C}(G)}$ that satisfy all the statements in $\mathcal{C}$.  \item G may also encode a family of dists $\mathcal{P}_{G}$ by their functional form.  \end{itemize}
 
-Compare $P_G$ and $P_{C(G)}$, the families of distributions encoded by functional form and (separately) that satisfy all the CI statements implied by a graph, in directed graphs, undirected graphs and factor graphs.;
-\begin{itemize}
-    \item For directed graphs, $P_G = P_{C(G)}$.
-    \item For undirected graphs, $P_G = P_{C(G)}$ if all dists are positive, i.e. $P(\mathcal{X})>0$ for all values of $\mathcal{X}$ (Hammersley-Clifford Theorem).
-    \item There are factor graphs for which $P_G \ne P_{C(G)}$.
-\end{itemize}
-(slide 35 Expressive power of directed and undirected graphs)
+Compare $P_G$ and $P_{C(G)}$, the families of distributions encoded by functional form and (separately) that satisfy all the CI statements implied by a graph, in directed graphs, undirected graphs and factor graphs.; \begin{itemize} \item For directed graphs, $P_G = P_{C(G)}$.  \item For undirected graphs, $P_G = P_{C(G)}$ if all dists are positive, i.e. $P(\mathcal{X})>0$ for all values of $\mathcal{X}$ (Hammersley-Clifford Theorem).  \item There are factor graphs for which $P_G \ne P_{C(G)}$.  \end{itemize}
 
-Are factor graphs or undirected graphs more expressive? Explain.; \begin{itemize}
-    \item Factor graphs are more expressive than undirected graphs: for every undirected graph $G_1$ there is a factor graph $G_2$ with $P_{G_1}=P_{G_2}$ but not vice versa.
-\end{itemize}
+% (slide 35 Expressive power of directed and undirected graphs)
 
-What does adding edges to graphs mean?; \begin{itemize}
-    \item Adding edges to a graph means REMOVING conditional independency statements.
-    \item i.e. enlarging the family of dists the graph encodes.
-\end{itemize}
+Are factor graphs or undirected graphs more expressive? Explain.; \begin{itemize} \item Factor graphs are more expressive than undirected graphs: for every undirected graph $G_1$ there is a factor graph $G_2$ with $P_{G_1}=P_{G_2}$ but not vice versa.  \end{itemize} 
+
+What does adding edges to graphs mean?; \begin{itemize} \item Adding edges to a graph means REMOVING conditional independency statements.  \item i.e. enlarging the family of dists the graph encodes.  \end{itemize}
 
 If the edges are the same (between the same pairs of nodes), where do the differences between directed and undirected graphs come from?; Collider nodes, i.e. $A\rightarrow C \leftarrow B$.
 
-If a tree only has one root, can there be marginal independence? How about if there is more than one root?; \begin{itemize}
-    \item one root: no marginal independence.
-    \item More than one root: can have marginal independence (e.g. between two of the roots).
-\end{itemize}
+If a tree only has one root, can there be marginal independence? How about if there is more than one root?; \begin{itemize} \item one root: no marginal independence.  \item More than one root: can have marginal independence (e.g. between two of the roots).  \end{itemize}
 
-How can you see if a graph is tree structured? (heuristic-y answer, not in slides); \begin{itemize}
-    \item No loops
-    \item For every pair of nodes, there exists exactly one (undirected) path between them.
-    \item also called `singly connected' graphs.
-\end{itemize}
+How can you see if a graph is tree structured? (heuristic-y answer, not in slides); \begin{itemize} \item No loops \item For every pair of nodes, there exists exactly one (undirected) path between them.  \item also called `singly connected' graphs.  \end{itemize}
 
-Do directed polytrees correspond to their (corresponding) undirected trees?; \begin{itemize}
-    \item Not necessarily. 
-    \item E.g. if the directed polytree has more than one root, there is marginal independence (e.g. between the two roots), but this likely won't be clear from the undirected tree.
-\end{itemize}
+Do directed polytrees correspond to their (corresponding) undirected trees?; \begin{itemize} \item Not necessarily.  \item E.g. if the directed polytree has more than one root, there is marginal independence (e.g. between the two roots), but this likely won't be clear from the undirected tree.  \end{itemize}
 
-Name and briefly describe four types of tree-structured graphical models.; \begin{itemize}
-    \item Rooted directed tree (one root, directed graph)
-    \item Directed polytree (tree-structured DAGs with more than one root)
-    \item Undirected tree (undirected graph so don't know how many roots there are)
-    \item Tree-structured factor graph (tbh don't know precise definition, guessing it means without loops / exactly one path from node i to node j for all i,j).
-\end{itemize}
+Name and briefly describe four types of tree-structured graphical models.; \begin{itemize} \item Rooted directed tree (one root, directed graph) \item Directed polytree (tree-structured DAGs with more than one root) \item Undirected tree (undirected graph so don't know how many roots there are) \item Tree-structured factor graph (tbh don't know precise definition, guessing it means without loops / exactly one path from node i to node j for all i,j).  \end{itemize}
 
-Write the form of a joint for a directed polytree; \begin{itemize}
-    \item $P(\mathcal{X})=\prod_i P(X_i|X_{pa(i)} = \prod_i f_i(X_{C_i})$
-    \item where $C_i \ i\cup pa(i)$, $f_i(X_{C_i})=P(X_i|X_{pa(i)}$.
-    \item The marginal distribution on the roots is absorbed into an adjacent factor because you don't have a factor of the root node itself.
-\end{itemize}
+Write the form of a joint for a directed polytree; \begin{itemize} \item $P(\mathcal{X})=\prod_i P(X_i|X_{pa(i)} = \prod_i f_i(X_{C_i})$ \item where $C_i \ i\cup pa(i)$, $f_i(X_{C_i})=P(X_i|X_{pa(i)}$.  \item The marginal distribution on the roots is absorbed into an adjacent factor because you don't have a factor of the root node itself.  \end{itemize}
 
-How do you go from polytrees to tree-structured factor graphs?; Write the joint in terms of factors. \begin{itemize}
-    \item $P(\mathcal{X})=\prod_i P(X_i|X_{pa(i)} = \prod_i f_i(X_{C_i})$
-    \item where $C_i \ i\cup pa(i)$, $f_i(X_{C_i})=P(X_i|X_{pa(i)}$.
-    \item The marginal distribution on the roots is absorbed into an adjacent factor because you don't have a factor of the root node itself.
-\end{itemize}
+How do you go from polytrees to tree-structured factor graphs?; Write the joint in terms of factors. \begin{itemize} \item $P(\mathcal{X})=\prod_i P(X_i|X_{pa(i)} = \prod_i f_i(X_{C_i})$ \item where $C_i \ i\cup pa(i)$, $f_i(X_{C_i})=P(X_i|X_{pa(i)}$.  \item The marginal distribution on the roots is absorbed into an adjacent factor because you don't have a factor of the root node itself.  \end{itemize}
 
-Write the form of a joint for a single-rooted directed tree.; \begin{itemize}
-    \item Can be written as a product of pairwise factors (like an undirected tree)
-    \item $P(\mathcal{X})=P(X_r)\prod_{i\ne r} P(X_i|X_{pa(i)} = \prod_{edges(ij)} f_{ij}(X_{i}, X_j)$
-\end{itemize}
+Write the form of a joint for a single-rooted directed tree.; \begin{itemize} \item Can be written as a product of pairwise factors (like an undirected tree) \item $P(\mathcal{X})=P(X_r)\prod_{i\ne r} P(X_i|X_{pa(i)} = \prod_{edges(ij)} f_{ij}(X_{i}, X_j)$ \end{itemize}
 
-How do you go from single-rooted directed trees to undirected trees?; \begin{itemize}
-    \item If you write out the joint, you get pairwise factors, which is like an undirected tree.
-    \item basically make directed edges undirected.
-\end{itemize}
+How do you go from single-rooted directed trees to undirected trees?; \begin{itemize} \item If you write out the joint, you get pairwise factors, which is like an undirected tree.  \item basically make directed edges undirected.  \end{itemize}
 
-How do you go from undirected trees to (singly) rooted directed trees?; \begin{itemize}
-    \item Choose an arbitrary node $X_r$ to be the root and point all the arrows away from it
-    \item Compute the marginal distributions on single nodes $P(X_i)$ and on edges $P(X_i, X_j)$ implied by the undirected graph. (By belief propagation).
-    \item Compute conditionals in the DAG: $P(X_i|X_{pa(i)}) = \frac{P(X_i, X_{pa(i)}}{P(X_{pa(i)}}$.
-    \item (Related: joint is then $P(\mathcal{X})=P(X_r)\prod_{i\ne r}P(X_i|X_{pa(i)})=\frac{\prod_{edges(ij)}P(X_i, X_j)}{\prod_{nodes i}P(X_i)^{deg(i)-1}}$
-    \item $deg(i) - 1$ = num times a parent. For root, have $-1$ because cancels with the $P(X_r)$ in the numerator.
-\end{itemize}
+How do you go from undirected trees to (singly) rooted directed trees?; \begin{itemize} \item Choose an arbitrary node $X_r$ to be the root and point all the arrows away from it \item Compute the marginal distributions on single nodes $P(X_i)$ and on edges $P(X_i, X_j)$ implied by the undirected graph. (By belief propagation).  \item Compute conditionals in the DAG: $P(X_i|X_{pa(i)}) = \frac{P(X_i, X_{pa(i)}}{P(X_{pa(i)}}$.  \item (Related: joint is then $P(\mathcal{X})=P(X_r)\prod_{i\ne r}P(X_i|X_{pa(i)})=\frac{\prod_{edges(ij)}P(X_i, X_j)}{\prod_{nodes i}P(X_i)^{deg(i)-1}}$ \item $deg(i) - 1$ = num times a parent. For root, have $-1$ because cancels with the $P(X_r)$ in the numerator.  \end{itemize}
 
-Derive the form of messages in undirected trees. (No need to show recursion); \begin{itemize}
-    \item Undirected tree $Rightarrow$ pairwise factored joint distribution $P(\mathcal{X})= \frac{1}{Z}\prod_{ij \in edges(T)}f_{ij}(X_i, X_j)$
-    \item Each neighbour $X_j$ of $X_i$ defines a disjoint subtree $T_{j\rightarrow i}$. So we can split up the product:
-    \item $P(X_i) = \sum_{\mathcal{X}\backslash\{X_i\}} P(\mathcal{X}) \propto \sum_{\mathcal{X}\backslash\{X_i\}}\prod_{(ij)\in \mathcal{E}_T} f_{(ij)}(X_i, X_j)$
-    \begin{itemize}
-        \item $\mathcal{E}_T$ = edges in tree.
-    \end{itemize}
-    \item $= \sum_{\mathcal{X}\backslash\{X_i\}}\prod_{X_j\in ne(X_i)}f_{(ij)}(X_i, X_j)\prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j')$
-    \item $= \prod_{X_j\in ne(X_i)}(\sum_{\mathcal{X}_{T_{j\rightarrow i}}}f_{(ij)}(X_i, X_j)\prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j'))$
-    \item $= \prod_{X_j\in ne(X_i)}M_{j\rightarrow i}(X_i)$
-\end{itemize}
+Derive the form of messages in undirected trees. (No need to show recursion); \begin{itemize} \item Undirected tree $Rightarrow$ pairwise factored joint distribution $P(\mathcal{X})= \frac{1}{Z}\prod_{ij \in edges(T)}f_{ij}(X_i, X_j)$ \item Each neighbour $X_j$ of $X_i$ defines a disjoint subtree $T_{j\rightarrow i}$. So we can split up the product: \item $P(X_i) = \sum_{\mathcal{X}\backslash\{X_i\}} P(\mathcal{X}) \propto \sum_{\mathcal{X}\backslash\{X_i\}}\prod_{(ij)\in \mathcal{E}_T} f_{(ij)}(X_i, X_j)$ \begin{itemize} \item $\mathcal{E}_T$ = edges in tree.  \end{itemize} \item $= \sum_{\mathcal{X}\backslash\{X_i\}}\prod_{X_j\in ne(X_i)}f_{(ij)}(X_i, X_j)\prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j')$ \item $= \prod_{X_j\in ne(X_i)}(\sum_{\mathcal{X}_{T_{j\rightarrow i}}}f_{(ij)}(X_i, X_j)\prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j'))$ \item $= \prod_{X_j\in ne(X_i)}M_{j\rightarrow i}(X_i)$ \end{itemize}
 
-Write down the definition of a messsage in an undirected tree.; \begin{itemize}
-    \item  $M_{j\rightarrow i}(X_i) =\sum_{\mathcal{X}_{T_{j\rightarrow i}}}f_{(ij)}(X_i, X_j)\prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j')$
-\end{itemize}
+Write down the definition of a messsage in an undirected tree.; \begin{itemize} \item  $M_{j\rightarrow i}(X_i) =\sum_{\mathcal{X}_{T_{j\rightarrow i}}}f_{(ij)}(X_i, X_j)\prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j')$ \end{itemize} 
 
-Show why the definition of messages in undirected trees makes sense (recursion);  \begin{itemize}
-    \item Defn: $M_{j\rightarrow i}(X_i) =\sum_{\mathcal{X}_{T_{j\rightarrow i}}}f_{(ij)}(X_i, X_j)\prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j')$
-    \item $=\sum_{X_j}f_{(ij)}(X_i, X_j)\sum_{\mathcal{X}_{T_{j\rightarrow i}}\backslash X_j}\prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j')$
-    \item Thing from second sum onwards (including the sum) is $\propto P_{T\rightarrow i}(X_j)\propto \prod_{X_k\in ne(X_j)\backslash X_i} M_{k\rightarrow j}(X_j)$
-    \item so $M_{j\rightarrow i}(X_i) \propto \sum_{X_j}f_{(ij)}(X_i, X_j)\prod_{X_k\in ne(X_j)\backslash X_i} M_{k\rightarrow j}(X_j)$
-    \begin{itemize}
-        \item Slides says $=$ instead of $\propto$, think it's because messages can be unnormalised. but I don't really get why you can say they're equal because the (relative) normalising constants may be different across messages. (maybe write this out more clearly TODO).
-    \end{itemize}
-\end{itemize}
+Show why the definition of messages in undirected trees makes sense (recursion);  \begin{itemize} \item Defn: $M_{j\rightarrow i}(X_i) =\sum_{\mathcal{X}_{T_{j\rightarrow i}}}f_{(ij)}(X_i, X_j)\prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j')$ \item $=\sum_{X_j}f_{(ij)}(X_i, X_j)\sum_{\mathcal{X}_{T_{j\rightarrow i}}\backslash X_j}\prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j')$ \item Thing from second sum onwards (including the sum) is $\propto P_{T\rightarrow i}(X_j)\propto \prod_{X_k\in ne(X_j)\backslash X_i} M_{k\rightarrow j}(X_j)$ \item so $M_{j\rightarrow i}(X_i) \propto \sum_{X_j}f_{(ij)}(X_i, X_j)\prod_{X_k\in ne(X_j)\backslash X_i} M_{k\rightarrow j}(X_j)$ \begin{itemize} \item Slides says $=$ instead of $\propto$, think it's because messages can be unnormalised. but I don't really get why you can say they're equal because the (relative) normalising constants may be different across messages. (maybe write this out more clearly TODO).  \end{itemize} \end{itemize}
 
-Derive how to calculate pairwise marginals in an undirected tree; \begin{itemize}
-    \item $P(X_i, X_j) = $ 
-    \item $P(X_i, X_j) = \sum_{\mathcal{X}\backslash\{X_i, X_j\}} P(\mathcal{X}) \propto \sum_{\mathcal{X}\backslash\{X_i, X_j\}}\prod_{(ij)\in \mathcal{E}_T} f_{(ij)}(X_i, X_j)$
-    \begin{itemize}
-        \item $\mathcal{E}_T$ = edges in tree.
-    \end{itemize}
-    % \item $=f_{(ij)}(X_i, X_j)\prod_{X_k\in ne(X_j)\backslash X_i}M_{k\rightarrow j}(X_j)\prod_{X_k\in ne(X_i)\backslash X_j}M_{k\rightarrow i}(X_i)$
-    \item $= f_{(ij)}(X_i, X_j)
-    (\sum_{\mathcal{X}_{T_j\rightarrow i}\backslash X_j} \prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j'))
-    (\sum_{\mathcal{X}_{T_i\rightarrow j}\backslash X_i} \prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j'))$
-    \item $= f_{(ij)}(X_i, X_j) 
-    \prod_{X_k\in ne(X_j)\backslash X_i}M_{k\rightarrow j}(X_j)
-    \prod_{X_k\in ne(X_i)\backslash X_j}M_{k\rightarrow i}(X_i)$
-\end{itemize}
+Derive how to calculate pairwise marginals in an undirected tree; \begin{itemize} \item $P(X_i, X_j) = $ \item $P(X_i, X_j) = \sum_{\mathcal{X}\backslash\{X_i, X_j\}} P(\mathcal{X}) \propto \sum_{\mathcal{X}\backslash\{X_i, X_j\}}\prod_{(ij)\in \mathcal{E}_T} f_{(ij)}(X_i, X_j)$ \begin{itemize} \item $\mathcal{E}_T$ = edges in tree.  \end{itemize} \item ($=f_{(ij)}(X_i, X_j)\prod_{X_k\in ne(X_j)\backslash X_i}M_{k\rightarrow j}(X_j)\prod_{X_k\in ne(X_i)\backslash X_j}M_{k\rightarrow i}(X_i)$) \item $= f_{(ij)}(X_i, X_j) (\sum_{\mathcal{X}_{T_j\rightarrow i}\backslash X_j} \prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j')) (\sum_{\mathcal{X}_{T_i\rightarrow j}\backslash X_i} \prod_{(i'j')\in \mathcal{E}_T_{j\rightarrow i}} f_{(i'j')}(X_i', X_j'))$ \item $= f_{(ij)}(X_i, X_j) \prod_{X_k\in ne(X_j)\backslash X_i}M_{k\rightarrow j}(X_j) \prod_{X_k\in ne(X_i)\backslash X_j}M_{k\rightarrow i}(X_i)$ \end{itemize}
 
-What is the message $M_{a\rightarrow i }$ when computing $P(X_i|X_a = a)$ as opposed to computing $P(X_i)$?; \begin{itemize}
-    \item $P(X_i|X_a=a): M_{a\rightarrow i} = f_{ai}(X_a = a, X_i)$
-    \item $P(X_i): M_{a\rightarrow i} = \sum_{X_a}f_{ai}(X_a, X_i)$
-\end{itemize}
+What is the message $M_{a\rightarrow i }$ when computing $P(X_i|X_a = a)$ as opposed to computing $P(X_i)$?; \begin{itemize} \item $P(X_i|X_a=a): M_{a\rightarrow i} = f_{ai}(X_a = a, X_i)$ \item $P(X_i): M_{a\rightarrow i} = \sum_{X_a}f_{ai}(X_a, X_i)$ \end{itemize}
 
-Write down how to calculate pairwise marginals in an undirected tree; \begin{itemize}
-    \item $P(X_i, X_j) = f_{(ij)}(X_i, X_j)\prod_{X_k\in ne(X_j)\backslash X_i}M_{k\rightarrow j}(X_j)\prod_{X_k\in ne(X_i)\backslash X_j}M_{k\rightarrow i}(X_i)$
-\end{itemize}
+Write down how to calculate pairwise marginals in an undirected tree; \begin{itemize} \item $P(X_i, X_j) = f_{(ij)}(X_i, X_j)\prod_{X_k\in ne(X_j)\backslash X_i}M_{k\rightarrow j}(X_j)\prod_{X_k\in ne(X_i)\backslash X_j}M_{k\rightarrow i}(X_i)$ \end{itemize} 
 
-Write down how to calculate a singleton (?) marginal in an undirected tree; \begin{itemize}
-    \item $P(X_i) = \prod_{X_j\in ne(X_i)}M_{j\rightarrow i}(X_i)$
-\end{itemize}
+Write down how to calculate a singleton (?) marginal in an undirected tree; \begin{itemize} \item $P(X_i) = \prod_{X_j\in ne(X_i)}M_{j\rightarrow i}(X_i)$ \end{itemize}
 
-How do you propagate messages across observed internal nodes?; \begin{itemize}
-    \item Observed internal nodes partition the graph, and so messages propaget independently across parts of the graph (stop at observed internal nodes).
-\end{itemize}
+How do you propagate messages across observed internal nodes?; \begin{itemize} \item Observed internal nodes partition the graph, and so messages propaget independently across parts of the graph (stop at observed internal nodes).  \end{itemize}
 
-What can we say about the message $M_{i\rightarrow j}$ if some variables $\mathcal{O}$ are observed?; \begin{itemize}
-    \item Proportional to likelihood of observed variables within message subtree, possible scaled by a prior factor (depending on factorisation)
-    \item i.e. $M_{i\rightarrow j}(X_j) \propto P(\mathcal{X}_{T_{i\rightarrow j}}\cap \mathcal{O}|X_j)P(X_i)$
-\end{itemize}
+What can we say about the message $M_{i\rightarrow j}$ if some variables $\mathcal{O}$ are observed?; \begin{itemize} \item Proportional to likelihood of observed variables within message subtree, possible scaled by a prior factor (depending on factorisation) \item i.e. $M_{i\rightarrow j}(X_j) \propto P(\mathcal{X}_{T_{i\rightarrow j}}\cap \mathcal{O}|X_j)P(X_i)$ \end{itemize}
 
-Describe how one might do BP on a latent chain model; \begin{itemize}
-    \item A latent chain model is a rooted directed tree (which you can then treat as an undirected tree when doing BP).
-    \item Forward-backward algorithm is BP on this graph.
-\end{itemize}
+Describe how one might do BP on a latent chain model; \begin{itemize} \item A latent chain model is a rooted directed tree (which you can then treat as an undirected tree when doing BP).  \item Forward-backward algorithm is BP on this graph.  \end{itemize}
 
-Write down how the forward-backward algorithm corresponds to BP on a latent chain model.; \begin{itemize}
-    \item $\alpha_t(i)\Leftrightarrow M_{s_{t-1}\rightarrow s_t}(s_t = i)\propto P(\mathbf{x}_{1:t},s_t)$ (prior on $s_t$ included)
-    \item $\beta_t(i)\Leftrightarrow M_{s_{t+1}\rightarrow s_t}(s_t = i)\propto P(\mathbf{x}_{t+1:T}|s_t)$ (just likelihood)
-    \item $\alpha_t(i)\beta_t(i) =  \prod_{j\in ne(s_t)} M_{j\rightarrow s_t}(s_t = i)\propto P(s_t=i|\mathcal{O})$ (posterior, marginal)
-\end{itemize}
+Write down how the forward-backward algorithm corresponds to BP on a latent chain model.; \begin{itemize} \item $\alpha_t(i)\Leftrightarrow M_{s_{t-1}\rightarrow s_t}(s_t = i)\propto P(\mathbf{x}_{1:t},s_t)$ (prior on $s_t$ included) \item $\beta_t(i)\Leftrightarrow M_{s_{t+1}\rightarrow s_t}(s_t = i)\propto P(\mathbf{x}_{t+1:T}|s_t)$ (just likelihood) \item $\alpha_t(i)\beta_t(i) =  \prod_{j\in ne(s_t)} M_{j\rightarrow s_t}(s_t = i)\propto P(s_t=i|\mathcal{O})$ (posterior, marginal) \end{itemize}
 
-Is doing BP in non-trees problematic? Why or why not?; \begin{itemize}
-    \item Yes it's problematic.
-    \item Neighbours of a node don't necessarily belong to disjoint subtrees, so the influence of other nodes can't always be separated into messages.
-\end{itemize}
+Is doing BP in non-trees problematic? Why or why not?; \begin{itemize} \item Yes it's problematic.  \item Neighbours of a node don't necessarily belong to disjoint subtrees, so the influence of other nodes can't always be separated into messages.  \end{itemize}
 
-Describe two strategies for BP in non-trees; \begin{itemize}
-    \item Loopy BP: propagate messages anyway and hope for the best (a powerful approximation)
-    \item Junction tree: group variables together into multivariate nodes until the resulting graph is a tree.
-\end{itemize}
+Describe two strategies for BP in non-trees; \begin{itemize} \item Loopy BP: propagate messages anyway and hope for the best (a powerful approximation) \item Junction tree: group variables together into multivariate nodes until the resulting graph is a tree.  \end{itemize}
 
 How do you remove conditional independencies in a graph?; Add edges.
 
-What is one key thing to consider when transforming a loopy graph to a tree-like graph so we can do BP on it?; \begin{itemize}
-    \item New graph $G'$ needs to be able to represent $P(\mathcal{X})$
-    \item Can ensure this if we only remove conditional independencies (i.e. add edges)
-    \item (Factor potentials on new graph $G'$ built from those given on original graph $G$ so as to encode the same distribution. Then inference on $G'$ with the appropriate potentials acts on $P(\mathcal{X})$.)
-\end{itemize}
+What is one key thing to consider when transforming a loopy graph to a tree-like graph so we can do BP on it?; \begin{itemize} \item New graph $G'$ needs to be able to represent $P(\mathcal{X})$ \item Can ensure this if we only remove conditional independencies (i.e. add edges) \item (Factor potentials on new graph $G'$ built from those given on original graph $G$ so as to encode the same distribution. Then inference on $G'$ with the appropriate potentials acts on $P(\mathcal{X})$.) \end{itemize}
 
 In what way may the factorisation of a graph be conservative? (not super important); we have factors for all maximal cliques when these factors could perhaps be finer.
 
-List the steps of the Junction Tree Algorithm; \begin{itemize}
-    \item DAG to
-    \item (factor graph)
-    \item Undirected graph (may DAG $\rightarrow$ this, `moralising')
-    \item Chordal or triangulated undirected graph
-    \item Junction tree (cliques of chordal graph)
-    \item Message passing on junction tree
-\end{itemize}
+List the steps of the Junction Tree Algorithm; \begin{itemize} \item DAG to \item (factor graph) \item Undirected graph (may DAG $\rightarrow$ this, `moralising') \item Chordal or triangulated undirected graph \item Junction tree (cliques of chordal graph) \item Message passing on junction tree \end{itemize}
 
-How do you go from DAGs to factor graphs?; Factors are simply the conditional distributions in the DAG. \begin{itemize}
-    \item $P(\mathcal{X})=\prod_i P(X_i|X_{pa(i)})= \prod_i f_i(X_{C_i})$
-    \item where $C_i \ i\cup pa(i)$, $f_i(X_{C_i})=P(X_i|X_{pa(i)})$.
-    \item The marginal distribution on the roots is absorbed into an adjacent factor because you don't have a factor of the root node itself.
-\end{itemize}
+How do you go from DAGs to factor graphs?; Factors are simply the conditional distributions in the DAG. \begin{itemize} \item $P(\mathcal{X})=\prod_i P(X_i|X_{pa(i)})= \prod_i f_i(X_{C_i})$ \item where $C_i \ i\cup pa(i)$, $f_i(X_{C_i})=P(X_i|X_{pa(i)})$.  \item The marginal distribution on the roots is absorbed into an adjacent factor because you don't have a factor of the root node itself.  \end{itemize}
 
-How do you incorporate observations into factor graphs? (formally); \begin{itemize}
-    \item Add singleton factors adjacent to observed nodes (drawn as a stick with a square on the end extending from the node) or
-    \item Modify factors linked to observed nodes
-\end{itemize}
+How do you incorporate observations into factor graphs? (formally); \begin{itemize} \item Add singleton factors adjacent to observed nodes (drawn as a stick with a square on the end extending from the node) or \item Modify factors linked to observed nodes \end{itemize}
 
-How do you convert a factor graph to an undirected graph?; \begin{itemize}
-    \item Replace each factor by an undirected clique (i.e. place undir edge between each pair of nodes in each factor)
-    \item Construct the potentials on each maximal clique by multiplying together factor potentials that fall within it (that haven't been included in cliques already), ensuring each factor potential only appears once.
-\end{itemize}
+How do you convert a factor graph to an undirected graph?; \begin{itemize} \item Replace each factor by an undirected clique (i.e. place undir edge between each pair of nodes in each factor) \item Construct the potentials on each maximal clique by multiplying together factor potentials that fall within it (that haven't been included in cliques already), ensuring each factor potential only appears once.  \end{itemize}
 
-How do you convert DAGs into undirected graphs?; \begin{itemize}
-    \item `Moralisation'
-    \item `Marry' all unmarried parents of each node by adding an undirected edge between each pair of parents
-\end{itemize}
+How do you convert DAGs into undirected graphs?; \begin{itemize} \item `Moralisation' \item `Marry' all unmarried parents of each node by adding an undirected edge between each pair of parents \end{itemize}
 
-Are we losing much information when we go from a factor graph to an undirected graph?; \begin{itemize}
-    \item Not really.
-\end{itemize}
+Are we losing much information when we go from a factor graph to an undirected graph?; \begin{itemize} \item Not really.  \end{itemize}
 
-What is the motivation behind triangulating a graph?; \begin{itemize}
-    \item To get rid of loops in the graph.
-\end{itemize}
+What is the motivation behind triangulating a graph?; \begin{itemize} \item To get rid of loops in the graph.  \end{itemize}
 
-How can we triangulate a graph?; \begin{itemize}
-    \item Add edges to the graph so every loop of size $\geq 4$ has at least one chord.
-    \item becomes a chordal / triangulated graph.
-    \item Many ways to add chords: in general finding the best triangulation is NP-complete. 
-    \item One approach (of finding triangulation) is variable elimination (using some heuristic).
-    \begin{itemize}
-        \item Minimimum deficiency search: choose var that induces fewest new edges (empirically seems better).
-        \item Max cardinality search: choose var with most previously visited neighbours.
-    \end{itemize}
-\end{itemize}
+How can we triangulate a graph?; \begin{itemize} \item Add edges to the graph so every loop of size $\geq 4$ has at least one chord.  \item becomes a chordal / triangulated graph.  \item Many ways to add chords: in general finding the best triangulation is NP-complete.  \item One approach (of finding triangulation) is variable elimination (using some heuristic).  \begin{itemize} \item Minimimum deficiency search: choose var that induces fewest new edges (empirically seems better).  \item Max cardinality search: choose var with most previously visited neighbours.  \end{itemize} \end{itemize}
 
 When is belief propagation valid?; As long as the graph is a tree.
 
-What would constitute a good triangulation of a graph?; \begin{itemize}
-    \item One where clique sizes are small.
-    \item (Because? TODO type.)
-\end{itemize}
+What would constitute a good triangulation of a graph?; \begin{itemize} \item One where clique sizes are small.  \item (Because? TODO type.) \end{itemize}
 
-Describe a method of triangulating a graph.; \begin{itemize}
-    \item Variable elimination.
-    \item Theorem: A garph including all edges that would be induced by elimination is chordal.
-    \item Elimination: marginalising the distribution one variable at a time.
-    \item Finding a good triangulation depends on finding a good order of elimination, which is also NP-complete.
-    \item Can use heuristics (both greedy): \begin{itemize}
-        \item Minimimum deficiency search: choose var that induces fewest new edges (empirically seems better).
-        \item Max cardinality search: choose var with most previously visited neighbours.
-    \end{itemize}
-\end{itemize}
+Describe a method of triangulating a graph.; \begin{itemize} \item Variable elimination.  \item Theorem: A garph including all edges that would be induced by elimination is chordal.  \item Elimination: marginalising the distribution one variable at a time.  \item Finding a good triangulation depends on finding a good order of elimination, which is also NP-complete.  \item Can use heuristics (both greedy): \begin{itemize} \item Minimimum deficiency search: choose var that induces fewest new edges (empirically seems better).  \item Max cardinality search: choose var with most previously visited neighbours.  \end{itemize} \end{itemize}
 
-Describe two heuristics for variables to eliminate (when triangulating a graph); \begin{itemize}
-        \item Minimimum deficiency search: choose var that induces fewest new edges (empirically seems better).
-        \item Max cardinality search: choose var with most previously visited neighbours.
-    \end{itemize}
+Describe two heuristics for variables to eliminate (when triangulating a graph); \begin{itemize} \item Minimimum deficiency search: choose var that induces fewest new edges (empirically seems better).  \item Max cardinality search: choose var with most previously visited neighbours.  \end{itemize}
     
-What is the intuition behind maximum cardinality search for picking variables to eliminate (re triangulating graphs)?; \begin{itemize}
-        \item Max cardinality search: choose var with most previously visited neighbours.
-    \item So already have edges between neighoubrs, less likely have to add more edges. (TODO: clarify?) 
-\end{itemize}
+What is the intuition behind maximum cardinality search for picking variables to eliminate (re triangulating graphs)?; \begin{itemize} \item Max cardinality search: choose var with most previously visited neighbours.  \item So already have edges between neighoubrs, less likely have to add more edges. (TODO: clarify?) \end{itemize}
 
-Name one case where triangulation may not be obvious by inspection.; \begin{itemize}
-    \item Pentagon with a node in the middle split into five triangles.
-    \item Not triangulated because chords must be direct connections - they cannot step through an intermediate node.
-    \item Missing two chords across the pentagon.
-    \item Detecting unchorded loops by inspection becomes difficult in large graphs.
-\end{itemize}
+Name one case where triangulation may not be obvious by inspection.; \begin{itemize} \item Pentagon with a node in the middle split into five triangles.  \item Not triangulated because chords must be direct connections - they cannot step through an intermediate node.  \item Missing two chords across the pentagon.  \item Detecting unchorded loops by inspection becomes difficult in large graphs.  \end{itemize}
 
-What is a chordal / triangulated graph?; \begin{itemize}
-    \item An undirected graph where every loop of size $\geq 4$ has at least one chord.
-\end{itemize}
+What is a chordal / triangulated graph?; \begin{itemize} \item An undirected graph where every loop of size $\geq 4$ has at least one chord.  \end{itemize}
 
-What is a junction tree and what do its components represent? Name a key property of junction trees.;\begin{itemize}
-    \item  A tree whose nodes and edges are labelled with sets of variables.;
-    \item Each node represents a (maximal) clique.
-    \item Edges are labelled by the intersections of cliques, called separators.
-    \item (Property: Cliques contain all adjacent separators.)
-    \item Running intersection property: If two cliques contain variable X, all cliques and separators on the path between the two cliques contain X. This property is required to do BP consistently.
-\end{itemize}
+What is a junction tree and what do its components represent? Name a key property of junction trees.;\begin{itemize} \item  A tree whose nodes and edges are labelled with sets of variables. \item Each node represents a (maximal) clique.  \item Edges are labelled by the intersections of cliques, called separators.  \item (Property: Cliques contain all adjacent separators.) \item Running intersection property: If two cliques contain variable X, all cliques and separators on the path between the two cliques contain X. This property is required to do BP consistently.  \end{itemize}
 
-What is the running intersection property and why does it matter?; \begin{itemize}
-    \item A property of junction trees
-    \item If two cliques contain variable X, all cliques and separators on the path between the two cliques contain X.
-    \item This property is required to do BP consistently.
-\end{itemize}
+What is the running intersection property and why does it matter?; \begin{itemize} \item A property of junction trees \item If two cliques contain variable X, all cliques and separators on the path between the two cliques contain X.  \item This property is required to do BP consistently.  \end{itemize}
 
-How do you convert a chordal graph into a junction tree?; \begin{itemize}
-    \item Find the maximal cliques $C_1,...,C_k$ of the chordal undirected graph.
-    \item Construct a weighted graph, with nodes labelled by the maximal cliques and edges connecting each pair of cliques that shares vars (labelled by the vars in the intersection).
-    \item Define the weight of an edge to be the size (number of variables in) the separator (edge).
-    \item Find the max-weight spanning tree of the weighted graph. This is a junction tree. (i.e. delete extra edges with few vars.) (NOTE: doing this greedily may not satisfy the running intersection property.)
-\end{itemize}
+How do you convert a chordal graph into a junction tree?; \begin{itemize} \item Find the maximal cliques $C_1,...,C_k$ of the chordal undirected graph.  \item Construct a weighted graph, with nodes labelled by the maximal cliques and edges connecting each pair of cliques that shares vars (labelled by the vars in the intersection).  \item Define the weight of an edge to be the size (number of variables in) the separator (edge).  \item Find the max-weight spanning tree of the weighted graph. This is a junction tree. (i.e. delete extra edges with few vars.) (NOTE: doing this greedily may not satisfy the running intersection property.) \end{itemize}
 
-What should you do after you've constructed a junction tree to check it's correct?; \begin{itemize}
-    \item Verify it satisfies the running intersection property.
-    \item If two cliques contain variable X, all cliques and separators on the path between the two cliques contain X.
-    \item This property is required to do BP consistently.
-\end{itemize}
+What should you do after you've constructed a junction tree to check it's correct?; \begin{itemize} \item Verify it satisfies the running intersection property.  \item If two cliques contain variable X, all cliques and separators on the path between the two cliques contain X.  \item This property is required to do BP consistently.  \end{itemize}
 
 What is a maximal clique?; A clique that is not a subset of another clique.
 
-Derive Shafer-Shenoy propagation.; \begin{itemize}
-    \item Introduce copy variables on each side of the separator so factors on nodes no longer overlap.
-    \item Make factors on separators delta functions to enforce consistency amongst copies.
-    \item Messages become $M_{i\rightarrow j}(X^{(2)}_{S_{ij}})=\sum_{X^{(-)}_{C_i},\{X_{S_{ki}}^{(2)}\},X^{(1)}_{S_{ij}}}f_i(X^{(-)}_{C_i},\{X_{S_{ki}}^{(2)}\},X^{(1)}_{S_{ij}})$\newline$f_{ij}(X^{(1)}_{S_{ij}},X^{(2)}_{S_{ij}})
-    \prod_{k\in ne(i)\backslash j}M_{k\rightarrow i}(X^{(2)}_{S_{ki}})$
-    \item $\Rightarrow M_{i\rightarrow j}(X^{(2)}_{S_{ij}})=\sum_{X_{C_i}\backslash s_{ij}}f_i(X_{C_i})\prod_{k\in ne(i)\backslash j}M_{k\rightarrow i}(X_{S_{ki}})$, where \begin{itemize}
-    \item $s_ij$ are variables that nodes (cliques) $i, j$ have in common and
-    \end{itemize}
-\end{itemize}
+Derive Shafer-Shenoy propagation.; \begin{itemize} \item Introduce copy variables on each side of the separator so factors on nodes no longer overlap.  \item Make factors on separators delta functions to enforce consistency amongst copies.  \item Messages become $M_{i\rightarrow j}(X^{(2)}_{S_{ij}})=\sum_{X^{(-)}_{C_i},\{X_{S_{ki}}^{(2)}\},X^{(1)}_{S_{ij}}}f_i(X^{(-)}_{C_i},\{X_{S_{ki}}^{(2)}\},X^{(1)}_{S_{ij}})$\newline$f_{ij}(X^{(1)}_{S_{ij}},X^{(2)}_{S_{ij}}) \prod_{k\in ne(i)\backslash j}M_{k\rightarrow i}(X^{(2)}_{S_{ki}})$ \item $\Rightarrow M_{i\rightarrow j}(X^{(2)}_{S_{ij}})=\sum_{X_{C_i}\backslash s_{ij}}f_i(X_{C_i})\prod_{k\in ne(i)\backslash j}M_{k\rightarrow i}(X_{S_{ki}})$, where \begin{itemize} \item $s_ij$ are variables that nodes (cliques) $i, j$ have in common and \end{itemize} \end{itemize}
 
-Write down the expression for messages in Shafer-Shenoy propagation.; $M_{i\rightarrow j}(X_{S_{ij}})=\sum_{X_{C_i}\backslash s_{ij}}f_i(X_{C_i})\prod_{k\in ne(i)\backslash j}M_{k\rightarrow i}(X_{S_{ki}})$, where \begin{itemize}
-    \item $s_ij$ are variables that nodes (cliques) $i, j$ have in common and
-    $X_{S_{ki}}$ are variables nodes (cliques) $k, i$ have in common.
-\end{itemize}
+Write down the expression for messages in Shafer-Shenoy propagation.; $M_{i\rightarrow j}(X_{S_{ij}})=\sum_{X_{C_i}\backslash s_{ij}}f_i(X_{C_i})\prod_{k\in ne(i)\backslash j}M_{k\rightarrow i}(X_{S_{ki}})$, where \begin{itemize} \item $s_ij$ are variables that nodes (cliques) $i, j$ have in common and $X_{S_{ki}}$ are variables nodes (cliques) $k, i$ have in common.  \end{itemize}
 
-Write down the expressions for marginal distributions for cliques and separators when using Shafer-Shenoy propagation.; \begin{itemize}
-    \item Clique marginal: $P(X_{C_i})=f_i(X_{C_i})\prod_{k\in ne(i)}M_{k\rightarrow i}(X_{S_{ki}})$
-    \item Separator marginal: $P(X_{S_{ij}})=M_{i\rightarrow j}(X_{S_{ij}})M_{j\rightarrow i}(X_{S_{ji}})$
-    \item where $X_{C_i}$ are variables in the clique, $X_{S_{ki}}$ are variables in the clique that are also in neighbour $C_k$ (i.e. in separator $S_{ki}$) (message coming inward towards $C_i$.) Whereas $S_{ij}$ are variables in common with $C_j$, the node we're sending a message to.
-\end{itemize}
+Write down the expressions for marginal distributions for cliques and separators when using Shafer-Shenoy propagation.; \begin{itemize} \item Clique marginal: $P(X_{C_i})=f_i(X_{C_i})\prod_{k\in ne(i)}M_{k\rightarrow i}(X_{S_{ki}})$ \item Separator marginal: $P(X_{S_{ij}})=M_{i\rightarrow j}(X_{S_{ij}})M_{j\rightarrow i}(X_{S_{ji}})$ \item where $X_{C_i}$ are variables in the clique, $X_{S_{ki}}$ are variables in the clique that are also in neighbour $C_k$ (i.e. in separator $S_{ki}$) (message coming inward towards $C_i$.) Whereas $S_{ij}$ are variables in common with $C_j$, the node we're sending a message to.  \end{itemize} 
 
-What can we say about consistency in Shafer-Shenoy propagation?; \begin{itemize}
-    \item BP enforces local consistency between adjacent nodes
-    \item Running intersection property and tree structure of the junction tree implies that local consistency between cliques and separator marginals guarantees global consistency.
-    \item i.e.: if $q_i(X_{C_i})$ (dist on cliques), $r_{ij}(X_{S_{ij}})$ (dist on separators) are dists s.t. $\sum_{X_{C_i}\backslash s_{ij}}q_i(X_{C_i})=r_{ij}(X_{S_{ij}})$,
-    \item then $P(\mathcal{X})=\frac{\prod_{cliques i}q_i(X_{C_i})}{\prod_{seps ij}r_{ij}(X_{S_{ij}}}$ is also a dist s.t.
-    \item $q_i(X_{C_i})=\sum_{\mathcal{X}\backslash X_{C_i}}P(\mathcal{X})$, 
-    $r_{ij}(X_{S_{ij}})=\sum_{\mathcal{X}\backslash X_{S_{ij}}}P(\mathcal{X})$.
-    \item THis is a non-trivial result. (slide 76)
-    \item (Generally factors are not marginals. But if have locally consistent factors of this form, they are marginals given s(?) is a tree.)
-\end{itemize}
+What can we say about consistency in Shafer-Shenoy propagation?; \begin{itemize} \item BP enforces local consistency between adjacent nodes \item Running intersection property and tree structure of the junction tree implies that local consistency between cliques and separator marginals guarantees global consistency.  \item i.e.: if $q_i(X_{C_i})$ (dist on cliques), $r_{ij}(X_{S_{ij}})$ (dist on separators) are dists s.t. $\sum_{X_{C_i}\backslash s_{ij}}q_i(X_{C_i})=r_{ij}(X_{S_{ij}})$, \item then $P(\mathcal{X})=\frac{\prod_{cliques i}q_i(X_{C_i})}{\prod_{seps ij}r_{ij}(X_{S_{ij}}}$ is also a dist s.t.  \item $q_i(X_{C_i})=\sum_{\mathcal{X}\backslash X_{C_i}}P(\mathcal{X})$, $r_{ij}(X_{S_{ij}})=\sum_{\mathcal{X}\backslash X_{S_{ij}}}P(\mathcal{X})$.  \item THis is a non-trivial result. (slide 76) \item (Generally factors are not marginals. But if have locally consistent factors of this form, they are marginals given s(?) is a tree.) \end{itemize}
 
-Describe Hugin propagation; \begin{itemize}
-    \item Different (to Shafer-Shenoy) but equivalent message passing algorithm (for undirected trees)
-    \item Based on idea of reparameterisation
-    \item Initialise $q_i(X_{C_i})\propto f_i(X_{C_i})$. (init dist on each node prop to singleton factor on each node), $r_{ij}(X_{S_{ij}})\propto 1$ (unif dist on separators)
-    \item then p dist is initially $P(\mathcal{X})\propto\frac{\prod_{cliques i}q_i(X_{C_i})}{\prod_{seps ij}r_{ij}(X_{S_{ij}}}$ is also a dist s.t.
-    \item Hugin prop update for $i\rightarrow j$: $r_{ij}^{new}(X_{S_{ij}})=\sum_{X_{C_i}\backslash s_{ij}}q_i(X_{C_i})$, $q_j^{new}(X_{C_j})=q_j(X_{C_j})\frac{r_{ij}^{new}(X_{S_{ij}}}{r_{ij}(X_{S_{ij}})}$
-    \item i.e. update i to get update for sep between i and j. (change tgt node?) marginalise out var not in ending separator.
-    \item upd q for updated value of r. i.e. qnew/rnew = q/r.
-    \item (Keep track of marginals on cliques and marginals on separators individually? not sure.)
-\end{itemize}
+Describe Hugin propagation; \begin{itemize} \item Different (to Shafer-Shenoy) but equivalent message passing algorithm (for undirected trees) \item Based on idea of reparameterisation \item Initialise $q_i(X_{C_i})\propto f_i(X_{C_i})$. (init dist on each node prop to singleton factor on each node), $r_{ij}(X_{S_{ij}})\propto 1$ (unif dist on separators) \item then p dist is initially $P(\mathcal{X})\propto\frac{\prod_{cliques i}q_i(X_{C_i})}{\prod_{seps ij}r_{ij}(X_{S_{ij}}}$ is also a dist s.t.  \item Hugin prop update for $i\rightarrow j$: $r_{ij}^{new}(X_{S_{ij}})=\sum_{X_{C_i}\backslash s_{ij}}q_i(X_{C_i})$, $q_j^{new}(X_{C_j})=q_j(X_{C_j})\frac{r_{ij}^{new}(X_{S_{ij}}}{r_{ij}(X_{S_{ij}})}$ \item i.e. update i to get update for sep between i and j. (change tgt node?) marginalise out var not in ending separator.  \item upd q for updated value of r. i.e. qnew/rnew = q/r.  \item (Keep track of marginals on cliques and marginals on separators individually? not sure.) \end{itemize} 
 
-Properties of Hugin propagation; \begin{itemize}
-    \item Defined dist $P(\mathcal{X})$ is unchanged by the updates.
-    \item Each update introduces a local consistency constraint
-    $q_i(X_{C_i})$ (dist on cliques), $r_{ij}(X_{S_{ij}})$ (dist on separators) are dists s.t. $\sum_{X_{C_i}\backslash s_{ij}}q_i(X_{C_i})=r_{ij}(X_{S_{ij}})$,
-    \item If eaech update $i\rightarrow j$ is carried out only after incoming updates $k\rightarrow i$ have been carried out (i.e. in a particular order e.g. in/out), then each update needs only be carried out once. (And graph is tree)
-    \item Each Hugin update (on tgt node) is equivalent to the corresponding Shafer-Shenoy update (pass from one side to another).
-    \item (Also converges in a tree after 1 pass in 1 dir and another pass in another dir, similar to in/out pass in SS, converges to approx marginal.)
-\end{itemize}
+Properties of Hugin propagation; \begin{itemize} \item Defined dist $P(\mathcal{X})$ is unchanged by the updates.  \item Each update introduces a local consistency constraint $q_i(X_{C_i})$ (dist on cliques), $r_{ij}(X_{S_{ij}})$ (dist on separators) are dists s.t. $\sum_{X_{C_i}\backslash s_{ij}}q_i(X_{C_i})=r_{ij}(X_{S_{ij}})$, \item If eaech update $i\rightarrow j$ is carried out only after incoming updates $k\rightarrow i$ have been carried out (i.e. in a particular order e.g. in/out), then each update needs only be carried out once. (And graph is tree) \item Each Hugin update (on tgt node) is equivalent to the corresponding Shafer-Shenoy update (pass from one side to another).  \item (Also converges in a tree after 1 pass in 1 dir and another pass in another dir, similar to in/out pass in SS, converges to approx marginal.) \end{itemize}
 
-Describe the computational costs of the junction tree algorithm.; \begin{itemize}
-    \item Most cost incurred during the message passing phase: running and memory costs both $O(\sum_i|\mathcal{X}_{C_i}|)$, can be exponentially more efficient than brute force.
-    \item Var elim ordering heuristic can have a significant impact on MP costs (since may alter size of cliques).
-    \item (can hand-craft efficient ordering of var elim for certain classes of graphical models, e.g. 2D lattice Markov Random Field.)
-\end{itemize}
+Describe the computational costs of the junction tree algorithm.; \begin{itemize} \item Most cost incurred during the message passing phase: running and memory costs both $O(\sum_i|\mathcal{X}_{C_i}|)$, can be exponentially more efficient than brute force.  \item Var elim ordering heuristic can have a significant impact on MP costs (since may alter size of cliques).  \item (can hand-craft efficient ordering of var elim for certain classes of graphical models, e.g. 2D lattice Markov Random Field.) \end{itemize}
 
-Briefly discuss learning in graphical models.; \begin{itemize}
-    \item Factorised structure implied by graph makes learning easy.
-    \item Assuming normaliser is tractable.
-    \item ML learning on a graph means adjusting parameters in maximise the likelihood (of observed datapoints), i.e. marginalise over unobserved.
-    \item By EM, need to maximise (under q of unobserved): $\mathcal{(F}(q,\theta)=\langle \log P(X_{obs}, X_{unobs}|\theta) - \log q(X_{unobs})\rangle_{q(X_{unobs})}$
-    \begin{itemize}
-        \item $=\langle \sum_i\log f_i(X_{C_i}|\theta_i)-\log Z(\theta)\rangle_{q(X_{unobs})} + H(q)$
-        \item $=\sum_i\langle \log f_i(X_{C_i}|\theta_i)\rangle_{q(X_{unobs})} -\log Z(\theta)+H(q)$
-    \end{itemize}
-    \item So learning only requires posterior maarginals on cliques (obtained by MP) and updates on cliques (cf Baum-Welch procedure for HMMs.)
-    \item If normaliser is tractable, can update params just by one local clique
-    \item Normaliser usually tractable for DAGs (where each f is a conditional dist, usually exp fam)
-\end{itemize}
+Briefly discuss learning in graphical models.; \begin{itemize} \item Factorised structure implied by graph makes learning easy.  \item Assuming normaliser is tractable.  \item ML learning on a graph means adjusting parameters in maximise the likelihood (of observed datapoints), i.e. marginalise over unobserved.  \item By EM, need to maximise (under q of unobserved): $\mathcal{(F}(q,\theta)=\langle \log P(X_{obs}, X_{unobs}|\theta) - \log q(X_{unobs})\rangle_{q(X_{unobs})}$ \begin{itemize} \item $=\langle \sum_i\log f_i(X_{C_i}|\theta_i)-\log Z(\theta)\rangle_{q(X_{unobs})} + H(q)$ \item $=\sum_i\langle \log f_i(X_{C_i}|\theta_i)\rangle_{q(X_{unobs})} -\log Z(\theta)+H(q)$ \end{itemize} \item So learning only requires posterior maarginals on cliques (obtained by MP) and updates on cliques (cf Baum-Welch procedure for HMMs.) \item If normaliser is tractable, can update params just by one local clique \item Normaliser usually tractable for DAGs (where each f is a conditional dist, usually exp fam) \end{itemize}
 
 \end{document}

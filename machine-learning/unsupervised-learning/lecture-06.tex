@@ -7,393 +7,129 @@
 \documentclass{article}
 \begin{document}
 
-Give examples of questions you may come across during model selection. (learning model structure from data); \begin{itemize}
-    \item No. of clusters
-    \item How smooth the function should be (e.g. non-linear regression degree of poly)
-    \item Is this input relevant to predicting that output, or correl by chance?
-    \item (Order of a dynamical system)
-    \item No. of states in an HMM
-    \item Number of auditory sources in the input (/how many PCs or independent components)
-\end{itemize}
+Give examples of questions you may come across during model selection. (learning model structure from data); \begin{itemize} \item No. of clusters \item How smooth the function should be (e.g. non-linear regression degree of poly) \item Is this input relevant to predicting that output, or correl by chance?  \item (Order of a dynamical system) \item No. of states in an HMM \item Number of auditory sources in the input (/how many PCs or independent components) \end{itemize}
 
-Briefly describe two approaches to model selection; \begin{itemize}
-    \item Learn composite parameter $(m, \theta_m)$
-    \item Separate model selection step: $P(\theta_m, m|\mathcal{D})=P(\theta_m|m, \mathcal{D})\cdot P(m|\mathcal{D})$
-    \begin{itemize}
-        \item = model-specific posterior x model selection
-    \end{itemize}
-\end{itemize}
+Briefly describe two approaches to model selection; \begin{itemize} \item Learn composite parameter $(m, \theta_m)$ \item Separate model selection step: $P(\theta_m, m|\mathcal{D})=P(\theta_m|m, \mathcal{D})\cdot P(m|\mathcal{D})$ \begin{itemize} \item = model-specific posterior x model selection \end{itemize} \end{itemize}
 
-Describe difficulties of model selection as learning a composite parameter $(m, \theta_m)$.; \begin{itemize}
-    \item Max likelihood learning will overfit: favours more flexible model with more parameters, even if the data come from a simpler one
-    \item Density fn on composite parameter space (union of manifolds of different dims, e.g. diff number of parameters for diff degree poly regressions) difficult to define, so MAP learning is ill-posed. (though if ML large, MAP may also be large)
-    \item Joint posterior difficulty to compute - dim of composite parameters varies (though Monte-Carlo methods may be able to sample from such a posterior.)
-\end{itemize}
+Describe difficulties of model selection as learning a composite parameter $(m, \theta_m)$.; \begin{itemize} \item Max likelihood learning will overfit: favours more flexible model with more parameters, even if the data come from a simpler one \item Density fn on composite parameter space (union of manifolds of different dims, e.g. diff number of parameters for diff degree poly regressions) difficult to define, so MAP learning is ill-posed. (though if ML large, MAP may also be large) \item Joint posterior difficulty to compute - dim of composite parameters varies (though Monte-Carlo methods may be able to sample from such a posterior.) \end{itemize}
 
-Contrast discrete latent variables with the model as a discrete latent variable (one key difference).; \begin{itemize}
-    \item Discrete latents usually have one value per datapoint
-    \item Model latent has one value per dataset.
-\end{itemize}
+Contrast discrete latent variables with the model as a discrete latent variable (one key difference).; \begin{itemize} \item Discrete latents usually have one value per datapoint \item Model latent has one value per dataset.  \end{itemize}
 
-Name three concrete methods for model selection.; \begin{itemize}
-    \item Neyman-Pearson hypothesis testing
-    \item Likelihood validation
-    \item Bayesian model selection
-\end{itemize}
+Name three concrete methods for model selection.; \begin{itemize} \item Neyman-Pearson hypothesis testing \item Likelihood validation \item Bayesian model selection \end{itemize}
 
-Describe Neyman-Pearson hypothesis testing.; \begin{itemize}
-    \item For nested models (e.g. mixture models of diff order). 
-    \item Procedure: \begin{itemize}
-        \item Start with simplest model $(m=1)$, compare $H_0: m$ to $H_1: m+1$. (e.g. by likelihood ratio test)
-        \item Continue until $m+1$ is rejected.
-    \end{itemize}
-    \item Tests often only exact asymptotically in the number of datapoints.
-    \item Conservative (likely to choose simpler model) (N-P hypothesis tests asymmetric by design.)
-\end{itemize}
+Describe Neyman-Pearson hypothesis testing.; \begin{itemize} \item For nested models (e.g. mixture models of diff order).  \item Procedure: \begin{itemize} \item Start with simplest model $(m=1)$, compare $H_0: m$ to $H_1: m+1$. (e.g. by likelihood ratio test) \item Continue until $m+1$ is rejected.  \end{itemize} \item Tests often only exact asymptotically in the number of datapoints.  \item Conservative (likely to choose simpler model) (N-P hypothesis tests asymmetric by design.) \end{itemize}
 
 TODO: what is the likelihood ratio test?
 
-Describe likelihood validation; \begin{itemize}
-    \item Partition data into disjoint training and validation sets.
-    \item Choose model with largest $P(\mathcal{D}_{vld}|\theta_m^{ML})$, with $\theta_m^{ML}=\arg\max P(\mathcal{D}_{tr}|\theta)$.
-    \begin{itemize}
-        \item Or, better, greatest $P(\mathcal{D}_{vld}|\mathcal{D}_{tr},m)$.
-    \end{itemize}
-    \item Consistent. Selects most useful model (the one that describes the data best), even if all are incorrect.
-    \item May be biased towards simple models, often high-variance.
-    \begin{itemize}
-        \item high var bc diff for diff partitions of train-validation.
-    \end{itemize}
-    \item Cross-validation uses multiple partitions and averages likelihoods. \begin{itemize}
-        \item (complicates issues of bias?)
-    \end{itemize}
-\end{itemize}
+Describe likelihood validation; \begin{itemize} \item Partition data into disjoint training and validation sets.  \item Choose model with largest $P(\mathcal{D}_{vld}|\theta_m^{ML})$, with $\theta_m^{ML}=\arg\max P(\mathcal{D}_{tr}|\theta)$.  \begin{itemize} \item Or, better, greatest $P(\mathcal{D}_{vld}|\mathcal{D}_{tr},m)$.  \end{itemize} \item Consistent. Selects most useful model (the one that describes the data best), even if all are incorrect.  \item May be biased towards simple models, often high-variance.  \begin{itemize} \item high var bc diff for diff partitions of train-validation.  \end{itemize} \item Cross-validation uses multiple partitions and averages likelihoods. \begin{itemize} \item (complicates issues of bias?) \end{itemize} \end{itemize}
 
-Describe Bayesian model selection; \begin{itemize}
-    \item Choose most likely model: $\arg\max P(m|\mathcal{D})$.
-    \item Consistent: probabilistically principled if true model is in set being considered, 
-    \item but sensitive to assumed priors etc.
-    \item Posterior probabilities can weight models for combined predictions (model averaging, avoiding selection).
-    \item (Note: even if we use Bayesian model selection, often use cross validation to choose model)
-    \item (Min description length approximates this?)
-\end{itemize}
+Describe Bayesian model selection; \begin{itemize} \item Choose most likely model: $\arg\max P(m|\mathcal{D})$.  \item Consistent: probabilistically principled if true model is in set being considered, \item but sensitive to assumed priors etc.  \item Posterior probabilities can weight models for combined predictions (model averaging, avoiding selection).  \item (Note: even if we use Bayesian model selection, often use cross validation to choose model) \item (Min description length approximates this?) \end{itemize}
 
 One big criticism of Bayesian model selection; Highly dependent on prior chosen.
 
-What is a model class $m$ in Bayesian model selection?; \begin{itemize}
-    \item A set of distributions parameterised by $\theta_m$
-    \item e.g. the set of all possible mixtures of $m$ Gaussians.
-\end{itemize}
+What is a model class $m$ in Bayesian model selection?; \begin{itemize} \item A set of distributions parameterised by $\theta_m$ \item e.g. the set of all possible mixtures of $m$ Gaussians.  \end{itemize}
 
 Write out the posterior distribution over parameters of a model in Bayesian model selection.; $P(\theta_m|\mathcal{D}, m) = \frac{P(\mathcal{D}|\theta_m, m)P(\theta_m|m)}{P(\mathcal{D}|m)}$. (Likelihood of data given parameters may require integrating out latents)
 
-What is the Bayesian evidence for a model $m$?; \begin{itemize}
-    \item $P(\mathcal{D}|m)=\int_{\Theta_m}P(\mathcal{D}|\theta_m, m)P(\theta_m|m)d\theta_m$
-    \item i.e. marginal probability of the data under the model class $m$ .
-\end{itemize}
+What is the Bayesian evidence for a model $m$?; \begin{itemize} \item $P(\mathcal{D}|m)=\int_{\Theta_m}P(\mathcal{D}|\theta_m, m)P(\theta_m|m)d\theta_m$ \item i.e. marginal probability of the data under the model class $m$ .  \end{itemize}
 
-What is the Bayes factor?; \begin{itemize}
-    \item Ratio of two marginal probabilities (or sometimes its log
-    \item $\frac{P(\mathcal{D}|m}{P(\mathcal{D}|m')}=\frac{P(m|\mathcal{D})}{P(m'|\mathcal{D})}\frac{p(m')}{p(m)}$.
-    \item Used in Bayesian model selection
-\end{itemize}
+What is the Bayes factor?; \begin{itemize} \item Ratio of two marginal probabilities (or sometimes its log \item $\frac{P(\mathcal{D}|m}{P(\mathcal{D}|m')}=\frac{P(m|\mathcal{D})}{P(m'|\mathcal{D})}\frac{p(m')}{p(m)}$.  \item Used in Bayesian model selection \end{itemize}
 
 What is Occam's razor?; Of two explanations adequate to explain the same set of observations, the simpler should always be preferred.
 
-Describe the Bayesian Occam's Razor.; \begin{itemize}
-    \item Bayesian inference formalises and automatically implements a form of Occam's Razor.
-    \item $P(m|\mathcal{D})=\frac{P(\mathcal{D}|m)P(m)}{P(\mathcal{D})}$
-    \item $P(\mathcal{D}|m)=\int_{\Theta_m}P(\mathcal{D}|\theta_m, m)P(\theta_m, m)d\theta_m$
-    \item $P(\mathcal{D}|m)$ is the prob that randomly selected parameter values ($P(\theta_m|m)$) from the model class would generate dataset $\mathcal{D}$.
-    \item Model classes that are too simple are unlikely to generate the observed data set. 
-    \item Model classes that are too complex generate many possible data sets, so they are unlikely tog enerate that particular dataset at random.
-\end{itemize}
+Describe the Bayesian Occam's Razor.; \begin{itemize} \item Bayesian inference formalises and automatically implements a form of Occam's Razor.  \item $P(m|\mathcal{D})=\frac{P(\mathcal{D}|m)P(m)}{P(\mathcal{D})}$ \item $P(\mathcal{D}|m)=\int_{\Theta_m}P(\mathcal{D}|\theta_m, m)P(\theta_m, m)d\theta_m$ \item $P(\mathcal{D}|m)$ is the prob that randomly selected parameter values ($P(\theta_m|m)$) from the model class would generate dataset $\mathcal{D}$.  \item Model classes that are too simple are unlikely to generate the observed data set.  \item Model classes that are too complex generate many possible data sets, so they are unlikely tog enerate that particular dataset at random.  \end{itemize}
 
-Can we compute $P(\mathcal{D}|m)$?; Sometimes. \begin{itemize}
-    \item If $P(\mathcal{D}|\theta_m, m)$ is a member of the exp fam, and our prior on $\theta_m$ is conjugate, then the joint $P(\mathcal{D},\theta_m|m)$ is in the same family and we can calculate $P(\mathcal{D}|m)$ by integrating out $\theta_m$. (tractable bc exp fam).
-    \item Else may need to approximate.
-\end{itemize}
+Can we compute $P(\mathcal{D}|m)$?; Sometimes. \begin{itemize} \item If $P(\mathcal{D}|\theta_m, m)$ is a member of the exp fam, and our prior on $\theta_m$ is conjugate, then the joint $P(\mathcal{D},\theta_m|m)$ is in the same family and we can calculate $P(\mathcal{D}|m)$ by integrating out $\theta_m$. (tractable bc exp fam).  \item Else may need to approximate.  \end{itemize} 
 
 TODO (opt): Derive $P(\mathcal{D}|m)$ when $P(\mathcal{D}|\theta_m, m)$ is a member of the exponential family and our prior on $\theta_m$ is conjugate. (slide 9/34)
 
-Briefly describe the expression (solution) we get for $P(\mathcal{D}|m)$ when $P(\mathcal{D}|\theta_m, m)$ is a member of the exponential family and our prior on $\theta_m$ is conjugate.; \begin{itemize}
-    \item Posterior volume divided by prior volume
-\end{itemize}
+Briefly describe the expression (solution) we get for $P(\mathcal{D}|m)$ when $P(\mathcal{D}|\theta_m, m)$ is a member of the exponential family and our prior on $\theta_m$ is conjugate.; \begin{itemize} \item Posterior volume divided by prior volume \end{itemize}
 
-Name at least four practical Bayesian approaches for approximating $P(\mathcal{D}|m)$.; \begin{itemize}
-    \item Laplace approximation
-    \item Bayesian Information Criterion (BIC)
-    \item Variational Bayes
-    \item Monte Carlo methods
-    \item (also Bethe approximation, Expectation Propagation among others)
-\end{itemize}
+Name at least four practical Bayesian approaches for approximating $P(\mathcal{D}|m)$.; \begin{itemize} \item Laplace approximation \item Bayesian Information Criterion (BIC) \item Variational Bayes \item Monte Carlo methods \item (also Bethe approximation, Expectation Propagation among others) \end{itemize}
 
-Briefly describe Laplace approximation.; \begin{itemize}
-    \item Approximate the posterior by a Gaussian centred at the MAP parameter estimate.
-\end{itemize}
+Briefly describe Laplace approximation.; \begin{itemize} \item Approximate the posterior by a Gaussian centred at the MAP parameter estimate.  \end{itemize}
 
 Describe variational bayes in one phrase.; Gives a lower bound on the marginal probability. (TODO: check after typing VB lecture notes)
 
 Is Variational Bayes unbiased?; No.
 
-Compare Variational Bayes in terms of speed to the Laplace approx and BIC; \begin{itemize}
-    \item VB is easy and fast, and `often bettert han Laplace or BIC'.
-\end{itemize}
+Compare Variational Bayes in terms of speed to the Laplace approx and BIC; \begin{itemize} \item VB is easy and fast, and `often bettert han Laplace or BIC'.  \end{itemize}
 
-Name and briefly describe two Monte Carlo methods for calculating $P(\mathcal{D}|m)$.; \begin{itemize}
-    \item (Annealed) importance sampling \begin{itemize}
-        \item Estimate evidence using samples $\theta^{(i)}$ from arbitrary $f(\theta)$.
-        \item $\sum_i \frac{P(\mathcal{D}|\theta^{(i)}, m)P(\theta^{(i)}|m)}{f(\theta^{(i)}}\rightarrow \int d\theta f(\theta)\frac{P(\mathcal{D},\theta|m)}{f(\theta)}=P(\mathcal{D}|m)$
-    \end{itemize}
-    \item `Reversible jump' Markov Chain Monte Carlo: 
-    \begin{itemize}
-        \item Sample from posterior on composite $(m, \theta_m)$, num of samples for each $m\propto p(m|\mathcal{D})$.
-    \end{itemize}
-    \item Both exact in the limit of infinite samples, but may have high variance with finite samples.
-\end{itemize}
+Name and briefly describe two Monte Carlo methods for calculating $P(\mathcal{D}|m)$.; \begin{itemize} \item (Annealed) importance sampling \begin{itemize} \item Estimate evidence using samples $\theta^{(i)}$ from arbitrary $f(\theta)$.  \item $\sum_i \frac{P(\mathcal{D}|\theta^{(i)}, m)P(\theta^{(i)}|m)}{f(\theta^{(i)}}\rightarrow \int d\theta f(\theta)\frac{P(\mathcal{D},\theta|m)}{f(\theta)}=P(\mathcal{D}|m)$ \end{itemize} \item `Reversible jump' Markov Chain Monte Carlo: \begin{itemize} \item Sample from posterior on composite $(m, \theta_m)$, num of samples for each $m\propto p(m|\mathcal{D})$.  \end{itemize} \item Both exact in the limit of infinite samples, but may have high variance with finite samples.  \end{itemize}
 
-Describe the Laplace approximation to approx $P(\mathcal{D}|m)$ (no need for final expr or derivations).; \begin{itemize}
-    \item Assume the joint $P(\mathcal{D},\theta_m|m)\propto P(\theta_m|\mathcal{D},m)$ becomes more peaked on posterior mode $\theta^*_m$ as the number of datapoints $N\rightarrow\infty$.
-    \item Idea: Approx $\log P(\mathcal{D},\theta_m|m)$ to second order around $\theta^*$. (using Taylor expansion)
-    \item Equivalent to approx the posterior by a Gassian: an approx which is asymptotically correct.
-\end{itemize}
+Describe the Laplace approximation to approx $P(\mathcal{D}|m)$ (no need for final expr or derivations).; \begin{itemize} \item Assume the joint $P(\mathcal{D},\theta_m|m)\propto P(\theta_m|\mathcal{D},m)$ becomes more peaked on posterior mode $\theta^*_m$ as the number of datapoints $N\rightarrow\infty$.  \item Idea: Approx $\log P(\mathcal{D},\theta_m|m)$ to second order around $\theta^*$. (using Taylor expansion) \item Equivalent to approx the posterior by a Gassian: an approx which is asymptotically correct.  \end{itemize}
 
-Derive the Laplace approximation for $P(\mathcal{D}|m)$. \begin{itemize}
-    \item Recall: approx $\log P(\mathcal{D},\theta_m|m)$ to second order around $\theta^*$. (using Taylor expansion)
-    \item $\int P(\mathcal{D},\theta_m|m)d\theta_m = \int e^{\log P(\mathcal{D},\theta_m|m)}d\theta_m$
-    \item Exponent: expand as (approx) $\log P(\mathcal{D},\theta^*_m|m) + \nabla \log P(\mathcal{D},\theta^*_m|m)\cdot (\theta_m-\theta_m^*)+\frac{1}{2}(\theta_m-\theta_m^*)^T\nabla^2\log P(\mathcal{D},\theta^*_m|m)(\theta_m-\theta_m^*)$
-    \item integral $=\int P(\mathcal{D},\theta^*_m|m)e^{-\frac{1}{2}(\theta_m-\theta_m^*)^TA(\theta_m-\theta_m^*)}d\theta_m$
-    \item $=P(\mathcal{D}|\theta^*_m, m)P(\theta^*_m|m)(2\pi)^{d/2}|A|^{-\frac{1}{2}}$
-    \item where $A=-\nabla^2\log P(\mathcal{D},\theta^*_m|m)$ is the negative Hessian of $\log P(\mathcal{D},\theta_m|m)$ evaluated at $\theta^*_m$.
-    \item think this is $\theta_m \sim N(\theta_m^*, A)$ but need to check TODO
-\end{itemize}
+Derive the Laplace approximation for $P(\mathcal{D}|m)$.; \begin{itemize} \item Recall: approx $\log P(\mathcal{D},\theta_m|m)$ to second order around $\theta^*$. (using Taylor expansion) \item $\int P(\mathcal{D},\theta_m|m)d\theta_m = \int e^{\log P(\mathcal{D},\theta_m|m)}d\theta_m$ \item Exponent: expand as (approx) $\log P(\mathcal{D},\theta^*_m|m) + \nabla \log P(\mathcal{D},\theta^*_m|m)\cdot (\theta_m-\theta_m^*)+\frac{1}{2}(\theta_m-\theta_m^*)^T\nabla^2\log P(\mathcal{D},\theta^*_m|m)(\theta_m-\theta_m^*)$ \item integral $=\int P(\mathcal{D},\theta^*_m|m)e^{-\frac{1}{2}(\theta_m-\theta_m^*)^TA(\theta_m-\theta_m^*)}d\theta_m$ \item $=P(\mathcal{D}|\theta^*_m, m)P(\theta^*_m|m)(2\pi)^{d/2}|A|^{-\frac{1}{2}}$ \item where $A=-\nabla^2\log P(\mathcal{D},\theta^*_m|m)$ is the negative Hessian of $\log P(\mathcal{D},\theta_m|m)$ evaluated at $\theta^*_m$.  \item think this is $\theta_m \sim N(\theta_m^*, A)$ but need to check TODO \end{itemize}
 
-Briefly describe how to derive the Bayesian Information Criterion.; \begin{itemize}
-    \item From log of Laplace Approx $\log P(\mathcal{D}|m)$
-    \item Consider $N\approx\infty$ case (asymptotic approx): Retain only terms that grow with N
-    \begin{itemize}
-        \item $\mathcal{D}$ is iid.
-    \end{itemize}
-\end{itemize}
+Briefly describe how to derive the Bayesian Information Criterion.; \begin{itemize} \item From log of Laplace Approx $\log P(\mathcal{D}|m)$ \item Consider $N\approx\infty$ case (asymptotic approx): Retain only terms that grow with N \begin{itemize} \item $\mathcal{D}$ is iid.  \end{itemize} \end{itemize}
 
-State the Bayesian Information Criterion.; \begin{itemize}
-    \item $\log P(\mathcal{D}|m)\approx \log P(\mathcal{D}|\theta^*_m, m)-\frac{d}{2}\log N$ 
-\end{itemize}
+State the Bayesian Information Criterion.; \begin{itemize} \item $\log P(\mathcal{D}|m)\approx \log P(\mathcal{D}|\theta^*_m, m)-\frac{d}{2}\log N$ \end{itemize}
 
-Derive the Bayesian Information Criterion; \begin{itemize}
-    \item From Laplace Approx 
-    $\log P(\mathcal{D}|m)=\log P(\mathcal{D}|\theta^*_m, m) + \log P(\theta^*_m|m) + \log (2\pi)^{d/2} + \log|A|^{-\frac{1}{2}}$
-    \item where $A=-\nabla^2\log P(\mathcal{D},\theta^*_m|m)$ is the negative Hessian of $\log P(\mathcal{D},\theta_m|m)$
-    \item so $A=-\nabla^2\log P(\mathcal{D}|\theta^*_m,m) -\nabla^2\log P(\theta^*_m|m)$
-    \item Dataset is iid, so as $N=|\mathcal{D}|\rightarrow\infty$, $A\rightarrowNA_0+C, A_0$ pd and fixed.
-    \item so $\log|A|\rightarrow\log|NA_0|=d\logN+\log|A_0|$
-    \item Retaining only terms that grow with N, we have $\log P(\mathcal{D}|m)\approx \log P(\mathcal{D}|\theta^*_m, m)-\frac{d}{2}\log N$.
-\end{itemize}
+Derive the Bayesian Information Criterion; \begin{itemize} \item From Laplace Approx $\log P(\mathcal{D}|m)=\log P(\mathcal{D}|\theta^*_m, m) + \log P(\theta^*_m|m) + \log (2\pi)^{d/2} + \log|A|^{-\frac{1}{2}}$ \item where $A=-\nabla^2\log P(\mathcal{D},\theta^*_m|m)$ is the negative Hessian of $\log P(\mathcal{D},\theta_m|m)$ \item so $A=-\nabla^2\log P(\mathcal{D}|\theta^*_m,m) -\nabla^2\log P(\theta^*_m|m)$ \item Dataset is iid, so as $N=|\mathcal{D}|\rightarrow\infty$, $A\rightarrowNA_0+C, A_0$ pd and fixed.  \item so $\log|A|\rightarrow\log|NA_0|=d\logN+\log|A_0|$ \item Retaining only terms that grow with N, we have $\log P(\mathcal{D}|m)\approx \log P(\mathcal{D}|\theta^*_m, m)-\frac{d}{2}\log N$.  \end{itemize}
 
-Properties of Bayesian Information Criterion.; \begin{itemize}
-    \item Pros
-    \begin{itemize}
-        \item Quick and easy to compute
-    \item Does not depend on prior
-    \item Can use ML est of $\theta$ instead of MAP est (since = as $N\rightarrow\infty$.
-    \end{itemize}
-    \item Cons \begin{itemize}
-        \item Assumes that in the large sample limit, all the params are well-determined (i.e. that the model is identifiable, else $d$ should be the number of well-det params (so? wrote something about being careful about $A_0$ 'obvsap')
-        \item Neglects multiple modes (e.g. permutations in a MoG)
-        \item Assumes data is iid, i.e. not autocorrelated.
-    \end{itemize}
-    \item Neutral
-    \begin{itemize}
-        \item Related to min description length criterion
-    \end{itemize}
-\end{itemize}
+Properties of Bayesian Information Criterion.; \begin{itemize} \item Pros \begin{itemize} \item Quick and easy to compute \item Does not depend on prior \item Can use ML est of $\theta$ instead of MAP est (since = as $N\rightarrow\infty$.  \end{itemize} \item Cons \begin{itemize} \item Assumes that in the large sample limit, all the params are well-determined (i.e. that the model is identifiable, else $d$ should be the number of well-det params (so? wrote something about being careful about $A_0$ 'obvsap') \item Neglects multiple modes (e.g. permutations in a MoG) \item Assumes data is iid, i.e. not autocorrelated.  \end{itemize} \item Neutral \begin{itemize} \item Related to min description length criterion \end{itemize} \end{itemize}
 
-Interpret the Bayesian Information Criterion; TODO \begin{itemize}
-    \item $\log P(\mathcal{D}|m)\approx \log P(\mathcal{D}|\theta^*_m, m)-\frac{d}{2}\log N$.
-    \item notes atm:
-    \item first term scales with N, second one: $\log N$ is like width of (illegible word that looks like parameters?)
-\end{itemize}
+Interpret the Bayesian Information Criterion; TODO \begin{itemize} \item $\log P(\mathcal{D}|m)\approx \log P(\mathcal{D}|\theta^*_m, m)-\frac{d}{2}\log N$.  \item notes atm: \item first term scales with N, second one: $\log N$ is like width of (illegible word that looks like parameters?) \end{itemize}
 
-Describe how we can choose between models in a family of continuously parameterised models. (two main kinds of methods you can't really use on discretely parameterised models); \begin{itemize}
-    \item Can use the gradient, i.e. ascend the gradient in \begin{itemize}
-        \item The exact evidence (if tractable)
-        \item Approximated evidence (Laplace, EP, Bethe,...) as fns of hyperparameters $\eta$
-        \item Free-energy bound on the evidence (VB)
-    \end{itemize}
-    \item Or by placing a hyperprior on the hyperparameters $\eta$ and sampling from the posterior $P(\eta|\mathcal{D})=\frac{P(\mathcal{D}|\eta)P(\eta)}{P(\mathcal{D})}$ using Markov chain monte carlo sampling.
-\end{itemize}
+Describe how we can choose between models in a family of continuously parameterised models. (two main kinds of methods you can't really use on discretely parameterised models); \begin{itemize} \item Can use the gradient, i.e. ascend the gradient in \begin{itemize} \item The exact evidence (if tractable) \item Approximated evidence (Laplace, EP, Bethe,...) as fns of hyperparameters $\eta$ \item Free-energy bound on the evidence (VB) \end{itemize} \item Or by placing a hyperprior on the hyperparameters $\eta$ and sampling from the posterior $P(\eta|\mathcal{D})=\frac{P(\mathcal{D}|\eta)P(\eta)}{P(\mathcal{D})}$ using Markov chain monte carlo sampling.  \end{itemize} 
 
 % Now do calculations exactly vs approximations
 
-Describe the setup of Bayesian linear regression and the solution approach (with equations but not soln eqn); \begin{itemize}
-    \item $\mathbf{w}\sim N(\mathbf{0}, C)$
-    \item $y_i\sim N(\mathbf{w^Tx}_i, \sigma^2)$
-    \item Solve by maximising the evidence $P(y_1,...,y_N|\mathbf{x_1,...,x_N}, C, \sigma^2)=\int P(y_1,...,y_N|\mathbf{x_1,...,x_N,w}, \sigma^2)P(\mathbf{w}|C)d\mathbf{w}$.
-    \item to find optimal values of $C, \sigma$.
-    \item Compute the posterior $P(\mathbf{w}|y_1,...,y_N,\mathbf{x_1},...,\mathbf{x}_N, C, \sigma^2)$ given these optimal values.
-\end{itemize}
+Describe the setup of Bayesian linear regression and the solution approach (with equations but not soln eqn); \begin{itemize} \item $\mathbf{w}\sim N(\mathbf{0}, C)$ \item $y_i\sim N(\mathbf{w^Tx}_i, \sigma^2)$ \item Solve by maximising the evidence $P(y_1,...,y_N|\mathbf{x_1,...,x_N}, C, \sigma^2)=\int P(y_1,...,y_N|\mathbf{x_1,...,x_N,w}, \sigma^2)P(\mathbf{w}|C)d\mathbf{w}$.  \item to find optimal values of $C, \sigma$.  \item Compute the posterior $P(\mathbf{w}|y_1,...,y_N,\mathbf{x_1},...,\mathbf{x}_N, C, \sigma^2)$ given these optimal values.  \end{itemize}
 
-Write down the posterior on $\mathbf{w}$ in Bayesian linear regression.; \begin{itemize}
-    \item $\Sigma_w = (\frac{XX^T}{\sigma^2}+C^{-1})^{-1}$, $\mathbf{\bar{w}}=\Sigma_w\frac{XY^T}{\sigma^2}$.
-    \begin{itemize}
-        \item X is a matrix where columns are input vectors, Y is a row vector of corresponding predicted oututs.
-    \end{itemize}
-    \item (X like $\Lambda$ in FA, but only have one obs of y?)
-\end{itemize}
+Write down the posterior on $\mathbf{w}$ in Bayesian linear regression.; \begin{itemize} \item $\Sigma_w = (\frac{XX^T}{\sigma^2}+C^{-1})^{-1}$, $\mathbf{\bar{w}}=\Sigma_w\frac{XY^T}{\sigma^2}$.  \begin{itemize} \item X is a matrix where columns are input vectors, Y is a row vector of corresponding predicted oututs.  \end{itemize} \item (X like $\Lambda$ in FA, but only have one obs of y?) \end{itemize}
 
-Write out the evidence for Bayesian linear regression in closed form.; (optional, dk if necc to know, but think could be an exam question) \begin{itemize}
-    \item $\mathcal{E}(C,\sigma^2)=p(\mathbf{y|x_1,...,x_N}, C, \sigma^2)=\int P(Y|X, \mathbf{w}, \sigma^2)P(\mathbf{w}|C)d\mathbf{w}$
-    \item $=\sqrt{\frac{|2\pi\Sigma_w|}{|2\pi\sigma^2I||2\pi C|}}\exp(-\frac{1}{2}Y(\frac{I}{\sigma^2}-\frac{X^T\Sigma_w X}{\sigma^4})Y^T)$
-\end{itemize}
+Write out the evidence for Bayesian linear regression in closed form.; (optional, dk if necc to know, but think could be an exam question) \begin{itemize} \item $\mathcal{E}(C,\sigma^2)=p(\mathbf{y|x_1,...,x_N}, C, \sigma^2)=\int P(Y|X, \mathbf{w}, \sigma^2)P(\mathbf{w}|C)d\mathbf{w}$ \item $=\sqrt{\frac{|2\pi\Sigma_w|}{|2\pi\sigma^2I||2\pi C|}}\exp(-\frac{1}{2}Y(\frac{I}{\sigma^2}-\frac{X^T\Sigma_w X}{\sigma^4})Y^T)$ \end{itemize}
 
-Given the evidence for Bayesian linear regression is $\mathcal{E}(C,\sigma^2)=\sqrt{\frac{|2\pi\Sigma_w|}{|2\pi\sigma^2I||2\pi C|}}\exp(-\frac{1}{2}Y(\frac{I}{\sigma^2}-\frac{X^T\Sigma_w X}{\sigma^4})Y^T)$. Find the general forms of the gradients wrt $\theta$ and $\sigma^2$.; \begin{itemize}
-    \item $\frac{\partiall}{\partial\theta}\log\mathcal{E}(C,\sigma^2)=\frac{1}{2}Tr[(C-\Sigma_w-\mathbf{\bar{w}\bar{w}}^T)\frac{\partial}{\partial\theta}C^{-1}]$
-    \item $\frac{\partial}{\partial\sigma^2}\log\mathcal{E}(C,\sigma^2)=\frac{1}{\sigma^2}\big(-N+Tr[I-\Sigma_wC^{-1}]+\frac{1}{\sigma^2}(Y-\mathbf{\bar{w}}X)(Y-\mathbf{\bar{w}}^TX)^T\big )$
-\end{itemize}
+Given the evidence for Bayesian linear regression is $\mathcal{E}(C,\sigma^2)=\sqrt{\frac{|2\pi\Sigma_w|}{|2\pi\sigma^2I||2\pi C|}}\exp(-\frac{1}{2}Y(\frac{I}{\sigma^2}-\frac{X^T\Sigma_w X}{\sigma^4})Y^T)$. Find the general forms of the gradients wrt $\theta$ and $\sigma^2$.; \begin{itemize} \item $\frac{\partiall}{\partial\theta}\log\mathcal{E}(C,\sigma^2)=\frac{1}{2}Tr[(C-\Sigma_w-\mathbf{\bar{w}\bar{w}}^T)\frac{\partial}{\partial\theta}C^{-1}]$ \item $\frac{\partial}{\partial\sigma^2}\log\mathcal{E}(C,\sigma^2)=\frac{1}{\sigma^2}\big(-N+Tr[I-\Sigma_wC^{-1}]+\frac{1}{\sigma^2}(Y-\mathbf{\bar{w}}X)(Y-\mathbf{\bar{w}}^TX)^T\big )$ \end{itemize}
 
-Describe Automatic Relevance Determination; \begin{itemize}
-    \item Take $C^{-1}=diag(\mathbf{\alpha})$ (i.e. $w_i\sim N(0, \alpha_i^{\1}))$ and then optimises the precisions $\{\alpha_i\}$.
-    \item by setting gradients wrt $\alpha, \sigma^2$ (for Bayesian regression) equal to zero and solving.
-    \item During optimisation, $\alpha_i$s either go to infinity for irrelevant inputs $x_i$ or remain finite for relevant input.
-    \begin{itemize}
-        \item note $\alpha_i^{new}=\frac{1-\alpha_i[\Sigma_w]_{ii}}{\mathbf{\bar{w}}^2_i}$
-        \item so $\alpha_i\rightarrow\infty\Rightarrow w_i = 0$
-    \end{itemize}
-    \item ARD yields sparse solutions that improve on ML regression.
-\end{itemize}
+Describe Automatic Relevance Determination; \begin{itemize} \item Take $C^{-1}=diag(\mathbf{\alpha})$ (i.e. $w_i\sim N(0, \alpha_i^{\1}))$ and then optimises the precisions $\{\alpha_i\}$.  \item by setting gradients wrt $\alpha, \sigma^2$ (for Bayesian regression) equal to zero and solving.  \item During optimisation, $\alpha_i$s either go to infinity for irrelevant inputs $x_i$ or remain finite for relevant input.  \begin{itemize} \item note $\alpha_i^{new}=\frac{1-\alpha_i[\Sigma_w]_{ii}}{\mathbf{\bar{w}}^2_i}$ \item so $\alpha_i\rightarrow\infty\Rightarrow w_i = 0$ \end{itemize} \item ARD yields sparse solutions that improve on ML regression.  \end{itemize}
 
 % some more notes on things related to ARD on slide 16/34
 
-What is the Bayesian approach if our goal is not to learn the model structure or parameters but to predict the conditional density at a new data point?; Prediction averaging: \begin{itemize}
-    \item  $p(\mathbf{y|x}, \mathcal{D}, m)=\int d\theta p(\mathbf{y|x}, \theta, m)p(\theta|\mathcal{D}, m)$.
-    \item (Integral naturally favours predictions associated with  large volumes in the posterior, and so incorporates an Occam-like factor.)
-    \item In principle, prediction smay resist overfitting even with an infinitely complex model (bc integrate over theta vs suing a single theta) $\rightarrow$ Bayesian nonparametrics.
-\end{itemize}
+What is the Bayesian approach if our goal is not to learn the model structure or parameters but to predict the conditional density at a new data point?; Prediction averaging: \begin{itemize} \item  $p(\mathbf{y|x}, \mathcal{D}, m)=\int d\theta p(\mathbf{y|x}, \theta, m)p(\theta|\mathcal{D}, m)$.  \item (Integral naturally favours predictions associated with  large volumes in the posterior, and so incorporates an Occam-like factor.) \item In principle, prediction smay resist overfitting even with an infinitely complex model (bc integrate over theta vs suing a single theta) $\rightarrow$ Bayesian nonparametrics.  \end{itemize} 
 
-Describe how Gaussian Processes relate to Bayesian model selection.; \begin{itemize}
-    \item Goal: predict conditional density at new datapoint (vs learn model structure or params)
-    \item Applied to (non)linear regression
-\end{itemize}
+Describe how Gaussian Processes relate to Bayesian model selection.; \begin{itemize} \item Goal: predict conditional density at new datapoint (vs learn model structure or params) \item Applied to (non)linear regression \end{itemize}
 
-What is the predicted output y given a new input vector $\mathbf{x}$ in Bayesian regression? Given we have found the distribution of $\mathbf{w}\simN(\mathbf{\bar{w}}, \Sigma_w)$; $y|\mathbf{x}\sim N(\mathbf{\bar{w}^Tx}^T, \mathbf{x^T\Sigma_w x}+\sigma^2)$. \begin{itemize}
-    \item Added variance $\mathbf{x^T\Sigma_w x}$ comes from posterior uncertainty in $\mathbf{w}$.
-\end{itemize}
+What is the predicted output y given a new input vector $\mathbf{x}$ in Bayesian regression? Given we have found the distribution of $\mathbf{w}\simN(\mathbf{\bar{w}}, \Sigma_w)$; $y|\mathbf{x}\sim N(\mathbf{\bar{w}^Tx}^T, \mathbf{x^T\Sigma_w x}+\sigma^2)$. \begin{itemize} \item Added variance $\mathbf{x^T\Sigma_w x}$ comes from posterior uncertainty in $\mathbf{w}$.  \end{itemize}
 
-Describe marginalised linear regression; \begin{itemize}
-    \item Integrate out $\mathbf{w}$ in the model.
-    \item Joint of $Y|X$ is Gaussian.
-    \item Calculate mean and covariances of $y_i, y_j$, get $Y^T\sim N(\mathbf{0}, \tau^2X^TX+\sigma^2I)$.
-    \item include test vector input and output, so get dist of $[\begin{bmatrix}
-    Y^T\\
-    y
-  \end{bmatrix}]|X, \mathbf{x}\sim N(\begin{bmatrix}\mathbf{0} \\ 0 \end{bmatrix}, \begin{bmatrix}\tau^2X^TX +\sigma^2I & \tau^2X^T\mathbf{x} \\ \tau^2\mathbf{x}^TX & \tau^2\mathbf{x^Tx}+\sigma^2 \end{bmatrix})=N(\begin{bmatrix}\mathbf{0} \\ 0 \end{bmatrix}, \begin{bmatrix}\tilde{K}_{XX} & \tilde{K}_{Xx} \\ \tilde{K}_{xX} & \tilde{K}_{xx} \end{bmatrix})
-  \item and use standard multivariate gaussian result to find $y|Y$.
-$
-\end{itemize}
+Describe marginalised linear regression; \begin{itemize} \item Integrate out $\mathbf{w}$ in the model.  \item Joint of $Y|X$ is Gaussian.  \item Calculate mean and covariances of $y_i, y_j$, get $Y^T\sim N(\mathbf{0}, \tau^2X^TX+\sigma^2I)$.  \item include test vector input and output, so get dist of $[\begin{bmatrix} Y^T\\ y \end{bmatrix}]|X, \mathbf{x}\sim N(\begin{bmatrix}\mathbf{0} \\ 0 \end{bmatrix}, \begin{bmatrix}\tau^2X^TX +\sigma^2I & \tau^2X^T\mathbf{x} \\ \tau^2\mathbf{x}^TX & \tau^2\mathbf{x^Tx}+\sigma^2 \end{bmatrix})=N(\begin{bmatrix}\mathbf{0} \\ 0 \end{bmatrix}, \begin{bmatrix}\tilde{K}_{XX} & \tilde{K}_{Xx} \\ \tilde{K}_{xX} & \tilde{K}_{xx} \end{bmatrix}) \item and use standard multivariate gaussian result to find $y|Y$.  $ \end{itemize}
 
 State the standard multivariate Gaussian result to find $b|a$ from $N(\begin{bmatrix}\mathbf{0} \\ \mathbf{0} \end{bmatrix}, \begin{bmatrix}\tilde{K}_{AA} & \tilde{K}_{AB} \\ \tilde{K}_{BA} & \tilde{K}_{BB} \end{bmatrix})$.; $\mathbf{b|a}\sim N(K_{BA}K_{AA}^{-1}\mathbf{a}, K_{BB}-K_{BA}K_{AA}^{-1}K_{AB})$.
 
-Interpret the standard multivariate Gaussian result to find $b|a$ from $N(\begin{bmatrix}\mathbf{0} \\ \mathbf{0} \end{bmatrix}, \begin{bmatrix}\tilde{K}_{AA} & \tilde{K}_{AB} \\ \tilde{K}_{BA} & \tilde{K}_{BB} \end{bmatrix})$.; \begin{itemize}
-    \item $\mathbf{b|a}\sim N(K_{BA}K_{AA}^{-1}\mathbf{a}, K_{BB}-K_{BA}K_{AA}^{-1}K_{AB})$.
-    \item $K_{AA}$ is autocorrelation of input (todo: interpret better?)
-    \item $K_{BB}$ is marginal var over output if we don't know what other variables are.
-    \item Posterior variance less than that bc know what other vars are
-\end{itemize}
+Interpret the standard multivariate Gaussian result to find $b|a$ from $N(\begin{bmatrix}\mathbf{0} \\ \mathbf{0} \end{bmatrix}, \begin{bmatrix}\tilde{K}_{AA} & \tilde{K}_{AB} \\ \tilde{K}_{BA} & \tilde{K}_{BB} \end{bmatrix})$.; \begin{itemize} \item $\mathbf{b|a}\sim N(K_{BA}K_{AA}^{-1}\mathbf{a}, K_{BB}-K_{BA}K_{AA}^{-1}K_{AB})$.  \item $K_{AA}$ is autocorrelation of input (todo: interpret better?) \item $K_{BB}$ is marginal var over output if we don't know what other variables are.  \item Posterior variance less than that bc know what other vars are \end{itemize} 
 
-Derive Bayesian linear regression from a jointt, parameter-free distribution on all the outputs conditioned on all the inputs.; \begin{itemize}
-    \item Answer: $N(\mathbf{x^T}\frac{1}{\sigma^2}\Sigma XY^T, \mathbf{x^T\Sigma x}+\sigma^2)$, $\Sigma=(\frac{1}{\sigma^2}XX^T+\frac{1}{\tau^2}I)^{-1}$.
-    \item Method: dist over $[Y^T y]$ and use standard Multivariate Gaussian result (eqn for $b|a$ when have dist of [a b]).
-\end{itemize}
+Derive Bayesian linear regression from a jointt, parameter-free distribution on all the outputs conditioned on all the inputs.; \begin{itemize} \item Answer: $N(\mathbf{x^T}\frac{1}{\sigma^2}\Sigma XY^T, \mathbf{x^T\Sigma x}+\sigma^2)$, $\Sigma=(\frac{1}{\sigma^2}XX^T+\frac{1}{\tau^2}I)^{-1}$.  \item Method: dist over $[Y^T y]$ and use standard Multivariate Gaussian result (eqn for $b|a$ when have dist of [a b]).  \end{itemize} 
 
-Compare marginalised nonlinear vs linear regression.; \begin{itemize}
-    \item Regression function is now $f(\mathbf{x})=\mathbf{w^T\phi(x)}$ (nonlinear), but outputs $Y^T|X$ are still jointly Gaussian.
-    \item $Y^T|X\sim N(0_N, \tau^2\Phi^T\Phi+\sigma^2I_N)$
-    \item vs prev $Y^T|X\sim N(0, \tau^2X^TX+\sigma^2I)$
-    \item and then proceed as before
-\end{itemize}
+Compare marginalised nonlinear vs linear regression.; \begin{itemize} \item Regression function is now $f(\mathbf{x})=\mathbf{w^T\phi(x)}$ (nonlinear), but outputs $Y^T|X$ are still jointly Gaussian.  \item $Y^T|X\sim N(0_N, \tau^2\Phi^T\Phi+\sigma^2I_N)$ \item vs prev $Y^T|X\sim N(0, \tau^2X^TX+\sigma^2I)$ \item and then proceed as before \end{itemize}
 
-Define a covariance kernel function.; \begin{itemize}
-    \item $\tilde{K}:\mathbb{X}\times \mathbb{X}\mapsto \mathbb{R}$ s.t. if $\mathbf{x, x'} \in \mathbb{X}$ are two input vectors with corresponding outputs $y, y'$, then
-    \item $\tilde{K}(\mathbf{x, x'})=Cov[y, y']=E[yy']-E[y]E[y']$
-\end{itemize} 
+Define a covariance kernel function.; \begin{itemize} \item $\tilde{K}:\mathbb{X}\times \mathbb{X}\mapsto \mathbb{R}$ s.t. if $\mathbf{x, x'} \in \mathbb{X}$ are two input vectors with corresponding outputs $y, y'$, then \item $\tilde{K}(\mathbf{x, x'})=Cov[y, y']=E[yy']-E[y]E[y']$ \end{itemize} 
 
 What is the covariance kernel in the nonlinear regression example?; $\tilde{K}(\mathbf{x, x'})=\tau^2\phi(\mathbf{x})^T\phi(\mathbf{x}')+\sigma^2\delta_{\mathbf{x}=\mathbf{x}'}$
 
-Properties of any covariance kernel.; \begin{itemize}
-    \item Symmetric: $K(x, x')=K(x', x)$ for all $x, x'$.
-    \item Positive semidefinite: the matrix $[K(\mathbf{x_i, x_j}]$ formed by any finite set of input vectors $\mathbf{x_1, ..., x_N}$ is positive semidefinite.
-\end{itemize}
+Properties of any covariance kernel.; \begin{itemize} \item Symmetric: $K(x, x')=K(x', x)$ for all $x, x'$.  \item Positive semidefinite: the matrix $[K(\mathbf{x_i, x_j}]$ formed by any finite set of input vectors $\mathbf{x_1, ..., x_N}$ is positive semidefinite.  \end{itemize}
 
-What is the condition for a covariance kernel to be symmetric and positive definite?; \begin{itemize}
-    \item iff there is a feature map $\phi:\mathbb{X}\mapsto\mathbb{H}$ s.t. 
-    \item $K(\mathbf{x, x'})=\phi(\mathbf{x})^T\phi(\mathbf{x'})$
-    \item the feature space $\mathbb{H}$ might be an infinite-dimensional Hilbert space.
-\end{itemize}
+What is the condition for a covariance kernel to be symmetric and positive definite?; \begin{itemize} \item iff there is a feature map $\phi:\mathbb{X}\mapsto\mathbb{H}$ s.t.  \item $K(\mathbf{x, x'})=\phi(\mathbf{x})^T\phi(\mathbf{x'})$ \item the feature space $\mathbb{H}$ might be an infinite-dimensional Hilbert space.  \end{itemize}
 
 When doing regression using the covariance kernel, what does the term $[\tilde{K}_{XX}]_{ij}$ correspond to?; $\tilde{K}(\mathbf{x_i, x_j})$.
 
-What is the evidence for regression using the covariance kernel and how do we optimise it?; \begin{itemize}
-    \item Evidence is given by the Gaussian likelihood $P(Y|X, \tilde{K})=|2\pi\tilde{K}_{XX}|^{-\frac{1}{2}}e^{-\frac{1}{2}Y\tilde{K}_{XX}^{-1}Y^T}$.
-    \item Optim (hyper)parameters of covariance kernel $\tilde{K}$ by gradient ascent in $\log P(Y|X, \tilde{K})$.
-\end{itemize}
+What is the evidence for regression using the covariance kernel and how do we optimise it?; \begin{itemize} \item Evidence is given by the Gaussian likelihood $P(Y|X, \tilde{K})=|2\pi\tilde{K}_{XX}|^{-\frac{1}{2}}e^{-\frac{1}{2}Y\tilde{K}_{XX}^{-1}Y^T}$.  \item Optim (hyper)parameters of covariance kernel $\tilde{K}$ by gradient ascent in $\log P(Y|X, \tilde{K})$.  \end{itemize} 
 
-What is the kernel trick?; \begin{itemize}
-    \item Don't need to define $\phi(x)$ explicitly (and feature mapping may be infinite dim), only need to evaluate dot product, i.e. kernel.
-    \item (own paraphrase)
-\end{itemize}
+What is the kernel trick?; \begin{itemize} \item Don't need to define $\phi(x)$ explicitly (and feature mapping may be infinite dim), only need to evaluate dot product, i.e. kernel.  \item (own paraphrase) \end{itemize}
 
-Define a Gaussian process.; \begin{itemize}
-    \item Defined by a covariance kernel $K(\mathbf{x, x'})$ (and mean function $m(\mathbf{x})$ on a domain $\mathbb{X}$.
-    \item A GP is a stochastic process (collection of RVs) on $\mathbb{R}$ indexed by $\mathbf{x}\in \mathbb{X}$, any finite subset of which have consistent Gaussian distributions.
-    \item Let $f(\mathbf{x})$ be the RV indexed by $\mathbf{x}$. Then a draw from the whole GP (i.e. for all $\mathbf{x}$) is a random function $f:\mathbb{X}\mapsto\mathbb{R}$, written as $f(\cdot)\sim GP(m(\cdot), K(\cdot, \cdot))$. (dot to emphasise these are all functions.)
-    \item Given a finite list of points $\{\mathbf{x_1,...,x_N}\}$, the joint distribution of the function values $\mathbf{f}=[f(\mathbf{x_1}),...,f(\mathbf{x_N})]^T$ is $\mathbf{f}|X, K\sim N(\mathbf{m}, K_{XX})$.
-    \begin{itemize}
-        \item Where, as usual, $[K_{XX}]_{ij}=K(\mathbf{x_i, x_j})$ and $[\mathbf{m}]_i=m(\mathbf{x_i})$.
-    \end{itemize}
-\end{itemize}
+Define a Gaussian process.; \begin{itemize} \item Defined by a covariance kernel $K(\mathbf{x, x'})$ (and mean function $m(\mathbf{x})$ on a domain $\mathbb{X}$.  \item A GP is a stochastic process (collection of RVs) on $\mathbb{R}$ indexed by $\mathbf{x}\in \mathbb{X}$, any finite subset of which have consistent Gaussian distributions.  \item Let $f(\mathbf{x})$ be the RV indexed by $\mathbf{x}$. Then a draw from the whole GP (i.e. for all $\mathbf{x}$) is a random function $f:\mathbb{X}\mapsto\mathbb{R}$, written as $f(\cdot)\sim GP(m(\cdot), K(\cdot, \cdot))$. (dot to emphasise these are all functions.) \item Given a finite list of points $\{\mathbf{x_1,...,x_N}\}$, the joint distribution of the function values $\mathbf{f}=[f(\mathbf{x_1}),...,f(\mathbf{x_N})]^T$ is $\mathbf{f}|X, K\sim N(\mathbf{m}, K_{XX})$.  \begin{itemize} \item Where, as usual, $[K_{XX}]_{ij}=K(\mathbf{x_i, x_j})$ and $[\mathbf{m}]_i=m(\mathbf{x_i})$.  \end{itemize} \end{itemize}
 
-Compare the non-GP analog to the GP solution for nonlinear regression.; \begin{itemize}
-    \item non-GP: could define $f(\cdot)$ by drawing the weight vector $\mathbf{w}\in \mathbb{H}$ from the prior.
-    \item But $\mathbb{H}$ may be infinite dimensional, so need an infinite-size object w to make even a single prediction.
-    \item vs in the GP view, each $f(\mathbf{x})$ can be drawn separately (and doesn't require drawing infinite-dim objects).
-\end{itemize}
+Compare the non-GP analog to the GP solution for nonlinear regression.; \begin{itemize} \item non-GP: could define $f(\cdot)$ by drawing the weight vector $\mathbf{w}\in \mathbb{H}$ from the prior.  \item But $\mathbb{H}$ may be infinite dimensional, so need an infinite-size object w to make even a single prediction.  \item vs in the GP view, each $f(\mathbf{x})$ can be drawn separately (and doesn't require drawing infinite-dim objects).  \end{itemize}
 
-How do you do regression with GPs?; \begin{itemize}
-    \item Approach: observations as noisy versions of almost surely continuous latent $f(\mathbf{x}_i)$: $y_i|\mathbf{x}_i, f(\cdot)\sim N(f(\mathbf{x}_i), \sigma^2)$
-    \item So predictions are $y|X, Y, \mathbf{x}\sim N(E[f(\mathbf{x})|X, Y], Var[f(\mathbf{x})|X, Y]+\sigma^2)$
-    \begin{itemize}
-        \item where posterior on latent $f$ is also a GP: $f(\cdot)|X,Y\sim GP(K_{\cdot X}(K_{XX}+\sigma^2I)^{-1}Y^T, K(\cdot, \cdot)-K_{\cdot X}(K_{XX}+\sigma^2I)^{-1}K_{X\cdot})$
-        \item $\cdot$ is location of prediction
-    \end{itemize}
-    \item Evidence $P(Y|X)=|2\pi(K_{XX}+\sigma^2I)|^{-\frac{1}{2}}e^{-\frac{1}{2}Y(K_{XX}+\sigma^2I)^{-1}Y^T}$
-    \begin{itemize}
-        \item Evidence optimisation: gradient ascent in $\log P(Y|X)$.
-    \end{itemize}
-\end{itemize}
+How do you do regression with GPs?; \begin{itemize} \item Approach: observations as noisy versions of almost surely continuous latent $f(\mathbf{x}_i)$: $y_i|\mathbf{x}_i, f(\cdot)\sim N(f(\mathbf{x}_i), \sigma^2)$ \item So predictions are $y|X, Y, \mathbf{x}\sim N(E[f(\mathbf{x})|X, Y], Var[f(\mathbf{x})|X, Y]+\sigma^2)$ \begin{itemize} \item where posterior on latent $f$ is also a GP: $f(\cdot)|X,Y\sim GP(K_{\cdot X}(K_{XX}+\sigma^2I)^{-1}Y^T, K(\cdot, \cdot)-K_{\cdot X}(K_{XX}+\sigma^2I)^{-1}K_{X\cdot})$ \item $\cdot$ is location of prediction \end{itemize} \item Evidence $P(Y|X)=|2\pi(K_{XX}+\sigma^2I)|^{-\frac{1}{2}}e^{-\frac{1}{2}Y(K_{XX}+\sigma^2I)^{-1}Y^T}$ \begin{itemize} \item Evidence optimisation: gradient ascent in $\log P(Y|X)$.  \end{itemize} \end{itemize}
 
-How to draw samples from a Gaussian Process; \begin{itemize}
-    \item Fix a set of input vectors $\mathbf{x_1, ..., x_N}$ and draw a sample $f(\mathbf{x_1}),...,f(\mathbf{x_N})$ from the corresponding multivariate Gaussian.
-    \item or sample $f(\mathbf{x}_1)$ first and then sample $f(\mathbf{x_{i+1}})|f(\mathbf{x_1}),...,f(\mathbf{x_i})$.
-\end{itemize}
+How to draw samples from a Gaussian Process; \begin{itemize} \item Fix a set of input vectors $\mathbf{x_1, ..., x_N}$ and draw a sample $f(\mathbf{x_1}),...,f(\mathbf{x_N})$ from the corresponding multivariate Gaussian.  \item or sample $f(\mathbf{x}_1)$ first and then sample $f(\mathbf{x_{i+1}})|f(\mathbf{x_1}),...,f(\mathbf{x_i})$.  \end{itemize}
 
-Name and briefly describe at least three kinds of covariance kernels.; \begin{itemize}
-    \item Polynomial (f is poly of degree m)
-    \item Squared-exponential/ exponentiated-quadratic/RBF (f smooth on length scale $\eta$)
-    \item Periodic (exp-sine) (f smooth and periodic)
-    \item Rational quadratic (f smooth over multiple scales)
-\end{itemize}
+Name and briefly describe at least three kinds of covariance kernels.; \begin{itemize} \item Polynomial (f is poly of degree m) \item Squared-exponential/ exponentiated-quadratic/RBF (f smooth on length scale $\eta$) \item Periodic (exp-sine) (f smooth and periodic) \item Rational quadratic (f smooth over multiple scales) \end{itemize}
 
-What is the squared-exponential/exponentiated-quadratic kernel?; \begin{itemize}
-    \item $K(x, x')=\theta^2e^{-\frac{||\mathbf{x}-\mathbf{x'}||^2}{2\eta^2}}$
-    \item ($f$ is smooth ($C^\infty$ almost surely) on length scale $\eta$)
-\end{itemize}
+What is the squared-exponential/exponentiated-quadratic kernel?; \begin{itemize} \item $K(x, x')=\theta^2e^{-\frac{||\mathbf{x}-\mathbf{x'}||^2}{2\eta^2}}$ \item ($f$ is smooth ($C^\infty$ almost surely) on length scale $\eta$) \end{itemize} 
 
-Give four examples of combinations of covariance kernels that are also covariance kernels.; \begin{itemize}
-    \item Rescaling: $\alpha K_1$ for $\alpha > 0$
-    \item Addition: $K_1+K_2$
-    \item Elementwise prod: $K_1K_2$
-    \item Mapping: $K_1(\phi(\mathbf{x}), \phi(\mathbf{x'}))$ for some $\phi$.
-\end{itemize}
+Give four examples of combinations of covariance kernels that are also covariance kernels.; \begin{itemize} \item Rescaling: $\alpha K_1$ for $\alpha > 0$ \item Addition: $K_1+K_2$ \item Elementwise prod: $K_1K_2$ \item Mapping: $K_1(\phi(\mathbf{x}), \phi(\mathbf{x'}))$ for some $\phi$.  \end{itemize}
 
 How might you create a kernel to model a function that is not perfectly periodic using a GP?; Sum periodic kernel for period and squared exp (RBF) kernel to learn scale.
 
@@ -407,40 +143,16 @@ If a GP has a radial covariance kernel, it; is stationary wrt translations, rota
 
 How can we have a non-Gaussian mapping from f to y using GPs?; Approximation
 
-Name at least two ways in which functions in more complex hierarchical models can be drawn from GP priors.; \begin{itemize}
-    \item GP Lavent var model (GPLVM)
-    \item Stacked GPs
-    \item Deep GP networks
-\end{itemize}
+Name at least two ways in which functions in more complex hierarchical models can be drawn from GP priors.; \begin{itemize} \item GP Lavent var model (GPLVM) \item Stacked GPs \item Deep GP networks \end{itemize}
 
-What are computational limits of GPs?; \begin{itemize}
-    \item Inferenec and learning require inversion of $K_{XX}$: scales as $N^3$. 
-    \item Sparse approximation methods reduce this to order N.
-\end{itemize}
+What are computational limits of GPs?; \begin{itemize} \item Inferenec and learning require inversion of $K_{XX}$: scales as $N^3$.  \item Sparse approximation methods reduce this to order N.  \end{itemize}
 
 In what cases (name one) are GPs particularly useful or SOTA?; When data is limited.
 
-Why is it that even though the parameter (function f) is infinite-dimensional for GPs, it doesn't overfit the data?; \begin{itemize}
-    \item Bayesian treatment integrates over these params: never identify a single best fit f, just a posterior and posterior mean. 
-    \item So f cannot be adjusted to overfit the data.
-\end{itemize}
+Why is it that even though the parameter (function f) is infinite-dimensional for GPs, it doesn't overfit the data?; \begin{itemize} \item Bayesian treatment integrates over these params: never identify a single best fit f, just a posterior and posterior mean.  \item So f cannot be adjusted to overfit the data.  \end{itemize}
 
-Describe nonparametric Bayesian models.; \begin{itemize}
-    \item Infinite number of parameters
-    \item Often constructed as the infinite limit of a nested family of finite models (sometimes equivalent to infinite model averaging)
-    \item Params integrated out, so effective number of params to overfit is zero or small (hyperparameters)
-    \item No need for model selection, just average over models. \begin{itemize}
-        \item Bayesian posterior on parameters will concentrate on `submodel' with largest integral automatically.
-    \end{itemize}
-    \item No explicit need for Occam's razor, validation or added regularisation penalty.
-\end{itemize}
+Describe nonparametric Bayesian models.; \begin{itemize} \item Infinite number of parameters \item Often constructed as the infinite limit of a nested family of finite models (sometimes equivalent to infinite model averaging) \item Params integrated out, so effective number of params to overfit is zero or small (hyperparameters) \item No need for model selection, just average over models. \begin{itemize} \item Bayesian posterior on parameters will concentrate on `submodel' with largest integral automatically.  \end{itemize} \item No explicit need for Occam's razor, validation or added regularisation penalty.  \end{itemize}
 
-Give at least two examples of nonparametric Bayesian models.; \begin{itemize}
-    \item Gaussian Processes (params transferred to kernels)
-    \item Dirichlet process (infinite mixtures)
-    \item Infinite Binary Prior ( infinite binary factor models)
-    \item Infinite HMM
-    \item /chinese restaurant process
-\end{itemize}
+Give at least two examples of nonparametric Bayesian models.; \begin{itemize} \item Gaussian Processes (params transferred to kernels) \item Dirichlet process (infinite mixtures) \item Infinite Binary Prior ( infinite binary factor models) \item Infinite HMM \item /chinese restaurant process \end{itemize}
 
 \end{document}
