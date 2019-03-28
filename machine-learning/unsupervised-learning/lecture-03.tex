@@ -52,13 +52,13 @@ Write down the likelihood for mixtures of factor analysers.; \begin{itemize} \it
 
 Describe the EM algorithm for mixtures of factor analysers.; \begin{itemize} \item E-step: need moments of $p(\mathbf{z}|s_n, \mathbf{x}_n, \theta)$, specifically $\langle \delta_{s_n=m}\rangle, \langle\delta_{s_n=m}\mathbf{z}_n\rangle$ and $\langle \delta_{s_n=m}\mathbf{z_nz_n^T}\rangle$.  \item M-step: similar to M-step for FA with responsibility weighted moments.  \end{itemize} 
 
-EM for exponential families E-step; TODO: it says we need only expected suff stats under q but it seems wrong, under p?
+EM for (joint $p(x,y)$ in) exponential families E-step; TODO: it says we need only expected suff stats under q but it seems wrong, under p?
 
-The M-step for EM for exponential families solves; $\frac{\partial \mathcal{F}}{\partial \theta}= \langle T(\mathbf{z})\rangle_{q(z)} - \langle T(z)|\theta \rangle_{p(z|\theta)} = 0$
+The M-step for EM for (joint $p(x,y)$ in) exponential families solves; \begin{itemize} \item $\frac{\partial \mathcal{F}}{\partial \theta}= \langle T(\mathbf{x, y})\rangle_{q(x, y)} - \langle T(x, y)|\theta \rangle_{p(x, y|\theta)} = 0$ \item Derived from: \item $F(\theta) = \theta^T\langle T(x, y) \rangle_{q(x, y)} - \log Z(\theta) + C_{wrt \theta}$. \item $\frac{\partial}{\partial \theta}\log Z(\theta) = \frac{1}{Z(\theta)}\frac{\partial}{\partial\theta}Z(\theta)$ \item $\frac{1}{Z(\theta)}\frac{\partial}{\partial\theta}\int f(z)\exp\{\theta^TT(z)\}$ \item $=\int \frac{1}{Z(\theta)}f(z)\exp\{\theta^TT(z)\}T(z)$ \item $=\langle T(z)|\theta\rangle_{p(z|\theta)}$ \end{itemize}
 
-Write the free energy dependence on $\theta$ for exponential family p(x,z).; $F(\theta) = \theta^T\langle T(z) \rangle_{q(z)} - \log Z(\theta) + C$.
+Write the free energy dependence on $\theta$ for exponential family p(x,y).; \begin{itemize} \item $F(\theta) = \theta^T\langle T(x, y) \rangle_{q(x, y)} - \log Z(\theta) + C_{wrt \theta}$. \end{itemize}
 
-What is it helpful to do to derive Em formally for models with discrete latents?; Introduce an indicator (one-hot) vector $\mathbf{s}$ in place of the discrete $s$.
+What is it helpful to do to derive EM formally for models with discrete latents?; Introduce an indicator (one-hot) vector $\mathbf{s}$ in place of the discrete $s$.
 
 What are the expected sufficient statistics we need to calculate for EM for exponential family mixtures?; \begin{itemize} \item $\sum_i \langle s_i \rangle_{q}$ \item $\sum_i T(\mathbf{x}_i)\langle \mathbf{s}_i^T \rangle_q$. (responsibility-weighted sufficient stats) \end{itemize}
 
