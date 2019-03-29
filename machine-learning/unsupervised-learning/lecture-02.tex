@@ -91,6 +91,10 @@ State three equivalent definitions of PCA.; \begin{itemize} \item Find K directi
 
 Describe PCA from the perspective of mutual information.; \begin{itemize} \item Problem: Given $\mathbf{x}$, find $\mathbf{y = Ax}$ with columns of $A$ being unit vectors such that $I(y,x)$ is maximised, assuming $p(\mathbf{x})$ is Gaussian. (Also dim y $<$ dim x.) \item I(y,x) = H(y) + H(x) - H(x,y). Here, H(x) = H(x,y) so I(x,y) = H(y).  \item $H(z)=-\int dz p(z) \ln p(z) = \frac{1}{2}\ln|\Sigma|+\frac{D}{2}(1+\ln 2\pi )$.  \item I.e. want to choose $y$ with largest det of covariance matrix $|\Sigma|$, i.e. largest volume.  \item $\Sigma_y = A\Sigma_x A^T = AUW_XU^TA^T$ \item So $A$ should be aligned with the columns of $U$ which are associated with the largest eigenvalues (variances).  \item Projection to the principal component subspace preserves the most information about the data.  \end{itemize}
 
+Mutual information I(X,Y) in terms of entropy; \begin{itemize} \item $H(X)+H(Y)-H(X,Y)$ \item $=H(X)-H(X|Y)$ \item $= H(Y) - H(Y|X)$ (MI is symmetric) \item $=H(X,Y)-H(X|Y)-H(Y|X)$ \end{itemize}
+
+Entropy of a Gaussian $h(z)$; $h(z)=-\int dz p(z) \ln p(z) = \frac{1}{2}\ln|\Sigma|+\frac{D}{2}(1+\ln 2\pi )$
+
 PC score; project vector onto first few (two e.g.) PCs.
 
 How do you interpret a matrix? e.g. $U = [u_1 u_2 ...]$, and you have the product $Ux$.; Each $u_i$ is an axis (or directional vector), and each $x_i$ is how far you want to walk in the direction of $u_i$. \newline Note: this is not in the notes.
