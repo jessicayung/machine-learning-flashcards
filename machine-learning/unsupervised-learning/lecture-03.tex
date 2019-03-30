@@ -66,7 +66,7 @@ What are the expected sufficient statistics we need to calculate for EM for expo
 
 Write the expfam form of a distribution and a prior.; \begin{itemize} \item $p(z|\theta) = f(z)\exp\{\theta^T T(z)/Z(\theta)\}$ \item $p(\theta) = F(\nu, \tau)\exp\{\theta^T\tau\}/Z(\theta)^\nu$ \end{itemize}
 
-Write down the free energy for exponential families for MAP. (first line only);  $F_{MAP}(q,\theta) = \langle \log P(\mathcal{X, Z, \theta}|\theta)\rangle_{q(\mathcal{Z})}+H(q)$.
+Write down the free energy for exponential families for MAP. (first line only);  $F_{MAP}(q,\theta) = \langle \log P(\mathcal{X, Z, \theta})\rangle_{q(\mathcal{Z})}+H(q)$.
 
 Write down the MAP free energy for exponential families wrt theta.;  $F(\theta) = \theta^T(\langle \sum_i T(z_i) \rangle_{q(z)} + \tau)- (N+\nu) \log Z(\theta) + C$.
 
