@@ -50,12 +50,7 @@ Describe the probabilistic PCA model.; \begin{itemize} \item N D-dim datapoints 
 
 Law of iterated expectation; $E_x[f(x)] = E_y[E_{x|y}[f(x)]]$
 
-Variance of x in terms of expectation, variance over y, where x can be conditioned on y; \begin{itemize}
-    \item $Var_X[x] = E_Y[V[x|y] + V[E[x|y]]]$
-    \item Unexplained + explained
-    \item Write out defn, use law of iterated expectations, rewrite $E[X^2|Y]=Var[X]+E[X|Y]^2$, regroup terms.
-    \item called the `Law of total variance'.
-\end{itemize} 
+Variance of x in terms of expectation, variance over y, where x can be conditioned on y; \begin{itemize} \item $Var_X[x] = E_Y[V[x|y] + V[E[x|y]]]$ \item Unexplained + explained \item Write out defn, use law of iterated expectations, rewrite $E[X^2|Y]=Var[X]+E[X|Y]^2$, regroup terms. \item called the `Law of total variance'. \end{itemize} 
 
 Compare modelling x as a multivariate Gaussian vs using probabilistic PCA; \begin{itemize}\item Multivariate Gaussian \begin{itemize} \item Model: Descriptive density model: correlations captured by off-diagonal elements of $\Sigma$.  \item $\Sigma$ has $\frac{D(D+1)}{2}$ free parameters.  \item $\Sigma$ only constrained to be positive definite.  \item Simple ML estimate.  \end{itemize} \item Latent variables \begin{itemize} \item Interpretable causal model: correlations caputerd by common influence of latent variable.  \item $\Lambda\Lambda^T +\psi I$ has $DK+1$ free parameters.  \item For $K < D$, covariance structure (of x?) is constrained (blurry pancake) \item ML estimation is more complex.  \end{itemize} \end{itemize}
 
