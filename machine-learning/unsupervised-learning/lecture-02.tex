@@ -111,7 +111,7 @@ Properties of an empirical covariance matrix; \begin{itemize} \item DxD, where D
 
 Log likelihood of PPCA; $l = -\frac{N}{2}\log|2\pi C|-\frac{N}{2}Tr[C^{-1}S]$, where $C=\Lambda\Lambda^T+\psi I$.
 
-Maximum likelihood expression for PPCA; Deriv wrt $\Lambda$: \begin{itemize} \item $\frac{\partial l}{\partial \Lambda} = N(-C^{-1}\Lambda+C^{-1}SC^{-1}\Lambda) = 0$ \item (Use trace inverse trick.) \item So at stationary point we have $\Lambda = SC^{-1}\Lambda$.  \item working: $l = -\frac{N}{2}\log|2\pi C|-\frac{N}{2}Tr[C^{-1}S]$, where $C=\Lambda\Lambda^T+\psi I$ \item and use trace inverse formula $\frac{d Tr \mathbf{(AX^{-1}B)}}{dX}] = -(X^{-1}BAX^{-1})^T$ \end{itemize}
+Maximum likelihood expression for $\Lambda$ for PPCA; Deriv wrt $\Lambda$: \begin{itemize} \item $\frac{\partial l}{\partial \Lambda} = N(-C^{-1}\Lambda+C^{-1}SC^{-1}\Lambda) = 0$ \item (Use trace inverse trick.) \item So at stationary point we have $\Lambda = SC^{-1}\Lambda$.  \item working: $l = -\frac{N}{2}\log|2\pi C|-\frac{N}{2}Tr[C^{-1}S]$, where $C=\Lambda\Lambda^T+\psi I$ \item and use trace inverse formula $\frac{d Tr \mathbf{(AX^{-1}B)}}{dX}] = -(X^{-1}BAX^{-1})^T$ \end{itemize}
 
 Singular Value Decomposition; SVD decomposes any n x p matrix $\mathbf{X}$.\begin{itemize} \item $X = USV^T$ \item dim U = nxn, $U^TU=I_n$.  \item dim V = pxp, $V^TV=I_p$ \item dim S = nxp, S diagonal.  \item Singular values are diagonal entries $[S]_{jj}$, all positive, ordered in decreasing order from upper left diagonal element.  \end{itemize} (From Intro to DL Background Maths slides)
 

@@ -71,7 +71,7 @@ Multivariate Linear Regression (Gaussian noise): State the conditional distribut
 Multivariate Linear Regression (Gaussian noise): $\frac{\partial(-l)}{\partial W} = $; \begin{itemize} \item $\frac{1}{2}\sum_i [2\Sigma^{-1}_yW\mathbf{x_ix_i^T}-2\Sigma_y^{-1}\mathbf{y_ix_i}^T]=0$ (Use trace $A^TBAC$ trick) \item $\hat{W} = \sum_i y_ix_i^T(\sum_i x_i x_i^T)^{-1}$ \end{itemize}
 
 
-Multivariate Linear Regression (Gaussian noise): Log posterior on $\mathbf{w}$; \begin{itemize}
+Multivariate Linear Regression (Gaussian noise): Log posterior on $\mathbf{w}$ (one-dim y); \begin{itemize}
     \item $\log N(\Sigma_w\sum_i(y_i\mathbf{x_i})\sigma^{-2}_y,\Sigma_w)$ $ = -\frac{1}{2}\mathbf{w^T\Sigma_w^{-1}w+w^T\Sigma^{-1}_w\Sigma_w\sum_i(y_i\mathbf{x_i})\sigma_y^{-2}}+C$, $\Sigma_w^{-1} = A+\sigma_y^{-2}\sum_i \mathbf{x_ix_i^T}$
     \item from $\log P(\mathbf{w}|\mathcal{D},A,\sigma_y) = \log P(\mathcal{D}|\mathbf{w},A, \sigma_y)+\log P(\mathbf{w}|A,\sigma_y)-\log P(\mathcal{D}|A,\sigma_y)$
 \end{itemize}
