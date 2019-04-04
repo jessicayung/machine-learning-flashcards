@@ -50,7 +50,7 @@ Do we always need all the parameters that fully determine the distribution q for
 
 Write down the likelihood for mixtures of factor analysers.; \begin{itemize} \item $p(\mathbf{x}|\theta) = \sum_k \pi_k N(\mathbf{\mu_k}, \Lambda_k\Lambda_k^T + \Psi)$ \end{itemize}
 
-Describe the EM algorithm for mixtures of factor analysers.; \begin{itemize} \item E-step: need moments of $p(\mathbf{z}|s_n, \mathbf{x}_n, \theta)$, specifically $\langle \delta_{s_n=m}\rangle, \langle\delta_{s_n=m}\mathbf{z}_n\rangle$ and $\langle \delta_{s_n=m}\mathbf{z_nz_n^T}\rangle$.  \item M-step: similar to M-step for FA with responsibility weighted moments.  \end{itemize} 
+Describe the EM algorithm for mixtures of factor analysers.; \begin{itemize} \item E-step: need moments of $p(\mathbf{y}_n, s_n | \mathbf{x}_n, \theta)$, specifically $\langle \delta_{s_n=m}\rangle, \langle\delta_{s_n=m}\mathbf{y}_n\rangle$ and $\langle \delta_{s_n=m}\mathbf{y_ny_n^T}\rangle$.  \item M-step: similar to M-step for FA with responsibility weighted moments. \item Note model has two sets of latent variables: discrete indicator $s_n$ and continuous factor vector $\mathbf{y}_{n,k} \in R^{D_k}$ s.t. \item $p(\mathbf{x}|\theta) = \sum_{s_n=1}^K p(s_n|\theta) \int p(\mathbf{y}|s_n, \theta)p(\mathbf{x}_n|\mathbf{y}, s_n, \theta)d\mathbf{y}$ \end{itemize} 
 
 EM for (joint $p(x,y)$ in) exponential families E-step: what do we need?; \begin{itemize} \item Need only expected suff stats under q. bc \item $F(\theta) = \theta^T\langle T(x, y) \rangle_{q(x, y)} - \log Z(\theta) + C_{wrt \theta}$. TODO I don't buy that - don't we need to look at q in the E-step? Why constant wrt theta?\end{itemize}
 
