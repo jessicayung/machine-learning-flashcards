@@ -80,7 +80,7 @@ Variance of empirical data in an arbitrary direction $\mathbf{v}$; \begin{itemiz
 
 Explain how the PCs can be obtained from the empirical data.; \begin{itemize} \item PCs are the eigenvectors of the empirical covariance matrix $S=\langle\mathbf{xx^T}\rangle$ with the largest eigenvalues.  \item Variance in arbitrary direction is $\langle (\mathbf{x^Tv})^2\rangle =\sum_i v_{(i)}^2\omega_{(i)}$.  \item If $\mathbf{v^Tv}=1$, then $\sum_i v_{(i)}^2=1$ and so $\arg\max_{||v||=1} \langle (\mathbf{x^Tv})^2\rangle = \mathbf{u}_{(max)}$. ($v_{(i)}=1$ corresponding to largest eigenvalue, zero otherwise.) \item i.e. the direction of greatest variance is the eigenvector with the largest eigenvalue.  \end{itemize}
 
-State the algebraic expression for a projection into a K-dimensional principal subspace.; $\hat{x_n} = \sum_{k=1}^K x_{n(k)}\mathbf{\lambda}_{(k)}$
+State the algebraic expression for a projection into a K-dimensional principal subspace.; $\hat{x}_n = \sum_{k=1}^K x_{n(k)}\mathbf{\lambda}_{(k)}$ (note $\mathbf{\lambda}_k$ is a vector, doesn't always come out on flashcards for some reason)
 
 State three equivalent definitions of PCA.; \begin{itemize} \item Find K directions of greatest variance in data.  \item Find K-dimensional orthogonal projection that preserves greatest variance.  \item Find K-dimensional vectors $y_i$ and matrix $\Lambda$ so that $\hat{\mathbf{x}}_i = \Lambda\mathbf{y_i}$ is as close as possible (in terms of squared distance) to $\mathbf{x_i}$.  \end{itemize}
 
