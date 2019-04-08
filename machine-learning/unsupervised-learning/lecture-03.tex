@@ -70,7 +70,7 @@ Write down the free energy for exponential families for MAP. (first line only); 
 
 Write down the MAP free energy for exponential families wrt theta.;  $F(\theta) = \theta^T(\langle \sum_i T(z_i) \rangle_{q(z)} + \tau)- (N+\nu) \log Z(\theta) + C$.
 
-How can we find MAP values using the free energy?; \begin{itemize} \item After the E-step, the augmented free energy (F with $p(Z, X, \theta)$) is equal to the log-joint $P(X, Z, \theta)$.  \item So free energy maxima are log-joint maxima (MAP values).  \end{itemize}
+How can we find MAP values using the free energy?; \begin{itemize} \item After the E-step, the augmented free energy (F with $p(Z, X, \theta)$) is equal to the log-joint $P(X, \theta | Z)$.  \item So free energy maxima are log-joint maxima (MAP values).  \end{itemize}
 
 Can we find posteriors $p(z|x, \theta)$ using EM?; Only approximately (VB) (TODO wait why only approx?)
 
