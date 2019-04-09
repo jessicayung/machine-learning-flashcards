@@ -36,7 +36,7 @@ Write the Bernouilli distribution (single coin flip) in exponential form.; $P(x|
 
 Natural parameter and sufficient statistics for Bernouilli distribution written in exponential form; \begin{itemize} \item Natural parameter: log odds $\log (q/(1-q))$ \item Sufficient stats (for multiple tosses): number of heads \end{itemize}
 
-Conjugate prior for Bernouilli distribution; \begin{itemize} \item $P(q)=F(\tau, \nu)(1-q)^{\nu}e^{\log(q/1-q)\tau}$ \item $=F(\tau, \nu)(1-q)^{\nu-\tau}q^{\tau}$ \item $= Beta(\tau+1, \nu-\tau+1)$.  \end{itemize}
+Conjugate prior for Bernouilli distribution (write out); \begin{itemize} \item $P(q)=F(\tau, \nu)(1-q)^{\nu}e^{\log(q/1-q)\tau}$ \item $=F(\tau, \nu)(1-q)^{\nu-\tau}q^{\tau}$ \item $= Beta(\tau+1, \nu-\tau+1)$.  \end{itemize}
 
 Posterior for Bernouilli dist with conjugate prior; $P(q|\{x_i\}) = Beta(\alpha_1, \alpha_2)$, where \begin{itemize} \item $\alpha_1 = 1+\tau+\sum_i x_i$ \item $\alpha_2 = 1+(\nu+n) - (\tau+\sum_i x_i)$ \item Obs head: add 1 to $\sum_i x_i$ and to count $n$, increments $\alpha_1$ but $\alpha_2$ stays the same.  \item Obs tail: add 1 to $n$ only, $\alpha_2$ increases, $\alpha_1$ stays the same.  \end{itemize}
 
