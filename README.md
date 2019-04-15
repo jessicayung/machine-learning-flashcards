@@ -45,33 +45,39 @@ These flashcards are formatted to be used with [Anki](https://apps.ankiweb.net/)
 4. Click 'Add'.
 5. Click 'Clone: Basic' and name the card type as 'LaTeX' (or whatever else you want). (Or if you don't have Basic, cloning another card type should also work - Basic is just the most basic (!) card type.) 
 6. Select the card type you just created. Click 'Options' and add the following to the header:
-    - ```\documentclass[12pt]{article} \usepackage{amssymb,amsmath,amsfonts,mathrsfs, graphicx} \usepackage[paperwidth=5in, paperheight=100in]{geometry} \pagestyle{empty} \setlength{\parindent}{0in}
-\newcommand{\indep}{\perp\!\!\!\perp}
+    ```
+    \documentclass[12pt]{article} 
+    \usepackage{amssymb,amsmath,amsfonts,mathrsfs, graphicx} 
+    \usepackage[paperwidth=5in, paperheight=100in]{geometry} % you probably don't need this but I haven't tested removing it
+    \newcommand{\indep}{\perp\!\!\!\perp}
 
-\newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+    \newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
 
-\newcommand{\nCI}{\centernot{\CI}}
-\begin{document} 
+    \newcommand{\nCI}{\centernot{\CI}}
+    \begin{document} 
     ```
     - If you already have a header, you can add the following if you plan to import  Unsupervised Learning Lecture 5 (Graphical models):
-    - ```\newcommand{\indep}{\perp\!\!\!\perp}
+    ```\newcommand{\indep}{\perp\!\!\!\perp}
 
-\newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+    \newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
 
-\newcommand{\nCI}{\centernot{\CI}}```
+    \newcommand{\nCI}{\centernot{\CI}}
+    ```
     - Add the following footer:
-        ```\end{document}```
+    ```\end{document}```
 7. You should be back where you are choosing a card type. (To get to this window, click on the card type name from the window where you are adding cards.) Click on your new card type and click 'Choose.'
 8. Click 'Cards...'. You should see something like: 
     - ![Card layout in Anki](latex_card.png)
 10. Replace the front template with
     - ```[latex]{{Front}}[/latex] ```
     - and the back template with
-    - ```[latex]{{Front}}[/latex]
+    ```
+    [latex]{{Front}}[/latex]
 
-<br /><br />
-<hr id=answer>
-<br />
+    <br /><br />
+    <hr id=answer>
+    <br />
 
-[latex]{{Back}}[/latex] ```
+    [latex]{{Back}}[/latex] 
+    ```
 9. Click 'Close'. You're done! Just select this card type when you're importing cards in future.
