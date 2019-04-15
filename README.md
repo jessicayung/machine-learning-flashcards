@@ -28,9 +28,50 @@ These flashcards are formatted to be used with [Anki](https://apps.ankiweb.net/)
     - Select the `.tex` file you want to import.
     - You should see an Anki screen with import options that looks like this:  ![How to import tex files to Anki](how_to_anki.png)
         - 1 Select the LaTeX card type by clicking on the field to the right of Type.
+            - If you don't have this card type, create one (see 'How to create LaTeX Card Type' below).
+            - If you do, you will 99% still have to edit the header of the card type to accommodate for the conditional independence symbols in `lecture-05.tex`. (Step 5 of 'How to create LaTeX Card Type' below.)
         - 2 Choose to have fields separated by a semicolon (; char).
             - You should now have two fields in the file.
         - 3 Choose to update existing notes when the first field matches (optional but is generally a good idea).
     - Click 'Import'.
     - There may be some error messages - most of them don't matter but let me know if you see a proper error.
 5. Click on the name of the deck and click 'Study Now' to start reviewing the flashcards! :)
+
+#### How to create a LaTeX card type
+
+1. From the Anki launch page, click 'Add'. If you are already in a window where you can select the card type, skip this step.
+2. Click on the card type.
+3. You should see a list of card types. Click 'Manage'.
+4. Click 'Add'.
+5. Click 'Clone: Basic' and name the card type as 'LaTeX' (or whatever else you want). (Or if you don't have Basic, cloning another card type should also work - Basic is just the most basic (!) card type.) 
+6. Select the card type you just created. Click 'Options' and add the following to the header:
+    - ```\documentclass[12pt]{article} \usepackage{amssymb,amsmath,amsfonts,mathrsfs, graphicx} \usepackage[paperwidth=5in, paperheight=100in]{geometry} \pagestyle{empty} \setlength{\parindent}{0in}
+\newcommand{\indep}{\perp\!\!\!\perp}
+
+\newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+
+\newcommand{\nCI}{\centernot{\CI}}
+\begin{document} 
+    ```
+    - If you already have a header, you can add the following if you plan to import  Unsupervised Learning Lecture 5 (Graphical models):
+    - ```\newcommand{\indep}{\perp\!\!\!\perp}
+
+\newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+
+\newcommand{\nCI}{\centernot{\CI}}```
+    - Add the following footer:
+        ```\end{document}```
+7. You should be back where you are choosing a card type. (To get to this window, click on the card type name from the window where you are adding cards.) Click on your new card type and click 'Choose.'
+8. Click 'Cards...'. You should see something like: 
+    - ![Card layout in Anki](latex_card.png)
+10. Replace the front template with
+    - ```[latex]{{Front}}[/latex] ```
+    - and the back template with
+    - ```[latex]{{Front}}[/latex]
+
+<br /><br />
+<hr id=answer>
+<br />
+
+[latex]{{Back}}[/latex] ```
+9. Click 'Close'. You're done! Just select this card type when you're importing cards in future.

@@ -9,7 +9,10 @@
 \newcommand{\nCI}{\centernot{\CI}}
 
 \begin{document}
-	
+\indep
+\CI
+{\perp\!\!\!\perp}
+
 Briefly describe what elements in a graph correspond to.; \begin{itemize} \item Nodes: random variables \item Edges: statistical dependence between the variables.  \end{itemize}
 
 Define conditional independence between RVs X, Y; \begin{itemize} \item $X\indep Y|V \Leftrightarrow P(X|Y, V) = P(X|V)$ (provided, for events, $P(Y,V)>0$.  \item Thus, $X\indep Y|V \Leftrightarrow P(X,Y|V)=P(X|Y,V)P(Y|V)=P(X|V)P(Y|V)$.  \end{itemize}
@@ -20,7 +23,7 @@ Marginal independence (graph); $X\indep Y \Leftrightarrow X \indep Y | \emptyset
 
 Factor graph; \begin{itemize} \item Graphical repr of the factorised model structure \item Each square indicates a factor that depends on the linked variables.  \item $P(\mathcal{X})=\frac{1}{Z}\prod_j f_j(\mathcal{X}_{C_j})$ \item where $\mathcal{X}=\{X_1,...,X_K\}, \mathcal{X}_S=\{X_i:i\in S\}$, $j$ indexes the factors, $C_j$ contains the indices of variables adjacent to factor $j$, $f_j$ is the factor function (also called the factor potential or clique potential) and $Z$ is the normalisation constant.  \end{itemize}
 
-Conditional independence in a graph; $X\indep Y|\mathcal{V}$ if every path between X and Y contains some $V\in\mathcal{V}$.
+How do you check (graphically) if two variables are conditionally independent in a graph?; $X\indep Y|\mathcal{V}$ if every path between X and Y contains some $V\in\mathcal{V}$.
 
 State a condition where, when satisfied, there exists a factorisation of the probability distribution (graph); \begin{itemize} \item If every path between X and Y contains some $V\in\mathcal{V}$, then \item there exists a factorisation $P(X,Y,\mathcal{V})=\frac{1}{Z}g_X(X,\mathcal{V}_X, \mathcal{Q}_X)g_Y(Y,\mathcal{V}_Y, \mathcal{Q}_Y)g_R(\mathcal{V}_R, \mathcal{Q}_R)$ \item where $\mathcal{V}_X, \mathcal{V}_Y, \mathcal{V}_R \subseteq \mathcal{V}$ and the sets of remaining variables $\mathcal{Q}_X,\mathcal{Q}_Y,\mathcal{Q}_R$ are disjoint.  \end{itemize}
 
