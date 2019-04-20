@@ -42,7 +42,26 @@ What is whitening? (very brief); Decorrelating inputs. (TODO: add)
 
 Motivation for decorrelating inputs / whitening; \begin{itemize}
     \item May want different learning rates in different directions for non-isotropic objective function, but generally only have one learning rate
-    \item 
+    \item Want Hessian to be $kI$ locally: makes optimisatino easier? cause then locally bowl-shaped. (TODO: check)
+    \item Approx Hessian is $-\frac{2\gamma}{N}\sum_n \mathbf{x_nx_n^T}$, so want to transform $\frac{1}{N}\mathbf{x_nx_n^T}$ to the identity matrix
+    \item (Approx via $H=-\frac{2}{N}\sum_n[(f^n - f(\mathbf{w^Tx_n})f''(\mathbf{w^Tx_n}) - (f'(\mathbf{w^Tx_n}))^2]\mathbf{x_nx_n^T}$ and crude approx all in square bracket $\gamma_n \approx \gamma$.
+    \item (Overall a bit dodgy, from notes only)
 \end{itemize}
+
+Describe the process of whitening data.; \begin{itemize}
+    \item Want to transform the data so that $\frac{1}{N}\sum_n \mathbf{x_nx_n^T} = I$
+    \item write $\mathbf{x_n}' = A(\mathbf{x_n - \mu}$, where $\mathbf{\mu}=\frac{1}{N}\sum_{n=1}^N\mathbf{x_n}$
+    \item SVD of matrix $\mathbf{X}=\frac{1}{\sqrt{N}}[\mathbf{x_1 - \mu, ..., x_N - \mu}]$ then 
+    \item $\frac{1}{N}\sum_n(\mathbf{x_n - \mu})(\mathbf{x_n - \mu})^T = \mathbf{XX^T = USV^TVS^TU^T = US^2U^T}$
+    \item Hence applying the `whitening' transform $\mathbf{x'} = \mathbf{S^{-1}U^T(x_n - \mu})$ will make points $\mathbf{x_n}'$ that are zero mean and unit covariance.
+    \item also makes approx Hessian diagonal and can be a useful initial preprocessing step to make optimisation easier.
+\end{itemize}
+
+Write down the whitening transform.; \begin{itemize}
+    \item $\mathbf{x'} = \mathbf{S^{-1}U^T(x_n - \mu})$ 
+    \item (will make points $\mathbf{x_n}'$ that are zero mean and unit covariance.)
+\end{itemize} 
+
+% 'a more complex discussion' omitted
 
 \end{document}
