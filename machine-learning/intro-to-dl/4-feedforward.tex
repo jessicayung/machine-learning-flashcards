@@ -40,6 +40,102 @@ Briefly compare statistics and neural networks (TODO wording? but that's what I 
     \item Stats mapping $\mathbf{\phi}$ is usually fixed (e.g. GLMs) vs NN mapping is learnable.
 \end{itemize}
 
+Name types of neural networks with a single hidden layer.; \begin{itemize}
+    \item PCA
+    \item GLM
+    \item Logistic regression
+\end{itemize}
 
+State the objective function for regression; $\min_W E(W) = \sum_{n=1}^N [\mathbf{y}^n - f(\mathbf{x^n}|W)]^2$
+
+In neural networks, do we generally learn a representation with respect to a task or `in general'?; With respect to a task. (though e.g. with ImageNet you can transfer the result)
+
+What can you model with a one-layer neural network? (linear + nonlinearity + linear); Shifted and scaled nonlinearity.
+
+Consider a single-layer neural network (linear + nonlinearity + linear).  If we use a nonlinearity like a sigmoid or a tanh, how many bumps can we sum together if we have N units in that hidden layer?; $\leq N/2$ bumps.
+
+Name a bump-like transfer function.; $\sigma(x) = e^{-x^2}$
+
+Problems to consider re nonlinearities (especially non-ReLU ones); Saturating as $x\rightarrow \pm\infty$.
+
+If your output is between 0 and 1 (e.g. scaled MNIST pixel values), what might you choose your loss function to be?; \begin{itemize}
+    \item Likelihood: e.g. for $p=\sigma(w^Tx)$, $KL(q||p)$ is convex in $\mathbf{w}$, squared loss is not.
+    \item i.e. choice of loss function affects whether optimisation is convex or not.
+    \item (Note also squared loss is upper bounded by KL: $(q-p)^2 \leq \frac{1}{2}KL(q||p)$
+\end{itemize}
+
+For $p=\sigma(w^T)$, is the squared loss convex in w?; No.
+
+For $p=\sigma(w^T)$, is the $KL(y||p)$ convex in w?; Yes.
+
+State a relationship between the squared loss and KL (bound); $(q-p)^2 \leq \frac{1}{2}KL(q||p)$.
+
+How can we visualise a high dimensional objective function (e.g. to examine convexity)?; \begin{itemize}
+    \item Plot 1D/2D slice in high-dim space
+    \item i.e. eval fn along a dir
+    \item (For a convex fn, any slice must be convex. If see nonconvex slice, then it is not a convex fn. And if a fn is convex in a dir, the slice should be convex.)
+\end{itemize}
+
+Show that logistic regression $\sigma(w^x_n)$ with log likelihood loss is convex in $w$.; \begin{itemize}
+    \item $E(w)=-\sum_{n=1}^N [1(c_n=1)\log \sigma(\mathbf{w^Tx}_n + 1(c_n=0)\log(1-\sigma(\mathbf{w^Tx}_n)]$
+    \item $\frac{\partial E(w)}{\partial w} = -\sum_{n=1}^N 1(c_n=1)\frac{\sigma(1-\sigma)}{\sigma}\mathbf{x_n} + 1(c_n=0)\frac{-\sigma(1-\sigma)}{1-\sigma}\mathbf{x_n}$
+    \item $\frac{\partial^2E(w)}{\partial w^2} = -\sum_{n=1}^N 1(c_n = 1)(-\sigma)(1-\sigma)\mathbf{x_nx_n^T}+1(c_n=0)(-\sigma)(1-\sigma)\mathbf{x_nx_n^T}$
+    \item $=\sum_{n=1}^N \sigma_n(1-\sigma_n)\mathbf{x_nx_n^T}\geq 0$
+    \item (non-convex in x but convex in w)
+\end{itemize}
+
+Is logistic regression $\sigma(w^x_n)$ with log likelihood loss convex in $w$?; Yes.
+
+How might non-linearities saturate?; if W is too big. (Then e.g with sigmoid, gradient will go to zero.)
+
+What problems might arise when the weights w become too big?; Non-linearities may saturate. (then e.g. with sigmoid, gradient will go to zero.)
+
+List two advantages of ReLUs; \begin{itemize}
+    \item faster to compute
+    \item has one fewer saturating region (than e.g. sigmoid, tanh)
+\end{itemize}
+
+Describe the Single Layer Representation Theorem.; \begin{itemize}
+    \item You can approximate a fn arbitrarily well as the number of hidden units increases (and you have nonlinear activations and a linear layer after.)
+    \item (So mathematically you don't need depth. (But have similar theorem for deep nets.))
+\end{itemize}
+
+Given the Single Layer Representation Theorem, why do we use deep nets?; \begin{itemize}
+    \item There is a similar theorem for deep nets and deep nets work better in practice
+    \item (the real q is if this kind of fn class is good for our purposes in ML - e.g. things we care about tend to have hierarchical structure, so deep nets may be more suitable)
+\end{itemize}
+
+Compare the overall performance of PCA and NNs on MNIST; \begin{itemize}
+    \item PCA performs worse reconstruction wise but is much faster
+\end{itemize}
+
+Briefly describe an autoencoder.; \begin{itemize}
+    \item Try to map the input back to itself.
+    \item Hidden layer with the smallest number of units is called the `bottleneck'.
+    \item Bottleneck forces the network to try to find a low dim repr of the data
+    \item Useful for unsupervised learning.
+\end{itemize}
+
+Describe PCA in terms of a neural network.; A single hidden layer NN with a linear transfer function.
+
+What is the optimal solution for a single hidden layer autoencoder; PCA (linear transfer function)
+
+Does using non-linearities improve performance for a singe hidden layer autoencoder?; \begin{itemize}
+    \item No. PCA is optimal for a single hidden layer. 
+    \item (Story changes if you have more than one input layer, i.e. nonlinear input into nonlinearity.)
+\end{itemize}
+
+How can you reconstruct four images perfectly with a single-layer autoencoder with only 2 hidden units?; \begin{itemize}
+    \item Encoder: non-linearity output 4 outcomes $(2^2)$
+    \item Output layer set $w_1=$img 1, four combos.
+\end{itemize}
+
+Does a lower latent dimensionality for an autoencoder mean that the reconstructions will be less complex/detailed?; Not necessarily, it depends on the complexity of the decoder.
+
+Draw the computational graph for $W_1 = W_2 = W$.; \begin{itemize}
+    \item W points to $f_1$ which uses $W_1$ and $f_2$ which uses $W_2$
+    \item sum over all child paths of $W$: here have two.
+    \item so dealing with tied parameters is simple because it's just a sum in the computational graph (I wrote multiplication: which is right? TODO)
+\end{itemize}
 
 \end{document}
