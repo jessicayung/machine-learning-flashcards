@@ -1,0 +1,48 @@
+%Front;
+% From lectures by David Barber, 2018.
+
+\documentclass{article}
+\usepackage{amsmath}
+\begin{document}
+
+Why is initialisation important for neural networks?; \begin{itemize}
+    \item Many nonlinearities in the NN
+    \item transfer functions often saturate to some constant value
+    \item If init at saturated value, gradient of error $\approx$ 0
+    \item if do gradient-based training, won't get anywhere
+    \item want to be in area with appreciable gradient, e.g. around origin for sigmoid.
+\end{itemize}
+
+Things to watch out for when scaling the objective function; \begin{itemize}
+    \item Good to scale the objective functino by $1/N$ so that it remains roughly $O(1)$ even as the number of datapoints increases.
+    \item Else as the number of examples in your minibatch increases, the learning rate will effectively decrease.
+\end{itemize}
+
+How might we decide on the scale of weights? Assume the input is rescaled to 0 mean unit variance.; \begin{itemize}
+    \item We want $\mathbf{z}_n = \mathbf{w^Tx}$ to be $O(1)$ (vs $O(D)$, say) (TODO: why?)
+    \item Assume $w_i \sim W$ s.t. $E(w_i) = 0$.
+    \item Then $z_n = \sum_i w_i x^n_i$. 
+    \item 
+    \item $E[z_n] = \sum_i E(w_i)x_i^n = 0$
+    \item $E[z_n^2] = \sum_{i\ne j} E(w_i)E(w_j)x_i^nx_j^n + \sum_i E[w_i^2](x_i^n)^2$
+    \item $=E(w^2)\sum_{i=1}^D(x_i^n)^2$
+    \item so have $E(w^2) \sim O(\frac{1}{D})$ to have $E(z_n^2)\sim O(1)$.
+    \item i.e. $w$ has standard deviation $\frac{1}{\sqrt(D)}$, where $D$ is the dim of $x$.
+\end{itemize}
+
+Why don't we initialise all the weights in a NN to zero?; \begin{itemize}
+    \item Note there is permutational symmetry in the weights of a NN.
+    \item (and obj fn generally will have a min associated with each perm)
+    \item If set all w = 0, doesn't help break symmetry, network needs to decide which symmetry / permutation to specialise on
+\end{itemize}
+
+If we want the nonlinearities to have a big gradient, why don't we set the variance of the weights to be very small?; Then the transfer function will be almost linear -> network collapses to a linear function.
+
+What is whitening? (very brief); Decorrelating inputs. (TODO: add)
+
+Motivation for decorrelating inputs / whitening; \begin{itemize}
+    \item May want different learning rates in different directions for non-isotropic objective function, but generally only have one learning rate
+    \item 
+\end{itemize}
+
+\end{document}
