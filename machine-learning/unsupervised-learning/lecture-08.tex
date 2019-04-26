@@ -1,0 +1,270 @@
+%Front;
+% Approximate Inference
+% Lectured by Maneesh Sahani at the Gatsby Computational Neuroscience Unit, UCL, Fall 2018
+% Link to course info and slides: http://www.gatsby.ucl.ac.uk/teaching/courses/ml1/
+
+\documentclass{article}
+\begin{document}
+
+What are two things we need to compute for inference and learning?; \begin{itemize}
+    \item Posterior distributions (on latents and/or parameters) or predictive distributions
+    \item Expectations wrt these distributions
+    \item (Both are often intractable)
+\end{itemize}
+
+Discuss a pro and con of using deterministic approximations on distributions or expectations (Bethe/Kikuchi methods); \begin{itemize}
+    \item Pro: Tractable
+    \item Con: Fixed approximation penalty
+\end{itemize}
+
+What are two broad ways of computing posterior or predictive distributions and expectations wrt these distributions when they are intractable?; \begin{itemize}
+    \item Deterministic approximations (factored variational/mean field, BP, EP) or expectations (Bethe/Kikuchi methods)
+    \item Randomly generated samples
+\end{itemize}
+
+Briefly discuss the consistency, bias and variance of using sampling to compute posterior/predictive distributions and expectations wrt these distributions.; Results are \begin{itemize}
+    \item Consistent
+    \item Often unbiased
+    \item Precision can generally be improved to an arbitrary degree by inceasing the number of samples.
+\end{itemize}
+
+% TODO: revisit slide 3 at the end and see if I should add any of those comments
+
+What is a general form of the integration problem?; \begin{itemize}
+    \item Need to calculate some expected value integrals of the form
+    \item $E[F(x)] = \int F(x)p(x)dx$
+\end{itemize}
+
+What are three typical difficulties of computing expected value integrals \item $E[F(x)] = \int F(x)p(x)dx$?; \begin{itemize}
+    \item Complicated / high variance $F(x)$, e.g. rare spikes but flat otherwise
+    \item Complicated density
+    \item Non-analytic integral (or sum) in many dimensions
+\end{itemize}
+
+Describe how to use simple monte-carlo integration to evaluate $\int dx F(x) p(x)$.; \begin{itemize}
+    \item Idea: draw samples from $p(x)$, evaluate $F(x)$, average the values
+    \item $\int F(x)p(x)dx \simeq \frac{1}{T}\sum_{t=1}^T F(x^{(t)})$,
+    \item where $x^({t})$ are independent samples drawn from $p(x)$.
+    \item Convergence to the integral follows from the strong law of large numbers. (but may be slow)
+\end{itemize}
+
+Why does the simple monte carlo estimate converge to the integral?; \begin{itemize}
+    \item By the strong law of large numbers.
+    \item Recall simple MC: $\int F(x)p(x)dx \simeq \frac{1}{T}\sum_{t=1}^T F(x^{(t)})$.
+\end{itemize} 
+
+Name two advantages of simple Monte-Carlo.; \begin{itemize}
+    \item Unbiased
+    \item Variance falls as $\frac{1}{T}$ independent of dimension (T=num samples). i.e. $Var[\frac{1}{T}\sum_t F(x^{(t)})] = \frac{1}{T}(E[F(x)^2] - E[F(x)]^2)$.
+\end{itemize}
+
+Derive the variance of a simple Monte Carlo estimate; \begin{itemize}
+    \item $Var[\frac{1}{T}\sum_t F(x^{(t)})] = E[(\frac{1}{T}\sum_t F(x^{(t)})^2] - E[F(x)]^2$
+    \item $=\frac{1}{T^2}(TE[F(x)^2]+(T^2-T)E[F(x)]^2) - E[F(x)]^2$
+    \item $= \frac{1}{T}(E[F(x)^2] - E[F(x)]^2)$.
+    \item $=\frac{1}{T}$(Var in a single dim).
+    \item (makes sense since draws are independent)
+\end{itemize}
+
+Name two problems of simple Monte Carlo.; \begin{itemize}
+    \item May be difficult or impossible to obtain the samples directly from $p(x)$.
+    \item High var initially: Regions of high density $p(x)$ may not correspond to regions where $F(x)$ departs most from its mean value (and thus each $F(x)$ evaluation might have v high variance).
+\end{itemize}
+
+Describe importance sampling in one sentence.; \begin{itemize}
+    \item Idea: Sample from a proposal distribution and weight those samples by $p(x)/q(x)$.
+\end{itemize}
+
+Describe importance sampling (include equations); \begin{itemize}
+    \item Idea: Sample from a proposal distribution and weight those samples by $p(x)/q(x)$.
+    \item i.e. for samples $x^{(t)}\sim q(x)$: $\int F(x)p(x)dx = \int F(x)\frac{p(x)}{q(x)}q(x) dx \simeq \frac{1}{T}F(x^{(t)}\frac{p(x^{(t)})}{q(x^{(t)})}$
+    \item provided $q(x)$ is nonzero wherever $p(x)$ is. 
+    \item (Weights $w(x^{(i)}) \equiv \frac{p(x^{(t)})}{q(x^{(t)})}$.
+\end{itemize}
+
+Describe pros and cons of importance sampling.; \begin{itemize}
+    \item Unbiased
+    \item Variance ccould be smaller than simple monte carlo if 
+    \begin{itemize}
+        \item $E_q[(F(x)w(x))^2 - E_q [F(x)w(x)]^2 < E_p [F(x)]^2 - E_p [F(x)]^2$.
+        \item `Optimal' proposal is $q(x) = p(x)F(x)/Z_q$: every sample yields same estimate $F(x)w(x) = F(x)\frac{p(x)}{p(x)F(x)/Z_q}=Z_q$, but normalising requires solving original problem
+    \end{itemize}
+    \item Handles cases where $p(x)$ is difficult to sample (since sample from $q(x)$).
+    \item (Can direct samples towards high values of integrand $F(x)p(x)$, rather than just high $p(x)$ alone (e.g. p prior and F likelihood))
+    \item (something about not needing the normaliser)
+\end{itemize}
+
+Describe cons of importance sampling; \begin{itemize}
+    \item May be hard to construct or sample $q(x)$ to give small variance (Var increases as p and q differ more)
+    \item Var of weights could be unbounded: $V[w(x)] = E_q[w(x)^2] - E_q[w(x)]^2$
+    \begin{itemize}
+        \item $E_q[w(x)] = \int q(x)w(x)dx = 1$
+        \item $E_q[w(x)^2] = \int \frac{p(x)^2}{q(x)^2}q(x)dx = \int \frac{p(x)^2}{q(x)}dx$, which could be v large if e.g. q has a lighter tail than p. 
+        \item MC avg may be dominated by a few samples, not even necessarily in the region of large integrand.
+        \item (decreases num effective samples used to calculate estimate)
+    \end{itemize}
+    \item (Need to be able to evaluate density p (and q).)
+\end{itemize}
+
+What is an important diagnostic for the quality of a sampler?; Variance.
+
+Can we apply importance sampling using unnormalised distributions?; Yes (both p and q).
+
+Describe how to apply importance sampling using unnormalised distributions p and q.; \begin{itemize}
+    \item Suppose we have $p(x) = \tilde{p(x)}/Z_p, q(x) = \tilde{q(x)}/Z_q$.
+    \item We apply importance sampling by estimating the normaliser:
+    \item $\int F(x) p(x) dx \approx \frac{\sum_t F(x^{(t)})w(x^{(t)})}{\sum_t w(x^{(t)})}$
+    \item Estimate is biased for finite $T$ but is consistent.
+    \item (Note can estimate $Z_p$ if we have $Z_q$: $\frac{1}{T}\sum_t w(x^{(t)})\rightarrow \langle \frac{\tilde{p}(x)}{\tilde{q}(x)}\rangle_q$
+    \begin{itemize}
+        \item $=\int dx \frac{Z_p p(x)}{Z_q q(x)}q(x) = \frac{Z_p}{Z_q}$.
+        \item note above is importance sampling integral with $F(x) = 1$.
+    \end{itemize}
+\end{itemize}
+
+Why is the variance of weights important in importance sampling?; As the variance of weights increases, the number of effective samples decreases.
+
+Derive an expression for the variance of weights in importance sampling; \item Var of weights could be unbounded: $V[w(x)] = E_q[w(x)^2] - E_q[w(x)]^2$
+    \begin{itemize}
+        \item $E_q[w(x)] = \int q(x)w(x)dx = 1$
+        \item $E_q[w(x)^2] = \int \frac{p(x)^2}{q(x)^2}q(x)dx = \int \frac{p(x)^2}{q(x)}dx$, which could be v large if e.g. q has a lighter tail than p. 
+        \item MC avg may be dominated by a few samples, not even necessarily in the region of large integrand.
+        \item (decreases num effective samples used to calculate estimate)
+    \end{itemize}
+
+In importance sampling, does large effective sample size prove effectiveness? Why or why not?; \begin{itemize}
+    \item No.
+    \item It doesn't prove effectiveness if no high weight samples are found, or if q places little mass where $F(x)$ is large.
+    \item (var dec as 1/T, but init var may still be high?)
+\end{itemize}
+
+How do you generate samples from an arbitrary distribution $p(x)$ (given you have access to a sampler $u\sim Uniform[0,1]$)?; \begin{itemize}
+    \item Inverse CDF
+    \item $x = G^{-1}(u)$
+    \item with $G(x) = \int_{-infty}^x p(x')dx'$ being the target CDF.
+\end{itemize}
+
+Describe rejection sampling in a sentence.; Sample from an upper bound on $p(x)$, reject some samples. (TODO: expand a bit?)
+
+Describe rejection sampling.; \begin{itemize}
+    \item Idea: Sample from an upper bound on $p(x)$, reject some samples.
+    \item Find a distribution $q(x)$ and a constant $c$ such that $\forall x, p(x) \leq cq(x)$.
+    \item Sample $x^*$ from $q(x)$ and accept $x^*$ with probability $p(x^*)/(cq(x^*))$.
+    \begin{itemize}
+        \item sample $y^* \sim U[0, cq(x^*)]$, then joint proposal $(x^*, y^*)$ is a point uniformly drawn from the area under the $cq(x)$ curve.
+        \item The proposal is accepted if $y^* \leq p(x^*)$, i.e. the proposal falls in the red box. The probability of this is $q(x)dx * p(x) / cq(x) = p(x)/c dx$.
+        \item Thus accepted $x^* \sim p(x)$ (with avg prob of acceptance = 1/c = area of p / area of cq.
+    \end{itemize}
+    \item Reject the rest.
+\end{itemize}
+
+Describe the pros and cons of rejection sampling.; \begin{itemize}
+    \item Pros
+    \begin{itemize}
+        \item Unbiased: accepted $x^*$ is true sample from $p(x)$.
+        \item Diagnostics easier than (say) importance sampling: number of accepted samples is true sample size. (vs needing to use effective sample size.)
+    \end{itemize}
+    \item Con: May be difficult to find $q(x)$ with small c $\Rightarrow$ lots of wasted area.
+\end{itemize}
+
+Can we do rejection sampling with unnormalised distributions? If so, how?; Yes. (Both p, q can be unnormalised.) \begin{itemize}
+    \item Can still apply if using c with $\tilde{p}(x) \leq c\tilde{q}(x)$, where $\tilde{p}, \tilde{q}$ are unnormalised dists. (And still unbiased.)
+\end{itemize}
+
+Describe the relationship between importance and rejection sampling.; \begin{itemize}
+    \item If we have $c$ for which $q(x)$ is an upper bound on $p(x)$, then importance weights are upper bounded: \begin{itemize}
+        \item $0 \leq \frac{p(x)}{q(x)} \leq c$.
+    \end{itemize}
+    \item So importance weights have finite variance and importance sampling is well-behaved.
+    \item Upper bound condition makes both rejection sampling work and importance sampling well-behaved.
+    \item (if want integral at the end, probably better to do importance sampling. randomness from keeping the sample or not in rejection sampler only adds variance.)
+\end{itemize}
+
+Would you use importance sampling or rejection sampling if you wanted to calculate an integral?; \begin{itemize}
+    \item If have upper bound condition $0 \leq \frac{p(x)}{q(x)} \leq c$
+    \item probably better to do importance sampling. 
+    \item Randomness from keeping the sample or not in rejection sampler only adds variance.
+\end{itemize}
+
+State the equation for a Boltzmann machine.; \begin{itemize}
+    \item $\log p(\mathbf{s^Vs^H|W, b}) = \sum_{ij}W_{ij}s_is_j - \sum_i b_is_i - \log Z$
+    \item with $Z = \sum_s e^{\sum_{ij}W_{ij}s_is_j - \sum_i b_i s_i}$
+\end{itemize}
+
+Write out the expression we need to calculate for the M-step on Boltzmann machines; \begin{itemize}
+    \item ($\Delta W_{ij} \propto \frac{\partial}{\partial W_{ij}} \langle \log p(\mathbf{s^Vs^H|W, b}) \rangle_{p(\mathbf{s^H|s^V})}$
+    \item Then $\Nabla_{W_ij} \log \mathcal{L} = \langle s_is_j \rangle_c - \langle s_is_j \rangle_u$
+    \item $\langle \rangle_c$ (clamped): expectations under $p(\mathbf{s^H|s^v})$, and 
+    \item $\langle \rangle_u$ (unclamped): expectations under current joint dist $p(\mathbf{s^H, s^v})$
+    \item TODO: I don't get where the unclamped part came from
+\end{itemize}
+
+Name the method we can use to find the expectations needed for the M-step on Boltzmann machines; Gibbs sampling. (Also called the heat bath or Glauber dynamics.)
+
+Describe how we can find the expectations needed for the M-step on Boltzmann machines; \begin{itemize}
+    \item Gibbs sampling. (Also called the heat bath or Glauber dynamics.)
+    \item Iterative approach:
+    \item Choose variable settings randomly (set any clamped nodes to clamped values)
+    \item Cycle through (unclamped) $s_i$, choosing $s_i \sim p(s_i|\mathbf{s}_{\backslash i})$ (easy since Bernouilli)
+    \item After enough samples, we might expect to reach a sample from the correct distribution.
+    \item (Another way of putting it: given settings of nodes in the markov blanket of $s_i$, we can compute and normalise the scalar $p(s_i)$ and toss a (virtual) coin, i.e. sample.)
+\end{itemize}
+
+Describe Markov chain Monte Carlo (MCMC) methods.; \begin{itemize}
+    \item TODO refine
+    \item Suppose we seek samples from a distribution $p^*(x)$.
+    \item Let us construct a Markov chain: $x_0 \rightarrow x_1 \rightarrow x_2 ... $, where $x_0 \sim p_0(x)$ and $T(x\rightarrow x') = p(X_t = x' | X_{t-1} = x)$ is the Markov chain transition probability from $x$ to $x'$, and we can easily sample from each of these.
+    \item Then the marginal distributions in the chain are $x_t \sim p_t(x)$ with the property that: \begin{itemize}
+        \item $p_t(x') = \sum_x p_{t-1}(x) T (x\rightarrow x')$
+    \end{itemize}
+    \item Under some conditions, these marginals converge to an invariant/stationary/equilibrium dist characterised by T with \begin{itemize}
+        \item $p_{\infty}(x') = \sum_x p_{\infty}(x)T(x\rightarrow x')$
+    \end{itemize}
+    \item If we can choose a $T(x\rightarrow x')$ so as to ensure $p_{\infty} = p*$ and sample from the Markov chain for long enough, we can obtain samples from distributions arbitrarily close to $p^*$.
+\end{itemize}
+
+Suppose we have a Markov chain $x_0 \rightarrow x_1 \rightarrow ...$ with marginals $x_0 \sim p_0(x)$ and $p_t(x') = \sum_x p_{t-1}(x)T(x\rightarrow x')$ according to transition probability $T(x\rightarrow x')$. When will the marginal of the chain defined by T converge to $p^*$?; \begin{itemize}
+    \item 1. Need convergence to a unique stat dist regardless of initial state $x_0$, i.e. a form of ergodicity. \begin{itemize}
+        \item Sufficient condition for MC to be ergodic is that
+        \item $T^k(x\rightarrow x') > 0$ for all $x, x'\in \mathcal{X}$ and some $k$.
+        \item That is, it is possible to reach any state from any other state in exactly k steps.
+    \end{itemize}
+    \item 2. Sufficient condition for $p^*(x)$ being invariant is detailed balance. \begin{itemize}
+        \item $p^*(x)T(x'\rightarrow x) = p^*(x)T(x\rightarrow x')$
+    \end{itemize}
+    \item if T and $p^*$ satisfy these two conditions (ergodicity, detailed balance), then the marginal of the chain defined by T will converge to $p^*$.
+\end{itemize}
+
+What is detailed balance?; \begin{itemize}
+        \item $p^*(x)T(x'\rightarrow x) = p^*(x)T(x\rightarrow x')$
+        \item for some prob dist $p^*$ and transition probability $T(x\rightarrow x') = p(X_t = x'|X_{t-1}=x)$.
+    \end{itemize}
+
+State a sufficient condition for a Markov chain to be ergodic. (MC $x_0 \rightarrow x_1 \rightarrow ...$ with marginals $x_0 \sim p_0(x)$ and $p_t(x') = \sum_x p_{t-1}(x)T(x\rightarrow x')$ according to transition probability $T(x\rightarrow x')$); \begin{itemize}
+        \item $T^k(x\rightarrow x') > 0$ for all $x, x'\in \mathcal{X}$ and some $k$.
+        \item That is, it is possible to reach any state from any other state in exactly k steps.
+    \end{itemize}
+    
+Describe Gibbs sampling in one sentence; Sample from the conditional of each variable given the settings of the other variables.
+
+Describe Gibbs sampling (steps); \begin{itemize}
+    \item Idea: Sample from the conditional of each variable given the settings of the other variables.
+    \item Repeatedly: \begin{itemize}
+        \item 1. Pick i (either at random or in turn, in practice pick in turn)
+        \item 2. Replace $x_i$ by a sample from the conditional distribution $p(x_i|\mathbf{x_{\backslash i}} = p(x_i | x_1, ..., x_{i-1}, x_{i+1}, ..., x_n)$.
+    \end{itemize}
+    \item This creates a Markov chain. Under some (mild) conditions, the equilibrium distribution $p(\mathbf{x}^(\infty))$ of this Markov chain is $p(\mathbf{x})$.
+    \item (feasible if it is easy to sample from the conditional probabilities)
+\end{itemize}
+
+When is Gibbs sampling feasible?; When it is easy to sample from the conditional probabilities $p(x_i|\mathbf{x_{\backslash i}} = p(x_i | x_1, ..., x_{i-1}, x_{i+1}, ..., x_n)$.
+
+Does Gibbs sampling guarantee the chain will be ergodic?; Not by itself.
+
+Is the detailed balance condition met in Gibbs Sampling?; Yes.
+
+What are the implications if the detailed balance condition is met in Gibbs sampling?; Then if it converges to a unique stationary distribution, the stationary distribution is the correct one.
+
+Show that the detailed balance condition is met in Gibbs sampling.; TODO
+
+\end{document}

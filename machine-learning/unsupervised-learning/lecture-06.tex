@@ -113,7 +113,7 @@ What is the condition for a covariance kernel to be symmetric and positive defin
 
 When doing regression using the covariance kernel, what does the term $[\tilde{K}_{XX}]_{ij}$ correspond to?; $\tilde{K}(\mathbf{x_i, x_j})$.
 
-What is the evidence for regression using the covariance kernel and how do we optimise it?; \begin{itemize} \item Evidence is given by the Gaussian likelihood $P(Y|X, \tilde{K})=|2\pi\tilde{K}_{XX}|^{-\frac{1}{2}}e^{-\frac{1}{2}Y\tilde{K}_{XX}^{-1}Y^T}$.  \item Optim (hyper)parameters of covariance kernel $\tilde{K}$ by gradient ascent in $\log P(Y|X, \tilde{K})$.  \end{itemize} 
+What is the evidence for regression (zero-mean w) using the covariance kernel and how do we optimise it?; \begin{itemize} \item Evidence is given by the Gaussian likelihood $P(Y|X, \tilde{K})=|2\pi\tilde{K}_{XX}|^{-\frac{1}{2}}e^{-\frac{1}{2}Y\tilde{K}_{XX}^{-1}Y^T}$.  \item Optim (hyper)parameters of covariance kernel $\tilde{K}$ by gradient ascent in $\log P(Y|X, \tilde{K})$.  \end{itemize} 
 
 What is the kernel trick?; \begin{itemize} \item Don't need to define $\phi(x)$ explicitly (and feature mapping may be infinite dim), only need to evaluate dot product, i.e. kernel.  \item (own paraphrase) \end{itemize}
 
