@@ -265,6 +265,174 @@ Is the detailed balance condition met in Gibbs Sampling?; Yes.
 
 What are the implications if the detailed balance condition is met in Gibbs sampling?; Then if it converges to a unique stationary distribution, the stationary distribution is the correct one.
 
-Show that the detailed balance condition is met in Gibbs sampling.; TODO
+Show that the detailed balance condition is met in Gibbs sampling.; \begin{itemize}
+    \item Transition probabilities are given by: $T(\mathbf{x}\rightarrow \mathbf{x'}) = \pi_i p(x_i'|\mathbf{x}_{\backslash i})$ \begin{itemize}
+    \item where $\pi_i$ is the prob of choosing to update the $i$th variable (to handle rotation updates instead of random ones, we need to consider transitions duo to one full sweep).
+    \end{itemize}
+    \item Then we have $T(\mathbf{x\rightarrow x'})p(\mathbf{x}) = \pi_i p(x'_i|\mathbf{x}_{\backslash i})p(x_i|\mathbf{x}_{\backslash i})p(\mathbf{x}_{\backslash i}) = \pi_i p(x'_i|\mathbf{x}_{\backslash i}) p(\mathbf{x})$
+    \and $T(\mathbf{x'\rightarrow x})p(\mathbf{x'}) = \pi_i p(x_i|\mathbf{x}'_{\backslash i})p(x'_i|\mathbf{x}'_{\backslash i})p(\mathbf{x}'_{\backslash i})$
+    \item But $\mathbf{x}'_{\backslash i} = \mathbf{x}_{\backslash i}$ so detailed balance holds. (All other nodes the same)
+\end{itemize}
+
+If the detailed balance condition holds in Gibbs sampling, what additional thing do we need for ergodicity to also hold?; Constant support. (Note detailed balance DOES hold in Gibbs sampling.)
+
+Name a kind of model Gibbs Sampling is well suited to.; Graphical models
+
+Describe the Metropolis-Hastings algorithm.; \begin{itemize}
+    \item Idea: Propose a change to current (global) state, accept or reject. (A kind of rejection sampling)
+    \item Each step: starting from the current state x, \begin{itemize}
+        \item 1. Propose a new state \mathbf{x'} using a proposal distribution (e.g. Gaussian): $S(\mathbf{x'|x}) = S(\mathbf{x\rightarrow x'})$.
+        \item 2. Accept the new state with probability: $\min (1, p(\mathbf{x'})S(\mathbf{x'\rightarrow x})/p(\mathbf{x})S(\mathbf{x}\rightarrow \mathbf{x'}))$
+        \item 3. Otherwise retain the old state.
+    \end{itemize}
+\end{itemize}
+
+Why might you want to use the Metropolis-Hastings algo instead of Gibbs sampling?; \begin{itemize}
+    \item Gibbs sampling can be slow ($p(x_i)$m ight be well determined by $\mathbf{x}_{\backslash i}$, and conditionals may be intractable.
+    \item So global transition might be better.
+\end{itemize}
+
+What controls the efficiency of a Metropolis-Hastings algo?; \begin{itemize}
+    \item Balancing between high acceptance rate and large step size.
+    \item May adapt $S(\mathbf{x\rightarrow x'})$ to balance these, but stationarity only holds once S is fixed.
+\end{itemize}
+
+Does Metropolis-Hastings work if we can't compute the normaliser? Why or why not?; \begin{itemize}
+    \item Yes it works
+    \item we only need to compute ratios of probabilities, not normalising constants.
+        \item Recall: Accept the new state with probability: $\min (1, p(\mathbf{x'})S(\mathbf{x'\rightarrow x})/p(\mathbf{x})S(\mathbf{x}\rightarrow \mathbf{x'}))$
+\end{itemize}
+
+(Trivia) What is the difference between the Metropolis and Metropolis-Hastings algorithms?; \begin{itemize}
+    \item Metropolis was symmetric: $S(\mathbf{x'|x}) = S(\mathbf{x|x'})$. So accept new state with prob $min(1, p(\mathbf{x'})/p(\mathbf{x}))$ 
+    \item vs MH accept prob $\min (1, p(\mathbf{x'})S(\mathbf{x'\rightarrow x})/p(\mathbf{x})S(\mathbf{x}\rightarrow \mathbf{x'}))$
+\end{itemize}
+
+Does Metropolis-Hastings satisfy detailed balance?; Yes.
+
+Show that Metropolis-Hastings satisfies detailed balance.; \begin{itemize}
+    \item The transition kernel is $T(\mathbf{x}\rightarrow \mathbf{x'}) = S(\mathbf{x}\rightarrow \mathbf{x'})\min(1, \frac{p(\mathbf{x'})S(\mathbf{x'\rightarrow x})}{p(\mathbf{x})S(\mathbf{x\rightarrow x'})})$ \begin{itemize}
+        \item with $T(\mathbf{x\rightarrow x})$ the expected rejection probability.
+    \end{itemize}
+    \item Without loss of generality we assume $p(\mathbf{x'})S(\mathbf{x'}\rightarrow \mathbf{x}) \leq p(\mathbf{x})S(\mathbf{x}\rightarrow \mathbf{x'})$.
+    \item Then $p(\mathbf{x})T(\mathbf{x}\rightarrow\mathbf{x'}) = p(\mathbf{x})S(\mathbf{x}\rightarrow\mathbf{x'})\cdot \frac{p(\mathbf{x'})S(\mathbf{x'}\rightarrow \mathbf{x})}{p(\mathbf{x})S(\mathbf{x}\rightarrow\mathbf{x'})}$\begin{itemize}
+        \item $= p(\mathbf{x'}S(\mathbf{x'}\rightarrow \mathbf{x})$.
+        \item (latter term is start at x' and propose x.)
+    \end{itemize}
+    \item and $p(\mathbf{x'})T(\mathbf{x'}\rightarrow \mathbf{x}) = p(\mathbf{x'})S(\mathbf{x'}\rightarrow \mathbf{x})\cdot 1 = p(\mathbf{x'})S(\mathbf{x'}\rightarrow \mathbf{x})$.
+\end{itemize}
+
+Discuss ergodicity for Metropolis-Hastings.; It's easy if the proposal distribution has nonzero density everywhere.
+
+Are local proposals more likely to be accepted in Metropolis-Hastings than non-local proposals? Why or why not?; \begin{itemize}
+    \item Arguably yes because local proposals are more likely to be in regions of density.
+    \item Recall: Accept the new state with probability: $\min (1, p(\mathbf{x'})S(\mathbf{x'\rightarrow x})/p(\mathbf{x})S(\mathbf{x}\rightarrow \mathbf{x'}))$
+\end{itemize} 
+
+What theoretical claims might not hold in practice when doing MCMC?; \begin{itemize}
+    \item Markov chain theory guarantees that $\frac{1}{T}\sum_{t=1}^T F(x_t)\rightarrow E[F(x)]$ as $T\rightarrow \infty$.
+    \item But given finite computational resources we have to compromise.
+\end{itemize}
+
+Discuss practical things to note about MCMC.; \begin{itemize}
+    \item Control runs: initial runs of the Markov chain can be used to set parameters like step size etc for good convergence. These are discarded. (bc e.g. need S to be fixed to have stationarity.)
+    \item Burn-in: discard first samples from Markov chain before convergence.
+    \item Collecting samples: usually run Markov chain for a number of iterations between collected samples to reduce dependence between samples. (not necc if calculating expectations)
+    \item Number of runs: for the same amount of computation, we can either run one long Markov chain (best chance of convergence), lots of short chains (wasted burn-ins, but chains are independent) or in between.
+    \item Use/try multiple transition kernels (since different ones have different convergence properties)
+    \item Use autocorrelation to estimate number of transitions needed for samples $F(x_t)$ to be effectively `independent'
+\end{itemize}
+
+How might you diagnose whether MCMC has converged?; Usually plot various useful statistics, e.g. \begin{itemize}
+    \item log prob
+    \item clusters obtained
+    \item factor oadings (FA on data and inspect structure)
+    \item eye-ball convergence: dist should be stationary after burn-in
+\end{itemize}
+
+How can we estimate the number of transitions needed for MCMC samples $F(x_t)$ to be effectively `independent'?; Integrated autocorrelation time, i.e. use empirical correlation. (no guarantees, probably underestimates true dependence) \begin{itemize}
+    \item Assume wlog $E[F(x)] = 0$.
+    \item $V[\frac{1}{T}\sum_{t=1}^T F(x_t)] = E[(\frac{1}{T}\sum_{t=1}^TF(x_t))^2]$
+    \item $=\frac{V[F(x)]}{T}(1+2\sum_{\tau = 1}^{T-1}(1-\frac{\tau}{T})\frac{C_\tau}{C_0})$
+    \item where $C_\tau = E[F(x_t)F(x_{t+\tau})]$ can be estimated empirically. The integrated autocorrelation (term in parentheses) gives the number of correlated samples we need to match one iid sample in terms of variance.
+    As $T\rightarrow\infty$, the number of samples is $1+2\sum_{\tau=1}^\infty \frac{C_\tau}{C_0}$.
+    \item (details FYI, no need to remember)
+\end{itemize}
+
+Briefly discuss how MCMC performs when we try to use it to sample from a distribution defined by unnormalised energy E, i.e. $p(\mathbf{x}) = \frac{1}{Z}e^{-E(x)}$.; \begin{itemize}
+    \item MCMC works well in this setting (MH: no change needed, Gibbs: usually possible to normalise conditional)
+    \item BUT may mix slowly.
+    \item (so it's often useful to introduce temperature $1/\beta$: $p_\beta(\mathbf{x}) = \frac{1}{Z_{\beta}}e^{-\beta E(x)}$.
+    \item When $\beta\rightarrow 0$ (temp $\rightarrow\infty$) all states are equally likely, so it's easy to sample and mix. As $\beta\rightarrow1, p_\beta\rightarrow p$.)
+\end{itemize}
+
+How can we make MCMC methods mix better?; \begin{itemize}
+    \item Often useful to introduce temperature $1/\beta$: $p_\beta(\mathbf{x}) = \frac{1}{Z_{\beta}}e^{-\beta E(x)}$.
+    \item When $\beta\rightarrow 0$ (temp $\rightarrow\infty$) all states are equally likely, so it's easy to sample and mix. 
+    \item (As $\beta\rightarrow1, p_\beta\rightarrow p$.)
+    \item Often anneal $\beta$: start from small value and gradually increase to 1.
+\end{itemize}
+
+Briefly describe simulated annealing for MCMC sampling from a distribution defined by unnormalised energy E, i.e. $p(\mathbf{x}) = \frac{1}{Z}e^{-E(x)}$.; \begin{itemize}
+    \item introduce temperature $1/\beta$: $p_\beta(\mathbf{x}) = \frac{1}{Z_{\beta}}e^{-\beta E(x)}$.
+    \item Start chain with $\beta$ small and gradually increase to 1.
+\end{itemize}
+
+How can we use simulated annealing for optimisation? (On a distribution defined by unnormalised energy E, i.e. $p(\mathbf{x}) = \frac{1}{Z}e^{-E(x)}$.); \begin{itemize}
+    \item introduce temperature $1/\beta$: $p_\beta(\mathbf{x}) = \frac{1}{Z_{\beta}}e^{-\beta E(x)}$.
+    \item Start chain with small $\beta$ small and take $\beta\to \infty$.
+    \item Provable finds global mode, albeit using exponentially slow annealing schedule (so not that beneficial).
+\end{itemize}
+
+Describe annealed importance sampling briefly in the context of annealing for MCMC sampling.; \begin{itemize}
+    \item Use importance sampling to correct for the fact that the chain need not have converged at each $\beta$.
+    \item Equivalently, use annealing to construct a good proposal for importance sampling.
+\end{itemize}
+
+Briefly describe the procedure for auxiliary variable MCMC methods.; \begin{itemize}
+    \item Idea: easier to sample from joint with introduced variables and then discard them.
+    \item Want to sample from $p^*(x)$, but suitable Markov chain is either difficult to design, or does not mix well.
+    \item Introduce a new variable $y$, defined using conditional $p(y|x)$.
+    \item Sample from joint $p^*(x)p(y|x)$, often by Gibbs.
+    \item Discard the ys. The xs are drawn from the target $p^*$.
+\end{itemize}
+
+Describe Hybrid/Hamiltonian Monte Carlo. (Motivation and very high level methodical outline without equations); \begin{itemize}
+    \item Motivation: Seek regions of high prob while avoiding random walk behaviour (like MH and Gibbs, since distance travelled in N steps by a RW $\propto \sqrt{n}$, slow.)
+    \item Want to use gradient information of $p(x)$ to shape proposal dist without breaking detailed balance.
+    \item HMC introduces fictitious physical system describing a particle with position x and momentum v (auxiliary var)
+    \item Make proposals by simulating motion in the dynamical system so that the marginal dist over position corresponds to the target.
+    \item MH acceptance step corrects for errors of discretised simulation. (but high acceptance rate.)
+\end{itemize}
+
+Describe the Hamiltonian Monte Carlo dynamical system.; \begin{itemize}
+    \item Positions \mathbf{x} correspond to the RVs of interest. 
+    \item These are augmented by momentum variables \mathbf{v}.
+    \item $p(\mathbf{x, v})\propto \exp(-H(\mathbf{x, v}))$
+    \item TODO: complete later, slides 29-32 skipped
+\end{itemize}
+
+% todo: skipped HMC slides 29-32, don't think I need to know the equations, but understand it and make that into FCs
+
+Describe the Hamiltonian Monte Carlo Algorithm (steps); \begin{itemize}
+    \item A new state is proposed by deterministically simulating a trajectory with L discrete steps from $(\mathbf{x, v})$ to $(\mathbf{x^*, v^*})$. \begin{itemize}
+        \item To compensate for errors of discretisation, 
+        \item the new state $(\mathbf{x^*, v^*})$ is accepted with probability $\min (1, \frac{p(\mathbf{v^*, x^*})}{p(\mathbf{v, x})}=\min(1, e^{-(H(\mathbf{v^*, x^*})-H(\mathbf{v, x}))})$
+        \item otherwise the state remains the same. 
+        \item (Metropolis step with proposal defined by choosing direction of momentum uniformly at random and simulating L (reversible) leapfrog steps.) 
+    \end{itemize}
+    \item Resample the momentum vector \begin{itemize}
+        \item (by a trivial Gibbs sampling step or with persistence (?)
+        \item $\mathbf{v}\sim p(\mathbf{v|x}) = p(\mathbf{v}) = N(0,I)$.
+        \item Like giving the ball a kick to explore the space faster
+        \item bc using info on density to ask what to propose.
+    \end{itemize}
+\end{itemize}
+
+Does HMC satisfy detailed balance? Why or why not?; Yes because the proposals (?) are reversible.
+
+What is Langevin Monte Carlo in one phrase?; Hamiltonian Monte Carlo taking only one leapfrog step. (Check this is correct)
+
+% resume at langevin MC slide s34
 
 \end{document}
