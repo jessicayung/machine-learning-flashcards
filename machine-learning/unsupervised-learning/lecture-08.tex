@@ -433,6 +433,89 @@ Does HMC satisfy detailed balance? Why or why not?; Yes because the proposals (?
 
 What is Langevin Monte Carlo in one phrase?; Hamiltonian Monte Carlo taking only one leapfrog step. (Check this is correct)
 
-% resume at langevin MC slide s34
+% TODO: add langevin MC slide s34
+
+Describe slice sampling in one phrase; \begin{itemize}
+    \item Efficient auxiliary-variable Gibbs sampler for low-dimensional distributions (can be used as an internal component fro a high-D Gibbs or M-H chain.)
+\end{itemize}
+
+Describe slice sampling (method); \begin{itemize}
+    \item Efficient auxiliary-variable Gibbs sampler for low-dimensional distributions: can be used as an internal component fro a high-D Gibbs or M-H chain.
+    \item Start with sample x
+    \item Sample auxiliary variable $y|x \sim Unif[0, p^*(x)]$
+    \begin{itemize}
+        \item $p(x, y) = p^*(x)p(y|x) = p^(x)\frac{1}{p^(x)}=1$ if $0\leq y \leq p^*(x)$, and $=0$ otherwise
+    \end{itemize}
+    \item Sample $x'$ from $p(x'|y)$ (HARD)
+    \begin{itemize}
+        \item $p(x'|y) \propto p(x',y) = 1$ if $p^*(x') \geq y$, $=0$ otherwise.
+        \item So $x' \sim Unif[\{x: p^*(x) \geq y\} ]$ (hard to define interval)
+        \item Choose slice fixed with length $\delta$, if both ends $> p(x^n)$, extend. Then rejection sample (and truncate slice if rej sample beyond $p(x)$.)
+    \end{itemize}
+    \item Defining $\{x:p^*(x)\geq y \}$ is often difficult: rejection sample in (adaptive) y-level `slice' around old $x$ extending outside at least local mode.
+    \item TODO: revisit slide 36, add FCs
+\end{itemize}
+
+% TODO: revisit slide 36, add FCs
+
+Why might we want to evaluate the marginal likelihood $p(\mathcal{D})$?; Calculating normaliser (e.g. in Bayesian learning).
+
+What sampling method can we use to evaluate the evidence $p(\mathcal{D})$? briefly explain the idea.; \begin{itemize}
+    \item Annealed importance sampling
+    \item Use MCMC transitions from known distribution to form proposal for importance sampling
+    \item Sum of importance weights = $p(\mathcal{D})$.
+    \item (trying to build proposal $q\approx$ posterior.
+\end{itemize}
+
+Describe the procedure for Annealed importance sampling; \begin{itemize}
+    \item Consider a sequence of densities $p_1, ..., p_n$: \begin{itemize}
+        \item $p_j(x) = \frac{1}{Z_j}p_*(x)^{\beta_j}p_0(x)^{1-\beta_j}$, $1=\beta_1 > ... > \beta_n = 0$,
+        \item where $p_1 = p_*$ is the target density and $p_n = p_0$ is easy to sample and normalise, perhaps a prior.
+    \end{itemize}
+    \item Let $T_j(x\rightarrow x')$ be an MCMC transition rule that leaves $p_j$ invariant.
+    \item Draw samples from $q(x_1,...,x_{n-1}) = p_nT_{n-1}...T_2$: \begin{itemize}
+        \item $x_{n-1}^{(t)}\sim p_n, x^{(t)}_{n-2} \sim T_{n-1}(x^{(t)}_{n-1}\rightarrow \cdot ), ..., x^{(t)}_1\sim T_2(x_2^{(t)}\rightarrow \cdot)$
+    \end{itemize}
+    \item Importance weight samples with \begin{itemize}
+        \item $w^{(t)} = (\frac{p_*(x_1^{(t)})}{p_0(x_1^{(t)})})^{\beta_1-\beta_2}(\frac{p_*(x_2^{(t)})}{p_0(x_2^{(t)})})^{\beta_2-\beta_3}...(\frac{p_*(x_{n-1}^{(t)})}{p_0(x_{n-1}^{(t)})})^{\beta_{n-1}-\beta_n}$
+        \item (non-trivial derivation)
+    \end{itemize}
+    \item Then $\frac{1}{T}\sum_t w^{(t)} \rightarrow \frac{Z_*}{Z_0}$
+\end{itemize}
+
+% TODO: slide 39 importance weights thing derivation
+
+% TODO Slide 40: other ideas in MCMC
+
+Briefly describe Sampling - Importance Resampling (SIR); \begin{itemize}
+    \item Proposal-based approach to generating samples from an unnormalised distribution
+    \item 1. Sample $\xi^{(s)} \sim q(x)$ (proposal dist), and calculate importance weights $w^{(s)} = p(\xi^{(s)})/q(\xi^{(s)})$.
+    \item (the more samples you draw in the first step, the more accurate the resampled sample is.)
+    \item Define $q(x) = \sum_{s=1}^S w^{(s)}\delta(x-\xi^{(s)})/\sum_{s=1}^S w^{(s)}$.
+    \item (delta only =1 on samples, importance weighted average of delta function on samples)
+    \item Resample $x^{(t)}\sim \tilde{q}(x)$.
+    \item (Resampled points yield consistent expectations $E_x[F(x)]$ but are not unbiased for finite numbers of samples.)
+    \item (For integration, SIR introduces added sampling noise relative to IS (although trades off with weight variance). But for message passing unweighted samples are redrawn tawards bulk of distribution.)
+\end{itemize}
+
+Do resampled points in SIR yield consistent expectations? (Show derivation); \begin{itemize}
+    \item Yes.
+    \item $E_x[F(x)] = \int dx F(x)\tilde{q}(x) = \int dx F(x) \frac{\sum_{s=1}^S w^{(s)}\delta(x-\xi^{(s)})}{\sum_{s=1}^Sw^{(s)}}$
+    \item $=\frac{\sum_{s=1}^S w^{(s)}F(\xi^{(s)})}{\sum_{s=1}^Sw^{(s)}}$
+    \item (but not unbiased for finite numbers of samples even if all distributions are normalised)
+\end{itemize}
+
+Describe particle filtering; \begin{itemize}
+    \item Also sequential Monte Carlo. Applying Sampling - Importance Resampling (SIR)
+    \item Suppose we want to compute $p(y_t | x_{1:t})$ in an NLSSM (filtering). \item We have $p(y_t|x_{1:t}) \propto \int p(x_t|y_t)p(y_t|y_{t-1})p(y_{t-1}|x_{1:t-1})dy_{t-1}$
+    \item if we have samples $y_{t-1}^{(s)}\sim p(y_{t-1}|x_{1:t-1})$ we can recurse (approximately): \begin{itemize}
+        \item draw $y_t^{(s)} \sim p(y_t|y_{t-1}^{(s)}$
+        \item calculate unnormalised weights $w_t^{(s)}=p(x_t|y_t^{(s)})$
+        \item resample $y_t^{(s')} \sim \sum_{s=1}^S w_t^{(s)}\delta (y-y_t^{(s)})/\sum_{s=1}^Sw_t^{(s)}$
+    \end{itemize}
+    \item (Technically entire trajectory $y_1^{(s)}, ..., y_t^{(s)}$ is resampled. As $S\to\infty$, surviving trajectories are drawn from full posterior (but not for practical sample sizes)).
+\end{itemize}
+
+What might be a better proposal distribution for particle filtering than $y^{(s)}_t \sim p(y_t|y^{(s)}_{t-1})$? (Not necc easy to get); Ideally $y^{(s)}_t \sim p(y_t|y^{(s)}_{t-1}, x_t)$, if available
 
 \end{document}
