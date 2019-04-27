@@ -401,18 +401,14 @@ Describe Hybrid/Hamiltonian Monte Carlo. (Motivation and very high level methodi
     \item Motivation: Seek regions of high prob while avoiding random walk behaviour (like MH and Gibbs, since distance travelled in N steps by a RW $\propto \sqrt{n}$, slow.)
     \item Want to use gradient information of $p(x)$ to shape proposal dist without breaking detailed balance.
     \item HMC introduces fictitious physical system describing a particle with position x and momentum v (auxiliary var)
-    \item Make proposals by simulating motion in the dynamical system so that the marginal dist over position corresponds to the target.
-    \item MH acceptance step corrects for errors of discretised simulation. (but high acceptance rate.)
+    \item Proposals: System evolves acc to Hamiltonian dynamics. We simulate L discrete steps of size $\epsilon$. \begin{itemize}
+        \item (marginal dist over position corresponds to the target.)
+    \end{itemize} 
+    \item New state is used as a proposal in the Metropolis algorithm to eliminate errors introduced by the leapfrog approximation. (high acceptance rate though)
+    \item Resample momentum vector $v\sim N(0,I)$ (by Gibbs or with persistence)
 \end{itemize}
 
-Describe the Hamiltonian Monte Carlo dynamical system.; \begin{itemize}
-    \item Positions \mathbf{x} correspond to the RVs of interest. 
-    \item These are augmented by momentum variables \mathbf{v}.
-    \item $p(\mathbf{x, v})\propto \exp(-H(\mathbf{x, v}))$
-    \item TODO: complete later, slides 29-32 skipped
-\end{itemize}
-
-% todo: skipped HMC slides 29-32, don't think I need to know the equations, but understand it and make that into FCs
+% todo: HMC dynamical sys equations, don't think they are necessary though.
 
 Describe the Hamiltonian Monte Carlo Algorithm (steps); \begin{itemize}
     \item A new state is proposed by deterministically simulating a trajectory with L discrete steps from $(\mathbf{x, v})$ to $(\mathbf{x^*, v^*})$. \begin{itemize}
@@ -431,9 +427,10 @@ Describe the Hamiltonian Monte Carlo Algorithm (steps); \begin{itemize}
 
 Does HMC satisfy detailed balance? Why or why not?; Yes because the proposals (?) are reversible.
 
-What is Langevin Monte Carlo in one phrase?; Hamiltonian Monte Carlo taking only one leapfrog step. (Check this is correct)
-
-% TODO: add langevin MC slide s34
+What is Langevin Monte Carlo in one phrase?; \begin{itemize}
+    \item Hamiltonian Monte Carlo taking only one leapfrog step.
+    \item (So often neglect acceptance step since introduced discretisation error by 1 leapfrog step is small. $\to$ Langevin sampling.
+\end{itemize} 
 
 Describe slice sampling in one phrase; \begin{itemize}
     \item Efficient auxiliary-variable Gibbs sampler for low-dimensional distributions (can be used as an internal component fro a high-D Gibbs or M-H chain.)
