@@ -182,6 +182,13 @@ Describe the pros and cons of maximum likelihood learning; Pros: C (see) A Gp. C
 
 How do you perform classification with HMMs?; \begin{itemize} \item Have multiple HMM models, one for each class (requires each seq to have a class label) \item Eval probability of unknown sequence (being a certain class) under each HMM \item Classify the unknown seq by the HMM which gave it the highest likelihood \item Or single HMM: compute posterior over label sequences (labels as s), return label seq either with the highest expected number of correct states or highest probability under the posterior (Viterbi, entire seq) \begin{itemize} \item Note here we model whole joint but only use $P(s_{1:T}|x_{1:T})$ - can model that directly using a conditional random field (CRF). \end{itemize} \end{itemize}
 
+Describe how you'd implement the Viterbi algorithm.; \begin{itemize}
+    \item Forward with  max: $\alpha_t(i) = \max_j \alpha_{t-1}(j)\Phi_{ji}A_i(x_t)$
+    \item and save $\alpha_{pmax}(t=i)=\arg\max_j (expr)$
+    \item Find $s_T = \argmax_{s_T}\alpha_T(s_T)$
+    \item Then backtrack (to start): $s_{T-1} = \alpha_{pmax}(T = s_T)$
+\end{itemize}
+
 % TODO: slide 50 onwards, not sure if we covered this.
 
 \end{document}
