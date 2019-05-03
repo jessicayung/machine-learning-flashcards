@@ -109,17 +109,66 @@ How can we calculate $q_{\neg i}(\mathcal{Y}_i)$ in EP more efficiently?; \begin
     \item TODO: not sure if there is a better ans to this q
 \end{itemize}
 
-Break down $q_{\neg i}(\mathcal{Y}_i)$ into messages; \begin{itemize}
-    \item $\prod_{j\in ne(i)}M_{j\rightarrow i}(\mathcal{Y}_j \cap \mathcal{Y}_i)$
+Break down the cavity distribution $q_{\neg i}(\mathcal{Y}_i)$ in a tree; \begin{itemize}
+    \item $q_{\neg i}(\mathcal{Y}_i) = \prod_{j\in ne(i)}M_{j\rightarrow i}(\mathcal{Y}_j \cap \mathcal{Y}_i)$
     \item i.e. prod of terms from each neighbouring clique
     \item (once the $i$th site has been approximated, the messages can be passed on to neighbouring cliques by marginalising the shared variables.
 \end{itemize}
 
-% TODO: loopy graphs part on slide 12, may leave till after typing LBP notes
+Is loopy BP (using cavity distributions as in EP) guaranteed to converge?; No.
+
+In loopy graphs, what does $q_{\neg i}(\mathcal{Y}_i)$ become?; \begin{itemize}
+    \item Recall $q_{\neg i}(\mathcal{Y}_i) = \prod_{j\in ne(i)}M_{j\rightarrow i}(\mathcal{Y}_j \cap \mathcal{Y}_i)$
+    \item becomes an approx to the true cavity distribution (or we can recast the approx directly in terms of messages, see a later lecture
+    \item (For some approx e.g. Gaussian, may be able to compute true loopy cavity using approx sites, even if computing exact messages would have been intractable.)
+\end{itemize}
 
 % TODO s13: EP for a NLSSM equations, s14 more on that
 
-% TODO s14 moment matching sort of proof
+Describe EP for a NLSSM; \begin{itemize}
+    \item Put $y_t, y_{t-1}, x_t$ in the same factor.
+    \item Let $P(\mathbf{y_i|y_{i-1}}) = \phi_i(\mathbf{y_i, y_{i-1}}), P(\mathbf{x_i|y_i}) = \phi_i(\mathbf{y_i})$. Then $f_i(\mathbf{y_i, y_{i-1}}) = \phi_i(\mathbf{y_i, y_{i-1}})\phi_i(\mathbf{y_i})$. As $\phi_i$ and $\psi_i$ are non-linear, inference is not generally tractable.
+    \item Assume $\tilde{f}_i(\mathbf{y_i, y_{i-1}})$ is Gaussian. Then find form of $q_{\neg i}(\mathbf{y_i, y_{i-1}}) = \alpha_{i-1}(\mathbf{y_{i-1}})\beta_i(\mathbf{y}_i)$, with both $\alpha, \beta$ Gaussian. \begin{itemize}
+        \item steps: $=\int_{\mathbf{y_{1:i-2, i+1:n}}} \prod_{i'\ne i}\tilde{f}_{i'}(\mathbf{y_{i'}, y_{i'-1}})$
+        \item $=\int_{\mathbf{y_{1:i-2}}} \prod_{i< i}\tilde{f}_{i'}(\mathbf{y_{i'}, y_{i'-1}}) \int_{\mathbf{y_{i+1:n}}} \prod_{i'> i}\tilde{f}_{i'}(\mathbf{y_{i'}, y_{i'-1}})$
+    \end{itemize}
+    \item $\tilde{f}_i(\mathbf{y_i, y_{i-1}}) = \arg\min_{f\in N} KL[\phi_i(\mathbf{y_i, y_{i-1}})\psi_i(\mathbf{y_i})\alpha_{i-1}(\mathbf{y_{i-1}})\beta_i(\mathbf{y_i}) || f(\mathbf{y_i, y_{i-1}})\alpha_{i-1}(\mathbf{y_{i-1}})\beta_i(\mathbf{y}_i)]$
+    \item update $\alpha, \beta, \tilde{P}, \tilde{f}$. \begin{itemize}
+        \item $\tilde{f}_i(\mathbf{y_i, y_{i-1}}) = \frac{\tilde{P}(\mathbf{y_{i-1}, y_i})}{\alpha_{i-1}(\mathbf{y_{i-1}})\beta_i(\mathbf{y_i})}$
+    \end{itemize} 
+\end{itemize}
+
+Derive the EP message update for $\alpha$; \begin{itemize}
+    \item $\alpha_i(\mathbf{y_i}) = \int_{\mathbf{y_{1:i-1}}} \int \prod_{i'<i+1} \tilde{f}_{i'}(\mathbf{y_{i'}, \mathbf{y}_{i'-1}}) 
+    $
+    \item $= \int_{\mathbf{y_{i-1}}}\alpha_{i-1}(\mathbf{y_{i-1}})\tilde{f}_i(\mathbf{y_i, y_{i-1}})$
+    \item $= \frac{1}{\beta_i(\mathbf{y}_i)}\int_{y_{i-1}}\tilde{P}(\mathbf{y_{i-1},y_i})$.
+    \item (Recall $\tilde{f}_i(\mathbf{y_i, y_{i-1}}) = \frac{\tilde{P}(\mathbf{y_{i-1}, y_i})}{\alpha_{i-1}(\mathbf{y_{i-1}})\beta_i(\mathbf{y_i})}$)
+\end{itemize} 
+
+Derive the EP message update for $\beta$; \begin{itemize}
+    \item $\beta_{i-1}(\mathbf{y_{i-1}}) = \int_{\mathbf{y_{i:n}}} \int \prod_{i'>i} \tilde{f}_{i'}(\mathbf{y_{i'}, \mathbf{y}_{i'-1}}) 
+    $
+    \item $= \int_{\mathbf{y_{i}}}\beta_{i}(\mathbf{y_{i}})\tilde{f}_i(\mathbf{y_i, y_{i-1}})$
+    \item $= \frac{1}{\alpha_{i-1}(\mathbf{y}_{i-1})}\int_{y_{i}}\tilde{P}(\mathbf{y_{i-1},y_i})$.
+    \item (Recall $\tilde{f}_i(\mathbf{y_i, y_{i-1}}) = \frac{\tilde{P}(\mathbf{y_{i-1}, y_i})}{\alpha_{i-1}(\mathbf{y_{i-1}})\beta_i(\mathbf{y_i})}$)
+\end{itemize} 
+
+Derive the EP message updates for $\tilde{f}, \tilde{P}$. Assume you know $\alpha, \beta$.; \begin{itemize}
+    \item $\tilde{f}_i(\mathbf{y_i, y_{i-1}}) = \frac{\tilde{P}(\mathbf{y_{i-1}, y_i})}{\alpha_{i-1}(\mathbf{y_{i-1}})\beta_i(\mathbf{y_i})}$
+\end{itemize}
+
+How do you find q to minimise $KL(p(x)||q(x))$ when q is an exponential family  distribution?; \begin{itemize}
+    \item Let $q(x) = \frac{1}{Z(\theta)}e^{T(x)\cdot\theta}$. Then
+    \item $\arg\min_q KL[p(x)||q(x)] = \arg\min_{\theta} KL[p(x)||\frac{1}{Z(\theta)e^{T(x)\dcdot\theta}}]$
+    \item $= \arg\min_{\theta} - \int dx p(x) \log \frac{1}{Z(\theta)}e^{T(x)\cdot\theta}$
+    \item $= \arg\min_{\theta} - \int dx p(x)T(x)\cdot \theta + \log Z(\theta)$
+    \item $\frac{\partial}{\partial \theta} = \int dx p(x) T(x) + \frac{1}{Z(\theta)}\int dx e^{T(x)\cdot \theta} T(x)$
+    \item $= -\langle T(x) \rangle_p + \frac{1}{Z(\theta)}\int dx e^{T(x)\cdot \theta} T(x)$
+    \item $ = - \langle T(x)\rangle_p + \langle T(x) \rangle_q$.
+    \item so the minimum is found by matching sufficient stats. This is usually moment matching.
+\end{itemize}
+
 
 How do we calculate $\langle T(x) \rangle_p$ for EP?; \begin{itemize}
     \item Often analytically tractable, 
