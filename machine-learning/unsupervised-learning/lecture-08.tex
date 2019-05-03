@@ -6,256 +6,83 @@
 \documentclass{article}
 \begin{document}
 
-What are two things we need to compute for inference and learning?; \begin{itemize}
-    \item Posterior distributions (on latents and/or parameters) or predictive distributions
-    \item Expectations wrt these distributions
-    \item (Both are often intractable)
-\end{itemize}
+What are two things we need to compute for inference and learning?; \begin{itemize} \item Posterior distributions (on latents and/or parameters) or predictive distributions \item Expectations wrt these distributions \item (Both are often intractable) \end{itemize}
 
-Discuss a pro and con of using deterministic approximations on distributions or expectations (Bethe/Kikuchi methods); \begin{itemize}
-    \item Pro: Tractable
-    \item Con: Fixed approximation penalty
-\end{itemize}
+Discuss a pro and con of using deterministic approximations on distributions or expectations (Bethe/Kikuchi methods); \begin{itemize} \item Pro: Tractable \item Con: Fixed approximation penalty \end{itemize}
 
-What are two broad ways of computing posterior or predictive distributions and expectations wrt these distributions when they are intractable?; \begin{itemize}
-    \item Deterministic approximations (factored variational/mean field, BP, EP) or expectations (Bethe/Kikuchi methods)
-    \item Randomly generated samples
-\end{itemize}
+What are two broad ways of computing posterior or predictive distributions and expectations wrt these distributions when they are intractable?; \begin{itemize} \item Deterministic approximations (factored variational/mean field, BP, EP) or expectations (Bethe/Kikuchi methods) \item Randomly generated samples \end{itemize}
 
-Briefly discuss the consistency, bias and variance of using sampling to compute posterior/predictive distributions and expectations wrt these distributions.; Results are \begin{itemize}
-    \item Consistent
-    \item Often unbiased
-    \item Precision can generally be improved to an arbitrary degree by inceasing the number of samples.
-\end{itemize}
+Briefly discuss the consistency, bias and variance of using sampling to compute posterior/predictive distributions and expectations wrt these distributions.; Results are \begin{itemize} \item Consistent \item Often unbiased \item Precision can generally be improved to an arbitrary degree by inceasing the number of samples. \end{itemize}
 
 % TODO: revisit slide 3 at the end and see if I should add any of those comments
 
-What is a general form of the integration problem?; \begin{itemize}
-    \item Need to calculate some expected value integrals of the form
-    \item $E[F(x)] = \int F(x)p(x)dx$
-\end{itemize}
+What is a general form of the integration problem?; \begin{itemize} \item Need to calculate some expected value integrals of the form \item $E[F(x)] = \int F(x)p(x)dx$ \end{itemize}
 
-What are three typical difficulties of computing expected value integrals \item $E[F(x)] = \int F(x)p(x)dx$?; \begin{itemize}
-    \item Complicated / high variance $F(x)$, e.g. rare spikes but flat otherwise
-    \item Complicated density
-    \item Non-analytic integral (or sum) in many dimensions
-\end{itemize}
+What are three typical difficulties of computing expected value integrals \item $E[F(x)] = \int F(x)p(x)dx$?; \begin{itemize} \item Complicated / high variance $F(x)$, e.g. rare spikes but flat otherwise \item Complicated density \item Non-analytic integral (or sum) in many dimensions \end{itemize} 
 
-Describe how to use simple monte-carlo integration to evaluate $\int dx F(x) p(x)$.; \begin{itemize}
-    \item Idea: draw samples from $p(x)$, evaluate $F(x)$, average the values
-    \item $\int F(x)p(x)dx \simeq \frac{1}{T}\sum_{t=1}^T F(x^{(t)})$,
-    \item where $x^({t})$ are independent samples drawn from $p(x)$.
-    \item Convergence to the integral follows from the strong law of large numbers. (but may be slow)
-\end{itemize}
+Describe how to use simple monte-carlo integration to evaluate $\int dx F(x) p(x)$.; \begin{itemize} \item Idea: draw samples from $p(x)$, evaluate $F(x)$, average the values \item $\int F(x)p(x)dx \simeq \frac{1}{T}\sum_{t=1}^T F(x^{(t)})$, \item where $x^({t})$ are independent samples drawn from $p(x)$. \item Convergence to the integral follows from the strong law of large numbers. (but may be slow) \end{itemize}
 
-Why does the simple monte carlo estimate converge to the integral?; \begin{itemize}
-    \item By the strong law of large numbers.
-    \item Recall simple MC: $\int F(x)p(x)dx \simeq \frac{1}{T}\sum_{t=1}^T F(x^{(t)})$.
-\end{itemize} 
+Why does the simple monte carlo estimate converge to the integral?; \begin{itemize} \item By the strong law of large numbers. \item Recall simple MC: $\int F(x)p(x)dx \simeq \frac{1}{T}\sum_{t=1}^T F(x^{(t)})$. \end{itemize} 
 
-Name two advantages of simple Monte-Carlo.; \begin{itemize}
-    \item Unbiased
-    \item Variance falls as $\frac{1}{T}$ independent of dimension (T=num samples). i.e. $Var[\frac{1}{T}\sum_t F(x^{(t)})] = \frac{1}{T}(E[F(x)^2] - E[F(x)]^2)$.
-\end{itemize}
+Name two advantages of simple Monte-Carlo.; \begin{itemize} \item Unbiased \item Variance falls as $\frac{1}{T}$ independent of dimension (T=num samples). i.e. $Var[\frac{1}{T}\sum_t F(x^{(t)})] = \frac{1}{T}(E[F(x)^2] - E[F(x)]^2)$. \end{itemize} 
 
-Derive the variance of a simple Monte Carlo estimate; \begin{itemize}
-    \item $Var[\frac{1}{T}\sum_t F(x^{(t)})] = E[(\frac{1}{T}\sum_t F(x^{(t)})^2] - E[F(x)]^2$
-    \item $=\frac{1}{T^2}(TE[F(x)^2]+(T^2-T)E[F(x)]^2) - E[F(x)]^2$
-    \item $= \frac{1}{T}(E[F(x)^2] - E[F(x)]^2)$.
-    \item $=\frac{1}{T}$(Var in a single dim).
-    \item (makes sense since draws are independent)
-\end{itemize}
+Derive the variance of a simple Monte Carlo estimate; \begin{itemize} \item $Var[\frac{1}{T}\sum_t F(x^{(t)})] = E[(\frac{1}{T}\sum_t F(x^{(t)})^2] - E[F(x)]^2$ \item $=\frac{1}{T^2}(TE[F(x)^2]+(T^2-T)E[F(x)]^2) - E[F(x)]^2$ \item $= \frac{1}{T}(E[F(x)^2] - E[F(x)]^2)$. \item $=\frac{1}{T}$(Var in a single dim). \item (makes sense since draws are independent) \end{itemize}
 
-Name two problems of simple Monte Carlo.; \begin{itemize}
-    \item May be difficult or impossible to obtain the samples directly from $p(x)$.
-    \item High var initially: Regions of high density $p(x)$ may not correspond to regions where $F(x)$ departs most from its mean value (and thus each $F(x)$ evaluation might have v high variance).
-\end{itemize}
+Name two problems of simple Monte Carlo.; \begin{itemize} \item May be difficult or impossible to obtain the samples directly from $p(x)$. \item High var initially: Regions of high density $p(x)$ may not correspond to regions where $F(x)$ departs most from its mean value (and thus each $F(x)$ evaluation might have v high variance). \end{itemize} 
 
-Describe importance sampling in one sentence.; \begin{itemize}
-    \item Idea: Sample from a proposal distribution and weight those samples by $p(x)/q(x)$.
-\end{itemize}
+Describe importance sampling in one sentence.; \begin{itemize} \item Idea: Sample from a proposal distribution and weight those samples by $p(x)/q(x)$. \end{itemize}
 
-Describe importance sampling (include equations); \begin{itemize}
-    \item Idea: Sample from a proposal distribution and weight those samples by $p(x)/q(x)$.
-    \item i.e. for samples $x^{(t)}\sim q(x)$: $\int F(x)p(x)dx = \int F(x)\frac{p(x)}{q(x)}q(x) dx \simeq \frac{1}{T}F(x^{(t)}\frac{p(x^{(t)})}{q(x^{(t)})}$
-    \item provided $q(x)$ is nonzero wherever $p(x)$ is. 
-    \item (Weights $w(x^{(i)}) \equiv \frac{p(x^{(t)})}{q(x^{(t)})}$.
-\end{itemize}
+Describe importance sampling (include equations); \begin{itemize} \item Idea: Sample from a proposal distribution and weight those samples by $p(x)/q(x)$. \item i.e. for samples $x^{(t)}\sim q(x)$: $\int F(x)p(x)dx = \int F(x)\frac{p(x)}{q(x)}q(x) dx \simeq \frac{1}{T}F(x^{(t)}\frac{p(x^{(t)})}{q(x^{(t)})}$ \item provided $q(x)$ is nonzero wherever $p(x)$ is.  \item (Weights $w(x^{(i)}) \equiv \frac{p(x^{(t)})}{q(x^{(t)})}$. \end{itemize}
 
-Describe pros and cons of importance sampling.; \begin{itemize}
-    \item Unbiased
-    \item Variance ccould be smaller than simple monte carlo if 
-    \begin{itemize}
-        \item $E_q[(F(x)w(x))^2 - E_q [F(x)w(x)]^2 < E_p [F(x)]^2 - E_p [F(x)]^2$.
-        \item `Optimal' proposal is $q(x) = p(x)F(x)/Z_q$: every sample yields same estimate $F(x)w(x) = F(x)\frac{p(x)}{p(x)F(x)/Z_q}=Z_q$, but normalising requires solving original problem
-    \end{itemize}
-    \item Handles cases where $p(x)$ is difficult to sample (since sample from $q(x)$).
-    \item (Can direct samples towards high values of integrand $F(x)p(x)$, rather than just high $p(x)$ alone (e.g. p prior and F likelihood))
-    \item (something about not needing the normaliser)
-\end{itemize}
+Describe pros and cons of importance sampling.; \begin{itemize} \item Unbiased \item Variance ccould be smaller than simple monte carlo if  \begin{itemize} \item $E_q[(F(x)w(x))^2 - E_q [F(x)w(x)]^2 < E_p [F(x)]^2 - E_p [F(x)]^2$. \item `Optimal' proposal is $q(x) = p(x)F(x)/Z_q$: every sample yields same estimate $F(x)w(x) = F(x)\frac{p(x)}{p(x)F(x)/Z_q}=Z_q$, but normalising requires solving original problem \end{itemize} \item Handles cases where $p(x)$ is difficult to sample (since sample from $q(x)$). \item (Can direct samples towards high values of integrand $F(x)p(x)$, rather than just high $p(x)$ alone (e.g. p prior and F likelihood)) \item (something about not needing the normaliser) \end{itemize}
 
-Describe cons of importance sampling; \begin{itemize}
-    \item May be hard to construct or sample $q(x)$ to give small variance (Var increases as p and q differ more)
-    \item Var of weights could be unbounded: $V[w(x)] = E_q[w(x)^2] - E_q[w(x)]^2$
-    \begin{itemize}
-        \item $E_q[w(x)] = \int q(x)w(x)dx = 1$
-        \item $E_q[w(x)^2] = \int \frac{p(x)^2}{q(x)^2}q(x)dx = \int \frac{p(x)^2}{q(x)}dx$, which could be v large if e.g. q has a lighter tail than p. 
-        \item MC avg may be dominated by a few samples, not even necessarily in the region of large integrand.
-        \item (decreases num effective samples used to calculate estimate)
-    \end{itemize}
-    \item (Need to be able to evaluate density p (and q).)
-\end{itemize}
+Describe cons of importance sampling; \begin{itemize} \item May be hard to construct or sample $q(x)$ to give small variance (Var increases as p and q differ more) \item Var of weights could be unbounded: $V[w(x)] = E_q[w(x)^2] - E_q[w(x)]^2$ \begin{itemize} \item $E_q[w(x)] = \int q(x)w(x)dx = 1$ \item $E_q[w(x)^2] = \int \frac{p(x)^2}{q(x)^2}q(x)dx = \int \frac{p(x)^2}{q(x)}dx$, which could be v large if e.g. q has a lighter tail than p.  \item MC avg may be dominated by a few samples, not even necessarily in the region of large integrand. \item (decreases num effective samples used to calculate estimate) \end{itemize} \item (Need to be able to evaluate density p (and q).) \end{itemize}
 
 What is an important diagnostic for the quality of a sampler?; Variance.
 
 Can we apply importance sampling using unnormalised distributions?; Yes (both p and q).
 
-Describe how to apply importance sampling using unnormalised distributions p and q.; \begin{itemize}
-    \item Suppose we have $p(x) = \tilde{p(x)}/Z_p, q(x) = \tilde{q(x)}/Z_q$.
-    \item We apply importance sampling by estimating the normaliser:
-    \item $\int F(x) p(x) dx \approx \frac{\sum_t F(x^{(t)})w(x^{(t)})}{\sum_t w(x^{(t)})}$
-    \item Estimate is biased for finite $T$ but is consistent.
-    \item (Note can estimate $Z_p$ if we have $Z_q$: $\frac{1}{T}\sum_t w(x^{(t)})\rightarrow \langle \frac{\tilde{p}(x)}{\tilde{q}(x)}\rangle_q$
-    \begin{itemize}
-        \item $=\int dx \frac{Z_p p(x)}{Z_q q(x)}q(x) = \frac{Z_p}{Z_q}$.
-        \item note above is importance sampling integral with $F(x) = 1$.
-    \end{itemize}
-\end{itemize}
+Describe how to apply importance sampling using unnormalised distributions p and q.; \begin{itemize} \item Suppose we have $p(x) = \tilde{p(x)}/Z_p, q(x) = \tilde{q(x)}/Z_q$. \item We apply importance sampling by estimating the normaliser: \item $\int F(x) p(x) dx \approx \frac{\sum_t F(x^{(t)})w(x^{(t)})}{\sum_t w(x^{(t)})}$ \item Estimate is biased for finite $T$ but is consistent. \item (Note can estimate $Z_p$ if we have $Z_q$: $\frac{1}{T}\sum_t w(x^{(t)})\rightarrow \langle \frac{\tilde{p}(x)}{\tilde{q}(x)}\rangle_q$ \begin{itemize} \item $=\int dx \frac{Z_p p(x)}{Z_q q(x)}q(x) = \frac{Z_p}{Z_q}$. \item note above is importance sampling integral with $F(x) = 1$. \end{itemize} \end{itemize}
 
 Why is the variance of weights important in importance sampling?; As the variance of weights increases, the number of effective samples decreases.
 
-Derive an expression for the variance of weights in importance sampling; \item Var of weights could be unbounded: $V[w(x)] = E_q[w(x)^2] - E_q[w(x)]^2$
-    \begin{itemize}
-        \item $E_q[w(x)] = \int q(x)w(x)dx = 1$
-        \item $E_q[w(x)^2] = \int \frac{p(x)^2}{q(x)^2}q(x)dx = \int \frac{p(x)^2}{q(x)}dx$, which could be v large if e.g. q has a lighter tail than p. 
-        \item MC avg may be dominated by a few samples, not even necessarily in the region of large integrand.
-        \item (decreases num effective samples used to calculate estimate)
-    \end{itemize}
+Derive an expression for the variance of weights in importance sampling; \item Var of weights could be unbounded: $V[w(x)] = E_q[w(x)^2] - E_q[w(x)]^2$ \begin{itemize} \item $E_q[w(x)] = \int q(x)w(x)dx = 1$ \item $E_q[w(x)^2] = \int \frac{p(x)^2}{q(x)^2}q(x)dx = \int \frac{p(x)^2}{q(x)}dx$, which could be v large if e.g. q has a lighter tail than p.  \item MC avg may be dominated by a few samples, not even necessarily in the region of large integrand. \item (decreases num effective samples used to calculate estimate) \end{itemize}
 
-In importance sampling, does large effective sample size prove effectiveness? Why or why not?; \begin{itemize}
-    \item No.
-    \item It doesn't prove effectiveness if no high weight samples are found, or if q places little mass where $F(x)$ is large.
-    \item (var dec as 1/T, but init var may still be high?)
-\end{itemize}
+In importance sampling, does large effective sample size prove effectiveness? Why or why not?; \begin{itemize} \item No. \item It doesn't prove effectiveness if no high weight samples are found, or if q places little mass where $F(x)$ is large. \item (var dec as 1/T, but init var may still be high?) \end{itemize}
 
-How do you generate samples from an arbitrary distribution $p(x)$ (given you have access to a sampler $u\sim Uniform[0,1]$)?; \begin{itemize}
-    \item Inverse CDF
-    \item $x = G^{-1}(u)$
-    \item with $G(x) = \int_{-infty}^x p(x')dx'$ being the target CDF.
-\end{itemize}
+How do you generate samples from an arbitrary distribution $p(x)$ (given you have access to a sampler $u\sim Uniform[0,1]$)?; \begin{itemize} \item Inverse CDF \item $x = G^{-1}(u)$ \item with $G(x) = \int_{-infty}^x p(x')dx'$ being the target CDF. \end{itemize}
 
 Describe rejection sampling in a sentence.; Sample from an upper bound on $p(x)$, reject some samples. (TODO: expand a bit?)
 
-Describe rejection sampling.; \begin{itemize}
-    \item Idea: Sample from an upper bound on $p(x)$, reject some samples.
-    \item Find a distribution $q(x)$ and a constant $c$ such that $\forall x, p(x) \leq cq(x)$.
-    \item Sample $x^*$ from $q(x)$ and accept $x^*$ with probability $p(x^*)/(cq(x^*))$.
-    \begin{itemize}
-        \item sample $y^* \sim U[0, cq(x^*)]$, then joint proposal $(x^*, y^*)$ is a point uniformly drawn from the area under the $cq(x)$ curve.
-        \item The proposal is accepted if $y^* \leq p(x^*)$, i.e. the proposal falls in the red box. The probability of this is $q(x)dx * p(x) / cq(x) = p(x)/c dx$.
-        \item Thus accepted $x^* \sim p(x)$ (with avg prob of acceptance = 1/c = area of p / area of cq.
-    \end{itemize}
-    \item Reject the rest.
-\end{itemize}
+Describe rejection sampling.; \begin{itemize} \item Idea: Sample from an upper bound on $p(x)$, reject some samples. \item Find a distribution $q(x)$ and a constant $c$ such that $\forall x, p(x) \leq cq(x)$. \item Sample $x^*$ from $q(x)$ and accept $x^*$ with probability $p(x^*)/(cq(x^*))$. \begin{itemize} \item sample $y^* \sim U[0, cq(x^*)]$, then joint proposal $(x^*, y^*)$ is a point uniformly drawn from the area under the $cq(x)$ curve. \item The proposal is accepted if $y^* \leq p(x^*)$, i.e. the proposal falls in the red box. The probability of this is $q(x)dx * p(x) / cq(x) = p(x)/c dx$. \item Thus accepted $x^* \sim p(x)$ (with avg prob of acceptance = 1/c = area of p / area of cq. \end{itemize} \item Reject the rest. \end{itemize}
 
-Describe the pros and cons of rejection sampling.; \begin{itemize}
-    \item Pros
-    \begin{itemize}
-        \item Unbiased: accepted $x^*$ is true sample from $p(x)$.
-        \item Diagnostics easier than (say) importance sampling: number of accepted samples is true sample size. (vs needing to use effective sample size.)
-    \end{itemize}
-    \item Con: May be difficult to find $q(x)$ with small c $\Rightarrow$ lots of wasted area.
-\end{itemize}
+Describe the pros and cons of rejection sampling.; \begin{itemize} \item Pros \begin{itemize} \item Unbiased: accepted $x^*$ is true sample from $p(x)$. \item Diagnostics easier than (say) importance sampling: number of accepted samples is true sample size. (vs needing to use effective sample size.) \end{itemize} \item Con: May be difficult to find $q(x)$ with small c $\Rightarrow$ lots of wasted area. \end{itemize}
 
-Can we do rejection sampling with unnormalised distributions? If so, how?; Yes. (Both p, q can be unnormalised.) \begin{itemize}
-    \item Can still apply if using c with $\tilde{p}(x) \leq c\tilde{q}(x)$, where $\tilde{p}, \tilde{q}$ are unnormalised dists. (And still unbiased.)
-\end{itemize}
+Can we do rejection sampling with unnormalised distributions? If so, how?; Yes. (Both p, q can be unnormalised.) \begin{itemize} \item Can still apply if using c with $\tilde{p}(x) \leq c\tilde{q}(x)$, where $\tilde{p}, \tilde{q}$ are unnormalised dists. (And still unbiased.) \end{itemize}  
 
-Describe the relationship between importance and rejection sampling.; \begin{itemize}
-    \item If we have $c$ for which $q(x)$ is an upper bound on $p(x)$, then importance weights are upper bounded: \begin{itemize}
-        \item $0 \leq \frac{p(x)}{q(x)} \leq c$.
-    \end{itemize}
-    \item So importance weights have finite variance and importance sampling is well-behaved.
-    \item Upper bound condition makes both rejection sampling work and importance sampling well-behaved.
-    \item (if want integral at the end, probably better to do importance sampling. randomness from keeping the sample or not in rejection sampler only adds variance.)
-\end{itemize}
+Describe the relationship between importance and rejection sampling.; \begin{itemize}  \item If we have $c$ for which $q(x)$ is an upper bound on $p(x)$, then importance weights are upper bounded: \begin{itemize} \item $0 \leq \frac{p(x)}{q(x)} \leq c$. \end{itemize} \item So importance weights have finite variance and importance sampling is well-behaved. \item Upper bound condition makes both rejection sampling work and importance sampling well-behaved. \item (if want integral at the end, probably better to do importance sampling. randomness from keeping the sample or not in rejection sampler only adds variance.) \end{itemize} 
 
-Would you use importance sampling or rejection sampling if you wanted to calculate an integral?; \begin{itemize}
-    \item If have upper bound condition $0 \leq \frac{p(x)}{q(x)} \leq c$
-    \item probably better to do importance sampling. 
-    \item Randomness from keeping the sample or not in rejection sampler only adds variance.
-\end{itemize}
+Would you use importance sampling or rejection sampling if you wanted to calculate an integral?; \begin{itemize} \item If have upper bound condition $0 \leq \frac{p(x)}{q(x)} \leq c$ \item probably better to do importance sampling.  \item Randomness from keeping the sample or not in rejection sampler only adds variance. \end{itemize}
 
-State the equation for a Boltzmann machine.; \begin{itemize}
-    \item $\log p(\mathbf{s^Vs^H|W, b}) = \sum_{ij}W_{ij}s_is_j - \sum_i b_is_i - \log Z$
-    \item with $Z = \sum_s e^{\sum_{ij}W_{ij}s_is_j - \sum_i b_i s_i}$
-\end{itemize}
+State the equation for a Boltzmann machine.; \begin{itemize} \item $\log p(\mathbf{s^Vs^H|W, b}) = \sum_{ij}W_{ij}s_is_j - \sum_i b_is_i - \log Z$ \item with $Z = \sum_s e^{\sum_{ij}W_{ij}s_is_j - \sum_i b_i s_i}$ \end{itemize}
 
-Write out the expression we need to calculate for the M-step on Boltzmann machines; \begin{itemize}
-    \item ($\Delta W_{ij} \propto \frac{\partial}{\partial W_{ij}} \langle \log p(\mathbf{s^Vs^H|W, b}) \rangle_{p(\mathbf{s^H|s^V})}$
-    \item Then $\Nabla_{W_ij} \log \mathcal{L} = \langle s_is_j \rangle_c - \langle s_is_j \rangle_u$
-    \item $\langle \rangle_c$ (clamped): expectations under $p(\mathbf{s^H|s^v})$, and 
-    \item $\langle \rangle_u$ (unclamped): expectations under current joint dist $p(\mathbf{s^H, s^v})$
-    \item TODO: I don't get where the unclamped part came from
-\end{itemize}
+Write out the expression we need to calculate for the M-step on Boltzmann machines; \begin{itemize} \item ($\Delta W_{ij} \propto \frac{\partial}{\partial W_{ij}} \langle \log p(\mathbf{s^Vs^H|W, b}) \rangle_{p(\mathbf{s^H|s^V})}$ \item Then $\Nabla_{W_ij} \log \mathcal{L} = \langle s_is_j \rangle_c - \langle s_is_j \rangle_u$ \item $\langle \rangle_c$ (clamped): expectations under $p(\mathbf{s^H|s^v})$, and  \item $\langle \rangle_u$ (unclamped): expectations under current joint dist $p(\mathbf{s^H, s^v})$ \item TODO: I don't get where the unclamped part came from \end{itemize} 
 
 Name the method we can use to find the expectations needed for the M-step on Boltzmann machines; Gibbs sampling. (Also called the heat bath or Glauber dynamics.)
 
-Describe how we can find the expectations needed for the M-step on Boltzmann machines; \begin{itemize}
-    \item Gibbs sampling. (Also called the heat bath or Glauber dynamics.)
-    \item Iterative approach:
-    \item Choose variable settings randomly (set any clamped nodes to clamped values)
-    \item Cycle through (unclamped) $s_i$, choosing $s_i \sim p(s_i|\mathbf{s}_{\backslash i})$ (easy since Bernouilli)
-    \item After enough samples, we might expect to reach a sample from the correct distribution.
-    \item (Another way of putting it: given settings of nodes in the markov blanket of $s_i$, we can compute and normalise the scalar $p(s_i)$ and toss a (virtual) coin, i.e. sample.)
-\end{itemize}
+Describe how we can find the expectations needed for the M-step on Boltzmann machines; \begin{itemize} \item Gibbs sampling. (Also called the heat bath or Glauber dynamics.) \item Iterative approach: \item Choose variable settings randomly (set any clamped nodes to clamped values) \item Cycle through (unclamped) $s_i$, choosing $s_i \sim p(s_i|\mathbf{s}_{\backslash i})$ (easy since Bernouilli) \item After enough samples, we might expect to reach a sample from the correct distribution. \item (Another way of putting it: given settings of nodes in the markov blanket of $s_i$, we can compute and normalise the scalar $p(s_i)$ and toss a (virtual) coin, i.e. sample.) \end{itemize}
 
-Describe Markov chain Monte Carlo (MCMC) methods.; \begin{itemize}
-    \item TODO refine
-    \item Suppose we seek samples from a distribution $p^*(x)$.
-    \item Let us construct a Markov chain: $x_0 \rightarrow x_1 \rightarrow x_2 ... $, where $x_0 \sim p_0(x)$ and $T(x\rightarrow x') = p(X_t = x' | X_{t-1} = x)$ is the Markov chain transition probability from $x$ to $x'$, and we can easily sample from each of these.
-    \item Then the marginal distributions in the chain are $x_t \sim p_t(x)$ with the property that: \begin{itemize}
-        \item $p_t(x') = \sum_x p_{t-1}(x) T (x\rightarrow x')$
-    \end{itemize}
-    \item Under some conditions, these marginals converge to an invariant/stationary/equilibrium dist characterised by T with \begin{itemize}
-        \item $p_{\infty}(x') = \sum_x p_{\infty}(x)T(x\rightarrow x')$
-    \end{itemize}
-    \item If we can choose a $T(x\rightarrow x')$ so as to ensure $p_{\infty} = p*$ and sample from the Markov chain for long enough, we can obtain samples from distributions arbitrarily close to $p^*$.
-\end{itemize}
+Describe Markov chain Monte Carlo (MCMC) methods.; \begin{itemize} \item TODO refine \item Suppose we seek samples from a distribution $p^*(x)$. \item Let us construct a Markov chain: $x_0 \rightarrow x_1 \rightarrow x_2 ... $, where $x_0 \sim p_0(x)$ and $T(x\rightarrow x') = p(X_t = x' | X_{t-1} = x)$ is the Markov chain transition probability from $x$ to $x'$, and we can easily sample from each of these. \item Then the marginal distributions in the chain are $x_t \sim p_t(x)$ with the property that: \begin{itemize} \item $p_t(x') = \sum_x p_{t-1}(x) T (x\rightarrow x')$ \end{itemize} \item Under some conditions, these marginals converge to an invariant/stationary/equilibrium dist characterised by T with \begin{itemize} \item $p_{\infty}(x') = \sum_x p_{\infty}(x)T(x\rightarrow x')$ \end{itemize} \item If we can choose a $T(x\rightarrow x')$ so as to ensure $p_{\infty} = p*$ and sample from the Markov chain for long enough, we can obtain samples from distributions arbitrarily close to $p^*$. \end{itemize}
 
-Suppose we have a Markov chain $x_0 \rightarrow x_1 \rightarrow ...$ with marginals $x_0 \sim p_0(x)$ and $p_t(x') = \sum_x p_{t-1}(x)T(x\rightarrow x')$ according to transition probability $T(x\rightarrow x')$. When will the marginal of the chain defined by T converge to $p^*$?; \begin{itemize}
-    \item 1. Need convergence to a unique stat dist regardless of initial state $x_0$, i.e. a form of ergodicity. \begin{itemize}
-        \item Sufficient condition for MC to be ergodic is that
-        \item $T^k(x\rightarrow x') > 0$ for all $x, x'\in \mathcal{X}$ and some $k$.
-        \item That is, it is possible to reach any state from any other state in exactly k steps.
-    \end{itemize}
-    \item 2. Sufficient condition for $p^*(x)$ being invariant is detailed balance. \begin{itemize}
-        \item $p^*(x)T(x'\rightarrow x) = p^*(x)T(x\rightarrow x')$
-    \end{itemize}
-    \item if T and $p^*$ satisfy these two conditions (ergodicity, detailed balance), then the marginal of the chain defined by T will converge to $p^*$.
-\end{itemize}
+Suppose we have a Markov chain $x_0 \rightarrow x_1 \rightarrow ...$ with marginals $x_0 \sim p_0(x)$ and $p_t(x') = \sum_x p_{t-1}(x)T(x\rightarrow x')$ according to transition probability $T(x\rightarrow x')$. When will the marginal of the chain defined by T converge to $p^*$?; \begin{itemize} \item 1. Need convergence to a unique stat dist regardless of initial state $x_0$, i.e. a form of ergodicity. \begin{itemize} \item Sufficient condition for MC to be ergodic is that \item $T^k(x\rightarrow x') > 0$ for all $x, x'\in \mathcal{X}$ and some $k$. \item That is, it is possible to reach any state from any other state in exactly k steps. \end{itemize} \item 2. Sufficient condition for $p^*(x)$ being invariant is detailed balance. \begin{itemize} \item $p^*(x)T(x'\rightarrow x) = p^*(x)T(x\rightarrow x')$ \end{itemize} \item if T and $p^*$ satisfy these two conditions (ergodicity, detailed balance), then the marginal of the chain defined by T will converge to $p^*$. \end{itemize}
 
-What is detailed balance?; \begin{itemize}
-        \item $p^*(x)T(x'\rightarrow x) = p^*(x)T(x\rightarrow x')$
-        \item for some prob dist $p^*$ and transition probability $T(x\rightarrow x') = p(X_t = x'|X_{t-1}=x)$.
-    \end{itemize}
+What is detailed balance?; \begin{itemize} \item $p^*(x)T(x'\rightarrow x) = p^*(x)T(x\rightarrow x')$ \item for some prob dist $p^*$ and transition probability $T(x\rightarrow x') = p(X_t = x'|X_{t-1}=x)$. \end{itemize}
 
-State a sufficient condition for a Markov chain to be ergodic. (MC $x_0 \rightarrow x_1 \rightarrow ...$ with marginals $x_0 \sim p_0(x)$ and $p_t(x') = \sum_x p_{t-1}(x)T(x\rightarrow x')$ according to transition probability $T(x\rightarrow x')$); \begin{itemize}
-        \item $T^k(x\rightarrow x') > 0$ for all $x, x'\in \mathcal{X}$ and some $k$.
-        \item That is, it is possible to reach any state from any other state in exactly k steps.
-    \end{itemize}
+State a sufficient condition for a Markov chain to be ergodic. (MC $x_0 \rightarrow x_1 \rightarrow ...$ with marginals $x_0 \sim p_0(x)$ and $p_t(x') = \sum_x p_{t-1}(x)T(x\rightarrow x')$ according to transition probability $T(x\rightarrow x')$); \begin{itemize} \item $T^k(x\rightarrow x') > 0$ for all $x, x'\in \mathcal{X}$ and some $k$. \item That is, it is possible to reach any state from any other state in exactly k steps. \end{itemize}
     
 Describe Gibbs sampling in one sentence; Sample from the conditional of each variable given the settings of the other variables.
 
-Describe Gibbs sampling (steps); \begin{itemize}
-    \item Idea: Sample from the conditional of each variable given the settings of the other variables.
-    \item Repeatedly: \begin{itemize}
-        \item 1. Pick i (either at random or in turn, in practice pick in turn)
-        \item 2. Replace $x_i$ by a sample from the conditional distribution $p(x_i|\mathbf{x_{\backslash i}} = p(x_i | x_1, ..., x_{i-1}, x_{i+1}, ..., x_n)$.
-    \end{itemize}
-    \item This creates a Markov chain. Under some (mild) conditions, the equilibrium distribution $p(\mathbf{x}^(\infty))$ of this Markov chain is $p(\mathbf{x})$.
-    \item (feasible if it is easy to sample from the conditional probabilities)
-\end{itemize}
+Describe Gibbs sampling (steps); \begin{itemize} \item Idea: Sample from the conditional of each variable given the settings of the other variables. \item Repeatedly: \begin{itemize} \item 1. Pick i (either at random or in turn, in practice pick in turn) \item 2. Replace $x_i$ by a sample from the conditional distribution $p(x_i|\mathbf{x_{\backslash i}} = p(x_i | x_1, ..., x_{i-1}, x_{i+1}, ..., x_n)$. \end{itemize} \item This creates a Markov chain. Under some (mild) conditions, the equilibrium distribution $p(\mathbf{x}^(\infty))$ of this Markov chain is $p(\mathbf{x})$. \item (feasible if it is easy to sample from the conditional probabilities) \end{itemize} 
 
 When is Gibbs sampling feasible?; When it is easy to sample from the conditional probabilities $p(x_i|\mathbf{x_{\backslash i}} = p(x_i | x_1, ..., x_{i-1}, x_{i+1}, ..., x_n)$.
 
@@ -265,253 +92,81 @@ Is the detailed balance condition met in Gibbs Sampling?; Yes.
 
 What are the implications if the detailed balance condition is met in Gibbs sampling?; Then if it converges to a unique stationary distribution, the stationary distribution is the correct one.
 
-Show that the detailed balance condition is met in Gibbs sampling.; \begin{itemize}
-    \item Transition probabilities are given by: $T(\mathbf{x}\rightarrow \mathbf{x'}) = \pi_i p(x_i'|\mathbf{x}_{\backslash i})$ \begin{itemize}
-    \item where $\pi_i$ is the prob of choosing to update the $i$th variable (to handle rotation updates instead of random ones, we need to consider transitions duo to one full sweep).
-    \end{itemize}
-    \item Then we have $T(\mathbf{x\rightarrow x'})p(\mathbf{x}) = \pi_i p(x'_i|\mathbf{x}_{\backslash i})p(x_i|\mathbf{x}_{\backslash i})p(\mathbf{x}_{\backslash i}) = \pi_i p(x'_i|\mathbf{x}_{\backslash i}) p(\mathbf{x})$
-    \and $T(\mathbf{x'\rightarrow x})p(\mathbf{x'}) = \pi_i p(x_i|\mathbf{x}'_{\backslash i})p(x'_i|\mathbf{x}'_{\backslash i})p(\mathbf{x}'_{\backslash i})$
-    \item But $\mathbf{x}'_{\backslash i} = \mathbf{x}_{\backslash i}$ so detailed balance holds. (All other nodes the same)
-\end{itemize}
+Show that the detailed balance condition is met in Gibbs sampling.; \begin{itemize} \item Transition probabilities are given by: $T(\mathbf{x}\rightarrow \mathbf{x'}) = \pi_i p(x_i'|\mathbf{x}_{\backslash i})$ \begin{itemize} \item where $\pi_i$ is the prob of choosing to update the $i$th variable (to handle rotation updates instead of random ones, we need to consider transitions duo to one full sweep). \end{itemize} \item Then we have $T(\mathbf{x\rightarrow x'})p(\mathbf{x}) = \pi_i p(x'_i|\mathbf{x}_{\backslash i})p(x_i|\mathbf{x}_{\backslash i})p(\mathbf{x}_{\backslash i}) = \pi_i p(x'_i|\mathbf{x}_{\backslash i}) p(\mathbf{x})$ \and $T(\mathbf{x'\rightarrow x})p(\mathbf{x'}) = \pi_i p(x_i|\mathbf{x}'_{\backslash i})p(x'_i|\mathbf{x}'_{\backslash i})p(\mathbf{x}'_{\backslash i})$ \item But $\mathbf{x}'_{\backslash i} = \mathbf{x}_{\backslash i}$ so detailed balance holds. (All other nodes the same) \end{itemize}
 
 If the detailed balance condition holds in Gibbs sampling, what additional thing do we need for ergodicity to also hold?; Constant support. (Note detailed balance DOES hold in Gibbs sampling.)
 
 Name a kind of model Gibbs Sampling is well suited to.; Graphical models
 
-Describe the Metropolis-Hastings algorithm.; \begin{itemize}
-    \item Idea: Propose a change to current (global) state, accept or reject. (A kind of rejection sampling)
-    \item Each step: starting from the current state x, \begin{itemize}
-        \item 1. Propose a new state \mathbf{x'} using a proposal distribution (e.g. Gaussian): $S(\mathbf{x'|x}) = S(\mathbf{x\rightarrow x'})$.
-        \item 2. Accept the new state with probability: $\min (1, p(\mathbf{x'})S(\mathbf{x'\rightarrow x})/p(\mathbf{x})S(\mathbf{x}\rightarrow \mathbf{x'}))$
-        \item 3. Otherwise retain the old state.
-    \end{itemize}
-\end{itemize}
+Describe the Metropolis-Hastings algorithm.; \begin{itemize} \item Idea: Propose a change to current (global) state, accept or reject. (A kind of rejection sampling) \item Each step: starting from the current state x, \begin{itemize} \item 1. Propose a new state \mathbf{x'} using a proposal distribution (e.g. Gaussian): $S(\mathbf{x'|x}) = S(\mathbf{x\rightarrow x'})$. \item 2. Accept the new state with probability: $\min (1, p(\mathbf{x'})S(\mathbf{x'\rightarrow x})/p(\mathbf{x})S(\mathbf{x}\rightarrow \mathbf{x'}))$ \item 3. Otherwise retain the old state. \end{itemize} \end{itemize}
 
-Why might you want to use the Metropolis-Hastings algo instead of Gibbs sampling?; \begin{itemize}
-    \item Gibbs sampling can be slow ($p(x_i)$m ight be well determined by $\mathbf{x}_{\backslash i}$, and conditionals may be intractable.
-    \item So global transition might be better.
-\end{itemize}
+Why might you want to use the Metropolis-Hastings algo instead of Gibbs sampling?; \begin{itemize} \item Gibbs sampling can be slow ($p(x_i)$m ight be well determined by $\mathbf{x}_{\backslash i}$, and conditionals may be intractable. \item So global transition might be better. \end{itemize}
 
-What controls the efficiency of a Metropolis-Hastings algo?; \begin{itemize}
-    \item Balancing between high acceptance rate and large step size.
-    \item May adapt $S(\mathbf{x\rightarrow x'})$ to balance these, but stationarity only holds once S is fixed.
-\end{itemize}
+What controls the efficiency of a Metropolis-Hastings algo?; \begin{itemize} \item Balancing between high acceptance rate and large step size. \item May adapt $S(\mathbf{x\rightarrow x'})$ to balance these, but stationarity only holds once S is fixed. \end{itemize}
 
-Does Metropolis-Hastings work if we can't compute the normaliser? Why or why not?; \begin{itemize}
-    \item Yes it works
-    \item we only need to compute ratios of probabilities, not normalising constants.
-        \item Recall: Accept the new state with probability: $\min (1, p(\mathbf{x'})S(\mathbf{x'\rightarrow x})/p(\mathbf{x})S(\mathbf{x}\rightarrow \mathbf{x'}))$
-\end{itemize}
+Does Metropolis-Hastings work if we can't compute the normaliser? Why or why not?; \begin{itemize} \item Yes it works \item we only need to compute ratios of probabilities, not normalising constants. \item Recall: Accept the new state with probability: $\min (1, p(\mathbf{x'})S(\mathbf{x'\rightarrow x})/p(\mathbf{x})S(\mathbf{x}\rightarrow \mathbf{x'}))$ \end{itemize}
 
-(Trivia) What is the difference between the Metropolis and Metropolis-Hastings algorithms?; \begin{itemize}
-    \item Metropolis was symmetric: $S(\mathbf{x'|x}) = S(\mathbf{x|x'})$. So accept new state with prob $min(1, p(\mathbf{x'})/p(\mathbf{x}))$ 
-    \item vs MH accept prob $\min (1, p(\mathbf{x'})S(\mathbf{x'\rightarrow x})/p(\mathbf{x})S(\mathbf{x}\rightarrow \mathbf{x'}))$
-\end{itemize}
+(Trivia) What is the difference between the Metropolis and Metropolis-Hastings algorithms?; \begin{itemize} \item Metropolis was symmetric: $S(\mathbf{x'|x}) = S(\mathbf{x|x'})$. So accept new state with prob $min(1, p(\mathbf{x'})/p(\mathbf{x}))$  \item vs MH accept prob $\min (1, p(\mathbf{x'})S(\mathbf{x'\rightarrow x})/p(\mathbf{x})S(\mathbf{x}\rightarrow \mathbf{x'}))$ \end{itemize} 
 
 Does Metropolis-Hastings satisfy detailed balance?; Yes.
 
-Show that Metropolis-Hastings satisfies detailed balance.; \begin{itemize}
-    \item The transition kernel is $T(\mathbf{x}\rightarrow \mathbf{x'}) = S(\mathbf{x}\rightarrow \mathbf{x'})\min(1, \frac{p(\mathbf{x'})S(\mathbf{x'\rightarrow x})}{p(\mathbf{x})S(\mathbf{x\rightarrow x'})})$ \begin{itemize}
-        \item with $T(\mathbf{x\rightarrow x})$ the expected rejection probability.
-    \end{itemize}
-    \item Without loss of generality we assume $p(\mathbf{x'})S(\mathbf{x'}\rightarrow \mathbf{x}) \leq p(\mathbf{x})S(\mathbf{x}\rightarrow \mathbf{x'})$.
-    \item Then $p(\mathbf{x})T(\mathbf{x}\rightarrow\mathbf{x'}) = p(\mathbf{x})S(\mathbf{x}\rightarrow\mathbf{x'})\cdot \frac{p(\mathbf{x'})S(\mathbf{x'}\rightarrow \mathbf{x})}{p(\mathbf{x})S(\mathbf{x}\rightarrow\mathbf{x'})}$\begin{itemize}
-        \item $= p(\mathbf{x'}S(\mathbf{x'}\rightarrow \mathbf{x})$.
-        \item (latter term is start at x' and propose x.)
-    \end{itemize}
-    \item and $p(\mathbf{x'})T(\mathbf{x'}\rightarrow \mathbf{x}) = p(\mathbf{x'})S(\mathbf{x'}\rightarrow \mathbf{x})\cdot 1 = p(\mathbf{x'})S(\mathbf{x'}\rightarrow \mathbf{x})$.
-\end{itemize}
+Show that Metropolis-Hastings satisfies detailed balance.; \begin{itemize} \item The transition kernel is $T(\mathbf{x}\rightarrow \mathbf{x'}) = S(\mathbf{x}\rightarrow \mathbf{x'})\min(1, \frac{p(\mathbf{x'})S(\mathbf{x'\rightarrow x})}{p(\mathbf{x})S(\mathbf{x\rightarrow x'})})$ \begin{itemize} \item with $T(\mathbf{x\rightarrow x})$ the expected rejection probability. \end{itemize} \item Without loss of generality we assume $p(\mathbf{x'})S(\mathbf{x'}\rightarrow \mathbf{x}) \leq p(\mathbf{x})S(\mathbf{x}\rightarrow \mathbf{x'})$. \item Then $p(\mathbf{x})T(\mathbf{x}\rightarrow\mathbf{x'}) = p(\mathbf{x})S(\mathbf{x}\rightarrow\mathbf{x'})\cdot \frac{p(\mathbf{x'})S(\mathbf{x'}\rightarrow \mathbf{x})}{p(\mathbf{x})S(\mathbf{x}\rightarrow\mathbf{x'})}$\begin{itemize} \item $= p(\mathbf{x'}S(\mathbf{x'}\rightarrow \mathbf{x})$. \item (latter term is start at x' and propose x.) \end{itemize} \item and $p(\mathbf{x'})T(\mathbf{x'}\rightarrow \mathbf{x}) = p(\mathbf{x'})S(\mathbf{x'}\rightarrow \mathbf{x})\cdot 1 = p(\mathbf{x'})S(\mathbf{x'}\rightarrow \mathbf{x})$. \end{itemize}
 
 Discuss ergodicity for Metropolis-Hastings.; It's easy if the proposal distribution has nonzero density everywhere.
 
-Are local proposals more likely to be accepted in Metropolis-Hastings than non-local proposals? Why or why not?; \begin{itemize}
-    \item Arguably yes because local proposals are more likely to be in regions of density.
-    \item Recall: Accept the new state with probability: $\min (1, p(\mathbf{x'})S(\mathbf{x'\rightarrow x})/p(\mathbf{x})S(\mathbf{x}\rightarrow \mathbf{x'}))$
-\end{itemize} 
+Are local proposals more likely to be accepted in Metropolis-Hastings than non-local proposals? Why or why not?; \begin{itemize} \item Arguably yes because local proposals are more likely to be in regions of density. \item Recall: Accept the new state with probability: $\min (1, p(\mathbf{x'})S(\mathbf{x'\rightarrow x})/p(\mathbf{x})S(\mathbf{x}\rightarrow \mathbf{x'}))$ \end{itemize} 
 
-What theoretical claims might not hold in practice when doing MCMC?; \begin{itemize}
-    \item Markov chain theory guarantees that $\frac{1}{T}\sum_{t=1}^T F(x_t)\rightarrow E[F(x)]$ as $T\rightarrow \infty$.
-    \item But given finite computational resources we have to compromise.
-\end{itemize}
+What theoretical claims might not hold in practice when doing MCMC?; \begin{itemize} \item Markov chain theory guarantees that $\frac{1}{T}\sum_{t=1}^T F(x_t)\rightarrow E[F(x)]$ as $T\rightarrow \infty$. \item But given finite computational resources we have to compromise. \end{itemize}
 
-Discuss practical things to note about MCMC.; \begin{itemize}
-    \item Control runs: initial runs of the Markov chain can be used to set parameters like step size etc for good convergence. These are discarded. (bc e.g. need S to be fixed to have stationarity.)
-    \item Burn-in: discard first samples from Markov chain before convergence.
-    \item Collecting samples: usually run Markov chain for a number of iterations between collected samples to reduce dependence between samples. (not necc if calculating expectations)
-    \item Number of runs: for the same amount of computation, we can either run one long Markov chain (best chance of convergence), lots of short chains (wasted burn-ins, but chains are independent) or in between.
-    \item Use/try multiple transition kernels (since different ones have different convergence properties)
-    \item Use autocorrelation to estimate number of transitions needed for samples $F(x_t)$ to be effectively `independent'
-\end{itemize}
+Discuss practical things to note about MCMC.; \begin{itemize} \item Control runs: initial runs of the Markov chain can be used to set parameters like step size etc for good convergence. These are discarded. (bc e.g. need S to be fixed to have stationarity.) \item Burn-in: discard first samples from Markov chain before convergence. \item Collecting samples: usually run Markov chain for a number of iterations between collected samples to reduce dependence between samples. (not necc if calculating expectations) \item Number of runs: for the same amount of computation, we can either run one long Markov chain (best chance of convergence), lots of short chains (wasted burn-ins, but chains are independent) or in between. \item Use/try multiple transition kernels (since different ones have different convergence properties) \item Use autocorrelation to estimate number of transitions needed for samples $F(x_t)$ to be effectively `independent' \end{itemize}
 
-How might you diagnose whether MCMC has converged?; Usually plot various useful statistics, e.g. \begin{itemize}
-    \item log prob
-    \item clusters obtained
-    \item factor oadings (FA on data and inspect structure)
-    \item eye-ball convergence: dist should be stationary after burn-in
-\end{itemize}
+How might you diagnose whether MCMC has converged?; Usually plot various useful statistics, e.g. \begin{itemize} \item log prob \item clusters obtained \item factor oadings (FA on data and inspect structure) \item eye-ball convergence: dist should be stationary after burn-in \end{itemize}
 
-How can we estimate the number of transitions needed for MCMC samples $F(x_t)$ to be effectively `independent'?; Integrated autocorrelation time, i.e. use empirical correlation. (no guarantees, probably underestimates true dependence) \begin{itemize}
-    \item Assume wlog $E[F(x)] = 0$.
-    \item $V[\frac{1}{T}\sum_{t=1}^T F(x_t)] = E[(\frac{1}{T}\sum_{t=1}^TF(x_t))^2]$
-    \item $=\frac{V[F(x)]}{T}(1+2\sum_{\tau = 1}^{T-1}(1-\frac{\tau}{T})\frac{C_\tau}{C_0})$
-    \item where $C_\tau = E[F(x_t)F(x_{t+\tau})]$ can be estimated empirically. The integrated autocorrelation (term in parentheses) gives the number of correlated samples we need to match one iid sample in terms of variance.
-    As $T\rightarrow\infty$, the number of samples is $1+2\sum_{\tau=1}^\infty \frac{C_\tau}{C_0}$.
-    \item (details FYI, no need to remember)
-\end{itemize}
+How can we estimate the number of transitions needed for MCMC samples $F(x_t)$ to be effectively `independent'?; Integrated autocorrelation time, i.e. use empirical correlation. (no guarantees, probably underestimates true dependence) \begin{itemize} \item Assume wlog $E[F(x)] = 0$. \item $V[\frac{1}{T}\sum_{t=1}^T F(x_t)] = E[(\frac{1}{T}\sum_{t=1}^TF(x_t))^2]$ \item $=\frac{V[F(x)]}{T}(1+2\sum_{\tau = 1}^{T-1}(1-\frac{\tau}{T})\frac{C_\tau}{C_0})$ \item where $C_\tau = E[F(x_t)F(x_{t+\tau})]$ can be estimated empirically. The integrated autocorrelation (term in parentheses) gives the number of correlated samples we need to match one iid sample in terms of variance. As $T\rightarrow\infty$, the number of samples is $1+2\sum_{\tau=1}^\infty \frac{C_\tau}{C_0}$. \item (details FYI, no need to remember) \end{itemize}
 
-Briefly discuss how MCMC performs when we try to use it to sample from a distribution defined by unnormalised energy E, i.e. $p(\mathbf{x}) = \frac{1}{Z}e^{-E(x)}$.; \begin{itemize}
-    \item MCMC works well in this setting (MH: no change needed, Gibbs: usually possible to normalise conditional)
-    \item BUT may mix slowly.
-    \item (so it's often useful to introduce temperature $1/\beta$: $p_\beta(\mathbf{x}) = \frac{1}{Z_{\beta}}e^{-\beta E(x)}$.
-    \item When $\beta\rightarrow 0$ (temp $\rightarrow\infty$) all states are equally likely, so it's easy to sample and mix. As $\beta\rightarrow1, p_\beta\rightarrow p$.)
-\end{itemize}
+Briefly discuss how MCMC performs when we try to use it to sample from a distribution defined by unnormalised energy E, i.e. $p(\mathbf{x}) = \frac{1}{Z}e^{-E(x)}$.; \begin{itemize} \item MCMC works well in this setting (MH: no change needed, Gibbs: usually possible to normalise conditional) \item BUT may mix slowly. \item (so it's often useful to introduce temperature $1/\beta$: $p_\beta(\mathbf{x}) = \frac{1}{Z_{\beta}}e^{-\beta E(x)}$. \item When $\beta\rightarrow 0$ (temp $\rightarrow\infty$) all states are equally likely, so it's easy to sample and mix. As $\beta\rightarrow1, p_\beta\rightarrow p$.) \end{itemize}
 
-How can we make MCMC methods mix better?; \begin{itemize}
-    \item Often useful to introduce temperature $1/\beta$: $p_\beta(\mathbf{x}) = \frac{1}{Z_{\beta}}e^{-\beta E(x)}$.
-    \item When $\beta\rightarrow 0$ (temp $\rightarrow\infty$) all states are equally likely, so it's easy to sample and mix. 
-    \item (As $\beta\rightarrow1, p_\beta\rightarrow p$.)
-    \item Often anneal $\beta$: start from small value and gradually increase to 1.
-\end{itemize}
+How can we make MCMC methods mix better?; \begin{itemize} \item Often useful to introduce temperature $1/\beta$: $p_\beta(\mathbf{x}) = \frac{1}{Z_{\beta}}e^{-\beta E(x)}$. \item When $\beta\rightarrow 0$ (temp $\rightarrow\infty$) all states are equally likely, so it's easy to sample and mix.  \item (As $\beta\rightarrow1, p_\beta\rightarrow p$.) \item Often anneal $\beta$: start from small value and gradually increase to 1. \end{itemize}
 
-Briefly describe simulated annealing for MCMC sampling from a distribution defined by unnormalised energy E, i.e. $p(\mathbf{x}) = \frac{1}{Z}e^{-E(x)}$.; \begin{itemize}
-    \item introduce temperature $1/\beta$: $p_\beta(\mathbf{x}) = \frac{1}{Z_{\beta}}e^{-\beta E(x)}$.
-    \item Start chain with $\beta$ small and gradually increase to 1.
-\end{itemize}
+Briefly describe simulated annealing for MCMC sampling from a distribution defined by unnormalised energy E, i.e. $p(\mathbf{x}) = \frac{1}{Z}e^{-E(x)}$.; \begin{itemize} \item introduce temperature $1/\beta$: $p_\beta(\mathbf{x}) = \frac{1}{Z_{\beta}}e^{-\beta E(x)}$. \item Start chain with $\beta$ small and gradually increase to 1. \end{itemize}
 
-How can we use simulated annealing for optimisation? (On a distribution defined by unnormalised energy E, i.e. $p(\mathbf{x}) = \frac{1}{Z}e^{-E(x)}$.); \begin{itemize}
-    \item introduce temperature $1/\beta$: $p_\beta(\mathbf{x}) = \frac{1}{Z_{\beta}}e^{-\beta E(x)}$.
-    \item Start chain with small $\beta$ small and take $\beta\to \infty$.
-    \item Provable finds global mode, albeit using exponentially slow annealing schedule (so not that beneficial).
-\end{itemize}
+How can we use simulated annealing for optimisation? (On a distribution defined by unnormalised energy E, i.e. $p(\mathbf{x}) = \frac{1}{Z}e^{-E(x)}$.); \begin{itemize} \item introduce temperature $1/\beta$: $p_\beta(\mathbf{x}) = \frac{1}{Z_{\beta}}e^{-\beta E(x)}$. \item Start chain with small $\beta$ small and take $\beta\to \infty$. \item Provable finds global mode, albeit using exponentially slow annealing schedule (so not that beneficial). \end{itemize}
 
-Describe annealed importance sampling briefly in the context of annealing for MCMC sampling.; \begin{itemize}
-    \item Use importance sampling to correct for the fact that the chain need not have converged at each $\beta$.
-    \item Equivalently, use annealing to construct a good proposal for importance sampling.
-\end{itemize}
+Describe annealed importance sampling briefly in the context of annealing for MCMC sampling.; \begin{itemize} \item Use importance sampling to correct for the fact that the chain need not have converged at each $\beta$. \item Equivalently, use annealing to construct a good proposal for importance sampling. \end{itemize}
 
-Briefly describe the procedure for auxiliary variable MCMC methods.; \begin{itemize}
-    \item Idea: easier to sample from joint with introduced variables and then discard them.
-    \item Want to sample from $p^*(x)$, but suitable Markov chain is either difficult to design, or does not mix well.
-    \item Introduce a new variable $y$, defined using conditional $p(y|x)$.
-    \item Sample from joint $p^*(x)p(y|x)$, often by Gibbs.
-    \item Discard the ys. The xs are drawn from the target $p^*$.
-\end{itemize}
+Briefly describe the procedure for auxiliary variable MCMC methods.; \begin{itemize} \item Idea: easier to sample from joint with introduced variables and then discard them. \item Want to sample from $p^*(x)$, but suitable Markov chain is either difficult to design, or does not mix well. \item Introduce a new variable $y$, defined using conditional $p(y|x)$. \item Sample from joint $p^*(x)p(y|x)$, often by Gibbs. \item Discard the ys. The xs are drawn from the target $p^*$. \end{itemize}
 
-Describe Hybrid/Hamiltonian Monte Carlo. (Motivation and very high level methodical outline without equations); \begin{itemize}
-    \item Motivation: Seek regions of high prob while avoiding random walk behaviour (like MH and Gibbs, since distance travelled in N steps by a RW $\propto \sqrt{n}$, slow.)
-    \item Want to use gradient information of $p(x)$ to shape proposal dist without breaking detailed balance.
-    \item HMC introduces fictitious physical system describing a particle with position x and momentum v (auxiliary var)
-    \item Proposals: System evolves acc to Hamiltonian dynamics. We simulate L discrete steps of size $\epsilon$. \begin{itemize}
-        \item (marginal dist over position corresponds to the target.)
-    \end{itemize} 
-    \item New state is used as a proposal in the Metropolis algorithm to eliminate errors introduced by the leapfrog approximation. (high acceptance rate though)
-    \item Resample momentum vector $v\sim N(0,I)$ (by Gibbs or with persistence)
-\end{itemize}
+Describe Hybrid/Hamiltonian Monte Carlo. (Motivation and very high level methodical outline without equations); \begin{itemize} \item Motivation: Seek regions of high prob while avoiding random walk behaviour (like MH and Gibbs, since distance travelled in N steps by a RW $\propto \sqrt{n}$, slow.) \item Want to use gradient information of $p(x)$ to shape proposal dist without breaking detailed balance. \item HMC introduces fictitious physical system describing a particle with position x and momentum v (auxiliary var) \item Proposals: System evolves acc to Hamiltonian dynamics. We simulate L discrete steps of size $\epsilon$. \begin{itemize} \item (marginal dist over position corresponds to the target.) \end{itemize}  \item New state is used as a proposal in the Metropolis algorithm to eliminate errors introduced by the leapfrog approximation. (high acceptance rate though) \item Resample momentum vector $v\sim N(0,I)$ (by Gibbs or with persistence) \end{itemize}
 
 % todo: HMC dynamical sys equations, don't think they are necessary though.
 
-Describe the Hamiltonian Monte Carlo Algorithm (steps); \begin{itemize}
-    \item A new state is proposed by deterministically simulating a trajectory with L discrete steps from $(\mathbf{x, v})$ to $(\mathbf{x^*, v^*})$. \begin{itemize}
-        \item To compensate for errors of discretisation, 
-        \item the new state $(\mathbf{x^*, v^*})$ is accepted with probability $\min (1, \frac{p(\mathbf{v^*, x^*})}{p(\mathbf{v, x})}=\min(1, e^{-(H(\mathbf{v^*, x^*})-H(\mathbf{v, x}))})$
-        \item otherwise the state remains the same. 
-        \item (Metropolis step with proposal defined by choosing direction of momentum uniformly at random and simulating L (reversible) leapfrog steps.) 
-    \end{itemize}
-    \item Resample the momentum vector \begin{itemize}
-        \item (by a trivial Gibbs sampling step or with persistence (?)
-        \item $\mathbf{v}\sim p(\mathbf{v|x}) = p(\mathbf{v}) = N(0,I)$.
-        \item Like giving the ball a kick to explore the space faster
-        \item bc using info on density to ask what to propose.
-    \end{itemize}
-\end{itemize}
+Describe the Hamiltonian Monte Carlo Algorithm (steps); \begin{itemize} \item A new state is proposed by deterministically simulating a trajectory with L discrete steps from $(\mathbf{x, v})$ to $(\mathbf{x^*, v^*})$. \begin{itemize} \item To compensate for errors of discretisation,  \item the new state $(\mathbf{x^*, v^*})$ is accepted with probability $\min (1, \frac{p(\mathbf{v^*, x^*})}{p(\mathbf{v, x})}=\min(1, e^{-(H(\mathbf{v^*, x^*})-H(\mathbf{v, x}))})$ \item otherwise the state remains the same.  \item (Metropolis step with proposal defined by choosing direction of momentum uniformly at random and simulating L (reversible) leapfrog steps.)  \end{itemize} \item Resample the momentum vector \begin{itemize} \item (by a trivial Gibbs sampling step or with persistence (?) \item $\mathbf{v}\sim p(\mathbf{v|x}) = p(\mathbf{v}) = N(0,I)$. \item Like giving the ball a kick to explore the space faster \item bc using info on density to ask what to propose. \end{itemize} \end{itemize}
 
 Does HMC satisfy detailed balance? Why or why not?; Yes because the proposals (?) are reversible.
 
-What is Langevin Monte Carlo in one phrase?; \begin{itemize}
-    \item Hamiltonian Monte Carlo taking only one leapfrog step.
-    \item (So often neglect acceptance step since introduced discretisation error by 1 leapfrog step is small. $\to$ Langevin sampling.
-\end{itemize} 
+What is Langevin Monte Carlo in one phrase?; \begin{itemize} \item Hamiltonian Monte Carlo taking only one leapfrog step. \item (So often neglect acceptance step since introduced discretisation error by 1 leapfrog step is small. $\to$ Langevin sampling. \end{itemize}  
 
-Describe slice sampling in one phrase; \begin{itemize}
-    \item Efficient auxiliary-variable Gibbs sampler for low-dimensional distributions (can be used as an internal component fro a high-D Gibbs or M-H chain.)
-\end{itemize}
+Describe slice sampling in one phrase; \begin{itemize} \item Efficient auxiliary-variable Gibbs sampler for low-dimensional distributions (can be used as an internal component fro a high-D Gibbs or M-H chain.) \end{itemize}
 
-Describe slice sampling (method); \begin{itemize}
-    \item Efficient auxiliary-variable Gibbs sampler for low-dimensional distributions: can be used as an internal component fro a high-D Gibbs or M-H chain.
-    \item Start with sample x
-    \item Sample auxiliary variable $y|x \sim Unif[0, p^*(x)]$
-    \begin{itemize}
-        \item $p(x, y) = p^*(x)p(y|x) = p^(x)\frac{1}{p^(x)}=1$ if $0\leq y \leq p^*(x)$, and $=0$ otherwise
-    \end{itemize}
-    \item Sample $x'$ from $p(x'|y)$ (HARD)
-    \begin{itemize}
-        \item $p(x'|y) \propto p(x',y) = 1$ if $p^*(x') \geq y$, $=0$ otherwise.
-        \item So $x' \sim Unif[\{x: p^*(x) \geq y\} ]$ (hard to define interval)
-        \item Choose slice fixed with length $\delta$, if both ends $> p(x^n)$, extend. Then rejection sample (and truncate slice if rej sample beyond $p(x)$.)
-    \end{itemize}
-    \item Defining $\{x:p^*(x)\geq y \}$ is often difficult: rejection sample in (adaptive) y-level `slice' around old $x$ extending outside at least local mode.
-    \item TODO: revisit slide 36, add FCs
-\end{itemize}
+Describe slice sampling (method); \begin{itemize} \item Efficient auxiliary-variable Gibbs sampler for low-dimensional distributions: can be used as an internal component fro a high-D Gibbs or M-H chain. \item Start with sample x \item Sample auxiliary variable $y|x \sim Unif[0, p^*(x)]$ \begin{itemize} \item $p(x, y) = p^*(x)p(y|x) = p^(x)\frac{1}{p^(x)}=1$ if $0\leq y \leq p^*(x)$, and $=0$ otherwise \end{itemize} \item Sample $x'$ from $p(x'|y)$ (HARD) \begin{itemize} \item $p(x'|y) \propto p(x',y) = 1$ if $p^*(x') \geq y$, $=0$ otherwise. \item So $x' \sim Unif[\{x: p^*(x) \geq y\} ]$ (hard to define interval) \item Choose slice fixed with length $\delta$, if both ends $> p(x^n)$, extend. Then rejection sample (and truncate slice if rej sample beyond $p(x)$.) \end{itemize} \item Defining $\{x:p^*(x)\geq y \}$ is often difficult: rejection sample in (adaptive) y-level `slice' around old $x$ extending outside at least local mode. \item TODO: revisit slide 36, add FCs \end{itemize}
 
 % TODO: revisit slide 36, add FCs
 
 Why might we want to evaluate the marginal likelihood $p(\mathcal{D})$?; Calculating normaliser (e.g. in Bayesian learning).
 
-What sampling method can we use to evaluate the evidence $p(\mathcal{D})$? briefly explain the idea.; \begin{itemize}
-    \item Annealed importance sampling
-    \item Use MCMC transitions from known distribution to form proposal for importance sampling
-    \item Sum of importance weights = $p(\mathcal{D})$.
-    \item (trying to build proposal $q\approx$ posterior.
-\end{itemize}
+What sampling method can we use to evaluate the evidence $p(\mathcal{D})$? briefly explain the idea.; \begin{itemize} \item Annealed importance sampling \item Use MCMC transitions from known distribution to form proposal for importance sampling \item Sum of importance weights = $p(\mathcal{D})$. \item (trying to build proposal $q\approx$ posterior. \end{itemize}
 
-Describe the procedure for Annealed importance sampling; \begin{itemize}
-    \item Consider a sequence of densities $p_1, ..., p_n$: \begin{itemize}
-        \item $p_j(x) = \frac{1}{Z_j}p_*(x)^{\beta_j}p_0(x)^{1-\beta_j}$, $1=\beta_1 > ... > \beta_n = 0$,
-        \item where $p_1 = p_*$ is the target density and $p_n = p_0$ is easy to sample and normalise, perhaps a prior.
-    \end{itemize}
-    \item Let $T_j(x\rightarrow x')$ be an MCMC transition rule that leaves $p_j$ invariant.
-    \item Draw samples from $q(x_1,...,x_{n-1}) = p_nT_{n-1}...T_2$: \begin{itemize}
-        \item $x_{n-1}^{(t)}\sim p_n, x^{(t)}_{n-2} \sim T_{n-1}(x^{(t)}_{n-1}\rightarrow \cdot ), ..., x^{(t)}_1\sim T_2(x_2^{(t)}\rightarrow \cdot)$
-    \end{itemize}
-    \item Importance weight samples with \begin{itemize}
-        \item $w^{(t)} = (\frac{p_*(x_1^{(t)})}{p_0(x_1^{(t)})})^{\beta_1-\beta_2}(\frac{p_*(x_2^{(t)})}{p_0(x_2^{(t)})})^{\beta_2-\beta_3}...(\frac{p_*(x_{n-1}^{(t)})}{p_0(x_{n-1}^{(t)})})^{\beta_{n-1}-\beta_n}$
-        \item (non-trivial derivation)
-    \end{itemize}
-    \item Then $\frac{1}{T}\sum_t w^{(t)} \rightarrow \frac{Z_*}{Z_0}$
-\end{itemize}
+Describe the procedure for Annealed importance sampling; \begin{itemize} \item Consider a sequence of densities $p_1, ..., p_n$: \begin{itemize} \item $p_j(x) = \frac{1}{Z_j}p_*(x)^{\beta_j}p_0(x)^{1-\beta_j}$, $1=\beta_1 > ... > \beta_n = 0$, \item where $p_1 = p_*$ is the target density and $p_n = p_0$ is easy to sample and normalise, perhaps a prior. \end{itemize} \item Let $T_j(x\rightarrow x')$ be an MCMC transition rule that leaves $p_j$ invariant. \item Draw samples from $q(x_1,...,x_{n-1}) = p_nT_{n-1}...T_2$: \begin{itemize} \item $x_{n-1}^{(t)}\sim p_n, x^{(t)}_{n-2} \sim T_{n-1}(x^{(t)}_{n-1}\rightarrow \cdot ), ..., x^{(t)}_1\sim T_2(x_2^{(t)}\rightarrow \cdot)$ \end{itemize} \item Importance weight samples with \begin{itemize} \item $w^{(t)} = (\frac{p_*(x_1^{(t)})}{p_0(x_1^{(t)})})^{\beta_1-\beta_2}(\frac{p_*(x_2^{(t)})}{p_0(x_2^{(t)})})^{\beta_2-\beta_3}...(\frac{p_*(x_{n-1}^{(t)})}{p_0(x_{n-1}^{(t)})})^{\beta_{n-1}-\beta_n}$ \item (non-trivial derivation) \end{itemize} \item Then $\frac{1}{T}\sum_t w^{(t)} \rightarrow \frac{Z_*}{Z_0}$ \end{itemize}
 
 % TODO: slide 39 importance weights thing derivation
 
 % TODO Slide 40: other ideas in MCMC
 
-Briefly describe Sampling - Importance Resampling (SIR); \begin{itemize}
-    \item Proposal-based approach to generating samples from an unnormalised distribution
-    \item 1. Sample $\xi^{(s)} \sim q(x)$ (proposal dist), and calculate importance weights $w^{(s)} = p(\xi^{(s)})/q(\xi^{(s)})$.
-    \item (the more samples you draw in the first step, the more accurate the resampled sample is.)
-    \item Define $q(x) = \sum_{s=1}^S w^{(s)}\delta(x-\xi^{(s)})/\sum_{s=1}^S w^{(s)}$.
-    \item (delta only =1 on samples, importance weighted average of delta function on samples)
-    \item Resample $x^{(t)}\sim \tilde{q}(x)$.
-    \item (Resampled points yield consistent expectations $E_x[F(x)]$ but are not unbiased for finite numbers of samples.)
-    \item (For integration, SIR introduces added sampling noise relative to IS (although trades off with weight variance). But for message passing unweighted samples are redrawn tawards bulk of distribution.)
-\end{itemize}
+Briefly describe Sampling - Importance Resampling (SIR); \begin{itemize} \item Proposal-based approach to generating samples from an unnormalised distribution \item 1. Sample $\xi^{(s)} \sim q(x)$ (proposal dist), and calculate importance weights $w^{(s)} = p(\xi^{(s)})/q(\xi^{(s)})$. \item (the more samples you draw in the first step, the more accurate the resampled sample is.) \item Define $q(x) = \sum_{s=1}^S w^{(s)}\delta(x-\xi^{(s)})/\sum_{s=1}^S w^{(s)}$. \item (delta only =1 on samples, importance weighted average of delta function on samples) \item Resample $x^{(t)}\sim \tilde{q}(x)$. \item (Resampled points yield consistent expectations $E_x[F(x)]$ but are not unbiased for finite numbers of samples.) \item (For integration, SIR introduces added sampling noise relative to IS (although trades off with weight variance). But for message passing unweighted samples are redrawn tawards bulk of distribution.) \end{itemize}
 
-Do resampled points in SIR yield consistent expectations? (Show derivation); \begin{itemize}
-    \item Yes.
-    \item $E_x[F(x)] = \int dx F(x)\tilde{q}(x) = \int dx F(x) \frac{\sum_{s=1}^S w^{(s)}\delta(x-\xi^{(s)})}{\sum_{s=1}^Sw^{(s)}}$
-    \item $=\frac{\sum_{s=1}^S w^{(s)}F(\xi^{(s)})}{\sum_{s=1}^Sw^{(s)}}$
-    \item (but not unbiased for finite numbers of samples even if all distributions are normalised)
-\end{itemize}
+Do resampled points in SIR yield consistent expectations? (Show derivation); \begin{itemize} \item Yes. \item $E_x[F(x)] = \int dx F(x)\tilde{q}(x) = \int dx F(x) \frac{\sum_{s=1}^S w^{(s)}\delta(x-\xi^{(s)})}{\sum_{s=1}^Sw^{(s)}}$ \item $=\frac{\sum_{s=1}^S w^{(s)}F(\xi^{(s)})}{\sum_{s=1}^Sw^{(s)}}$ \item (but not unbiased for finite numbers of samples even if all distributions are normalised) \end{itemize}
 
-Describe particle filtering; \begin{itemize}
-    \item Also sequential Monte Carlo. Applying Sampling - Importance Resampling (SIR)
-    \item Suppose we want to compute $p(y_t | x_{1:t})$ in an NLSSM (filtering). \item We have $p(y_t|x_{1:t}) \propto \int p(x_t|y_t)p(y_t|y_{t-1})p(y_{t-1}|x_{1:t-1})dy_{t-1}$
-    \item if we have samples $y_{t-1}^{(s)}\sim p(y_{t-1}|x_{1:t-1})$ we can recurse (approximately): \begin{itemize}
-        \item draw $y_t^{(s)} \sim p(y_t|y_{t-1}^{(s)}$
-        \item calculate unnormalised weights $w_t^{(s)}=p(x_t|y_t^{(s)})$
-        \item resample $y_t^{(s')} \sim \sum_{s=1}^S w_t^{(s)}\delta (y-y_t^{(s)})/\sum_{s=1}^Sw_t^{(s)}$
-    \end{itemize}
-    \item (Technically entire trajectory $y_1^{(s)}, ..., y_t^{(s)}$ is resampled. As $S\to\infty$, surviving trajectories are drawn from full posterior (but not for practical sample sizes)).
-\end{itemize}
+Describe particle filtering; \begin{itemize} \item Also sequential Monte Carlo. Applying Sampling - Importance Resampling (SIR) \item Suppose we want to compute $p(y_t | x_{1:t})$ in an NLSSM (filtering). \item We have $p(y_t|x_{1:t}) \propto \int p(x_t|y_t)p(y_t|y_{t-1})p(y_{t-1}|x_{1:t-1})dy_{t-1}$ \item if we have samples $y_{t-1}^{(s)}\sim p(y_{t-1}|x_{1:t-1})$ we can recurse (approximately): \begin{itemize} \item draw $y_t^{(s)} \sim p(y_t|y_{t-1}^{(s)}$ \item calculate unnormalised weights $w_t^{(s)}=p(x_t|y_t^{(s)})$ \item resample $y_t^{(s')} \sim \sum_{s=1}^S w_t^{(s)}\delta (y-y_t^{(s)})/\sum_{s=1}^Sw_t^{(s)}$ \end{itemize} \item (Technically entire trajectory $y_1^{(s)}, ..., y_t^{(s)}$ is resampled. As $S\to\infty$, surviving trajectories are drawn from full posterior (but not for practical sample sizes)). \end{itemize}
 
 What might be a better proposal distribution for particle filtering than $y^{(s)}_t \sim p(y_t|y^{(s)}_{t-1})$? (Not necc easy to get); Ideally $y^{(s)}_t \sim p(y_t|y^{(s)}_{t-1}, x_t)$, if available
 
