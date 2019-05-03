@@ -8,117 +8,35 @@
 
 % TODO: a generative model of generative models diagram
 
-Why do we need non-linear or non-Gaussian models? Give an example.; \begin{itemize}
-    \item Much of the world is neither linear nor Gaussian.
-    \item E.g. the joint distribution of pixel brightnesses in greyscale images of natural scenes is sparsely distributed.
-\end{itemize}
+Why do we need non-linear or non-Gaussian models? Give an example.; \begin{itemize} \item Much of the world is neither linear nor Gaussian. \item E.g. the joint distribution of pixel brightnesses in greyscale images of natural scenes is sparsely distributed. \end{itemize}
 
-Give one reason why hierarchical models may be useful.; \begin{itemize}
-    \item Many generative processes (e.g. biological ones) can be naturally described at different levels of detail. 
-    \item e.g. images: High to low level: objects, illumination, pose $\rightarrow$ object parts, surfaces $\rightarrow$ edges $\rightarrow$ retinal image, e.g. pixels
-    \item Biology seems to have developed hierarchical representations.
-\end{itemize}
+Give one reason why hierarchical models may be useful.; \begin{itemize} \item Many generative processes (e.g. biological ones) can be naturally described at different levels of detail.  \item e.g. images: High to low level: objects, illumination, pose $\rightarrow$ object parts, surfaces $\rightarrow$ edges $\rightarrow$ retinal image, e.g. pixels \item Biology seems to have developed hierarchical representations. \end{itemize}
 
-Briefly describe distributed representations; \begin{itemize}
-    \item Each observation is described by a vector of (discrete or continuous) attributes.
-    \item Some of these attributes may be latent.
-\end{itemize}
+Briefly describe distributed representations; \begin{itemize} \item Each observation is described by a vector of (discrete or continuous) attributes. \item Some of these attributes may be latent. \end{itemize}
 
-Briefly discuss the efficiency of distributed representations; \begin{itemize}
-    \item Can be exponentially efficient: K binary factors $\Rightarrow 2^K$ bits of info.
-\end{itemize}
+Briefly discuss the efficiency of distributed representations; \begin{itemize} \item Can be exponentially efficient: K binary factors $\Rightarrow 2^K$ bits of info. \end{itemize}
 
 Does it make sense for a linear Gaussian model to have hierarchicies with discrete or non-gaussian dependences?; No because this removes the benefits of having a linear Gaussian model in the first place (easy to calculate). (TODO check)
 
-Briefly describe blind source separation.; \begin{itemize}
-    \item Given signals from one or more receivers 
-    \item that mix signals from one or more sources,
-    \item recover the time series of the source signals.
-    \item Sometimes called the cocktail party problem.
-\item (Don't know where source is in room so don't know what transforms to apply)
-\end{itemize}
+Briefly describe blind source separation.; \begin{itemize} \item Given signals from one or more receivers  \item that mix signals from one or more sources, \item recover the time series of the source signals. \item Sometimes called the cocktail party problem. \item (Don't know where source is in room so don't know what transforms to apply) \end{itemize}
 
 How are pixel brightnesses of greyscale natural images distributed?; Sparse, like Laplace dist.
 
-Describe independent components analysis (ICA); \begin{itemize}
-    \item Graphical model identical to factor analysis: $\x_d=\sum_{k=1}^K\Lambda_{dk}y_k+\epsilon_d$
-    \begin{itemize}
-        \item I.e. linear combination of factors
-        \item Independent $\epsilon_d\sim N(0, \Psi_{dd})$ Gaussian noise
-    \end{itemize}
-    \item but with sources/factors $y_k\sim P_i$ non-Gaussian.
-\end{itemize}
+Describe independent components analysis (ICA); \begin{itemize} \item Graphical model identical to factor analysis: $\x_d=\sum_{k=1}^K\Lambda_{dk}y_k+\epsilon_d$ \begin{itemize} \item I.e. linear combination of factors \item Independent $\epsilon_d\sim N(0, \Psi_{dd})$ Gaussian noise \end{itemize} \item but with sources/factors $y_k\sim P_i$ non-Gaussian. \end{itemize}
 
-Name four differences between ICA and Factor Analysis; (things below are ICA) \begin{itemize}
-    \item Sources/factors in ICA are non-Gaussian (vs FA Gaussian)
-    \item ICA well-posed even with $K\geq D$| since there is no rotational symmetry
-    \item With non-zero noise, MAP inference is non-linear, and the full posterior is non-Gaussian (vs FA posterior Gaussian)
-    \item $\Rightarrow$ exact inference and learning in ICA difficult for most $P_y$.
-\end{itemize}
+Name four differences between ICA and Factor Analysis; (things below are ICA) \begin{itemize} \item Sources/factors in ICA are non-Gaussian (vs FA Gaussian) \item ICA well-posed even with $K\geq D$| since there is no rotational symmetry \item With non-zero noise, MAP inference is non-linear, and the full posterior is non-Gaussian (vs FA posterior Gaussian) \item $\Rightarrow$ exact inference and learning in ICA difficult for most $P_y$. \end{itemize}
 
-Describe what graphs of ICA-generated data looks like with two sources $y$.; \begin{itemize}
-    \item Heavy-tailed sources: like two crossing lines with much data clustered in the intersection. Each line is a $\Lambda$ dim.
-    \item Light-tailed sources: like a parallelogram. Each `side' is a $\Lambda$ dim.
-    \item (vs Gaussian would be elliptical.
-\end{itemize}
+Describe what graphs of ICA-generated data looks like with two sources $y$.; \begin{itemize} \item Heavy-tailed sources: like two crossing lines with much data clustered in the intersection. Each line is a $\Lambda$ dim. \item Light-tailed sources: like a parallelogram. Each `side' is a $\Lambda$ dim. \item (vs Gaussian would be elliptical. \end{itemize}
 
-Describe square, noiseless ICA; \begin{itemize}
-    \item K=D, i.e. number of sources = number of observation dimensions.
-    \item AND zero observation noise.
-    \item equivalent to infomax ICA
-    \item have $\mathbf{x=\Lambda y}$, which implies $\mathbf{y=Wx}$ with $W=\Lambda^{-1}$. (if $\Lambda$ is full rank)
-    \begin{itemize}
-        \item W is the unmixing matrix
-    \end{itemize}
-    \item ($P(\mathbf{x}|W)=|W|\prod_kP_i([W\mathbf{x}]_k)$.) TODO: okay, so what? independent-seeming?
-\end{itemize}
+Describe square, noiseless ICA; \begin{itemize} \item K=D, i.e. number of sources = number of observation dimensions. \item AND zero observation noise. \item equivalent to infomax ICA \item have $\mathbf{x=\Lambda y}$, which implies $\mathbf{y=Wx}$ with $W=\Lambda^{-1}$. (if $\Lambda$ is full rank) \begin{itemize} \item W is the unmixing matrix \end{itemize} \item ($P(\mathbf{x}|W)=|W|\prod_kP_i([W\mathbf{x}]_k)$.) TODO: okay, so what? independent-seeming? \end{itemize}
 
-Derive the likelihood $P(\mathbf{x}|W)$ for square, noiseless ICA, where $W=\Lambda^{-1}$ is the unmixing matrix.; \begin{itemize}
-    \item Obtain likelihood by transforming the density of $\mathbf{y}$ to that of $\mathbf{x}$.
-    \begin{itemize}
-        \item If $F:\mathbf{y}\to\mathbf{x}$ is a differentiable bijection, and if $d\mathbf{y}$ is a small neighbourhood around $\mathbf{y}$, then
-        \item $P_X(\mathbf{x})d\mathbf{x}=P_y(\mathbf{y})d\mathbf{y}=P_y(F^{-1}(\mathbf{x}))|\frac{d\mathbf{y}}{d\mathbf{x}}|d\mathbf{x}=P_y(F^{-1}(\mathbf{x}))|\nabla F^{-1}|d\mathbf{x}$
-        \begin{itemize}
-            \item Transfer x to y
-            \item Size of volume 
-            \item note $P_y$ (marginal dist of factors )is given in the model
-            \item (Something illegible about not intract? y bc model datasets? so a delta fn)
-        \end{itemize}
-    \end{itemize}
-    \item $P(\mathbf{x}|W)=|W|\prod_kP_i([W\mathbf{x}]_k)$.
-\end{itemize}
+Derive the likelihood $P(\mathbf{x}|W)$ for square, noiseless ICA, where $W=\Lambda^{-1}$ is the unmixing matrix.; \begin{itemize} \item Obtain likelihood by transforming the density of $\mathbf{y}$ to that of $\mathbf{x}$. \begin{itemize} \item If $F:\mathbf{y}\to\mathbf{x}$ is a differentiable bijection, and if $d\mathbf{y}$ is a small neighbourhood around $\mathbf{y}$, then \item $P_X(\mathbf{x})d\mathbf{x}=P_y(\mathbf{y})d\mathbf{y}=P_y(F^{-1}(\mathbf{x}))|\frac{d\mathbf{y}}{d\mathbf{x}}|d\mathbf{x}=P_y(F^{-1}(\mathbf{x}))|\nabla F^{-1}|d\mathbf{x}$ \begin{itemize} \item Transfer x to y \item Size of volume  \item note $P_y$ (marginal dist of factors )is given in the model \item (Something illegible about not intract? y bc model datasets? so a delta fn) \end{itemize} \end{itemize} \item $P(\mathbf{x}|W)=|W|\prod_kP_i([W\mathbf{x}]_k)$. \end{itemize}
 
 What is the log likelihood of data for ICA?; $\log P(\mathbf{x})=\log|W|+\sum_i \log P_y(W_i\mathbf{x})$
 
-How could you learn ICA? \begin{itemize}
-    \item Log likelihood: $\log P(\mathbf{x})=\log|W|+\sum_i \log P_y(W_i\mathbf{x})$ 
-    \item Learn by gradient ascent: $\Delta W\propto \nabla_W\log P(\mathbf{x}) = W^{-T}+g(\mathbf{y})\mathbf{x}^T$
-    \begin{itemize}
-        \item W map from x to y
-        \item units: y / x
-        \item $\mathbf{x}^T$ is $\frac{\partial W_ix}{\partial W}$
-        \item $g(y)=\frac{\partial \log P_y(y)}{\partial y}$
-    \end{itemize}
-    \item or learn by `natural' or `covariant' gradient $\Delta W\propto \nabla_W\log P(\mathbf{x})\cdot (W^TW) = W + g(\mathbf{y})\mathbf{y}^TW \approx \langle -\nabla\nabla\log P\rangle^{-1}$
-    \begin{itemize}
-        \item Naturally covariant to scaling and rotations
-        \item $\nabla\nabla$: Hessian
-        \item $W^TW$: average value of 2nd derivative, if exact then is Newton method
-        \item natural grad no units vs learning by gradient ascent have units y/x.
-        \item $g(y)=\frac{\partial \log P_y(y)}{\partial y}$
-    \end{itemize}
-\end{itemize}
+How could you learn ICA? \begin{itemize} \item Log likelihood: $\log P(\mathbf{x})=\log|W|+\sum_i \log P_y(W_i\mathbf{x})$  \item Learn by gradient ascent: $\Delta W\propto \nabla_W\log P(\mathbf{x}) = W^{-T}+g(\mathbf{y})\mathbf{x}^T$ \begin{itemize} \item W map from x to y \item units: y / x \item $\mathbf{x}^T$ is $\frac{\partial W_ix}{\partial W}$ \item $g(y)=\frac{\partial \log P_y(y)}{\partial y}$ \end{itemize} \item or learn by `natural' or `covariant' gradient $\Delta W\propto \nabla_W\log P(\mathbf{x})\cdot (W^TW) = W + g(\mathbf{y})\mathbf{y}^TW \approx \langle -\nabla\nabla\log P\rangle^{-1}$ \begin{itemize} \item Naturally covariant to scaling and rotations \item $\nabla\nabla$: Hessian \item $W^TW$: average value of 2nd derivative, if exact then is Newton method \item natural grad no units vs learning by gradient ascent have units y/x. \item $g(y)=\frac{\partial \log P_y(y)}{\partial y}$ \end{itemize} \end{itemize}
 
-Write down the natural gradient for ICA; \begin{itemize}
-    \item or learn by `natural' or `covariant' gradient $\Delta W\propto \nabla_W\log P(\mathbf{x})\cdot (W^TW) = W + g(\mathbf{y})\mathbf{y}^TW \approx \langle -\nabla\nabla\log P\rangle^{-1}$
-    \begin{itemize}
-        \item Naturally covariant to scaling and rotations
-        \item $\nabla\nabla$: Hessian
-        \item $W^TW$: average value of 2nd derivative, if exact then is Newton method
-        \item natural grad no units vs learning by gradient ascent have units y/x.
-        \item $g(y)=\frac{\partial \log P_y(y)}{\partial y}$
-    \end{itemize}
-\end{itemize}
+Write down the natural gradient for ICA; \begin{itemize} \item or learn by `natural' or `covariant' gradient $\Delta W\propto \nabla_W\log P(\mathbf{x})\cdot (W^TW) = W + g(\mathbf{y})\mathbf{y}^TW \approx \langle -\nabla\nabla\log P\rangle^{-1}$ \begin{itemize} \item Naturally covariant to scaling and rotations \item $\nabla\nabla$: Hessian \item $W^TW$: average value of 2nd derivative, if exact then is Newton method \item natural grad no units vs learning by gradient ascent have units y/x. \item $g(y)=\frac{\partial \log P_y(y)}{\partial y}$ \end{itemize} \end{itemize}
 
 Why is the natural gradient called natural gradient?; bc it's naturally covariant to scaling and rotations.
 
@@ -126,35 +44,11 @@ Why is the natural gradient called natural gradient?; bc it's naturally covarian
 
 Can we use EM in the square noiseless causal ICA model? Why?; 
 
-Describe Infomax ICA; \begin{itemize}
-    \item Consider a feedforward model $y_i=W_i\mathbf{x}$, $z_i=f_i(y_i)$
-    with a monotonic squashing function $f_i(\infty)=0, f_i(+\infty)+1$. (like sigmoid)
-    \item Infomax finds filtering weights W maximising the info carried by $\mathbf{z}$ about $\mathbf{x}$: \begin{itemize}
-        \item $\arg\max_W I(\mathbf{x, z}) = \arg\max_W H(\mathbf{z})-H(\mathbf{z|x})=\arg\max_WH(\mathbf{z})$.
-        \item $H(\mathbf{z})=0$ bc it's a deterministic mapping
-        \item so we just have to maximise entropy on z (make it as uniform as possible on [0, 1]
-    \end{itemize}
-    \item but if data were generated from a square noiseless causal ICA then best we can do is if $z_i=f_i(y_i)=cdf_i(y_i)$ and $W=\Lambda^{-1}$
-    \begin{itemize}
-        \item since cdf is uniform.
-        \item by defn, $x=\Lambda y$
-    \end{itemize}
-    \item so infomax ica is equivalent to square noiseless causal ICA
-    \item (Another view: redundancy reduction in the representation $\mathbf{z}$ of the data $\mathbf{x}$.
-    \begin{itemize}
-        \item $\arg\max_W H(\mathbf{z})=\arg\max_W\sum_i H(z_i)-I(z_1,...,z_D)$.
-    \end{itemize}
-\end{itemize}
+Describe Infomax ICA; \begin{itemize} \item Consider a feedforward model $y_i=W_i\mathbf{x}$, $z_i=f_i(y_i)$ with a monotonic squashing function $f_i(\infty)=0, f_i(+\infty)+1$. (like sigmoid) \item Infomax finds filtering weights W maximising the info carried by $\mathbf{z}$ about $\mathbf{x}$: \begin{itemize} \item $\arg\max_W I(\mathbf{x, z}) = \arg\max_W H(\mathbf{z})-H(\mathbf{z|x})=\arg\max_WH(\mathbf{z})$. \item $H(\mathbf{z})=0$ bc it's a deterministic mapping \item so we just have to maximise entropy on z (make it as uniform as possible on [0, 1] \end{itemize} \item but if data were generated from a square noiseless causal ICA then best we can do is if $z_i=f_i(y_i)=cdf_i(y_i)$ and $W=\Lambda^{-1}$ \begin{itemize} \item since cdf is uniform. \item by defn, $x=\Lambda y$ \end{itemize} \item so infomax ica is equivalent to square noiseless causal ICA \item (Another view: redundancy reduction in the representation $\mathbf{z}$ of the data $\mathbf{x}$. \begin{itemize} \item $\arg\max_W H(\mathbf{z})=\arg\max_W\sum_i H(z_i)-I(z_1,...,z_D)$. \end{itemize} \end{itemize}
 
-Describe kurtosis; \begin{itemize}
-    \item Kurtosis measures how `peaky' or `heavy-tailed' a distribution is.
-    \item (FYI: $K=\frac{E((x-\mu)^5)}{E((x-\mu)^2)^2}-3$, where $\mu=E(x)$ is the mean of $x$.)
-\end{itemize}
+Describe kurtosis; \begin{itemize} \item Kurtosis measures how `peaky' or `heavy-tailed' a distribution is. \item (FYI: $K=\frac{E((x-\mu)^5)}{E((x-\mu)^2)^2}-3$, where $\mu=E(x)$ is the mean of $x$.) \end{itemize}
 
-Describe positive vs negative kurtosis distributions.; \begin{itemize}
-    \item Positive kurtosis: heavy tailed (leptokurtic)
-    \item Negative kurtosis: light tailed (platykurtic, flat)
-\end{itemize}
+Describe positive vs negative kurtosis distributions.; \begin{itemize} \item Positive kurtosis: heavy tailed (leptokurtic) \item Negative kurtosis: light tailed (platykurtic, flat) \end{itemize}
 
 What is the kurtosis for Gaussian distributions?; Zero
 
@@ -162,57 +56,19 @@ Name one kind of algorithm that takes a kurtosis pursuit approach.; ICA algorith
 
 TODO: something about possibly ICA not being a limiting case of CLT: linear mixtures of independent non-Gaussian dists: more G, is K tending towards zero?
 
-Name at least two ways you can extend ICA.; \begin{itemize}
-    \item Non-zero output noise: intractable, so have to approximate posteriors and learning
-    \item Undercomplete $(K<D)$ or overcomplete $(K>D)$. (So not simple inverse rel but effectively like pseudoinverse)
-    \item Learning prior dists (on $\mathbf{y}$) \begin{itemize}
-        \item assumed know $p(\mathbf{y})$, but doesn't matter bc of kurtosis assumption. e.g. ML on high kurtosis usually ok (?)
-    \end{itemize}
-    \item Learning number of sources \begin{itemize}
-        \item Possible if full prob model with noise, else post hoc look at something and decide if it's signal or noise
-    \end{itemize}
-    \item Time-varying mixing matrix
-    \item Non-parametric, kernel ICA
-\end{itemize}
+Name at least two ways you can extend ICA.; \begin{itemize} \item Non-zero output noise: intractable, so have to approximate posteriors and learning \item Undercomplete $(K<D)$ or overcomplete $(K>D)$. (So not simple inverse rel but effectively like pseudoinverse) \item Learning prior dists (on $\mathbf{y}$) \begin{itemize} \item assumed know $p(\mathbf{y})$, but doesn't matter bc of kurtosis assumption. e.g. ML on high kurtosis usually ok (?) \end{itemize} \item Learning number of sources \begin{itemize} \item Possible if full prob model with noise, else post hoc look at something and decide if it's signal or noise \end{itemize} \item Time-varying mixing matrix \item Non-parametric, kernel ICA \end{itemize}
 
 Name one solution to blind source separation; ICA. Assumes no dependence across time, still works fine much of the time.
 
-Describe a nonlinear state-space model (NLSSM); \begin{itemize}
-    \item $\mathbf{y}_{t+1}=f(\mathbf{y}_t, \mathbf{u}_t)+\mathbf{w}_t$
-    \item $\mathbf{x}_t=g(\mathbf{y}_t, \mathbf{u}_t)+\mathbf{v}_t$
-    \item $\mathbf{w_t, v_t}$ usually still Gaussian.
-\end{itemize}
+Describe a nonlinear state-space model (NLSSM); \begin{itemize} \item $\mathbf{y}_{t+1}=f(\mathbf{y}_t, \mathbf{u}_t)+\mathbf{w}_t$ \item $\mathbf{x}_t=g(\mathbf{y}_t, \mathbf{u}_t)+\mathbf{v}_t$ \item $\mathbf{w_t, v_t}$ usually still Gaussian. \end{itemize}
 
-Describe the Extended Kalman Filter (EKF) (with equations); \begin{itemize}
-    \item Linearise (taylor expand) nonlinear functions about current estimate, $\mathbf{\hat{y}}^t_t$:
-    \item $\mathbf{y}_{t+1}\approx f(\mathbf{\hat{y}}^t_t, \mathbf{u}_t) + \frac{\partial f}{\partial \mathbf{y}_t}|_{\hat{\mathbf{y}}^t_t}(\mathbf{y_t-\hat{y}^t_t})+\mathbf{w}_t$
-    \item $\mathbf{x}_{t}\approx g(\mathbf{\hat{y}}^{t-1}_t, \mathbf{u}_t) + \frac{\partial g}{\partial \mathbf{y}_t}|_{\hat{\mathbf{y}}^{t-1}_t}(\mathbf{y_t-\hat{y}^{t-1}_t})+\mathbf{v}_t$
-    \item Run the Kalman filter/smoother on non-stationary linearised system
-    \item Adaptively approximates non-Gaussian messages by Gaussians
-    \item Local linearisation depends on central point of distribution$\Rightarrow$ approx degrades with increased state uncertainty. May work acceptable for close-to-linear systems.
-\end{itemize}
+Describe the Extended Kalman Filter (EKF) (with equations); \begin{itemize} \item Linearise (taylor expand) nonlinear functions about current estimate, $\mathbf{\hat{y}}^t_t$: \item $\mathbf{y}_{t+1}\approx f(\mathbf{\hat{y}}^t_t, \mathbf{u}_t) + \frac{\partial f}{\partial \mathbf{y}_t}|_{\hat{\mathbf{y}}^t_t}(\mathbf{y_t-\hat{y}^t_t})+\mathbf{w}_t$ \item $\mathbf{x}_{t}\approx g(\mathbf{\hat{y}}^{t-1}_t, \mathbf{u}_t) + \frac{\partial g}{\partial \mathbf{y}_t}|_{\hat{\mathbf{y}}^{t-1}_t}(\mathbf{y_t-\hat{y}^{t-1}_t})+\mathbf{v}_t$ \item Run the Kalman filter/smoother on non-stationary linearised system \item Adaptively approximates non-Gaussian messages by Gaussians \item Local linearisation depends on central point of distribution$\Rightarrow$ approx degrades with increased state uncertainty. May work acceptable for close-to-linear systems. \end{itemize}
 
-Describe the Extended Kalman Filter (without equations); \begin{itemize}
-     \item Linearise (taylor expand) nonlinear functions about current estimate, $\mathbf{\hat{y}}^t_t$:
-    \item Run the Kalman filter/smoother on non-stationary linearised system
-    \item Adaptively approximates non-Gaussian messages by Gaussians
-    \item Local linearisation depends on central point of distribution$\Rightarrow$ approx degrades with increased state uncertainty. May work acceptable for close-to-linear systems.
-\end{itemize}
+Describe the Extended Kalman Filter (without equations); \begin{itemize} \item Linearise (taylor expand) nonlinear functions about current estimate, $\mathbf{\hat{y}}^t_t$: \item Run the Kalman filter/smoother on non-stationary linearised system \item Adaptively approximates non-Gaussian messages by Gaussians \item Local linearisation depends on central point of distribution$\Rightarrow$ approx degrades with increased state uncertainty. May work acceptable for close-to-linear systems. \end{itemize}
 
-Describe how to do online parameter learning in NLSSMs; \begin{itemize}
-    \item Nonlinear message passing
-    \item E.g. for linear model (generalise to nonlinear by linearising), augment state vector to include model parameters: $\bar{\bar{\mathbf{y}}}=[\mathbf{y}_t A C]$
-    \item $\bar{\bar{y}}_{t+1}=[A\mathbf{y}_t A C]^T + [\mathbf{w}_t 0 0 ]^T$
-    \item $\mathbf{x}_t=C\mathbf{y}_t+\mathbf{v}_t$
-    \item Use EKF to compute online estimates of $E[\bar{\bar{\mathbf{y}}}_t|\mathbf{x_1,...,x_t}$ and $Cov[\bar{\bar{\mathbf{y}}}_t|\mathbf{x_1,...,x_t}$. (TODO: how?) These now include mean and posterior variance of parameter estimates.
-    \item Pseudo-Bayesian since gives Gaussian dists over params
-\end{itemize}
+Describe how to do online parameter learning in NLSSMs; \begin{itemize} \item Nonlinear message passing \item E.g. for linear model (generalise to nonlinear by linearising), augment state vector to include model parameters: $\bar{\bar{\mathbf{y}}}=[\mathbf{y}_t A C]$ \item $\bar{\bar{y}}_{t+1}=[A\mathbf{y}_t A C]^T + [\mathbf{w}_t 0 0 ]^T$ \item $\mathbf{x}_t=C\mathbf{y}_t+\mathbf{v}_t$ \item Use EKF to compute online estimates of $E[\bar{\bar{\mathbf{y}}}_t|\mathbf{x_1,...,x_t}$ and $Cov[\bar{\bar{\mathbf{y}}}_t|\mathbf{x_1,...,x_t}$. (TODO: how?) These now include mean and posterior variance of parameter estimates. \item Pseudo-Bayesian since gives Gaussian dists over params \end{itemize}
 
-Discuss the online EKF/joint-EKF approach.; \begin{itemize}
-    \item Can model nonstationarity by assuming non-zero innovations noise in A, C
-    \item Not simple to implement for Q and R (e.g. covariance constraints?) (todo: how do you even implement this for Q and R?)
-    \item May be faster than EM/gradient approaches
-\end{itemize}
+Discuss the online EKF/joint-EKF approach.; \begin{itemize} \item Can model nonstationarity by assuming non-zero innovations noise in A, C \item Not simple to implement for Q and R (e.g. covariance constraints?) (todo: how do you even implement this for Q and R?) \item May be faster than EM/gradient approaches \end{itemize}
 
 Name two binary (distributed) models; Boltzmann machines and sigmoid belief nets.
 
@@ -220,114 +76,35 @@ Name a binary model that is a Markov network (i.e. undirected); Boltzmann machin
 
 Name a binary model that is a directed net.; Sigmoid belief nets
 
-What are Boltzmann machines?;\begin{itemize}
-    \item Undirected graphical model (Markov net)
-    \item over a vector of binary variables $s_i\in\{0, 1\}$.
-    \item Some variables may be hidden, some may be visible (observed).
-    \item $P(\mathbf{s}|W, \mathbf{b})=\frac{1}{Z}\exp\{\sum_{ij}W_{ij}s_is_j-\sum_ib_is_i\}$.
-    \item i.e. a jointly exponential-family model, with intractable normaliser Z.
-    \item also called Ising models (physics)?
-\end{itemize} 
+What are Boltzmann machines?;\begin{itemize} \item Undirected graphical model (Markov net) \item over a vector of binary variables $s_i\in\{0, 1\}$. \item Some variables may be hidden, some may be visible (observed). \item $P(\mathbf{s}|W, \mathbf{b})=\frac{1}{Z}\exp\{\sum_{ij}W_{ij}s_is_j-\sum_ib_is_i\}$. \item i.e. a jointly exponential-family model, with intractable normaliser Z. \item also called Ising models (physics)? \end{itemize} 
 
-Explain the Boltzmann machine equation; \begin{itemize}
-    \item $P(\mathbf{s}|W, \mathbf{b})=\frac{1}{Z}\exp\{\sum_{ij}W_{ij}s_is_j-\sum_ibSis_i\}$.
-    \item $s_i$ are binary variables.
-    \item RHS is `energy'. $W_ij$ only comes into play if $s_i=s_j=1$.
-    \item $\sum_i b_is_i$ offset marginal $p(x)$.
-\end{itemize}
+Explain the Boltzmann machine equation; \begin{itemize} \item $P(\mathbf{s}|W, \mathbf{b})=\frac{1}{Z}\exp\{\sum_{ij}W_{ij}s_is_j-\sum_ibSis_i\}$. \item $s_i$ are binary variables. \item RHS is `energy'. $W_ij$ only comes into play if $s_i=s_j=1$. \item $\sum_i b_is_i$ offset marginal $p(x)$. \end{itemize}
 
-What is the learning algorithm for Boltzmann machines?; Gradient version of EM \begin{itemize}
-\item Inference: E step involves computing averages wrt $P(\mathbf{s^H|s^V}, W, \mathbf{b})$ (`clamped phase').
-\item May be exact or (more usually) approximate using Gibbs sampling or loopy BP.
-\item Learning: The M step requires gradients wrt Z, which can be computed by averages under $P(\mathbf{s}|W, \mathbf{b})$ (`unclamped phase'). \begin{itemize}
-    \item $\nabla_W\log P(\mathbf{s}^V, \mathbf{s}^H)=\langle \mathbf{ss^T} \rangle_c - \langle \mathbf{ss^T} \rangle_u$.
-    \item where $\langle \rangle_c$ (clamped) are expectations under $P(\mathbf{s|s}^V_{obs})$ with $P(\mathbf{s^V|s^V_{obs}})=\prod\delta_{s^V_i, s^V_{i, obs}})$. That is, observable variables are clamped to values actually observed.
-    \item $\langle \rangle_u$ is (unclamped) expectation under the current joint. (ExpFam moment matching, but requires simulation and gradient ascent.) (Directly sample and evaluate derivatives?)
-    \item diff Z wrt W, b..?
-\end{itemize}
-\end{itemize}
+What is the learning algorithm for Boltzmann machines?; Gradient version of EM \begin{itemize} \item Inference: E step involves computing averages wrt $P(\mathbf{s^H|s^V}, W, \mathbf{b})$ (`clamped phase'). \item May be exact or (more usually) approximate using Gibbs sampling or loopy BP. \item Learning: The M step requires gradients wrt Z, which can be computed by averages under $P(\mathbf{s}|W, \mathbf{b})$ (`unclamped phase'). \begin{itemize} \item $\nabla_W\log P(\mathbf{s}^V, \mathbf{s}^H)=\langle \mathbf{ss^T} \rangle_c - \langle \mathbf{ss^T} \rangle_u$. \item where $\langle \rangle_c$ (clamped) are expectations under $P(\mathbf{s|s}^V_{obs})$ with $P(\mathbf{s^V|s^V_{obs}})=\prod\delta_{s^V_i, s^V_{i, obs}})$. That is, observable variables are clamped to values actually observed. \item $\langle \rangle_u$ is (unclamped) expectation under the current joint. (ExpFam moment matching, but requires simulation and gradient ascent.) (Directly sample and evaluate derivatives?) \item diff Z wrt W, b..? \end{itemize} \end{itemize}
 
 What are \mathbf{s^V, s^H} in Boltzmann machines?; H = hidden, V = visible (observed).
 
-Write the expression for $\log P(\mathbf{s^Vs^H}|W, \mathbf{b})$ for Boltzmann machines; 
-    \begin{itemize}
-        \item $\log P(\mathbf{s^Vs^H}|W, \mathbf{b})=\sum_{ij}W_{ij}s_is_j-\sum_ib_is_i - \log Z$.
-        \item $Z=\sum_s \exp(\sum_{ij}W_{ij}s_is_j - \sum_i b_i s_i)$
-    \end{itemize}
+Write the expression for $\log P(\mathbf{s^Vs^H}|W, \mathbf{b})$ for Boltzmann machines;  \begin{itemize} \item $\log P(\mathbf{s^Vs^H}|W, \mathbf{b})=\sum_{ij}W_{ij}s_is_j-\sum_ib_is_i - \log Z$. \item $Z=\sum_s \exp(\sum_{ij}W_{ij}s_is_j - \sum_i b_i s_i)$ \end{itemize}
 
-Prove that $\nabla_W\log P(\mathbf{s}^V, \mathbf{s}^H)=\langle \mathbf{ss^T} \rangle_c - \langle \mathbf{ss^T} \rangle_u$; \begin{itemize}
-    \item $=\frac{\partial}{\partial W_{ij}}[\sum_{ij}W_{ij}\langle s_is_j\rangle_c -\sum_ib_i\langle s_i\rangle_c- \log Z]$
-    \item $=\langle s_is_j \rangle_c - \frac{\partial}{\partial W_{ij}}\log Z$
-    \item $=\langle s_is_j \rangle_c - \frac{1}{Z}\frac{\partial}{\partial W_{ij}}\sum_s \exp(\sum_{ij}W_{ij}s_is_j - \sum_i b_i s_i)$
-    \item $=\langle s_is_j \rangle_c - \sum_s\frac{1}{Z} \exp(\sum_{ij}W_{ij}s_is_j - \sum_i b_i s_i)s_is_j$
-    \item $=\langle s_is_j \rangle_c - \sum_sP(\mathbf{s|W, b})s_is_j$
-    \item $=\langle s_is_j \rangle_c - \langle s_is_j \rangle_u$
-    \item where $\langle \rangle_c$ (clamped) are expectations under $P(\mathbf{s|s}^V_{obs})$ with $P(\mathbf{s^V|s^V_{obs}})=\prod\delta_{s^V_i, s^V_{i, obs}})$. That is, observable variables are clamped to values actually observed.
-    \item $\langle \rangle_u$ is (unclamped) expectation under the current joint. (ExpFam moment matching, but requires simulation and gradient ascent.) (Directly sample and evaluate derivatives?)
-\end{itemize}
+Prove that $\nabla_W\log P(\mathbf{s}^V, \mathbf{s}^H)=\langle \mathbf{ss^T} \rangle_c - \langle \mathbf{ss^T} \rangle_u$; \begin{itemize} \item $=\frac{\partial}{\partial W_{ij}}[\sum_{ij}W_{ij}\langle s_is_j\rangle_c -\sum_ib_i\langle s_i\rangle_c- \log Z]$ \item $=\langle s_is_j \rangle_c - \frac{\partial}{\partial W_{ij}}\log Z$ \item $=\langle s_is_j \rangle_c - \frac{1}{Z}\frac{\partial}{\partial W_{ij}}\sum_s \exp(\sum_{ij}W_{ij}s_is_j - \sum_i b_i s_i)$ \item $=\langle s_is_j \rangle_c - \sum_s\frac{1}{Z} \exp(\sum_{ij}W_{ij}s_is_j - \sum_i b_i s_i)s_is_j$ \item $=\langle s_is_j \rangle_c - \sum_sP(\mathbf{s|W, b})s_is_j$ \item $=\langle s_is_j \rangle_c - \langle s_is_j \rangle_u$ \item where $\langle \rangle_c$ (clamped) are expectations under $P(\mathbf{s|s}^V_{obs})$ with $P(\mathbf{s^V|s^V_{obs}})=\prod\delta_{s^V_i, s^V_{i, obs}})$. That is, observable variables are clamped to values actually observed. \item $\langle \rangle_u$ is (unclamped) expectation under the current joint. (ExpFam moment matching, but requires simulation and gradient ascent.) (Directly sample and evaluate derivatives?) \end{itemize}
 
-What are sigmoid belief nets?; \begin{itemize}
-    \item Directed graphical model over a vector of binary variables $s_i\in\{0, 1\}$.
-    \item Generative multilayer perceptron, deep exponential family model (joint usually not expfam bc each layer is nonlinear fn of activations above).
-    \item $P(\mathbf{s|W, b})=\prod_i P(s_i|\{s_j\}_{j<i}, W, \mathbf{b})$
-    \item Parents most often grouped into layers, vars in a layer conditionally independent given layer above (immediate parents).
-    \item $P(s_i=1|\{s_j\}_{j<i}, W, \mathbf{b})=\frac{1}{1+\exp\{-\sum_{j<i}W_{ij}s_j-b_i\}}$ (logistic of lincomb of parents)
-\end{itemize}
+What are sigmoid belief nets?; \begin{itemize} \item Directed graphical model over a vector of binary variables $s_i\in\{0, 1\}$. \item Generative multilayer perceptron, deep exponential family model (joint usually not expfam bc each layer is nonlinear fn of activations above). \item $P(\mathbf{s|W, b})=\prod_i P(s_i|\{s_j\}_{j<i}, W, \mathbf{b})$ \item Parents most often grouped into layers, vars in a layer conditionally independent given layer above (immediate parents). \item $P(s_i=1|\{s_j\}_{j<i}, W, \mathbf{b})=\frac{1}{1+\exp\{-\sum_{j<i}W_{ij}s_j-b_i\}}$ (logistic of lincomb of parents) \end{itemize}
 
-What can we say about conditional independence of variables in a sigmoid belief net?; \begin{itemize}
-    \item Vars in a layer are conditionally independent given the layer above.
-\end{itemize}
+What can we say about conditional independence of variables in a sigmoid belief net?; \begin{itemize} \item Vars in a layer are conditionally independent given the layer above. \end{itemize}
 
 Is the joint dist of a sigmoid belief net usually in the exponential family?; No, because vars in each layer are a non-linear function of the activations in the layer above them (immediate parents).
 
-Describe the learning algorithm for sigmoid belief nets.; EM \begin{itemize}
-    \item E step involves computing averages wrt $P(\mathbf{s_H | s_v}, W, \mathbf{b})$. 
-    \begin{itemize}
-        \item This could be done either exactly or approx using Gibbs sampling or mean field approximations.
-        \item or using a parallel `recognition network' (Helmholtz machine, separately trained network that does inference for us.)
-    \end{itemize}
-    \item Unlike Boltzmann machines, there is no partition function Z since each Bernouilli is normalised, so no need for an unclamped phase in the M step. (Singly intractable only.)
-\end{itemize}
+Describe the learning algorithm for sigmoid belief nets.; EM \begin{itemize} \item E step involves computing averages wrt $P(\mathbf{s_H | s_v}, W, \mathbf{b})$.  \begin{itemize} \item This could be done either exactly or approx using Gibbs sampling or mean field approximations. \item or using a parallel `recognition network' (Helmholtz machine, separately trained network that does inference for us.) \end{itemize} \item Unlike Boltzmann machines, there is no partition function Z since each Bernouilli is normalised, so no need for an unclamped phase in the M step. (Singly intractable only.) \end{itemize}
 
-Briefly describe a restricted Boltzmann machine (RBM); TODO: this is all from written notes, check online. \begin{itemize}
-    \item Sigmoid belief net as generative and inference.
-    \item Tractable inference but intractable learning (opposite of SBN)
-    \item (only have $W_{ij}$ between V and H? really?)
-    \item All H CI of each other given V, all V CI of each other given H.
-    \begin{itemize}
-        \item Can do inference bc given V know H etc.
-        \item but can't learn bc intractable normaliser
-        \item (also note prod over each visible node on term(?) not dep on visible nodes and $s_i$ itself.)
-    \end{itemize}
-    \item Bipartite graph.
-    \item (MCMC: samples correl over time, in principle infinite time before getting an indep sample)
-\end{itemize}
+Briefly describe a restricted Boltzmann machine (RBM); TODO: this is all from written notes, check online. \begin{itemize} \item Sigmoid belief net as generative and inference. \item Tractable inference but intractable learning (opposite of SBN) \item (only have $W_{ij}$ between V and H? really?) \item All H CI of each other given V, all V CI of each other given H. \begin{itemize} \item Can do inference bc given V know H etc. \item but can't learn bc intractable normaliser \item (also note prod over each visible node on term(?) not dep on visible nodes and $s_i$ itself.) \end{itemize} \item Bipartite graph. \item (MCMC: samples correl over time, in principle infinite time before getting an indep sample) \end{itemize}
 
 % Distributed state models
-Describe Factorial Hidden Markov Models; \begin{itemize}
-    \item HMMs with many state vars $s_{it}$ (i.e. distributed state repr)
-    \item Each state var evolves independently
-    \begin{itemize}
-        \item (each chain marginally indep of all other states, but obs depend on all chains)
-    \end{itemize}
-    \item The state can capture many bits of information about the sequence (linear (?? should be exp?) in the number of state vars)
-    \item E step is typically intractable (due to explaining away in latent states, i.e. obs dep on all factorial chain tgt)
-\end{itemize}
+Describe Factorial Hidden Markov Models; \begin{itemize} \item HMMs with many state vars $s_{it}$ (i.e. distributed state repr) \item Each state var evolves independently \begin{itemize} \item (each chain marginally indep of all other states, but obs depend on all chains) \end{itemize} \item The state can capture many bits of information about the sequence (linear (?? should be exp?) in the number of state vars) \item E step is typically intractable (due to explaining away in latent states, i.e. obs dep on all factorial chain tgt) \end{itemize}
 
-Describe a dynamic bayesian network.; \begin{itemize}
-    \item DAG at each point in time
-    \item with temporal dependence between some of the variables (vs iid)
-    \item (i.e. combine MCs in some sort of DAG)
-    \item (Distributed HMM with structured dependencies amongst latent states (official))
-    \item Some vars observed, some not?
-\end{itemize}
+Describe a dynamic bayesian network.; \begin{itemize} \item DAG at each point in time \item with temporal dependence between some of the variables (vs iid) \item (i.e. combine MCs in some sort of DAG) \item (Distributed HMM with structured dependencies amongst latent states (official)) \item Some vars observed, some not? \end{itemize}
 % LDA
 
-State the pdf of and briefly describe a Dirichlet distribution.; \begin{itemize}
-    \item Dist over dists
-    \item Generalisation of beta
-    \item $P(\mathbf{q})=\frac{\Gamma(\sum_i a_i)}{\prod_i \Gamma(a_i)}\prod_i q^{a_i-1}_i=\frac{1}{Z}\prod_iq_i^{a_i-1}$
-\end{itemize}
+State the pdf of and briefly describe a Dirichlet distribution.; \begin{itemize} \item Dist over dists \item Generalisation of beta \item $P(\mathbf{q})=\frac{\Gamma(\sum_i a_i)}{\prod_i \Gamma(a_i)}\prod_i q^{a_i-1}_i=\frac{1}{Z}\prod_iq_i^{a_i-1}$ \end{itemize}
 
 What is the Dirichlet dist a conjugate prior for?; A categorical dist over a discrete var, e.g. rolling (unfair) dice.
 
@@ -339,86 +116,27 @@ Describe a probability simplex for a Dirichlet(2, 10, 2); Triangle with much mor
 
 Describe a probability simplex for a Dirichlet(0.9, 0.9, 0.9); All density on edges, esp in corners. Mass distributed over a small number of outcomes, a sparse prior.
 
-Describe latent dirichlet allocation. (LDA); \begin{itemize}
-    \item For topic modelling. 
-    \item Model each document as a bag of words (assumption).
-    \item Draw topic dist from a prior $\phi_k\sim Dir(\beta, ...\beta)$ (dim number of words)
-    \item For each document, \begin{itemize}
-        \item Draw a dist over topics $\theta_d \sim Dir(\alpha, ...\alpha)$ (dim number of topics)
-        \item Generate words iid: \begin{itemize}
-            \item Draw topic from a doc-specific dist: $z_{id}\sim Discrete (\theta_d)$ (indicators, categorical dist)
-            \item Draw word from topic-specific dist for that topic: $x_{id}\sim Discrete(\phi_{z_{id}})$. (indicators, categorical dist)
-        \end{itemize}
-    \end{itemize}
-\end{itemize}
+Describe latent dirichlet allocation. (LDA); \begin{itemize} \item For topic modelling.  \item Model each document as a bag of words (assumption). \item Draw topic dist from a prior $\phi_k\sim Dir(\beta, ...\beta)$ (dim number of words) \item For each document, \begin{itemize} \item Draw a dist over topics $\theta_d \sim Dir(\alpha, ...\alpha)$ (dim number of topics) \item Generate words iid: \begin{itemize} \item Draw topic from a doc-specific dist: $z_{id}\sim Discrete (\theta_d)$ (indicators, categorical dist) \item Draw word from topic-specific dist for that topic: $x_{id}\sim Discrete(\phi_{z_{id}})$. (indicators, categorical dist) \end{itemize} \end{itemize} \end{itemize}
 
-Describe Latent Dirichlet Allocation as Matrix Decomposition; Factor p(x) dist into low rank form  if $k<d$ or $k<w$  (generally true for LDA to be useful) \begin{itemize}
-    \item Let $N_{dw}$ be the number of times a word $w$ appears in document $d$, and $P_{dw}$ is the probability of word $w$ appearing in document $d$.
-    \item Then $p(N|P)=\prod_{dw}P^{N_{dw}}_{dw}$ (likelihood term) (no noise or sth)
-    \item $P_{dw}=\sum_k p(\text{pick topic k})p(\text{pick word }w|k)=\sum_{k=1}^K\theta_{dk}\phi_{kw}$
-    \item This decomposition is similar to PCA and factor analysis, but not Gaussian (dirichlet priors, categorical obs).
-    \item (related to non-negative matrix factorisation (NMF))
-\end{itemize}
+Describe Latent Dirichlet Allocation as Matrix Decomposition; Factor p(x) dist into low rank form  if $k<d$ or $k<w$  (generally true for LDA to be useful) \begin{itemize} \item Let $N_{dw}$ be the number of times a word $w$ appears in document $d$, and $P_{dw}$ is the probability of word $w$ appearing in document $d$. \item Then $p(N|P)=\prod_{dw}P^{N_{dw}}_{dw}$ (likelihood term) (no noise or sth) \item $P_{dw}=\sum_k p(\text{pick topic k})p(\text{pick word }w|k)=\sum_{k=1}^K\theta_{dk}\phi_{kw}$ \item This decomposition is similar to PCA and factor analysis, but not Gaussian (dirichlet priors, categorical obs). \item (related to non-negative matrix factorisation (NMF)) \end{itemize}
 
 What is the Latent Dirichlet Allocation matrix decomposition similar to?; PCA and factor analysis, but it's not Gaussian.
 
 Can we do exact inference in latent dirichlet allocation?; No, it's not tractable. (Inference: E-step) (Usually variational or MCMC approx)
 
-Name at least two generalisations of latent dirichlet allocation.; \begin{itemize}
-    \item Relax bag-of-words assumption (e.g. Markov model) \begin{itemize}
-        \item e.g. short seqs of words tend to be drawn from the same topic. Markov chain of markov chains (one for each topic, say, and switch between topics)
-    \end{itemize}
-    \item Model changes in topics across time
-    \item Model correl among occurrences of topics
-    \item Model authors, recipients
-    \item Cross modal interactions (images and tags)
-    \item Nonparametric generalisations (Bayesian, Dirichlet process, e.g. infinite topics)
-\end{itemize}
+Name at least two generalisations of latent dirichlet allocation.; \begin{itemize} \item Relax bag-of-words assumption (e.g. Markov model) \begin{itemize} \item e.g. short seqs of words tend to be drawn from the same topic. Markov chain of markov chains (one for each topic, say, and switch between topics) \end{itemize} \item Model changes in topics across time \item Model correl among occurrences of topics \item Model authors, recipients \item Cross modal interactions (images and tags) \item Nonparametric generalisations (Bayesian, Dirichlet process, e.g. infinite topics) \end{itemize}
 
 Name one mixed membership model from statistics.; Latent dirichlet allocation
-
-
 
 % TODO: Nonlinear dimensionality reduction, from slide 49
 
 % s80 GP LVMs 
-Describe how to go from probabilistic PCA to GP latent variable models; \begin{itemize}
-    \item Probabilistic PCA: $\mathbf{x}_i|\mathbf{y}_i, \Lambda \sim N(\Lambda\mathbf{x}_i, \beta^{\1}I)$, $\mathbf{x}_i\sim N(0, I)$
-    \item If we know the values of the latent Y, then we can integrate out $\Lambda$: $\Lambda\sim N(0, \alpha^{-1}I)$, $p(X|Y)\sim |2\pi K|^{-\frac{D}{2}}\exp(-\frac{1}{2}Tr[K^{-1}YY^T]), K=\alpha XX^T+\beta I$.
-    \item i.e. D indep GPs, one for each dimension of X (mapping from latent space $\mathbf{y}$ to one dim of \mathbf{x}.
-\end{itemize}
+Describe how to go from probabilistic PCA to GP latent variable models; \begin{itemize} \item Probabilistic PCA: $\mathbf{x}_i|\mathbf{y}_i, \Lambda \sim N(\Lambda\mathbf{x}_i, \beta^{\1}I)$, $\mathbf{x}_i\sim N(0, I)$ \item If we know the values of the latent Y, then we can integrate out $\Lambda$: $\Lambda\sim N(0, \alpha^{-1}I)$, $p(X|Y)\sim |2\pi K|^{-\frac{D}{2}}\exp(-\frac{1}{2}Tr[K^{-1}YY^T]), K=\alpha XX^T+\beta I$. \item i.e. D indep GPs, one for each dimension of X (mapping from latent space $\mathbf{y}$ to one dim of \mathbf{x}. \end{itemize}
 
-How do we have a nonlinear mapping from latent space $\mathbf{y}$ to dimension of $\mathbf{x}$ in GP LVMs (or similar models)?; \begin{itemize}
-    \item Replace the linear kernel with nonlinear kernels
-    \item But now dependence on X is complicated: instead of computing a posterior over X, 
-    \item we must find point values that max the likelihood (jointly with hyperparameters), 
-    \item or use a var approx (cf also locally linear latent var modls. GP-like, but over neighbourhood vs full mapping?
-\end{itemize}
+How do we have a nonlinear mapping from latent space $\mathbf{y}$ to dimension of $\mathbf{x}$ in GP LVMs (or similar models)?; \begin{itemize} \item Replace the linear kernel with nonlinear kernels \item But now dependence on X is complicated: instead of computing a posterior over X,  \item we must find point values that max the likelihood (jointly with hyperparameters),  \item or use a var approx (cf also locally linear latent var modls. GP-like, but over neighbourhood vs full mapping? \end{itemize}
 
-Describe three (four) main reasons for intractability in probabilistic models.; \begin{itemize}
-    \item Analytic intractability: Distributions may have complicated forms \begin{itemize}
-        \item (e.g. non-linearities in generative models, may need to calculate marginals over node pairs/groups to calculate density)
-    \end{itemize}
-    \item Computational / graph-structured intractability: Explaining away: observing the value of a child induces dependencies amongst its parents.
-    \begin{itemize}
-        \item or indirectly v large cliques, posteior dist is in v high dim space.
-    \end{itemize}
-    \item Even with simple models, Bayesian computation of the full posterior over both latent vars and parameters is made complicated by the strong coupling between latent vars and parameters (integrate over latents to get posterior over params)
-    \item (Boltzmann machine: poss can calculate posterior in RBM (Bernouilli), but learning is v difficult bc nonlinear intractability)
-\end{itemize}
+Describe three (four) main reasons for intractability in probabilistic models.; \begin{itemize} \item Analytic intractability: Distributions may have complicated forms \begin{itemize} \item (e.g. non-linearities in generative models, may need to calculate marginals over node pairs/groups to calculate density) \end{itemize} \item Computational / graph-structured intractability: Explaining away: observing the value of a child induces dependencies amongst its parents. \begin{itemize} \item or indirectly v large cliques, posteior dist is in v high dim space. \end{itemize} \item Even with simple models, Bayesian computation of the full posterior over both latent vars and parameters is made complicated by the strong coupling between latent vars and parameters (integrate over latents to get posterior over params) \item (Boltzmann machine: poss can calculate posterior in RBM (Bernouilli), but learning is v difficult bc nonlinear intractability) \end{itemize}
 
-Describe at least three general approaches to approximate inference; \begin{itemize}
-    \item (Local) Linearisation: approx nonlinearities by Taylor series expansion about a pt (e.g. approx mean/mode of hidden var dist) \begin{itemize}
-        \item Linear approx particularly useful since Gaussian dists are closed under linear transfs (e.g. EKF).
-        \item also Laplace's approx (TODO: what about it? look up)
-    \end{itemize}
-    \item Monte Carlo sampling: approx posterior over unobserved vars by a set of random samples. \begin{itemize}
-        \item Often need MCMC or sequential monte carlo methods to sample from difficult dists
-        \item (not always regarded as approx if drawing from true dist)
-    \end{itemize}
-    \item Variational methods: approx hidden var posterior $p(H)$ with a tractable form $q(H)$, s.t. $KL(q||p)$ is minimised. Gives a lower bound on the likelihood that can be maximised wrt the parameters of $q(H)$.
-    \item Local message passing methods: approx the hidden var posterior $p(H)$ with a tractable form $q(H)$ or with a set of locally consistent tractable forms by other means (Loopy belief propagation, expectation propagation)
-    \item Recognition models and autoencoders: approx the hidden var posterior dist using an explicit bottom-up recognition model/net.
-\end{itemize}
+Describe at least three general approaches to approximate inference; \begin{itemize} \item (Local) Linearisation: approx nonlinearities by Taylor series expansion about a pt (e.g. approx mean/mode of hidden var dist) \begin{itemize} \item Linear approx particularly useful since Gaussian dists are closed under linear transfs (e.g. EKF). \item also Laplace's approx (TODO: what about it? look up) \end{itemize} \item Monte Carlo sampling: approx posterior over unobserved vars by a set of random samples. \begin{itemize} \item Often need MCMC or sequential monte carlo methods to sample from difficult dists \item (not always regarded as approx if drawing from true dist) \end{itemize} \item Variational methods: approx hidden var posterior $p(H)$ with a tractable form $q(H)$, s.t. $KL(q||p)$ is minimised. Gives a lower bound on the likelihood that can be maximised wrt the parameters of $q(H)$. \item Local message passing methods: approx the hidden var posterior $p(H)$ with a tractable form $q(H)$ or with a set of locally consistent tractable forms by other means (Loopy belief propagation, expectation propagation) \item Recognition models and autoencoders: approx the hidden var posterior dist using an explicit bottom-up recognition model/net. \end{itemize}
 
 \end{document}
