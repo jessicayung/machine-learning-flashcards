@@ -189,13 +189,52 @@ What does a GP provide a prior over?; Functions.
 
 % TODO: s16-18 EP for GP classification
 Describe how to use EP for Gaussian Process classification.; \begin{itemize}
-    \item 
+    \item Write the GP joint on $g_i, y_i$ as a factor graph: $P(g_{1:n}, y_{1:n}) = f_0(\mathcal{G})\prod_i f_i(g_i) = N(g_{1:n}|\mathbf{0}, K) \prod_i N(y_i|g_i, \sigma^2_i)$
+    \item EP: approx non-Gaussian $f_i(g_i)$ by Gaussian $\tilde{f}_i(g_i) = N(g_i | \tilde{\mu}_i, \tilde{\phi}^2_i)$
+    \item Construct $q_{\neg i}(g_i) \sim N(dist on i | dist on \neg i)$
+    \item EP updates: $\tilde{f}_i^{new}(g_i) = N(E_{q_{\neg i}(g_i)f_i(g_i)}[g], Var_{q_{\neg i}(g_i)f_i(g_i)}[g])/q_{\neg i}(g_i)$
+    \item Make preds when approx site potentials $\tilde{f}_i(g_i)$ have stabilised: 
+    \item $P(y'|x', \mathcal{D}) = P(y', g)$ integrating out g, $g\sim p(x'|X)$ (cond Gaussian, $K_{BB} = K_{XX} + \tilde{\Psi}$),  
+\end{itemize}
+
+Write the GP joint (for GP prediction/classification) as a factor graph.; \begin{itemize}
+    \item Let observations $y_i \sim N(y_i | g_i, \sigma^2_i)$.
+    \item Joint: $P(g_{1:n}, y_{1:n}) = f_0(\mathcal{G})\prod_i f_i(g_i) = N(g_{1:n}|\mathbf{0}, K) \prod_i N(y_i|g_i, \sigma^2_i)$
+    \item one big factor connecting $g_{1:n}, g'$ and one factor for each $g_i, y_i$ pair.
+\end{itemize}
+
+What approximation do we make in EP for GP classification?; \begin{itemize}
+    \item Approx non-Gaussian $f_i(g_i) = P(y_i|g_i)$, where $y_i$ is the observation and $g_i$ is the latent drawn from a GP
+    \item by a Gaussian $\tilde{f}_i(g_i) = N(g_i | \tilde{\mu}_i, \tilde{\phi}^2_i)$.
+\end{itemize}
+
+How do we construct $q_{\neg i}(g_i)$ in EP for GP?; \begin{itemize}
+    \item Use Gaussian conditioning $P(i | \neg i)$.
+    \item $\Rightarrow q_{\neg i}(g_i) = N(\Sigma_{i, \neg i}\Sigma^{-1}_{\neg i, \neg i} \mathbf{\tilde{\mu}}_{\neg i}, K_{ii}-\Sigma_{i, \neg i}\Sigma^{-1}_{\neg i, \neg i}\Sigma_{\neg i, i})$
+    \item where $\Sigma = K + diag[\tilde{\phi}^2_1...\tilde{\phi}^2_n]$.
+    \item Recall observations $y_i \sim N(y_i | g_i, \sigma^2_i)$ and we let $f_i(g_i) = P(y_i|g_i)$, where $y_i$ are observations. We also approximated non-Gaussian $f_i(g_i) = P(y_i|g_i)$ by a Gaussian $\tilde{f}_i(g_i) = N(g_i | \tilde{\mu}_i, \tilde{\phi}^2_i)$.
+\end{itemize}
+
+State the EP updates for GP classification. Assume we know $q_{\neg i}(g_i)$.; \begin{itemize}
+    \item $\tilde{f}_i^{new}(g_i) = N(\int dg q_{\neg i}(g)f_i(g)g, \int dg q_{\neg i}(g)f_i(g)g^2 - (\tilde{\mu}^{new})^2)/q_{\neg i}(g_i)$.
+    \item Recall observations $y_i \sim N(y_i | g_i, \sigma^2_i)$ and we let $f_i(g_i) = P(y_i|g_i)$, where $y_i$ are observations. We also approximated non-Gaussian $f_i(g_i) = P(y_i|g_i)$ by a Gaussian $\tilde{f}_i(g_i) = N(g_i | \tilde{\mu}_i, \tilde{\phi}^2_i)$.
+\end{itemize}
+
+What is the distribution of predictions for GP classification using EP?; \begin{itemize}
+    \item $P(y'|\mathbf{x'}, \mathcal{D}) = \int dg' P(y'|g')N(g' | K_{x'X}(K_{XX}+\tilde{\Psi})^{-1}\tilde{\mu}, K_{x'x'} - K_{x'X}(K_{XX}+\tilde{\Psi})^{-1}K_{Xx'})$
+    \item where $\tilde{\Psi} = diag[\tilde{\psi}^2_{1:n}]$.
+    \item Recall observations $y_i \sim N(y_i | g_i, \sigma^2_i)$ and we let $f_i(g_i) = P(y_i|g_i)$, where $y_i$ are observations. We also approximated non-Gaussian $f_i(g_i) = P(y_i|g_i)$ by a Gaussian $\tilde{f}_i(g_i) = N(g_i | \tilde{\mu}_i, \tilde{\phi}^2_i)$.
+    \item No change is needed to the approximating potentials $\tilde{f}_i$ because introducing a test point changes K, but doesn't affect the marginal $P(g_{1:n})$ by consistency of the GP. Also unobs'd output provides no info about $g'$, so constant factor on $g'$.
+\end{itemize}
+
+When we introduce a test point, how do we change the $\tilde{f}_i$? (GP classification using EP); \begin{itemize}
+    \item No change is needed to the approximating potentials $\tilde{f}_i$ 
+    \item because introducing a test point changes K, but doesn't affect the marginal $P(g_{1:n})$ by consistency of the GP. \item Also unobs'd output provides no info about $g'$, so constant factor on $g'$.
+    \item Recall observations $y_i \sim N(y_i | g_i, \sigma^2_i)$ and we let $f_i(g_i) = P(y_i|g_i)$, where $y_i$ are observations. We also approximated non-Gaussian $f_i(g_i) = P(y_i|g_i)$ by a Gaussian $\tilde{f}_i(g_i) = N(g_i | \tilde{\mu}_i, \tilde{\phi}^2_i)$.
 \end{itemize}
 
 % TODO s17 normalisers
 
 % TODO s18 Alpha divergences and power EP
-
-
 
 \end{document}
