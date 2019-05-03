@@ -235,6 +235,25 @@ When we introduce a test point, how do we change the $\tilde{f}_i$? (GP classifi
 
 % TODO s17 normalisers
 
-% TODO s18 Alpha divergences and power EP
+Discuss normalisers in EP (lol poor FC front); \begin{itemize}
+    \item Approx sites determined by moment matching are naturally normalised
+    \item For posteriors, sufficient to normalise product after convergence. \begin{itemize}
+        \item Often straightforward for exponential family approximations
+    \end{itemize}
+    \item To compute likelihood, we need to keep track of site integrals (below) as well as the overall normaliser of $\prod_i\tilde{f}_i(\mathcal{Y}_i)$: \begin{itemize}
+        \item Minimising `unnormalised KL' $KL(p||q) = \int dx p(x)\log \frac{p(x)}{q(x)} + \int dx (q(x) - p(x))$ \item incorporates normaliser into each $\tilde{f}$ (match zeroth moment, along with sufficient stats
+    \end{itemize}
+\end{itemize}
+
+To compute the likelihood in EP, what do we need to keep track of in terms of normalisers?; \begin{itemize}
+    \item Site integrals: \begin{itemize}
+        \item Minimising `unnormalised KL' $KL(p||q) = \int dx p(x)\log \frac{p(x)}{q(x)} + \int dx (q(x) - p(x))$ \item incorporates normaliser into each $\tilde{f}$ (match zeroth moment, along with sufficient stats
+    \end{itemize}
+    \item The overall normaliser of $\prod_i\tilde{f}_i(\mathcal{Y}_i)$
+\end{itemize}
+
+State the definition of alpha divergence.; $D_{\alpha}[p||q] = \frac{1}{\alpha(1-\alpha)}\int dx \alpha p(x) + (1-\alpha)q(x) - p(x)^{\alpha}q(x)^{1-\alpha}$
+
+% TODO s18 Alpha divergences and power EP (after first line)
 
 \end{document}
