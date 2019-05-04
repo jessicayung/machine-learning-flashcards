@@ -256,4 +256,24 @@ State the definition of alpha divergence.; $D_{\alpha}[p||q] = \frac{1}{\alpha(1
 
 % TODO s18 Alpha divergences and power EP (after first line)
 
+Name two spocial cases of alpha-divergences; \begin{itemize}
+    \item (Recall alpha divergence is $D_{\alpha}[p||q] = \frac{1}{\alpha(1-\alpha)}\int dx \alpha p(x) + (1-\alpha)q(x) - p(x)^{\alpha}q(x)^{1-\alpha}$)
+    \item $\alpha\rightarrow 0$: min $KL(q||p)$.
+    \item $\alpha\rightarrow 1$: min $KL(p||q)$, EP.
+\end{itemize}
+
+State the local (EP) minimisation updates for alpha divergences; \begin{itemize}
+    \item (Recall alpha divergence is $D_{\alpha}[p||q] = \frac{1}{\alpha(1-\alpha)}\int dx \alpha p(x) + (1-\alpha)q(x) - p(x)^{\alpha}q(x)^{1-\alpha}$)
+    \item (usual EP is $\alpha\rightarrow 1$)
+    \item Local (EP) min gives fixed-point updates that blend messages (to power $\alpha$) with previous site approximations:
+    \item $\tilde{f}^{new}_i = \arg\min_{f \in \{\tilde{f}\}} KL[f_i(\mathcal{Y}_i)^{\alpha}\tilde{f}_i(\mathcal{Y}_i)^{1-\alpha}q_{\neg i}(\mathcal{Y})||f(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y})]$
+    \item (Small changes (for $\alpha < 1$) lead to more stable updates, and more reliable convergence.)
+\end{itemize}
+
+Briefly discuss how the magnitude of $\alpha$ in alpha-divergences for local (EP) minimisation affects the updates.; \begin{itemize}
+    \item (Recall alpha divergence is $D_{\alpha}[p||q] = \frac{1}{\alpha(1-\alpha)}\int dx \alpha p(x) + (1-\alpha)q(x) - p(x)^{\alpha}q(x)^{1-\alpha}$)
+    \item ($\alpha\rightarrow 0$ is min KL(q||p), $\alpha\rightarrow 1$ is EP KL(p||q)
+    \item Small changes (for $\alpha < 1$) lead to more stable updates, and more reliable convergence.
+\end{itemize}
+
 \end{document}
