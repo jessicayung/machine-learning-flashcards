@@ -1,0 +1,78 @@
+%Front;
+% Approximate Inference
+% Lectured by Maneesh Sahani at the Gatsby Computational Neuroscience Unit, UCL, Fall 2018
+% Link to course info and slides: http://www.gatsby.ucl.ac.uk/teaching/courses/ml1/
+
+\documentclass{article}
+\begin{document}
+
+Describe parametric variational methods and the new optimisation problem; \begin{itemize}
+    \item $q(\mathcal{Y}, \rho)$ where $\rho$ is the parameter vector.
+    \item Replace constrained opt of $F(q,\theta)$ (e.g. when restricting to certain expfams) with
+    \item (relatively) unconstrained optimisation of a constrained $F(\rho, \theta)$: 
+    \item $F(\rho, \theta) = \langle \log P(\mathcal{X, Y}|\theta^{(k-1)}\rangle_{q(\mathcal{Y}, \rho)}+ H(\rho) $
+    \item Might still be valuable to use coordinate ascent in $rho, \theta$, though this is no longer necessary.
+\end{itemize}
+
+If we parameterise our $q(\mathcal{Y})$ using $\rho$, do we still need to use coordinate ascent in $\rho, \theta$?; No. (though it may still be helpful)
+
+Can $P(\mathcal{X, Y}|\theta^{(k-1)}\rangle_{q(\mathcal{Y}, \rho)}$ usually be expressed in closed form? If not, how might we optimise $F(\rho, \theta)$ and what might be the problems with these methods?; \begin{itemize}
+    \item Not usually.
+    \item So might seek to follow the gradient $\nabla_\rho F$.
+    \item Naively requires evaluating a high-dim expectations wrt $q(\mathcal{Y}, \rho)$ as a fn of $\rho$, which is not simple.
+\end{itemize}
+
+Name three methods we could try to follow the gradient to optimise $F(\rho, \theta)$ over $\rho$.; \begin{itemize}
+    \item `Score-based' gradient estimate and Monte-Carlo \begin{itemize}
+        \item (grad e(x) wrt dist and eval by MC? TODO)
+    \end{itemize}
+    \item Recognition network trained in separate phase - not strictly variational (Wake-sleep for Helmholtz) (Dayan et. al., 1995) (min other KL? TODO: check)
+    \item Recognition network trained simultaneously with generative model using `frozen' samples \begin{itemize}
+        \item or `reparameterisation trick', VAEs
+        \item Kingma and Welling 2014, Rezende et. al., 2014
+    \end{itemize}
+\end{itemize}
+
+Outline the derivation of the score-based gradient approach to optimise the parameterised variational free energy; \begin{itemize}
+    \item Convert free energy from gradient of expectation to expectation of gradient
+    \item High dim but can be evaluated by Monte Carlo
+    \item Reduce dimensionality by factorisation
+    \item Manipulate terms so only need expectations wrt $\q(\bar{\mathcal{Y}})$ ($\bar{\mathcal{Y}}$ is the minimal Markov blanket of $\mathcal{Y}_i$ in the joint), so can use message passing
+\end{itemize}
+
+Outline the procedure for the score-based gradient approach to optimise the parameterised variational free energy; \begin{itemize}
+    \item Choose a parametric (factored) var family $q(\mathcal{Y}) = \prod_i q(\mathcal{Y}_i| \rho_i)$
+    \item Initialise factors
+    \item Repeat to convergence: \begin{itemize}
+        \item Stochastic VE-step: for each i: \begin{itemize}
+            \item Sample from $q(\bar{\mathcal{Y}}_i)$ and estimate expected gradient $\nabla_{\rho_i}F$.
+            \item Update $\rho_i$ along gradient.
+        \end{itemize}
+        \item Stochastic M-step. For each i:
+        \begin{itemize}
+            \item Sample from each $q(\bar{\mathcal{Y}}_i)$.
+            \item Update corresponding parameters.
+        \end{itemize}
+    \end{itemize}
+\end{itemize} 
+
+How do you reduce the gradient of expectation to the expectation of a gradient in score-based gradient estimation for the parameterised variational free energy?; \begin{itemize}
+    \item $\nabla_\rho F(\rho, \theta) = \nabla_\rho \int d\mathcal{Y}q(\mathcal{Y}|\rho)(\log P(\mathcal{X, Y}|\theta) - \log q(\mathcal{Y}|\rho))$
+    \item $= \int d\mathcal{Y}[\nabla_{\rho}q(\mathcal{Y}|\rho)](\log P(\mathcal{X, Y}|\theta) - \log q(\mathcal{Y}|\rho)) + \int d\mathcal{Y} q(\mathcal{Y}|\rho)\nabla_\rho(\log P(\mathcal{X, Y}|\theta) - \log q(\mathcal{Y}|\rho))$ (product rule)
+    \item Latter term = 0: \begin{itemize}
+        \item $\nabla_\rho\log P(\mathcal{X, Y}|\theta) = 0$ (no direct dependence)
+        \item $\int d\mathcal{Y}q(\mathcal{Y}|\rho)\nabla_\rho \log q(\mathcal{Y}|\rho) = \nabla_\rho \int d\mathcal{Y}q(\mathcal{Y}|\rho) = \nabla_\rho (1) = 0$ (dists normalised)
+    \end{itemize}
+    \item also $\nabla_\rho q(\mathcal{Y}|p) = q(\mathcal{Y}|p)\nabla_\rho \log q(\mathcal{Y}|\rho)$
+    \item so $\nabla_\rho F(\rho, \theta) = \langle [\nabla_{\rho}\log q(\mathcal{Y}|\rho)](\log P(\mathcal{X, Y}|\theta) - \log q(\mathcal{Y}|\rho)) \rangle_{q(\mathcal{Y}, \rho)}$
+\end{itemize}
+
+Show how you can reduce the dimensionality of the expectation-of-gradient form of the parameterised variational free energy.; TODO
+
+Briefly describe how you might design a step-size sequence to promote convergence when taking stochastic gradient steps.; \begin{itemize}
+    \item Stochastic: i.e. sampling vs systematically going through data
+    \item Robbins-Munro: sum of step sizes $=\infty$, but sum of squared step sizes is finite.
+    \item (vs if decrease too quickly, may not be moving towards true min?)
+\end{itemize}
+
+\end{document}
