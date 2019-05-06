@@ -1,0 +1,104 @@
+%Front;
+% Approximate Inference
+% Lectured by Maneesh Sahani at the Gatsby Computational Neuroscience Unit, UCL, Fall 2018
+% Link to course info and slides: http://www.gatsby.ucl.ac.uk/teaching/courses/ml1/
+
+\documentclass{article}
+\begin{document}
+
+What is the log partition function in an exponential family distribution?; \begin{itemize}
+    \item $\Phi(\theta) = \log Z = \log \sum_x \exp (\theta^T(s(x))$
+\end{itemize}
+
+What is the relationship between the log partition function and sufficient statistics of an expfam distribution?; \begin{itemize}
+    \item Log partition fn $\Phi(\theta) = \log Z$ maps natural parameters to the moments of the sufficient statistics
+    \item $\frac{\partial}{\partial \theta}\Phi(\theta) = e^{-\phi(\theta)}\sum_x s(x)e^{\theta^Ts(x)}=E_{\theta}[s(X)] = \mu(\theta) = \mu$
+    \item $\frac{\partial^2}{\partial^2 \theta}\Phi(\theta) = e^{-\phi(\theta)}\sum_x s(x)^2e^{\theta^Ts(x)} - e^{-2\Phi(\theta)}[\sum_x s(x)e^{\theta^Ts(x)}]^2 =V_{\theta}[s(X)]$
+    \item (second derivative is thus positive semi-definite, and so $\Phi(\theta)$ is convex in $\theta$.)
+\end{itemize}
+
+Is $\Phi(\theta)$ convex in $\theta$? + Prove your answer.; \begin{itemize}
+    \item Yes.
+    \item $\frac{\partial^2}{\partial^2 \theta}\Phi(\theta) = e^{-\phi(\theta)}\sum_x s(x)^2e^{\theta^Ts(x)} - e^{-2\Phi(\theta)}[\sum_x s(x)e^{\theta^Ts(x)}]^2 =V_{\theta}[s(X)]$
+    \item Second derivative is thus positive semi-definite, and so $\Phi(\theta)$ is convex in $\theta$.
+\end{itemize}
+
+What is dual to the log-partition function of an exponential family distribution?; The negative entropy.
+
+What are the requirements for an exp fam distribution to be parameterised by the means of the sufficient statistics?; TODO check \begin{itemize}
+    \item Sufficient stats all linearly independent
+    \item Average (?) cond (?) on value of $\Phi(\theta)$: should not introduce linear depedence between them
+\end{itemize}
+
+Write the negative entropy of a distribution as a function of the mean parameter.; \begin{itemize}
+    \item $\Psi(\mu) = E_{\theta}[\log P(X|\theta(\mu))]$
+    \item $= \theta^T\mu - \Phi(\theta)$
+    \item (Legendre conjugacy / duality: $\theta^T\mu = \Phi(\theta) + \Psi(\mu)$)
+\end{itemize}
+
+State the equation corresponding to Legendre conjugacy / duality for expfam distributions; \begin{itemize}
+    \item $\theta^T\mu = \Phi(\theta) + \Psi(\mu)$
+    \item where $\Phi(\theta)$ is the log normaliser
+    \item $\Psi$ is the negative entropy of the distribution.
+\end{itemize}
+
+How do you relate the negative entropy of an expfam distribution to its parameters directly?; \begin{itemize}
+    \item Neg entropy $\Psi(\mu) = E_{\theta}[\log P(X|\theta(\mu))]$
+    \item $\frac{d}{d\mu}\Psi(\mu) = \frac{\partial}{\partial\mu}(\theta^T\mu - \Phi(\theta)) + \frac{d\theta}{d\mu}\frac{\partial}{\partial\theta}(\theta^T\mu - \Phi(\theta))$
+    \item $= \theta + \frac{d\theta}{d\mu}(\mu - \mu )$
+    \item $=\theta$.
+\end{itemize}
+
+State the name of the formal relationship between the log partition function and negative entropy of an expfam distribution.; They are conjugate dual functions. \begin{itemize}
+    \item $\Psi(\mu) = \suup_{\theta'}[\theta'^T\mu - \Phi(\theta')]$
+\end{itemize}
+
+State the equation that shows the log partition function and negative entropy of an expfam distribution are conjugate dual.; \begin{itemize}
+    \item $\Psi(\mu) = \suup_{\theta'}[\theta'^T\mu - \Phi(\theta')]$
+\end{itemize}
+
+% TODO: could add more, slide 12. slide 13 also meh
+
+Write the log likelihood of a joint expfam distribution on observed $x$ and latent $y$ in terms of $\mu_Y, \theta$.; \begin{itemize}
+    \item (note posterior on Y is in the expfam with the clamped sufficient stat $s_Y(y|x) = S{XY}(x^{obs}, y)$, same (poss redundant) natural param $\theta$ and partition function $\Phi_Y(\theta) = \log \sum_y \exp \theta^Ts_Y(y)$.
+    \item Likelihood: $\mathcal{L}(\theta) = p(x|\theta) = \sum_y e^{\theta^Ts(x,y) - \Phi_{XY}(\theta)}$
+    \item $= \sum_y e^{\theta^Ts_Y(y|x)}e^{-\Phi_{XY}(\theta)} = \exp[\Phi_Y(\theta) - \Phi_{XY}(\theta)]$
+    \item so we can write the log-likelihood as $l(\theta) = \sup_{\mu_Y}[\theta^T\mu_Y - \Phi_{XY}(\theta) - \Psi(\mu_Y)]$
+    \item $=\sup_{\mu_Y}[\langle \log p(x, y)\rangle_q + H(q)] = \sup_{\mu_Y}F(\theta, \mu_Y)$.
+\end{itemize}
+
+Describe inference (est latents y) in terms of $E[s(y)] = \mu$ directly.; \begin{itemize}
+    \item Optimisation over $\mu$
+    \item $\mu^*_Y = \arg\max_{\mu_Y}[\theta^T\mu_Y - \Psi(\mu_Y)]$
+    \item Concave maximisation with two complications (feasible means, hard to evaluate $\Psi(\mu)$
+\end{itemize}
+
+Describe two complications of optimising over $\mu$ (ss of y) directly as the E-step; \begin{itemize}
+    \item Optimisation over feasible means \begin{itemize}
+        \item Independence of sufficient stats may prevent arbitrary sets of mean sufficient statistics being achieved
+        \item constraints: exponentially many hyperplanes (for discrete dist)
+    \end{itemize}
+    \item Evaluating $\Psi(\mu)$ can be challenging
+    \item (Recall opt is \item $\mu^*_Y = \arg\max_{\mu_Y}[\theta^T\mu_Y - \Psi(\mu_Y)]$)
+\end{itemize}
+
+% TODO: skipped slide 15
+
+Discuss the Bethe free energy problem as a relaxation of the true free-energy optimisation; \begin{itemize}
+    \item Relaxation of $\mu^*_Y = \arg\max_{\mu_Y}[\theta^T\mu_Y - \Psi(\mu_Y)]$
+    \item Relax set of feasible means $\mathcal{M}\rightarrow \mathcal{L}$, the set of locally consistent means (i.e. all nested means marginalise correctly) (larger set than before)
+    \begin{itemize}
+        \item still convex set (polytope for discrete problems)
+    \end{itemize}
+    \item Approximate $\Psi(\mu_Y)$ by the tree-structured form \begin{itemize}
+        \item $\Psi_{Bethe}(\mu_Y) = -\sum_iH(X_i) + \sum_{(ij)\in G}I(X_i, X_j)$
+        \item not concave!
+    \end{itemize}
+    \item BUT no longer a concave maximisation then.
+\end{itemize}
+
+Is the Bethe free energy a convex optimisation problem?; no ($\Psi_{bethe}$ is not convex).
+
+% TODO: from slide 17, but didn't really cover it?
+
+\end{document}
