@@ -67,12 +67,98 @@ How do you reduce the gradient of expectation to the expectation of a gradient i
     \item so $\nabla_\rho F(\rho, \theta) = \langle [\nabla_{\rho}\log q(\mathcal{Y}|\rho)](\log P(\mathcal{X, Y}|\theta) - \log q(\mathcal{Y}|\rho)) \rangle_{q(\mathcal{Y}, \rho)}$
 \end{itemize}
 
-Show how you can reduce the dimensionality of the expectation-of-gradient form of the parameterised variational free energy.; TODO
+Show how you can reduce the dimensionality of the expectation-of-gradient form of the parameterised variational free energy.; \begin{itemize}
+    \item Factorise: let $q(\mathcal{Y}) = \prod_i q(\mathcal{Y}_i|\rho_i)$ factor over disjoint cliques. \begin{itemize}
+        \item Let $\bar{\mathcal{Y}}_i$ be the minimal Markov blanket of $\mathcal{Y}_i$ in the joint, \item $P_{\bar{\mathcal{Y}}_i}$ be the product of joint factors that include any element of $\mathcal{Y}_i$ (so the union of their arguments is $\bar{\mathcal{Y}}_i$
+        \item and $P_{\neg \bar{\mathcal{Y}}_i}$ the remaining factors.
+    \end{itemize}
+    \item Then grad wrt param assoc with ith clique
+    \item $\nabla_{\rho_i}F(\{\rho_j\}, \theta) = \langle [\nabla_{\rho_i} \sum_j \log q(\mathcal{Y}_j | \rho_j)](\log P(\mathcal{X, Y}|\theta) - \sum_j \log q(\mathcal{Y}_j|\rho_j)) \rangle_{q(\mathcal{Y})}$
+    \item $=\langle [\nabla_{\rho_i} \log q(\mathcal{Y}_i | \rho_i)](\log P_{\bar{\mathcal{Y}}_i}(\mathcal{X, \bar{\mathcal{Y}}}_i) - \log q(\mathcal{Y}_i|\rho_i)) \rangle_{q(\bar{\mathcal{Y}}_i)}) + \langle [\nabla_{\rho_i} \log q(\mathcal{Y}_i | \rho_i)]\times\text{const wrt }\mathcal{Y}_i \rangle_{q(\mathcal{Y})}$
+    \item second term = 0
+    \item so expectations are only needed wrt $q(\bar{\mathcal{Y}}_i)$, so can use message passing.
+    
+\end{itemize}
 
 Briefly describe how you might design a step-size sequence to promote convergence when taking stochastic gradient steps.; \begin{itemize}
     \item Stochastic: i.e. sampling vs systematically going through data
     \item Robbins-Munro: sum of step sizes $=\infty$, but sum of squared step sizes is finite.
     \item (vs if decrease too quickly, may not be moving towards true min?)
+\end{itemize}
+
+Describe two ways we might come across iid processes in models; \begin{itemize}
+    \item iid data
+    \item multiple data draws and each instance requires its own variational optimisation \begin{itemize}
+        \item even for large models such as HMMs
+    \end{itemize}
+\end{itemize}
+
+Describe amortised inference.; \begin{itemize}
+    \item Learn recognition model $f:\bm{x_i}\rightarrow q(\bm{y}_i)$ (var params),
+    \item $f$ parameterised by $\rho$.
+\end{itemize}
+
+Describe learning in Helmholtz machines.; \begin{itemize}
+    \item (binary sigmoid belief net with parallel recognition model)
+    \item Two-phase `wake-sleep' learning
+    \item Wake phase: \begin{itemize}
+        \item Given current $f$, estimate mean-field representation from data 
+        \item (mean sufficient stats for Bernouilli are just probabilities)
+        \item $\bm{\hat{y}}_i = f(\bm{x}_i|\rho)$
+        \item Update generative params $\theta$ according to $\nabla_{\theta} F(\{\hat{\bm{y}}_i\}, \theta)$.
+        \item Like M-step: use recog model to do inference
+        \item (procedure: think at each stage you use mean obtained from f to get mean for next layer?)
+    \end{itemize}
+    \item Sleep phase: \begin{itemize}
+        \item Sample $\{\bm{y}_s, \bm{x}_s\}_{s=1}^S$ from current generative model.
+        \item Update recognition params $\rho$ to direct $f(\bm{x}_s)$ towards $\bm{y}_s$ (simple gradient learning)
+        \item $\Delta \rho \propto \sum_s (\bm{y}_s - \bm{f(x}_s | \rho))\nabla_\rho \bm{f(x}_s|\rho)$
+        \item (like delta rule, supervised-ish learning, like mean of generated latents)
+        \item like E-step but not strictly E-step
+    \end{itemize}
+\end{itemize}
+
+Describe an extension of wake phase learning in Helmholtz machines; \begin{itemize}
+    \item Can sample $\bm{y}$ from recognition model (use samples as input) rather than just evaluate means (each stage use means from f to get means for next layer). \begin{itemize}
+        \item useful esp if eval means is hard.
+    \end{itemize}
+    \item Expectations in free-energy can be computed directly rather than by mean substitution.
+    \item In hierarchical models, output of higher recog layers then depends on samples at previous stages, which introduces (right) correlations between samples at different layers. \begin{itemize}
+        \item vs mean-field between layers stil access (?) factors/latents (? can't read) across a layer
+    \end{itemize}
+\end{itemize}
+
+Describe a more general way of doing sleep-phase learning for Helmholtz machines; \begin{itemize}
+    \item Train f to yield expected sufficient statistics of ExpFam $q(\bm{y})$: \item $\Delta \rho \propto \sum_s (\bm{s_q(y}_s) - \bm{f(x}_s | \rho))\nabla_\rho \bm{f(x}_s|\rho)$
+    \item (replaced $\bm{y}_s$ with $\bm{s_q(y}_s)$.
+    \item (e.g. so that involve > 1 latent, train fn to yield mean of that expfam.)
+\end{itemize}
+
+Compare Helmholtz machines with EM; TODO may be dodgy \begin{itemize}
+    \item Wake like M-step, sleep like E-step (but not strictly E-step)
+    \item Sleep phase learning minimises $KL(p_\theta(\bm{y|x})||q(\bm{y}|f(\bm{x},\rho))]$. Opposite to variational objective, but may not matter if divergence is small enough.
+\end{itemize}
+
+Compare variational autoencoders with Helmholtz machines in one phrase; \begin{itemize}
+    \item VAEs fuse the wake and sleep phases.
+\end{itemize}
+
+Describe variational autoencoders; \begin{itemize}
+    \item Fuses the wake and sleep phases
+    \item Generate recognition samples using deterministic transfromations of external random variates (reparameterisation trick) \begin{itemize}
+        \item e.g. if $\bm{f}$ gives marginal $\mu_i$ and $\sigma_i$ for latents $y_i$ and $\epsilon^s_i \sim N(0,1)$, then $p^s_i = \mu_i + \sigma_i\epsilon_i^s$.
+    \end{itemize}
+    \item Now generative and recognition parameters can be trained together by gradient descent (backprop), holding $\epsilon^s$ fixed.
+\end{itemize}
+
+Write down the objective function for variational autoencoders; \begin{itemize}
+    \item $F_i(\theta, \rho) = \sum_s \log P(\bm{x}_i, \bm{y}_i^s|\theta) - \log q(\bm{y}_i^s|\bm{f(x_i}, \rho))$
+\end{itemize}
+
+Write down the gradients wrt the parameters for a variational autoencoder.;\begin{itemize}
+    \item Obj: $F_i(\theta, \rho) = \sum_s \log P(\bm{x}_i, \bm{y}_i^s|\theta) - \log q(\bm{y}_i^s|\bm{f(x_i}, \rho))$
+    \item $\frac{\partial}{\partial \theta}F_i = \sum_s \nabla_\theta \log P(\bm{x}_i, \bm{y}^s_i|\theta)$
+    \item $\frac{\partial}{\partial\rho}F_i = \sum_s \frac{\partial}{\partial \bm{y}^s_i}(\log P(\bm{x}_i, \bm{y}_i^s|\theta) - \log q(\bm{y}^s_i|\bm{f(x}_i)))\frac{d\bm{y}^s_i}{d\rho} + \frac{\partial}{\partial \bm{f(x}_i)}\log q(\bm{y}_i^s|\bm{f(x}_i))\frac{d\bm{f(x}_i)}{d\rho}$
 \end{itemize}
 
 \end{document}
