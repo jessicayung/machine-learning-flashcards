@@ -186,6 +186,36 @@ What does the Bethe energy at fixed points of loopy BP correspond to for binary 
     \item Useful for learning undirected graphical models as it leads to a lower bound on the log likelihood.
 \end{itemize}
 
+How do you interpret the Lagrange multipliers for the constraints $\xi$ in the Bethe fixed point equations?; Like log messages.
+
+What is the relationship between $b_i, b_{ij}$ in loopy BP and marginals of the implied joint?; \begin{itemize}
+    \item Beliefs $b_i, b_{ij}$ in loopy BP are only locally consistent pseudomarginals, \item not necessarily consistent marginals of the implied joint dist
+\end{itemize}
+
+State one key difference between the assumptions of the Bethe free energy and the variational free energy.; \begin{itemize}
+    \item Bethe: accounts for interactions between different sites
+    \item Var free energy assumes independence
+    \item (var uses p, Bethe uses b)
+\end{itemize}
+
+Compare loopy BP and mean-field approximation (outline 3 or 4 key differences); \begin{itemize}
+    \item Beliefs $b_i, b_{ij}$ in loopy BP are only locally consistent pseudomarginals, not necessarily consistent marginals of the implied joint dist.
+    \item Bethe free energy accounts for interactions between different sites, while variational free energy assumes independence.
+    \item Loopy BP tends to be significantly more accurate whenever it converges.
+    (\item The loop series or Plefka expansion of the log partition function $Z$: \begin{itemize}
+        \item var: forms first order terms
+        \item Bethe: contains higher order terms (involving generalised loops))
+    \end{itemize}
+\end{itemize}
+
 % TODO: slides 21-22
+List at least two extensions and variations of loopy BP; \begin{itemize}
+    \item Generalised BP: group variables together to treat their interactions exactly
+    \item Convergent alternatives: fixed points of loopy BP are stationary points of the Bethe free energy. \begin{itemize}
+        \item We can also derive algorithms that increase the Bethe free energy at every step, and are thus guaranteed to converge.
+    \end{itemize}
+    \time Convex alternatives: We can derive convex cousins of the negative of the Bethe free energy. These give rise to algorithms that will converge to a unique global max.
+    \item We have considered sum-product loopy BP to compute marginals. The treatment of loopy Viterbi or max-product algorithms is different.
+\end{itemize}
 
 \end{document}
