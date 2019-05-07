@@ -104,50 +104,19 @@ Formula for GP predictions given new datapoint $\mathbf{x'}$; $y'|X, Y, \mathbf{
 
 Formula for GP evidence; $\log P(Y|X) = -\frac{1}{2}\log|2\pi(K_{XX}+\sigma^2I)|-\frac{1}{2}Y(K_{XX}+\sigma^2I)^{-1}Y^T$ 
 
-Computational complexity of calculating GP predictions for new datapoint; \begin{itemize}
-    \item If you haven't computed predictions before, $O(N^3)$ since you have to invert $K_{XX}$ (NxN).
-    \item else much smaller
-\end{itemize}
+Computational complexity of calculating GP predictions for new datapoint; \begin{itemize} \item If you haven't computed predictions before, $O(N^3)$ since you have to invert $K_{XX}$ (NxN). \item else much smaller \end{itemize}
 
-What is the computational complexity of computing the evidence for GPs (for learning kernel hyperparameters)?; \begin{itemize}
-    \item Evidence:  $\log P(Y|X)$
-    \item Need to invert $K_{XX}$ (NxN), so $O(N^3)$ time.
-\end{itemize}
+What is the computational complexity of computing the evidence for GPs (for learning kernel hyperparameters)?; \begin{itemize} \item Evidence:  $\log P(Y|X)$ \item Need to invert $K_{XX}$ (NxN), so $O(N^3)$ time. \end{itemize}
 
-How might we make computing GP predictions or evidence more efficient? (Describe the general approach); \begin{itemize}
-    \item Find or select a smaller set of possibly fictitious measurements U (y) at inputs Z (x) such that 
-    \item $P(y'|Z, U, \mathbf{x'}\approx P(y'|X, Y, \mathbf{x'})$.
-    \item Q: how to choose U and Z? ($\rightarrow$ variational sparse GP approx)
-\end{itemize}
+How might we make computing GP predictions or evidence more efficient? (Describe the general approach); \begin{itemize} \item Find or select a smaller set of possibly fictitious measurements U (y) at inputs Z (x) such that  \item $P(y'|Z, U, \mathbf{x'}\approx P(y'|X, Y, \mathbf{x'})$. \item Q: how to choose U and Z? ($\rightarrow$ variational sparse GP approx) \end{itemize}
 
-Describe how we can choose U and Z for sparse GP approximations; \begin{itemize}
-    \item Variational sparse GP approx
-    \item Write $F$ for the (smooth) GP function values that underlie Y (so $Y\sim N(F, \sigma^2I)$.
-    \item Introduce latent measurements U at inputs Z (and integrate over U). 
-    \item Both U and F are latent, so we introduce a variational dist $q(F, U)$ to form a free-energy.
-    \item Choose var form $q(F, U)=P(F|U, X, Z)q(U)$. i.e. fix $F|U$ without reference to Y, so info about Y will need to be `compressed' into $q(U)$. Then
-    \item $F(q(F, U), \theta, Z)=\langle \log \frac{P(Y|F)P(F|U,X,Z)P(U|Z)}{P(F|U,X,Z)q(U)}\rangle_{P(F|U)q(U)} = \langle \langle \log P(Y|F)\rangle_{P(F|U)} + \log P(U|Z) - \log q(U) \rangle_{q(U)}$.
-    \item first term: only need Gaussian e(x) of LL since $P(F|U)$ is fixed by the generative model (vs subject to free opt). So can eval expectation under $P(F|U)$.
-    \item combined expectation under $q(U)$ is the free energy of a PPCA-like model. Max of this free energy is the log-likelihood, achieved with q equal to the posterior under the PPCA-like model.
-    \item (Final ans: $F(q^*(U), \theta, Z)=\log N(Y|0, K_{XZ}K^{-1}_{ZZ}K_{ZZ}K_{ZZ}^{-1}K_{ZX}+\sigma^2I) -\frac{1}{2\sigma^2}Tr[K_{XX}-K_{XZ}K_{ZZ}^{-1}K_{ZX}]$)
-    \item Then optimise free energy numerically wrt Z, $\theta$ to adjust the GP prior and quality of var approx.
-\end{itemize}
+Describe how we can choose U and Z for sparse GP approximations; \begin{itemize} \item Variational sparse GP approx \item Write $F$ for the (smooth) GP function values that underlie Y (so $Y\sim N(F, \sigma^2I)$. \item Introduce latent measurements U at inputs Z (and integrate over U).  \item Both U and F are latent, so we introduce a variational dist $q(F, U)$ to form a free-energy. \item Choose var form $q(F, U)=P(F|U, X, Z)q(U)$. i.e. fix $F|U$ without reference to Y, so info about Y will need to be `compressed' into $q(U)$. Then \item $F(q(F, U), \theta, Z)=\langle \log \frac{P(Y|F)P(F|U,X,Z)P(U|Z)}{P(F|U,X,Z)q(U)}\rangle_{P(F|U)q(U)} = \langle \langle \log P(Y|F)\rangle_{P(F|U)} + \log P(U|Z) - \log q(U) \rangle_{q(U)}$. \item first term: only need Gaussian e(x) of LL since $P(F|U)$ is fixed by the generative model (vs subject to free opt). So can eval expectation under $P(F|U)$. \item combined expectation under $q(U)$ is the free energy of a PPCA-like model. Max of this free energy is the log-likelihood, achieved with q equal to the posterior under the PPCA-like model. \item (Final ans: $F(q^*(U), \theta, Z)=\log N(Y|0, K_{XZ}K^{-1}_{ZZ}K_{ZZ}K_{ZZ}^{-1}K_{ZX}+\sigma^2I) -\frac{1}{2\sigma^2}Tr[K_{XX}-K_{XZ}K_{ZZ}^{-1}K_{ZX}]$) \item Then optimise free energy numerically wrt Z, $\theta$ to adjust the GP prior and quality of var approx. \end{itemize}
 
-Write down the likelihood in variational sparse GP approximations (after introducing latent measurements).; \begin{itemize}
-    \item $P(Y|X)=\int \int dFdU P(Y, F, U|X, Z)$
-    \item $=\int int dFdU P(F|X)P(F|U, X, Z)P(U|Z)$
-    \item Sample U, then sample F|U.
-    \item given X since GP specifies F given X.
-\end{itemize}
+Write down the likelihood in variational sparse GP approximations (after introducing latent measurements).; \begin{itemize} \item $P(Y|X)=\int \int dFdU P(Y, F, U|X, Z)$ \item $=\int int dFdU P(F|X)P(F|U, X, Z)P(U|Z)$ \item Sample U, then sample F|U. \item given X since GP specifies F given X. \end{itemize}
 
 How might you interpret the latent U added at inputs Z in variational sparse GP approximations?; As augmenting the data. (We then integrate over U.)
 
-What variational dist do we introduce in var sparse GP approx? Recall we have introduced latent measurements U at inputs Z.; \begin{itemize}
-    \item Choose var form $q(F, U)=P(F|U, X, Z)q(U)$. 
-    \item i.e. fix $F|U$ without reference to Y, so info about Y will need to be `compressed' into $q(U)$.
-    \item $q(U)$ optionally Gaussian.
-    \item (note not exactly factorisable)
-\end{itemize}
+What variational dist do we introduce in var sparse GP approx? Recall we have introduced latent measurements U at inputs Z.; \begin{itemize} \item Choose var form $q(F, U)=P(F|U, X, Z)q(U)$.  \item i.e. fix $F|U$ without reference to Y, so info about Y will need to be `compressed' into $q(U)$. \item $q(U)$ optionally Gaussian. \item (note not exactly factorisable) \end{itemize}
 
 Time complexity of var sparse GP approx; $N\log N$ (TODO check, have some dodgy notes on s34).
 
@@ -155,35 +124,12 @@ Which latents do we marginalise over in variational sparse GP approx?; U only, n
 
 Interpret $\log P(U|Z)$ in variational sparse GP approximations. (U are the latents we're adding at inputs Z); Gaussian prior on U (todo check: from s35 notes)
 
-How can you interpret this expectation? $\langle \log \frac{N(Y|K_{XZ}K_{ZZ}^{-1}U, \sigma^2I)P(U|Z)}{q(U)}\rangle_{q(U)}$ What is its maximum?; \begin{itemize}
-    \item The free energy of a PPCA-like model with normal prior $U\sim N(0, K_{ZZ})$ and loading matrix $K_{XZ}K_{ZZ}^{-1}$. Similar bc:
-    \begin{itemize}
-        \item prior on y, \item latent Y, \item fixed rel between U and Y.
-    \end{itemize}
-    \item (and second term like PPCA-like cost?)
-    \item The max of this free energy is the log-likelihood (achieved with $q$ equal to the posterior under the PPCA-like model).
-\end{itemize}
+How can you interpret this expectation? $\langle \log \frac{N(Y|K_{XZ}K_{ZZ}^{-1}U, \sigma^2I)P(U|Z)}{q(U)}\rangle_{q(U)}$ What is its maximum?; \begin{itemize} \item The free energy of a PPCA-like model with normal prior $U\sim N(0, K_{ZZ})$ and loading matrix $K_{XZ}K_{ZZ}^{-1}$. Similar bc: \begin{itemize} \item prior on y, \item latent Y, \item fixed rel between U and Y. \end{itemize} \item (and second term like PPCA-like cost?) \item The max of this free energy is the log-likelihood (achieved with $q$ equal to the posterior under the PPCA-like model). \end{itemize}
 
-Evaluate $\langle \log P(Y|F)\rangle_{P(F|U)}$ where F are the smooth GP function values that underlie Y ($Y\sim N(F, \sigma^2I)$, and U are some latent measurements we introduce at inputs Z.; $\log N(Y|K_{XZ}K_{ZZ}^{-1}U, \sigma^2I)-\frac{1}{2\sigma^2}Tr[K_{XX}-K_{XZ}K_{ZZ}^{-1}K_{ZX}]$
-    \begin{itemize}
-        \item (latter term not dependent on U, so outside of $q(U)$ expectation (which is not in the Q))
-        \item Steps:
-        \item $\langle -\frac{1}{2}\log|2\pi\sigma^2I|-\frac{1}{2\sigma^2}Tr[(Y-F)(Y-F)^T]\rangle_{P(F|U)}$
-        \item $-\frac{1}{2}\log|2\pi\sigma^2I|-\frac{1}{2\sigma^2}Tr[(Y-\langle F\rangle_{P(F|U)})(Y-\langle F\rangle_{P(F|U)})^T]-\frac{1}{\sigma^2}Tr[\Sigma_{F|U}]$
-        \item last term: correlated uncertainty in Fs, not dep on obs or form of likelihood
-    \end{itemize}
+Evaluate $\langle \log P(Y|F)\rangle_{P(F|U)}$ where F are the smooth GP function values that underlie Y ($Y\sim N(F, \sigma^2I)$, and U are some latent measurements we introduce at inputs Z.; $\log N(Y|K_{XZ}K_{ZZ}^{-1}U, \sigma^2I)-\frac{1}{2\sigma^2}Tr[K_{XX}-K_{XZ}K_{ZZ}^{-1}K_{ZX}]$ \begin{itemize} \item (latter term not dependent on U, so outside of $q(U)$ expectation (which is not in the Q)) \item Steps: \item $\langle -\frac{1}{2}\log|2\pi\sigma^2I|-\frac{1}{2\sigma^2}Tr[(Y-F)(Y-F)^T]\rangle_{P(F|U)}$ \item $-\frac{1}{2}\log|2\pi\sigma^2I|-\frac{1}{2\sigma^2}Tr[(Y-\langle F\rangle_{P(F|U)})(Y-\langle F\rangle_{P(F|U)})^T]-\frac{1}{\sigma^2}Tr[\Sigma_{F|U}]$ \item last term: correlated uncertainty in Fs, not dep on obs or form of likelihood \end{itemize}
 
-(Opt this is a bit silly) Give the final expression of the free energy when we want to find U and Z for sparse GP approximations.; \begin{itemize}
-    \item $F(q^*(U), \theta, Z)=\log N(Y|0, K_{XZ}K^{-1}_{ZZ}K_{ZZ}K_{ZZ}^{-1}K_{ZX}+\sigma^2I) -\frac{1}{2\sigma^2}Tr[K_{XX}-K_{XZ}K_{ZZ}^{-1}K_{ZX}]$
-    \item note that we've eliminated all terms in $K_{XX}^{-1}$.
-    \item We can optimise the free energy numerically  wrt Z and $\theta$ to adjust the GP prior and quality of variational approximation.
-\end{itemize}
+Give the final expression of the free energy when we want to find U and Z for sparse GP approximations.; (Opt this is a bit silly)  \begin{itemize} \item $F(q^*(U), \theta, Z)=\log N(Y|0, K_{XZ}K^{-1}_{ZZ}K_{ZZ}K_{ZZ}^{-1}K_{ZX}+\sigma^2I) -\frac{1}{2\sigma^2}Tr[K_{XX}-K_{XZ}K_{ZZ}^{-1}K_{ZX}]$ \item note that we've eliminated all terms in $K_{XX}^{-1}$. \item We can optimise the free energy numerically  wrt Z and $\theta$ to adjust the GP prior and quality of variational approximation. \end{itemize}
 
-How can we learn X for GPs if they are unobserved, e.g. in the GPLVM?; \begin{itemize}
-    \item Similar to variational sparse GP approx
-    \item Assume $q(X, F, U)=q(X)P(F|X, U)q(U)$.
-    \item Then $F=\langle \log P(Y, F, U|X)\log P(X)\rangle_{q(U)q(X)}$ 
-    \item which simplifies into tractable components in much the same way as above.
-\end{itemize}
+How can we learn X for GPs if they are unobserved, e.g. in the GPLVM?; \begin{itemize} \item Similar to variational sparse GP approx \item Assume $q(X, F, U)=q(X)P(F|X, U)q(U)$. \item Then $F=\langle \log P(Y, F, U|X)\log P(X)\rangle_{q(U)q(X)}$  \item which simplifies into tractable components in much the same way as above. \end{itemize}
 
 \end{document}
