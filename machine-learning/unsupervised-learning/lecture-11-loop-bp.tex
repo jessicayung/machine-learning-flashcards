@@ -10,212 +10,73 @@ State the joint distribution on an undirected graph.; $p(\mathcal{X}) = \frac{1}
 
 State the definition of a message on an undirected graph.; $M_{j\rightarrow i}(X_i) := \sum_{X_j}f_{ij}(X_i, X_j)f_j(X_j)\prod_{l\in ne(j) \backslash i}M_{l\rightarrow j}(X_j)$
 
-State the approximations to marginal distributions on a (loopy) undirected graph.; \begin{itemize}
-    \item Marginal dists approximate in general
-    \item $p(X_i)\approx b_i(X_i) \propto f_i(X_i)\prod_{k\in ne(i) }M_{k\rightarrow i}(X_i)$
-    \item $p(X_i, X_j) \approx b_{ij}(X_i, X_j) \propto f_{ij}(X_i, X_j)f_i(X_i)f_j(X_j)\prod_{k\in ne(i)\backslash j}M_{k\rightarrow i}(X_i)\prod_{l\in ne(j)\backslash i}M_{l\rightarrow j}(X_j)$
-\end{itemize}
+State the approximations to marginal distributions on a (loopy) undirected graph.; \begin{itemize} \item Marginal dists approximate in general \item $p(X_i)\approx b_i(X_i) \propto f_i(X_i)\prod_{k\in ne(i) }M_{k\rightarrow i}(X_i)$ \item $p(X_i, X_j) \approx b_{ij}(X_i, X_j) \propto f_{ij}(X_i, X_j)f_i(X_i)f_j(X_j)\prod_{k\in ne(i)\backslash j}M_{k\rightarrow i}(X_i)\prod_{l\in ne(j)\backslash i}M_{l\rightarrow j}(X_j)$ \end{itemize} 
 
-What is the message-passing schedule on a loopy undirected graph?; \begin{itemize}
-    \item Unclear: no left/right, forward/backward.
-    \item Recursive process, update till hope at some point converges.
-\end{itemize}
+What is the message-passing schedule on a loopy undirected graph?; \begin{itemize} \item Unclear: no left/right, forward/backward. \item Recursive process, update till hope at some point converges. \end{itemize}
 
-State four things to pay attention to when doing message-passing on a loopy graph.; \begin{itemize}
-    \item Accuracy: BP posterior marginals are approximate on all non-trees because evidence is over-counted, but converged approximations are frequently found to be good (particularly in their means).
-    \item Convergence: no general guarantee, but BP does converge in some cases (Trees, graphs with a single loop, distributions with sufficiently weak interactions, graphs with long (and weak) loops, Gaussian networks: means correct, variances may also converge.)
-    \item Damping: common approach to encourage convergence (cf EP) \begin{itemize}
-        \item $M^{new}_{i\rightarrow j}(X_j):= (1-\alpha)M^{old}_{i\rightarrow j}(X_j) + \alpha\sum_{X_i}f_{ij}(X_i, X_j)f_i(X_i)\prod_{k\in ne(i)\backslash j}M_{k\rightarrow i}(X_i)$
-    \end{itemize}
-    \item Grouping variables: vars can be grouped into cliques to improve accuracy.
-\end{itemize}
+State four things to pay attention to when doing message-passing on a loopy graph.; \begin{itemize} \item Accuracy: BP posterior marginals are approximate on all non-trees because evidence is over-counted, but converged approximations are frequently found to be good (particularly in their means). \item Convergence: no general guarantee, but BP does converge in some cases (Trees, graphs with a single loop, distributions with sufficiently weak interactions, graphs with long (and weak) loops, Gaussian networks: means correct, variances may also converge.) \item Damping: common approach to encourage convergence (cf EP) \begin{itemize} \item $M^{new}_{i\rightarrow j}(X_j):= (1-\alpha)M^{old}_{i\rightarrow j}(X_j) + \alpha\sum_{X_i}f_{ij}(X_i, X_j)f_i(X_i)\prod_{k\in ne(i)\backslash j}M_{k\rightarrow i}(X_i)$ \end{itemize} \item Grouping variables: vars can be grouped into cliques to improve accuracy. \end{itemize}
 
 Why are BP posterior marginals approximate on all non-trees?; Because evidence is over-counted. (evidence going both ways around loop, so over-counted.)
 
-In what cases does BP converge?; \begin{itemize}
-    \item Trees
-    \item Graphs with a single loop
-    \item Distributions with sufficiently weak interactions (diff between marginal and conditional dists given other vars relatively small. Influence of evidence decreases as we move away from evidence node.)
-    \item Graphs with long (and weak) loops
-    \item Gaussian networks: means correct, variances may also converge.
-\end{itemize}
+In what cases does BP converge?; \begin{itemize} \item Trees \item Graphs with a single loop \item Distributions with sufficiently weak interactions (diff between marginal and conditional dists given other vars relatively small. Influence of evidence decreases as we move away from evidence node.) \item Graphs with long (and weak) loops \item Gaussian networks: means correct, variances may also converge. \end{itemize}
 
-Describe one general approach to encourage convergence in belief propagation in loopy graphs.; Damping: (cf EP) \begin{itemize}
-        \item $M^{new}_{i\rightarrow j}(X_j):= (1-\alpha)M^{old}_{i\rightarrow j}(X_j) + \alpha\sum_{X_i}f_{ij}(X_i, X_j)f_i(X_i)\prod_{k\in ne(i)\backslash j}M_{k\rightarrow i}(X_i)$
-    \end{itemize} 
+Describe one general approach to encourage convergence in belief propagation in loopy graphs.; Damping: (cf EP) \begin{itemize} \item $M^{new}_{i\rightarrow j}(X_j):= (1-\alpha)M^{old}_{i\rightarrow j}(X_j) + \alpha\sum_{X_i}f_{ij}(X_i, X_j)f_i(X_i)\prod_{k\in ne(i)\backslash j}M_{k\rightarrow i}(X_i)$ \end{itemize} 
 
-Name three interpretations of loopy belief propagation (why it works); \begin{itemize}
-    \item (it's a form of) expectation propagation: use LBP to calculate cavity dist in EP.
-    \item Tree-based reparameterisation: subtrees in graph (TODO: expand)
-    \item Bethe free energy: FP (todo=?) updates to free energy
-\end{itemize}
+Name three interpretations of loopy belief propagation (why it works); \begin{itemize} \item (it's a form of) expectation propagation: use LBP to calculate cavity dist in EP. \item Tree-based reparameterisation: subtrees in graph (TODO: expand) \item Bethe free energy: FP (todo=?) updates to free energy \end{itemize}
 
-Outline the derivation of loopy BP as message-based EP; \begin{itemize}
-    \item Approx pairwise factors $f_{ij}$ by products of messages: $f_{ij}(X_i, X_j) \approx \tilde{f}_{ij}(X_i, X_j) = M_{i\rightarrow j}(X_j)M_{j\rightarrow i}(X_i)$
-    \item Thus the full joint is approx by a factorised dist $p(\mathcal{X}) \approx \frac{1}{Z}\prod_{nodes i}f_i(X_i)\prod_{edges ij}\tilde{f}_{ij}(X_i, X_j)$ (and subst), but with multiple factors for most $X_i$. (TODO: why?)
-    \item Deletion: $q_{\neg ij}(X_i, X_j)$ as part of joint that involves $(X_i, X_j)$ (unnormalised)
-    \item Projection: \begin{itemize}
-        \item $\{M^{new}_{i\rightarrow j}, M^{new}_{j \rightarrow i}\} = \arg\min KL[f_{ij}(X_i, X_j)q_{\neg ij}(X_i, X_j) || M_{j\rightarrow i}(X_i) M_{i\rightarrow j}(X_j)q_{\neg ij}(X_i, X_j)] $
-    \item $\Rightarrow M_{j\rightarrow i}^{new}(X_i) = \sum_{X_j}(f_{ij}(X_i, X_j)f_j(X_j)\prod_{l\in ne(j)\backslash i}M_{l\rightarrow j}(X_j))$
-    \end{itemize}
-\end{itemize}
+Outline the derivation of loopy BP as message-based EP; \begin{itemize} \item Approx pairwise factors $f_{ij}$ by products of messages: $f_{ij}(X_i, X_j) \approx \tilde{f}_{ij}(X_i, X_j) = M_{i\rightarrow j}(X_j)M_{j\rightarrow i}(X_i)$ \item Thus the full joint is approx by a factorised dist $p(\mathcal{X}) \approx \frac{1}{Z}\prod_{nodes i}f_i(X_i)\prod_{edges ij}\tilde{f}_{ij}(X_i, X_j)$ (and subst), but with multiple factors for most $X_i$. (TODO: why?) \item Deletion: $q_{\neg ij}(X_i, X_j)$ as part of joint that involves $(X_i, X_j)$ (unnormalised) \item Projection: \begin{itemize} \item $\{M^{new}_{i\rightarrow j}, M^{new}_{j \rightarrow i}\} = \arg\min KL[f_{ij}(X_i, X_j)q_{\neg ij}(X_i, X_j) || M_{j\rightarrow i}(X_i) M_{i\rightarrow j}(X_j)q_{\neg ij}(X_i, X_j)] $ \item $\Rightarrow M_{j\rightarrow i}^{new}(X_i) = \sum_{X_j}(f_{ij}(X_i, X_j)f_j(X_j)\prod_{l\in ne(j)\backslash i}M_{l\rightarrow j}(X_j))$ \end{itemize} \end{itemize}
 
-Derive the EP updates to the messages for Loopy BP (Deletion step); \begin{itemize}
-    \item $q_{\neg ij}(X_i, X_j) = f_i(X_i)f_j(X_j)\prod_{k\in ne(i)\backslash j}M_{k\rightarrow i}(X_i)\prod_{l\in ne(j)\backslash i}M_{i\rightarrow j}(X_j)$
-    \item Derivation: proportional to $\sum_{\mathcal{X}\backslash X_i, X_j}p(\mathcal{X})$, so drop parts without $X_i, X_j$
-\end{itemize}
+Derive the EP updates to the messages for Loopy BP (Deletion step); \begin{itemize} \item $q_{\neg ij}(X_i, X_j) = f_i(X_i)f_j(X_j)\prod_{k\in ne(i)\backslash j}M_{k\rightarrow i}(X_i)\prod_{l\in ne(j)\backslash i}M_{i\rightarrow j}(X_j)$ \item Derivation: proportional to $\sum_{\mathcal{X}\backslash X_i, X_j}p(\mathcal{X})$, so drop parts without $X_i, X_j$ \end{itemize} 
 
-Derive the EP updates to the messages for Loopy BP (Projection step); \begin{itemize}
-    \item $\{M^{new}_{i\rightarrow j}, M^{new}_{j \rightarrow i}\} = \arg\min KL[f_{ij}(X_i, X_j)q_{\neg ij}(X_i, X_j) || M_{j\rightarrow i}(X_i) M_{i\rightarrow j}(X_j)q_{\neg ij}(X_i, X_j)] $
-    \item Solve: $q_{\neg ij}(.)$ factors in terms of $X_i, X_j$, so RHS factors. So min is achieved by marginals on $X_i, X_j$ individually of LHS $f_{ij}(.)q_{\neg ij}(.)$.
-    \item $M_{j\rightarrow i}^{new}(X_i)q_{\neg ij}(X_i) = \sum_{X_j}(f_{ij}(X_i, X_j)f_j(X_j)\prod_{l\in ne(j)\backslash i}M_{l\rightarrow j}(X_j)) f_i(X_i) \prod_{k\in ne(i) \backslash j}M_{k\rightarrow i}(X_i)$ 
-    \item $\Rightarrow M_{j\rightarrow i}^{new}(X_i) = \sum_{X_j}(f_{ij}(X_i, X_j)f_j(X_j)\prod_{l\in ne(j)\backslash i}M_{l\rightarrow j}(X_j))$
-\end{itemize}
+Derive the EP updates to the messages for Loopy BP (Projection step); \begin{itemize} \item $\{M^{new}_{i\rightarrow j}, M^{new}_{j \rightarrow i}\} = \arg\min KL[f_{ij}(X_i, X_j)q_{\neg ij}(X_i, X_j) || M_{j\rightarrow i}(X_i) M_{i\rightarrow j}(X_j)q_{\neg ij}(X_i, X_j)] $ \item Solve: $q_{\neg ij}(.)$ factors in terms of $X_i, X_j$, so RHS factors. So min is achieved by marginals on $X_i, X_j$ individually of LHS $f_{ij}(.)q_{\neg ij}(.)$. \item $M_{j\rightarrow i}^{new}(X_i)q_{\neg ij}(X_i) = \sum_{X_j}(f_{ij}(X_i, X_j)f_j(X_j)\prod_{l\in ne(j)\backslash i}M_{l\rightarrow j}(X_j)) f_i(X_i) \prod_{k\in ne(i) \backslash j}M_{k\rightarrow i}(X_i)$  \item $\Rightarrow M_{j\rightarrow i}^{new}(X_i) = \sum_{X_j}(f_{ij}(X_i, X_j)f_j(X_j)\prod_{l\in ne(j)\backslash i}M_{l\rightarrow j}(X_j))$ \end{itemize}
 
-Interpret in words message-based EP in a loopy graph.; \begin{itemize}
-    \item A more severe constraint on the approximate sites: not just to an expfam factor, but to a product of expfam messages
-    \item (vs as two separate approx (one to the site and one to the cavity))
-    \item (Factorisation view remains valid even when original sites lie in the appropriate expfam already, so loopy BP in e.g. discrete graphs can be seen as a form of EP.)
-    \item FYI, recall EP updates are: \begin{itemize}
-        \item Deletion $q_{\neg ij}(X_i, X_j) = f_i(X_i)f_j(X_j)\prod_{k\in ne(i)\backslash j}M_{k\rightarrow i}(X_i)\prod_{l\in ne(j)\backslash i}M_{i\rightarrow j}(X_j)$
-        \item Projection $M_{j\rightarrow i}^{new}(X_i) = \sum_{X_j}(f_{ij}(X_i, X_j)f_j(X_j)\prod_{l\in ne(j)\backslash i}M_{l\rightarrow j}(X_j))$
-    \end{itemize}
-\end{itemize}
+Interpret in words message-based EP in a loopy graph.; \begin{itemize} \item A more severe constraint on the approximate sites: not just to an expfam factor, but to a product of expfam messages \item (vs as two separate approx (one to the site and one to the cavity)) \item (Factorisation view remains valid even when original sites lie in the appropriate expfam already, so loopy BP in e.g. discrete graphs can be seen as a form of EP.) \item FYI, recall EP updates are: \begin{itemize} \item Deletion $q_{\neg ij}(X_i, X_j) = f_i(X_i)f_j(X_j)\prod_{k\in ne(i)\backslash j}M_{k\rightarrow i}(X_i)\prod_{l\in ne(j)\backslash i}M_{i\rightarrow j}(X_j)$ \item Projection $M_{j\rightarrow i}^{new}(X_i) = \sum_{X_j}(f_{ij}(X_i, X_j)f_j(X_j)\prod_{l\in ne(j)\backslash i}M_{l\rightarrow j}(X_j))$ \end{itemize} \end{itemize}
 
-What is the difference between the message-factored version of EP and standard EP on a tree-structured graph?; \begin{itemize}
-    \item Same results. 
-    \item Messages are calculated in exactly the same way as before (Cf NLSSM).
-    \item (Pairwise marginals can be found after convergence by computing $\tilde{P}(\mathbf{y}_{i-1}, \mathbf{y}_i)$ as required, cf forward-backward for HMMs.
-    \item Not true of fully-factored var approx (and message-factored ver of EP? check? TODO)
-\end{itemize}
+What is the difference between the message-factored version of EP and standard EP on a tree-structured graph?; \begin{itemize} \item Same results.  \item Messages are calculated in exactly the same way as before (Cf NLSSM). \item (Pairwise marginals can be found after convergence by computing $\tilde{P}(\mathbf{y}_{i-1}, \mathbf{y}_i)$ as required, cf forward-backward for HMMs. \item Not true of fully-factored var approx (and message-factored ver of EP? check? TODO) \end{itemize}
 
 How does Loopy BP as EP help us understand the convergence properties of BP?; It doesn't.
 
-Which interpretation (if any) of Loopy BP assures us of convergence?; \begin{itemize}
-    \item None of them, because loopy BP may not converge. \item (But tree-based reparameterisation and Bethe free energy will tell us something about properties of converged solutions of loopy BP.)
-\end{itemize}
+Which interpretation (if any) of Loopy BP assures us of convergence?; \begin{itemize} \item None of them, because loopy BP may not converge. \item (But tree-based reparameterisation and Bethe free energy will tell us something about properties of converged solutions of loopy BP.) \end{itemize} 
 
-Write down three ways of parameterising a tree-structured distribution; \begin{itemize}
-    \item $p(\mathcal{X}) = \frac{1}{z}\prod_{nodes i}f_i(X_i)\prod_{edges ij}f_{ij}(X_i, X_j)$ (undir tree)
-    \item $= p(X_r)\prod_{i \ne r} p(X_i|X_{pa(i)})$ (dir rooted tree)
-    \item $=\prod_{nodes i}p(X_i)\prod_{edges ij}\frac{p(X_i, X_j)}{p(X_i)p(X_j)}$ (pairwise marginals)
-\end{itemize}
+Write down three ways of parameterising a tree-structured distribution; \begin{itemize} \item $p(\mathcal{X}) = \frac{1}{z}\prod_{nodes i}f_i(X_i)\prod_{edges ij}f_{ij}(X_i, X_j)$ (undir tree) \item $= p(X_r)\prod_{i \ne r} p(X_i|X_{pa(i)})$ (dir rooted tree) \item $=\prod_{nodes i}p(X_i)\prod_{edges ij}\frac{p(X_i, X_j)}{p(X_i)p(X_j)}$ (pairwise marginals) \end{itemize}
 
-Is an undirected tree representation of a distribution unique?; \begin{itemize}
-    \item No - multiplying a factor $f_{ij}(X_i, X_j)$ by $g(X_i)$ and dividing $f_i(X_i)$ by the same $g(X_i)$ does not change the distribution.
-    \item Recall repr $p(\mathcal{X}) = \frac{1}{z}\prod_{nodes i}f_i(X_i)\prod_{edges ij}f_{ij}(X_i, X_j)$ (undir tree)
-\end{itemize}
+Is an undirected tree representation of a distribution unique?; \begin{itemize} \item No - multiplying a factor $f_{ij}(X_i, X_j)$ by $g(X_i)$ and dividing $f_i(X_i)$ by the same $g(X_i)$ does not change the distribution. \item Recall repr $p(\mathcal{X}) = \frac{1}{z}\prod_{nodes i}f_i(X_i)\prod_{edges ij}f_{ij}(X_i, X_j)$ (undir tree) \end{itemize}
 
-Briefly describe in words loopy BP as tree-based reparameterisation; (TODO rewrite? likely incomplete?) \begin{itemize}
-    \item BP can be seen as iterative replacement of $f_i(X_i)$ by the local marginal of $p_{ij}(X_i, X_j)$ (local as in $X_i, X_j$ indiv?)
-    \item along with the corresponding reparameterisation of $f_{ij}(X_i, X_j)$. (cf Hugin propagation)
-    \item Converged BP on a tree finds $p(X_i), p(X_i, X_j)$, allowing us to transform the repr from an undirected tree to pairwise marginals.
-\end{itemize}
+Briefly describe in words loopy BP as tree-based reparameterisation; (TODO rewrite? likely incomplete?) \begin{itemize} \item BP can be seen as iterative replacement of $f_i(X_i)$ by the local marginal of $p_{ij}(X_i, X_j)$ (local as in $X_i, X_j$ indiv?) \item along with the corresponding reparameterisation of $f_{ij}(X_i, X_j)$. (cf Hugin propagation) \item Converged BP on a tree finds $p(X_i), p(X_i, X_j)$, allowing us to transform the repr from an undirected tree to pairwise marginals. \end{itemize}
 
 % todo: add slides 11-14 (Loopy BP as tree-based reparam continued, bc now don't understand it that well)
 
-Briefly describe the Bethe free energy interpretation of Loopy BP (words only, no equations); \begin{itemize}
-    \item LBP as a set of fixed point equations for finding stationary points on the Bethe Free Energy
-\end{itemize}
+Briefly describe the Bethe free energy interpretation of Loopy BP (words only, no equations); \begin{itemize} \item LBP as a set of fixed point equations for finding stationary points on the Bethe Free Energy \end{itemize}
 
-State the constraints of locally consistent beliefs $b_i, b_{ij}$ in the Bethe free energy.; \begin{itemize}
-    \item $\sum_{x_i} b_i(x_i) = 1 \forall i$
-    \item $\sum_{x_i}b_{ij}(x_i, x_j) = b_i(x_i) \forall i, j \in ne(i), x_i$
-    \item $b_i \geq 0, b_{ij} \geq 0$
-\end{itemize}
+State the constraints of locally consistent beliefs $b_i, b_{ij}$ in the Bethe free energy.; \begin{itemize} \item $\sum_{x_i} b_i(x_i) = 1 \forall i$ \item $\sum_{x_i}b_{ij}(x_i, x_j) = b_i(x_i) \forall i, j \in ne(i), x_i$ \item $b_i \geq 0, b_{ij} \geq 0$ \end{itemize}
 
-Describe and state the equations for the Bethe free energy.; \begin{itemize}
-    \item $F_{bethe}(b) = E_{bethe}(b) + H_{bethe}(b)$, where
-    \item The Bethe average energy is the expected log-joint evaluated as though the pseudomarginals $b$ were correct \begin{itemize}
-        \item $E_{bethe}(b) = \sum_i \sum_{x_i} b_i(x_i)\log f_i(x_i) + \sum_{(ij)}\sum_{x_i, x_j} b_{ij}(x_i, x_j)\log f_{ij}(x_i, x_j)$
-    \end{itemize} 
-    \item The Bethe entropy is approximate: \begin{itemize}
-        \item it is the sum of the pseudomarginal entropies \item corrected for the pairwise (pseudo)interactions, \item but neglecting higher-order dependence:
-        \item $H_{bethe}(b) = \sum_i H[b_i] - \sum_{ij}KL[b_{ij}||b_ib_j]$
-        \item $=-\sum_i \sum_{x_i}b_i(x_i)\log b_i(x_i) - \sum_{(ij)}\sum_{x_i, x_j}b_{ij}(x_i, x_j)\log \frac{b_{ij}(x_i, x_j)}{b_i(x_i)b_j(x_j)}$
-    \end{itemize} 
-\end{itemize}
+Describe and state the equations for the Bethe free energy.; \begin{itemize} \item $F_{bethe}(b) = E_{bethe}(b) + H_{bethe}(b)$, where \item The Bethe average energy is the expected log-joint evaluated as though the pseudomarginals $b$ were correct \begin{itemize} \item $E_{bethe}(b) = \sum_i \sum_{x_i} b_i(x_i)\log f_i(x_i) + \sum_{(ij)}\sum_{x_i, x_j} b_{ij}(x_i, x_j)\log f_{ij}(x_i, x_j)$ \end{itemize}  \item The Bethe entropy is approximate: \begin{itemize} \item it is the sum of the pseudomarginal entropies \item corrected for the pairwise (pseudo)interactions, \item but neglecting higher-order dependence: \item $H_{bethe}(b) = \sum_i H[b_i] - \sum_{ij}KL[b_{ij}||b_ib_j]$ \item $=-\sum_i \sum_{x_i}b_i(x_i)\log b_i(x_i) - \sum_{(ij)}\sum_{x_i, x_j}b_{ij}(x_i, x_j)\log \frac{b_{ij}(x_i, x_j)}{b_i(x_i)b_j(x_j)}$ \end{itemize}  \end{itemize}
 
-What is the relationship between the Bethe free energy and the variational free energy on a tree?; \begin{itemize}
-    \item They are equal.
-    \item since both the beliefs and the Bethe entropy expression are correct.
-\end{itemize}
+What is the relationship between the Bethe free energy and the variational free energy on a tree?; \begin{itemize} \item They are equal. \item since both the beliefs and the Bethe entropy expression are correct. \end{itemize}
 
-How can we derive message updates in loopy BP from the Bethe energy?; \begin{itemize}
-    \item Finding the stationary points of a Lagrangian with local consistency and normalisation constraints.
-    \item i.e. max $F_{bethe}$ with constraints (vai Lagrange multipliers) $\sum_{x_i}b_i(x_i) = 1, \sum_{x_j}b_{ij}(x_i, x_j) = b_i(x_i)$ and similar for $j$.
-    \item The BP messages are related to the Lagrange multipliers
-    \item (todo could add more)
-\end{itemize}
+How can we derive message updates in loopy BP from the Bethe energy?; \begin{itemize} \item Finding the stationary points of a Lagrangian with local consistency and normalisation constraints. \item i.e. max $F_{bethe}$ with constraints (vai Lagrange multipliers) $\sum_{x_i}b_i(x_i) = 1, \sum_{x_j}b_{ij}(x_i, x_j) = b_i(x_i)$ and similar for $j$. \item The BP messages are related to the Lagrange multipliers \item (todo could add more) \end{itemize}
 
-Write out the Bethe free-energy Lagrangian.; $\mathcal{L} =$\begin{itemize}
-    \item $\sum_i \sum_{x_i} b_i(x_i)\log f_i(x_i) + \sum_{(ij)}\sum_{x_i, x_j} b_{ij}(x_i, x_j)\log f_{ij}(x_i, x_j)$ ($E_{bethe}$)
-    \item $-\sum_i \sum_{x_i}b_i(x_i)\log b_i(x_i) - \sum_{(ij)}\sum_{x_i, x_j}b_{ij}(x_i, x_j)\log \frac{b_{ij}(x_i, x_j)}{b_i(x_i)b_j(x_j)}$ ($H_{bethe}$)
-    \item $+\sum_i \xi_i (\sum_{x_i}b_i(x_i) - 1)$ (norm $\forall i$)
-    \item $+ \sum_{(ij)}[\sum_{x_i}\xi_{ij}(x_i)(\sum_{x_j}b_{ij}(x_i, x_j) - b_i(x_i)) + \sum_{x_j}\xi_{ji}(x_j)(\sum_{x_i}b_{ij}(x_i, x_j) - b_j(x_j))]$ (marginals $\forall i, j, x_i, x_j$)
-\end{itemize}
+Write out the Bethe free-energy Lagrangian.; $\mathcal{L} =$\begin{itemize} \item $\sum_i \sum_{x_i} b_i(x_i)\log f_i(x_i) + \sum_{(ij)}\sum_{x_i, x_j} b_{ij}(x_i, x_j)\log f_{ij}(x_i, x_j)$ ($E_{bethe}$) \item $-\sum_i \sum_{x_i}b_i(x_i)\log b_i(x_i) - \sum_{(ij)}\sum_{x_i, x_j}b_{ij}(x_i, x_j)\log \frac{b_{ij}(x_i, x_j)}{b_i(x_i)b_j(x_j)}$ ($H_{bethe}$) \item $+\sum_i \xi_i (\sum_{x_i}b_i(x_i) - 1)$ (norm $\forall i$) \item $+ \sum_{(ij)}[\sum_{x_i}\xi_{ij}(x_i)(\sum_{x_j}b_{ij}(x_i, x_j) - b_i(x_i)) + \sum_{x_j}\xi_{ji}(x_j)(\sum_{x_i}b_{ij}(x_i, x_j) - b_j(x_j))]$ (marginals $\forall i, j, x_i, x_j$) \end{itemize}
 
-State the Bethe fixed point equations; \begin{itemize}
-    \item $b_i(x_i) \propto f_i(x_i)\prod_{j\in ne(i)} e^{-\xi_{ij}(x_i)}$
-    \item $b_{ij}(x_i, x_j) \propto f_{ij}(x_i, x_j)b_i(x_i)b_j(x_j)e^{\xi_{ij}(x_i)}e^{\xi_{ji}(x_j)}$
-\end{itemize}
+State the Bethe fixed point equations; \begin{itemize} \item $b_i(x_i) \propto f_i(x_i)\prod_{j\in ne(i)} e^{-\xi_{ij}(x_i)}$ \item $b_{ij}(x_i, x_j) \propto f_{ij}(x_i, x_j)b_i(x_i)b_j(x_j)e^{\xi_{ij}(x_i)}e^{\xi_{ji}(x_j)}$ \end{itemize}
 
-Derive the BP message passing rules from the Bethe fixed point equations \begin{itemize}
-    \item $b_i(x_i) \propto f_i(x_i)\prod_{j\in ne(i)} e^{-\xi_{ij}(x_i)}$
-    \item $b_{ij}(x_i, x_j) \propto f_{ij}(x_i, x_j)b_i(x_i)b_j(x_j)e^{\xi_{ij}(x_i)}e^{\xi_{ji}(x_j)}$
-\end{itemize}.; \begin{itemize}
-    \item Comparison with BP suggests messages should have the form $M_{j\rightarrow i}(x_i) = e^{-\xi_{ij}(x_i)}$.
-    \item Solving for $\xi_{ij}(x_i)$ by enforcing the constraint $\sum_{x_j} b_{ij}(x_i, x_j) = b_i(x_i)$ we have
-    \item $\sum_{x_j} b_{ij}(x_i, x_j) \propto \sum_{x_j} f_{ij}(x_i, x_j)b_i(x_i)b_j(x_j)e^{\xi_{ij}(x_i)}e^{\xi_{ji}(x_j)}$
-    \item $\Rightarrow b_i(x_i) \propto b_i(x_i)e^{\xi_{ij}(x_i)}\sum_{x_j} f_{ij}(x_i, x_j)b_j(x_j)e^{\xi_{ji}(x_j)}$
-    \item $\Rightarrow e^{-\xi_{ij}(x_i)} \propto \sum_{x_j} f_{ij}(x_i, x_j)b_j(x_j)e^{\xi_{ji}(x_j)}$
-    \item $=\sum_{x_j} f_{ij}(x_i, x_j)f_j(x_j)\prod_{l\in ne(j)\backslash i}e^{\xi_{jl}(x_j)}$
-    \item $=\sum_{x_j} f_{ij}(x_i, x_j)f_j(x_j)\prod_{l\in ne(j)\backslash i}M_{l\rightarrow j}(x_j)$
-    \item thus recovering the BP message passing rules.
-\end{itemize}
+Derive the BP message passing rules from the Bethe fixed point equations \begin{itemize} \item $b_i(x_i) \propto f_i(x_i)\prod_{j\in ne(i)} e^{-\xi_{ij}(x_i)}$ \item $b_{ij}(x_i, x_j) \propto f_{ij}(x_i, x_j)b_i(x_i)b_j(x_j)e^{\xi_{ij}(x_i)}e^{\xi_{ji}(x_j)}$ \end{itemize}.; \begin{itemize} \item Comparison with BP suggests messages should have the form $M_{j\rightarrow i}(x_i) = e^{-\xi_{ij}(x_i)}$. \item Solving for $\xi_{ij}(x_i)$ by enforcing the constraint $\sum_{x_j} b_{ij}(x_i, x_j) = b_i(x_i)$ we have \item $\sum_{x_j} b_{ij}(x_i, x_j) \propto \sum_{x_j} f_{ij}(x_i, x_j)b_i(x_i)b_j(x_j)e^{\xi_{ij}(x_i)}e^{\xi_{ji}(x_j)}$ \item $\Rightarrow b_i(x_i) \propto b_i(x_i)e^{\xi_{ij}(x_i)}\sum_{x_j} f_{ij}(x_i, x_j)b_j(x_j)e^{\xi_{ji}(x_j)}$ \item $\Rightarrow e^{-\xi_{ij}(x_i)} \propto \sum_{x_j} f_{ij}(x_i, x_j)b_j(x_j)e^{\xi_{ji}(x_j)}$ \item $=\sum_{x_j} f_{ij}(x_i, x_j)f_j(x_j)\prod_{l\in ne(j)\backslash i}e^{\xi_{jl}(x_j)}$ \item $=\sum_{x_j} f_{ij}(x_i, x_j)f_j(x_j)\prod_{l\in ne(j)\backslash i}M_{l\rightarrow j}(x_j)$ \item thus recovering the BP message passing rules. \end{itemize}
 
-What is the relationship between stationary points of the Bethe free energy and loopy BP?; \begin{itemize}
-    \item Stationary points of Bethe free energy = fixed points of loopy BP.
-    \item Stable fixed points of loopy BP are local maxima of Bethe free energy. (note the negative definition of free energy for consistency with the variational free energy)
-\end{itemize}
+What is the relationship between stationary points of the Bethe free energy and loopy BP?; \begin{itemize} \item Stationary points of Bethe free energy = fixed points of loopy BP. \item Stable fixed points of loopy BP are local maxima of Bethe free energy. (note the negative definition of free energy for consistency with the variational free energy) \end{itemize}
 
 What do stable fixed points of loopy BP correspond to in the Bethe free energy?; Local maxima of Bethe FE.
 
-What does the Bethe energy at fixed points of loopy BP correspond to for binary attractive networks? What can we use it for?; \begin{itemize}
-    \item Upper bound on the log partition function $\log Z$.
-    \item Useful for learning undirected graphical models as it leads to a lower bound on the log likelihood.
-\end{itemize}
+What does the Bethe energy at fixed points of loopy BP correspond to for binary attractive networks? What can we use it for?; \begin{itemize} \item Upper bound on the log partition function $\log Z$. \item Useful for learning undirected graphical models as it leads to a lower bound on the log likelihood. \end{itemize}
 
 How do you interpret the Lagrange multipliers for the constraints $\xi$ in the Bethe fixed point equations?; Like log messages.
 
-What is the relationship between $b_i, b_{ij}$ in loopy BP and marginals of the implied joint?; \begin{itemize}
-    \item Beliefs $b_i, b_{ij}$ in loopy BP are only locally consistent pseudomarginals, \item not necessarily consistent marginals of the implied joint dist
-\end{itemize}
+What is the relationship between $b_i, b_{ij}$ in loopy BP and marginals of the implied joint?; \begin{itemize} \item Beliefs $b_i, b_{ij}$ in loopy BP are only locally consistent pseudomarginals, \item not necessarily consistent marginals of the implied joint dist \end{itemize}
 
-State one key difference between the assumptions of the Bethe free energy and the variational free energy.; \begin{itemize}
-    \item Bethe: accounts for interactions between different sites
-    \item Var free energy assumes independence
-    \item (var uses p, Bethe uses b)
-\end{itemize}
+State one key difference between the assumptions of the Bethe free energy and the variational free energy.; \begin{itemize} \item Bethe: accounts for interactions between different sites \item Var free energy assumes independence \item (var uses p, Bethe uses b) \end{itemize}
 
-Compare loopy BP and mean-field approximation (outline 3 or 4 key differences); \begin{itemize}
-    \item Beliefs $b_i, b_{ij}$ in loopy BP are only locally consistent pseudomarginals, not necessarily consistent marginals of the implied joint dist.
-    \item Bethe free energy accounts for interactions between different sites, while variational free energy assumes independence.
-    \item Loopy BP tends to be significantly more accurate whenever it converges.
-    (\item The loop series or Plefka expansion of the log partition function $Z$: \begin{itemize}
-        \item var: forms first order terms
-        \item Bethe: contains higher order terms (involving generalised loops))
-    \end{itemize}
-\end{itemize}
+Compare loopy BP and mean-field approximation (outline 3 or 4 key differences); \begin{itemize} \item Beliefs $b_i, b_{ij}$ in loopy BP are only locally consistent pseudomarginals, not necessarily consistent marginals of the implied joint dist. \item Bethe free energy accounts for interactions between different sites, while variational free energy assumes independence. \item Loopy BP tends to be significantly more accurate whenever it converges. (\item The loop series or Plefka expansion of the log partition function $Z$: \begin{itemize} \item var: forms first order terms \item Bethe: contains higher order terms (involving generalised loops)) \end{itemize} \end{itemize}
 
 % TODO: slides 21-22
-List at least two extensions and variations of loopy BP; \begin{itemize}
-    \item Generalised BP: group variables together to treat their interactions exactly
-    \item Convergent alternatives: fixed points of loopy BP are stationary points of the Bethe free energy. \begin{itemize}
-        \item We can also derive algorithms that increase the Bethe free energy at every step, and are thus guaranteed to converge.
-    \end{itemize}
-    \time Convex alternatives: We can derive convex cousins of the negative of the Bethe free energy. These give rise to algorithms that will converge to a unique global max.
-    \item We have considered sum-product loopy BP to compute marginals. The treatment of loopy Viterbi or max-product algorithms is different.
-\end{itemize}
+List at least two extensions and variations of loopy BP; \begin{itemize} \item Generalised BP: group variables together to treat their interactions exactly \item Convergent alternatives: fixed points of loopy BP are stationary points of the Bethe free energy. \begin{itemize} \item We can also derive algorithms that increase the Bethe free energy at every step, and are thus guaranteed to converge. \end{itemize} \time Convex alternatives: We can derive convex cousins of the negative of the Bethe free energy. These give rise to algorithms that will converge to a unique global max. \item We have considered sum-product loopy BP to compute marginals. The treatment of loopy Viterbi or max-product algorithms is different. \end{itemize}
 
 \end{document}

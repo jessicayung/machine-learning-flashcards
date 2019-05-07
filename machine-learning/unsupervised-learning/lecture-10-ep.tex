@@ -6,274 +6,85 @@
 \documentclass{article}
 \begin{document}
 
-Name five ways of approximating the forward messages on a latent chain model / NLSSM.; \begin{itemize}
-    \item Linearisation
-    \item Laplace filter: use mode and curvature of integrand (Hessian)
-    \item Sigma-point (`unscented' filter) \begin{itemize}
-        \item 'Fit' Gaussian to 2K+1 points $f(\hat{\mathbf{y}}_{t-1}), f(\hat{\mathbf{y}}_{t-1}\pm \sqrt{lambda}\mathbf{v})$ for evs, evectors $\hat{V}_{t-1}\mathbf{v}=\lambda\mathbf{v}$ (mode of pred and set of 1 sigma pts along major axes of cov, which are called sigma points)
-        \item (assumes msgs are Gaussian, like moment matching)
-        \item bc pts equivalent to numerical evaluation of mean and cov by Gaussian quadrature
-        \item (one form of assumed density filtering and EP)
-    \end{itemize}
-    \item Parametric variational: $\arg\min KL [N(\mathbf{\hat{y}}_t, \hat{V}_t)||\int dy_{t-1}...]$. \begin{itemize}
-        \item Requires Gaussian expectations of $\log \int$, so may be challenging.
-    \end{itemize}
-    \item EP: other KL: $\arg\min KL[\int  dy_{t-1} ||N(\hat{\mathbf{y}}_t, \hat{V}_t)]$, needs only first and second moments of nonlinear message.
-    \begin{itemize}
-        \item Like moment matching in a more iterative way
-    \end{itemize}
-    \item Latter two approaches more principled than linearisation: look for an approx q that is closest to posterior P in some sense: $q=\arg\min_{q\in\mathcal{Q}}D(P\leftrightarrow q)$: D and $\mathcal{Q}$ open choices.
-\end{itemize}
+Name five ways of approximating the forward messages on a latent chain model / NLSSM.; \begin{itemize} \item Linearisation \item Laplace filter: use mode and curvature of integrand (Hessian) \item Sigma-point (`unscented' filter) \begin{itemize} \item 'Fit' Gaussian to 2K+1 points $f(\hat{\mathbf{y}}_{t-1}), f(\hat{\mathbf{y}}_{t-1}\pm \sqrt{lambda}\mathbf{v})$ for evs, evectors $\hat{V}_{t-1}\mathbf{v}=\lambda\mathbf{v}$ (mode of pred and set of 1 sigma pts along major axes of cov, which are called sigma points) \item (assumes msgs are Gaussian, like moment matching) \item bc pts equivalent to numerical evaluation of mean and cov by Gaussian quadrature \item (one form of assumed density filtering and EP) \end{itemize} \item Parametric variational: $\arg\min KL [N(\mathbf{\hat{y}}_t, \hat{V}_t)||\int dy_{t-1}...]$. \begin{itemize} \item Requires Gaussian expectations of $\log \int$, so may be challenging. \end{itemize} \item EP: other KL: $\arg\min KL[\int  dy_{t-1} ||N(\hat{\mathbf{y}}_t, \hat{V}_t)]$, needs only first and second moments of nonlinear message. \begin{itemize} \item Like moment matching in a more iterative way \end{itemize} \item Latter two approaches more principled than linearisation: look for an approx q that is closest to posterior P in some sense: $q=\arg\min_{q\in\mathcal{Q}}D(P\leftrightarrow q)$: D and $\mathcal{Q}$ open choices. \end{itemize}
 
 % from s7 The other KL.
-Discuss in what ways minimising KL(p||q) may or may not be `correct'; TODO \begin{itemize}
-    \item 'for a factored approx the clique marginals obtained by minimising this KL are correct': $\arg\min_{q_i} KL[P(\mathcal{Y}|\mathcal{X}||\prod q_j(\mathcal{Y}_j|\mathcal{X})]=P(\mathcal{Y}_i|\mathcal{X})$
-    \item If do exactly, while (1) may lose correl (??) bc of factored fn,
-    \item marginals are exact
-\end{itemize} 
+Discuss in what ways minimising KL(p||q) may or may not be `correct'; TODO \begin{itemize} \item 'for a factored approx the clique marginals obtained by minimising this KL are correct': $\arg\min_{q_i} KL[P(\mathcal{Y}|\mathcal{X}||\prod q_j(\mathcal{Y}_j|\mathcal{X})]=P(\mathcal{Y}_i|\mathcal{X})$ \item If do exactly, while (1) may lose correl (??) bc of factored fn, \item marginals are exact \end{itemize} 
 
-Show that for a factored approximation, the clique marginals obtained by minimising $KL(p||q)$ are correct; i.e. show $\arg\min_{q_i} KL[P(\mathcal{Y}|\mathcal{X}||\prod q_j(\mathcal{Y}_j|\mathcal{X})]=P(\mathcal{Y}_i|\mathcal{X})$. Steps: \begin{itemize}
-    \item $\arg\min_{q_i}-\int d\mathcal{Y}P(\mathcal{Y}|\mathcal{X})\log \prod_iq_j(\mathcal{Y}_j|\mathcal{X})$
-    \begin{itemize}
-        \item Assume corr to cliques, not necc of joint?
-    \end{itemize}
-    \item $\arg\min_{q_i}-\sum_j \int d\mathcal{Y}P(\mathcal{Y}|\mathcal{X})\log q_j(\mathcal{Y}_j|\mathcal{X})$
-    \item $\arg\min_{q_i}-\int d\mathcal{Y_i}P(\mathcal{Y_i}|\mathcal{X})\log q_i(\mathcal{Y}_i|\mathcal{X})$
-    \begin{itemize}
-        \item bc expectation only depends on $\mathcal{Y}_i$ terms
-        \item doesn't necc assume $P(\mathcal{Y}|\mathcal{X})$ factors, just integrate over the rest?
-    \end{itemize}
-    \item (so finding the best q for this KL is intractable.)
-\end{itemize}
+Show that for a factored approximation, the clique marginals obtained by minimising $KL(p||q)$ are correct; i.e. show $\arg\min_{q_i} KL[P(\mathcal{Y}|\mathcal{X}||\prod q_j(\mathcal{Y}_j|\mathcal{X})]=P(\mathcal{Y}_i|\mathcal{X})$. Steps: \begin{itemize} \item $\arg\min_{q_i}-\int d\mathcal{Y}P(\mathcal{Y}|\mathcal{X})\log \prod_iq_j(\mathcal{Y}_j|\mathcal{X})$ \begin{itemize} \item Assume corr to cliques, not necc of joint? \end{itemize} \item $\arg\min_{q_i}-\sum_j \int d\mathcal{Y}P(\mathcal{Y}|\mathcal{X})\log q_j(\mathcal{Y}_j|\mathcal{X})$ \item $\arg\min_{q_i}-\int d\mathcal{Y_i}P(\mathcal{Y_i}|\mathcal{X})\log q_i(\mathcal{Y}_i|\mathcal{X})$ \begin{itemize} \item bc expectation only depends on $\mathcal{Y}_i$ terms \item doesn't necc assume $P(\mathcal{Y}|\mathcal{X})$ factors, just integrate over the rest? \end{itemize} \item (so finding the best q for this KL is intractable.) \end{itemize}
 
 How can we find $q=\arg\min KL(p||q)$?; it's intractable.
 
-Write the posterior distribution in a graphical model as a (normalised) product of factors.;\begin{itemize}
-    \item  $P(\mathcal{Y}|\mathcal{X})=\frac{P(\mathcal{Y}, \mathcal{X})}{P(\mathcal{X})}=\frac{1}{Z}\prod_i P(Y_i|pa(Y_i))\propto \prod_{i=1}^N f_i(\mathcal{Y}_i)$.
-    \item where the $\mathcal{Y}_i$ are not necessarily disjoint.
-\end{itemize}
+Write the posterior distribution in a graphical model as a (normalised) product of factors.;\begin{itemize} \item  $P(\mathcal{Y}|\mathcal{X})=\frac{P(\mathcal{Y}, \mathcal{X})}{P(\mathcal{X})}=\frac{1}{Z}\prod_i P(Y_i|pa(Y_i))\propto \prod_{i=1}^N f_i(\mathcal{Y}_i)$. \item where the $\mathcal{Y}_i$ are not necessarily disjoint. \end{itemize} 
 
 What are sites in EP?; Factors.
 
 What is the form of $q$ in EP?; $q(\mathcal{Y}):=\prod_{i=1}^N\tilde{f}_i(\mathcal{Y}_i)$, where $f_i$ are factors/sites. $\tilde{f}_i$ are approximated $f_i$.
 
-What do we minimise in EP to get $q$? Describe the intuition behind it.; \begin{itemize}
-    \item $\arg\min_{\tilde{f}_i}KL[f_i(\mathcal{Y}_i)\prod_{j\ne i}\tilde{f}_j(\mathcal{Y}_j)||\tilde{f}_i(\mathcal{Y}_i)\prod_{j\ne i}\tilde{f_j}(\mathcal{Y}_j)]$
-    \item $=\arg\min_{\tilde{f}_i}KL[f_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y})||\tilde{f}_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y})]$
-    \item local (opt $\tilde{f}_i$ each time), contextual (prod with other ests $\tilde{f}_j$): iterative, accurate
-    \item intuition: obs in one clique may say bump is at X, whereas all  other cliques may say bump is at Y, should factor that in.
-\end{itemize}
+What do we minimise in EP to get $q$? Describe the intuition behind it.; \begin{itemize} \item $\arg\min_{\tilde{f}_i}KL[f_i(\mathcal{Y}_i)\prod_{j\ne i}\tilde{f}_j(\mathcal{Y}_j)||\tilde{f}_i(\mathcal{Y}_i)\prod_{j\ne i}\tilde{f_j}(\mathcal{Y}_j)]$ \item $=\arg\min_{\tilde{f}_i}KL[f_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y})||\tilde{f}_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y})]$ \item local (opt $\tilde{f}_i$ each time), contextual (prod with other ests $\tilde{f}_j$): iterative, accurate \item intuition: obs in one clique may say bump is at X, whereas all  other cliques may say bump is at Y, should factor that in. \end{itemize}  
 
-Describe the two ideas behind EP.; \begin{itemize}
-    \item E: Approximation of factors: \begin{itemize}
-        \item Usually by `projection' to exponential families (proj bc info geom view of expfams)
-        \item This involves finding expected sufficient statistics, hence expectation
-    \end{itemize}
-    \item P: Local $(KL(p||q))$ divergence minimisation in the context of other factors (This leads to a message passing appraoch, hence propagation)
-\end{itemize}
+Describe the two ideas behind EP.; \begin{itemize} \item E: Approximation of factors: \begin{itemize} \item Usually by `projection' to exponential families (proj bc info geom view of expfams) \item This involves finding expected sufficient statistics, hence expectation \end{itemize} \item P: Local $(KL(p||q))$ divergence minimisation in the context of other factors (This leads to a message passing appraoch, hence propagation) \end{itemize}
 
-Simplify $\arg\min_{\tilde{f}_i}KL[f_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y})||\tilde{f}_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y})]$; \begin{itemize}
-    \item $=\arg\max_{\tilde{f}_i} \int d\mathcal{Y}_i d\mathcal{Y}_{\neg i} f_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y})\log \tilde{f}_i(\mathcal{Y}_i) q_{\neg i}(\mathcal{Y})$
-    \item $=\arg\max_{\tilde{f}_i} \int d\mathcal{Y}_i d\mathcal{Y}_{\neg i} f_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y}_{\neg i}|\mathcal{Y}_i)(\log \tilde{f}_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y}_i)+\log q_{\neg i}(\mathcal{Y}_{\neg i}|\mathcal{Y}_i))$
-    \item $=\arg\max_{\tilde{f}_i} \int d\mathcal{Y}_i f_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y}_i)(\log \tilde{f}_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y}_i)) \int d\mathcal{Y}_{\neg i} q_{\neg i}(\mathcal{Y}_{\neg i}|\mathcal{Y}_i)$
-    \item $=\arg\min_{\tilde{f}_i}KL[f_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y}_i)||\tilde{f}_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y}_i)]$
-\end{itemize}
+Simplify $\arg\min_{\tilde{f}_i}KL[f_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y})||\tilde{f}_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y})]$; \begin{itemize} \item $=\arg\max_{\tilde{f}_i} \int d\mathcal{Y}_i d\mathcal{Y}_{\neg i} f_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y})\log \tilde{f}_i(\mathcal{Y}_i) q_{\neg i}(\mathcal{Y})$ \item $=\arg\max_{\tilde{f}_i} \int d\mathcal{Y}_i d\mathcal{Y}_{\neg i} f_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y}_{\neg i}|\mathcal{Y}_i)(\log \tilde{f}_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y}_i)+\log q_{\neg i}(\mathcal{Y}_{\neg i}|\mathcal{Y}_i))$ \item $=\arg\max_{\tilde{f}_i} \int d\mathcal{Y}_i f_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y}_i)(\log \tilde{f}_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y}_i)) \int d\mathcal{Y}_{\neg i} q_{\neg i}(\mathcal{Y}_{\neg i}|\mathcal{Y}_i)$ \item $=\arg\min_{\tilde{f}_i}KL[f_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y}_i)||\tilde{f}_i(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y}_i)]$ \end{itemize}
 
 What is the cavity distribution in EP?; $q_{\neg i}(\mathcal{Y}_i)$
 
-Write the EP algorithm in pseudocode.; \begin{itemize}
-    \item Input $f_1(\mathcal{Y}_1), ..., f_N(\mathcal{Y}_N)$
-    \item Initialise $\tilde{f}_1(\mathcal{Y}_1)=\arg\min_{f\in\{\tilde{f}\}} KL[\bar{f}_1(\mathcal{Y}_1||f_1(\mathcal{Y}_1)], \tilde{f}_i(\mathcal{Y}_i)=1$ for $i>1, q(\mathcal{Y})\propto\prod_i\tilde{f}_i(\mathcal{Y}_i)$.
-    \begin{itemize}
-        \item first term $\bar{f}_1$ is fixed, true one. Latter $f$ is one to opt over.
-        \item init to be uniform
-    \end{itemize}
-    \item repeat
-    \begin{itemize}
-        \item for $i=1,...,N$ do
-        \begin{itemize}
-            \item Delete $q_{\neg i}(\mathcal{Y})\leftarrow \frac{q(\mathcal{Y}}{\tilde{f}_i(\mathcal{Y}_i)}=\prod_{j\ne i}\tilde{f}_j(\mathcal{Y}_j)$
-            \item Project $\tilde{f}_i^{new}(\mathcal{Y})\leftarrow \arg\min_{f\in \{\tilde{f}\}} KL[f_i(\mathcal{Y}_iq_{\neg i}(\mathcal{Y}_i)||f(\mathcal{Y}_iq_{\neg i}(\mathcal{Y}_i)]$
-            \item Include: $q(\mathcal{Y}_i)\leftarrow \tilde{f}_i^{new}(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y})$
-        \end{itemize}
-        \item end for
-    \end{itemize}
-    \item until convergence
-\end{itemize}
+Write the EP algorithm in pseudocode.; \begin{itemize} \item Input $f_1(\mathcal{Y}_1), ..., f_N(\mathcal{Y}_N)$ \item Initialise $\tilde{f}_1(\mathcal{Y}_1)=\arg\min_{f\in\{\tilde{f}\}} KL[\bar{f}_1(\mathcal{Y}_1||f_1(\mathcal{Y}_1)], \tilde{f}_i(\mathcal{Y}_i)=1$ for $i>1, q(\mathcal{Y})\propto\prod_i\tilde{f}_i(\mathcal{Y}_i)$. \begin{itemize} \item first term $\bar{f}_1$ is fixed, true one. Latter $f$ is one to opt over. \item init to be uniform \end{itemize} \item repeat \begin{itemize} \item for $i=1,...,N$ do \begin{itemize} \item Delete $q_{\neg i}(\mathcal{Y})\leftarrow \frac{q(\mathcal{Y}}{\tilde{f}_i(\mathcal{Y}_i)}=\prod_{j\ne i}\tilde{f}_j(\mathcal{Y}_j)$ \item Project $\tilde{f}_i^{new}(\mathcal{Y})\leftarrow \arg\min_{f\in \{\tilde{f}\}} KL[f_i(\mathcal{Y}_iq_{\neg i}(\mathcal{Y}_i)||f(\mathcal{Y}_iq_{\neg i}(\mathcal{Y}_i)]$ \item Include: $q(\mathcal{Y}_i)\leftarrow \tilde{f}_i^{new}(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y})$ \end{itemize} \item end for \end{itemize} \item until convergence \end{itemize}
 
-How can we calculate $q_{\neg i}(\mathcal{Y}_i)$ in EP more efficiently?; \begin{itemize}
-    \item break down into $\prod_{j\in ne(i)}M_{j\rightarrow i}(\mathcal{Y}_j \cap \mathcal{Y}_i)$
-    \item i.e. prod of terms from each neighbouring clique
-    \item (once the $i$th site has been approximated, the messages can be passed on to neighbouring cliques by marginalising the shared variables.
-    \item so don't have to marginalise over each combo of vars
-    \item TODO: not sure if there is a better ans to this q
-\end{itemize}
+How can we calculate $q_{\neg i}(\mathcal{Y}_i)$ in EP more efficiently?; \begin{itemize} \item break down into $\prod_{j\in ne(i)}M_{j\rightarrow i}(\mathcal{Y}_j \cap \mathcal{Y}_i)$ \item i.e. prod of terms from each neighbouring clique \item (once the $i$th site has been approximated, the messages can be passed on to neighbouring cliques by marginalising the shared variables. \item so don't have to marginalise over each combo of vars \item TODO: not sure if there is a better ans to this q \end{itemize}
 
-Break down the cavity distribution $q_{\neg i}(\mathcal{Y}_i)$ in a tree; \begin{itemize}
-    \item $q_{\neg i}(\mathcal{Y}_i) = \prod_{j\in ne(i)}M_{j\rightarrow i}(\mathcal{Y}_j \cap \mathcal{Y}_i)$
-    \item i.e. prod of terms from each neighbouring clique
-    \item (once the $i$th site has been approximated, the messages can be passed on to neighbouring cliques by marginalising the shared variables.
-\end{itemize}
+Break down the cavity distribution $q_{\neg i}(\mathcal{Y}_i)$ in a tree; \begin{itemize} \item $q_{\neg i}(\mathcal{Y}_i) = \prod_{j\in ne(i)}M_{j\rightarrow i}(\mathcal{Y}_j \cap \mathcal{Y}_i)$ \item i.e. prod of terms from each neighbouring clique \item (once the $i$th site has been approximated, the messages can be passed on to neighbouring cliques by marginalising the shared variables. \end{itemize}
 
 Is loopy BP (using cavity distributions as in EP) guaranteed to converge?; No.
 
-In loopy graphs, what does $q_{\neg i}(\mathcal{Y}_i)$ become?; \begin{itemize}
-    \item Recall $q_{\neg i}(\mathcal{Y}_i) = \prod_{j\in ne(i)}M_{j\rightarrow i}(\mathcal{Y}_j \cap \mathcal{Y}_i)$
-    \item becomes an approx to the true cavity distribution (or we can recast the approx directly in terms of messages, see a later lecture
-    \item (For some approx e.g. Gaussian, may be able to compute true loopy cavity using approx sites, even if computing exact messages would have been intractable.)
-\end{itemize}
+In loopy graphs, what does $q_{\neg i}(\mathcal{Y}_i)$ become?; \begin{itemize} \item Recall $q_{\neg i}(\mathcal{Y}_i) = \prod_{j\in ne(i)}M_{j\rightarrow i}(\mathcal{Y}_j \cap \mathcal{Y}_i)$ \item becomes an approx to the true cavity distribution (or we can recast the approx directly in terms of messages, see a later lecture \item (For some approx e.g. Gaussian, may be able to compute true loopy cavity using approx sites, even if computing exact messages would have been intractable.) \end{itemize} 
 
 % TODO s13: EP for a NLSSM equations, s14 more on that
 
-Describe EP for a NLSSM; \begin{itemize}
-    \item Put $y_t, y_{t-1}, x_t$ in the same factor.
-    \item Let $P(\mathbf{y_i|y_{i-1}}) = \phi_i(\mathbf{y_i, y_{i-1}}), P(\mathbf{x_i|y_i}) = \phi_i(\mathbf{y_i})$. Then $f_i(\mathbf{y_i, y_{i-1}}) = \phi_i(\mathbf{y_i, y_{i-1}})\phi_i(\mathbf{y_i})$. As $\phi_i$ and $\psi_i$ are non-linear, inference is not generally tractable.
-    \item Assume $\tilde{f}_i(\mathbf{y_i, y_{i-1}})$ is Gaussian. Then find form of $q_{\neg i}(\mathbf{y_i, y_{i-1}}) = \alpha_{i-1}(\mathbf{y_{i-1}})\beta_i(\mathbf{y}_i)$, with both $\alpha, \beta$ Gaussian. \begin{itemize}
-        \item steps: $=\int_{\mathbf{y_{1:i-2, i+1:n}}} \prod_{i'\ne i}\tilde{f}_{i'}(\mathbf{y_{i'}, y_{i'-1}})$
-        \item $=\int_{\mathbf{y_{1:i-2}}} \prod_{i< i}\tilde{f}_{i'}(\mathbf{y_{i'}, y_{i'-1}}) \int_{\mathbf{y_{i+1:n}}} \prod_{i'> i}\tilde{f}_{i'}(\mathbf{y_{i'}, y_{i'-1}})$
-    \end{itemize}
-    \item $\tilde{f}_i(\mathbf{y_i, y_{i-1}}) = \arg\min_{f\in N} KL[\phi_i(\mathbf{y_i, y_{i-1}})\psi_i(\mathbf{y_i})\alpha_{i-1}(\mathbf{y_{i-1}})\beta_i(\mathbf{y_i}) || f(\mathbf{y_i, y_{i-1}})\alpha_{i-1}(\mathbf{y_{i-1}})\beta_i(\mathbf{y}_i)]$
-    \item update $\alpha, \beta, \tilde{P}, \tilde{f}$. \begin{itemize}
-        \item $\tilde{f}_i(\mathbf{y_i, y_{i-1}}) = \frac{\tilde{P}(\mathbf{y_{i-1}, y_i})}{\alpha_{i-1}(\mathbf{y_{i-1}})\beta_i(\mathbf{y_i})}$
-    \end{itemize} 
-\end{itemize}
+Describe EP for a NLSSM; \begin{itemize} \item Put $y_t, y_{t-1}, x_t$ in the same factor. \item Let $P(\mathbf{y_i|y_{i-1}}) = \phi_i(\mathbf{y_i, y_{i-1}}), P(\mathbf{x_i|y_i}) = \phi_i(\mathbf{y_i})$. Then $f_i(\mathbf{y_i, y_{i-1}}) = \phi_i(\mathbf{y_i, y_{i-1}})\phi_i(\mathbf{y_i})$. As $\phi_i$ and $\psi_i$ are non-linear, inference is not generally tractable. \item Assume $\tilde{f}_i(\mathbf{y_i, y_{i-1}})$ is Gaussian. Then find form of $q_{\neg i}(\mathbf{y_i, y_{i-1}}) = \alpha_{i-1}(\mathbf{y_{i-1}})\beta_i(\mathbf{y}_i)$, with both $\alpha, \beta$ Gaussian. \begin{itemize} \item steps: $=\int_{\mathbf{y_{1:i-2, i+1:n}}} \prod_{i'\ne i}\tilde{f}_{i'}(\mathbf{y_{i'}, y_{i'-1}})$ \item $=\int_{\mathbf{y_{1:i-2}}} \prod_{i< i}\tilde{f}_{i'}(\mathbf{y_{i'}, y_{i'-1}}) \int_{\mathbf{y_{i+1:n}}} \prod_{i'> i}\tilde{f}_{i'}(\mathbf{y_{i'}, y_{i'-1}})$ \end{itemize} \item $\tilde{f}_i(\mathbf{y_i, y_{i-1}}) = \arg\min_{f\in N} KL[\phi_i(\mathbf{y_i, y_{i-1}})\psi_i(\mathbf{y_i})\alpha_{i-1}(\mathbf{y_{i-1}})\beta_i(\mathbf{y_i}) || f(\mathbf{y_i, y_{i-1}})\alpha_{i-1}(\mathbf{y_{i-1}})\beta_i(\mathbf{y}_i)]$ \item update $\alpha, \beta, \tilde{P}, \tilde{f}$. \begin{itemize} \item $\tilde{f}_i(\mathbf{y_i, y_{i-1}}) = \frac{\tilde{P}(\mathbf{y_{i-1}, y_i})}{\alpha_{i-1}(\mathbf{y_{i-1}})\beta_i(\mathbf{y_i})}$ \end{itemize}  \end{itemize}
 
-Derive the EP message update for $\alpha$; \begin{itemize}
-    \item $\alpha_i(\mathbf{y_i}) = \int_{\mathbf{y_{1:i-1}}} \int \prod_{i'<i+1} \tilde{f}_{i'}(\mathbf{y_{i'}, \mathbf{y}_{i'-1}}) 
-    $
-    \item $= \int_{\mathbf{y_{i-1}}}\alpha_{i-1}(\mathbf{y_{i-1}})\tilde{f}_i(\mathbf{y_i, y_{i-1}})$
-    \item $= \frac{1}{\beta_i(\mathbf{y}_i)}\int_{y_{i-1}}\tilde{P}(\mathbf{y_{i-1},y_i})$.
-    \item (Recall $\tilde{f}_i(\mathbf{y_i, y_{i-1}}) = \frac{\tilde{P}(\mathbf{y_{i-1}, y_i})}{\alpha_{i-1}(\mathbf{y_{i-1}})\beta_i(\mathbf{y_i})}$)
-\end{itemize} 
+Derive the EP message update for $\alpha$; \begin{itemize} \item $\alpha_i(\mathbf{y_i}) = \int_{\mathbf{y_{1:i-1}}} \int \prod_{i'<i+1} \tilde{f}_{i'}(\mathbf{y_{i'}, \mathbf{y}_{i'-1}})  $ \item $= \int_{\mathbf{y_{i-1}}}\alpha_{i-1}(\mathbf{y_{i-1}})\tilde{f}_i(\mathbf{y_i, y_{i-1}})$ \item $= \frac{1}{\beta_i(\mathbf{y}_i)}\int_{y_{i-1}}\tilde{P}(\mathbf{y_{i-1},y_i})$. \item (Recall $\tilde{f}_i(\mathbf{y_i, y_{i-1}}) = \frac{\tilde{P}(\mathbf{y_{i-1}, y_i})}{\alpha_{i-1}(\mathbf{y_{i-1}})\beta_i(\mathbf{y_i})}$) \end{itemize} 
 
-Derive the EP message update for $\beta$; \begin{itemize}
-    \item $\beta_{i-1}(\mathbf{y_{i-1}}) = \int_{\mathbf{y_{i:n}}} \int \prod_{i'>i} \tilde{f}_{i'}(\mathbf{y_{i'}, \mathbf{y}_{i'-1}}) 
-    $
-    \item $= \int_{\mathbf{y_{i}}}\beta_{i}(\mathbf{y_{i}})\tilde{f}_i(\mathbf{y_i, y_{i-1}})$
-    \item $= \frac{1}{\alpha_{i-1}(\mathbf{y}_{i-1})}\int_{y_{i}}\tilde{P}(\mathbf{y_{i-1},y_i})$.
-    \item (Recall $\tilde{f}_i(\mathbf{y_i, y_{i-1}}) = \frac{\tilde{P}(\mathbf{y_{i-1}, y_i})}{\alpha_{i-1}(\mathbf{y_{i-1}})\beta_i(\mathbf{y_i})}$)
-\end{itemize} 
+Derive the EP message update for $\beta$; \begin{itemize} \item $\beta_{i-1}(\mathbf{y_{i-1}}) = \int_{\mathbf{y_{i:n}}} \int \prod_{i'>i} \tilde{f}_{i'}(\mathbf{y_{i'}, \mathbf{y}_{i'-1}})  $ \item $= \int_{\mathbf{y_{i}}}\beta_{i}(\mathbf{y_{i}})\tilde{f}_i(\mathbf{y_i, y_{i-1}})$ \item $= \frac{1}{\alpha_{i-1}(\mathbf{y}_{i-1})}\int_{y_{i}}\tilde{P}(\mathbf{y_{i-1},y_i})$. \item (Recall $\tilde{f}_i(\mathbf{y_i, y_{i-1}}) = \frac{\tilde{P}(\mathbf{y_{i-1}, y_i})}{\alpha_{i-1}(\mathbf{y_{i-1}})\beta_i(\mathbf{y_i})}$) \end{itemize} 
 
-Derive the EP message updates for $\tilde{f}, \tilde{P}$. Assume you know $\alpha, \beta$.; \begin{itemize}
-    \item $\tilde{f}_i(\mathbf{y_i, y_{i-1}}) = \frac{\tilde{P}(\mathbf{y_{i-1}, y_i})}{\alpha_{i-1}(\mathbf{y_{i-1}})\beta_i(\mathbf{y_i})}$
-\end{itemize}
+Derive the EP message updates for $\tilde{f}, \tilde{P}$. Assume you know $\alpha, \beta$.; \begin{itemize} \item $\tilde{f}_i(\mathbf{y_i, y_{i-1}}) = \frac{\tilde{P}(\mathbf{y_{i-1}, y_i})}{\alpha_{i-1}(\mathbf{y_{i-1}})\beta_i(\mathbf{y_i})}$ \end{itemize}
 
-How do you find q to minimise $KL(p(x)||q(x))$ when q is an exponential family  distribution?; \begin{itemize}
-    \item Let $q(x) = \frac{1}{Z(\theta)}e^{T(x)\cdot\theta}$. Then
-    \item $\arg\min_q KL[p(x)||q(x)] = \arg\min_{\theta} KL[p(x)||\frac{1}{Z(\theta)e^{T(x)\dcdot\theta}}]$
-    \item $= \arg\min_{\theta} - \int dx p(x) \log \frac{1}{Z(\theta)}e^{T(x)\cdot\theta}$
-    \item $= \arg\min_{\theta} - \int dx p(x)T(x)\cdot \theta + \log Z(\theta)$
-    \item $\frac{\partial}{\partial \theta} = \int dx p(x) T(x) + \frac{1}{Z(\theta)}\int dx e^{T(x)\cdot \theta} T(x)$
-    \item $= -\langle T(x) \rangle_p + \frac{1}{Z(\theta)}\int dx e^{T(x)\cdot \theta} T(x)$
-    \item $ = - \langle T(x)\rangle_p + \langle T(x) \rangle_q$.
-    \item so the minimum is found by matching sufficient stats. This is usually moment matching.
-\end{itemize}
+How do you find q to minimise $KL(p(x)||q(x))$ when q is an exponential family  distribution?; \begin{itemize} \item Let $q(x) = \frac{1}{Z(\theta)}e^{T(x)\cdot\theta}$. Then \item $\arg\min_q KL[p(x)||q(x)] = \arg\min_{\theta} KL[p(x)||\frac{1}{Z(\theta)e^{T(x)\dcdot\theta}}]$ \item $= \arg\min_{\theta} - \int dx p(x) \log \frac{1}{Z(\theta)}e^{T(x)\cdot\theta}$ \item $= \arg\min_{\theta} - \int dx p(x)T(x)\cdot \theta + \log Z(\theta)$ \item $\frac{\partial}{\partial \theta} = \int dx p(x) T(x) + \frac{1}{Z(\theta)}\int dx e^{T(x)\cdot \theta} T(x)$ \item $= -\langle T(x) \rangle_p + \frac{1}{Z(\theta)}\int dx e^{T(x)\cdot \theta} T(x)$ \item $ = - \langle T(x)\rangle_p + \langle T(x) \rangle_q$. \item so the minimum is found by matching sufficient stats. This is usually moment matching. \end{itemize}
 
 
-How do we calculate $\langle T(x) \rangle_p$ for EP?; \begin{itemize}
-    \item Often analytically tractable, 
-    \item but even if not, requires a relatively low dim integral 
-    \item (Numerical issues: mostly lack of posdef-ness)
-    \item can use \begin{itemize}
-        \item (1) Quadrature methods or 
-        \begin{itemize}
-            \item Classical Gaussian (not to do with dist) quadrature gives an iterative version of sigma-point methods
-            \item posdef joints, but not guaranteed posdef messages -> can skip non-posdef steps or damp msgs by interpolation or exponentiating to power < 1. (TODO how does exp/interpolating help?)
-            \item other quadrature methods like GP quadrature may be more accurate and  may allow formal constraint to posdef cone.
-        \end{itemize}
-        \item (2) Laplace approx: as long as msgs remain posdef, will converge to global Laplace approx
-    \end{itemize}
-\end{itemize}
+How do we calculate $\langle T(x) \rangle_p$ for EP?; \begin{itemize} \item Often analytically tractable,  \item but even if not, requires a relatively low dim integral  \item (Numerical issues: mostly lack of posdef-ness) \item can use \begin{itemize} \item (1) Quadrature methods or  \begin{itemize} \item Classical Gaussian (not to do with dist) quadrature gives an iterative version of sigma-point methods \item posdef joints, but not guaranteed posdef messages -> can skip non-posdef steps or damp msgs by interpolation or exponentiating to power < 1. (TODO how does exp/interpolating help?) \item other quadrature methods like GP quadrature may be more accurate and  may allow formal constraint to posdef cone. \end{itemize} \item (2) Laplace approx: as long as msgs remain posdef, will converge to global Laplace approx \end{itemize} \end{itemize}
 
 What does a GP provide a prior over?; Functions.
 
 % TODO: s16-18 EP for GP classification
-Describe how to use EP for Gaussian Process classification.; \begin{itemize}
-    \item Write the GP joint on $g_i, y_i$ as a factor graph: $P(g_{1:n}, y_{1:n}) = f_0(\mathcal{G})\prod_i f_i(g_i) = N(g_{1:n}|\mathbf{0}, K) \prod_i N(y_i|g_i, \sigma^2_i)$
-    \item EP: approx non-Gaussian $f_i(g_i)$ by Gaussian $\tilde{f}_i(g_i) = N(g_i | \tilde{\mu}_i, \tilde{\phi}^2_i)$
-    \item Construct $q_{\neg i}(g_i) \sim N(dist on i | dist on \neg i)$
-    \item EP updates: $\tilde{f}_i^{new}(g_i) = N(E_{q_{\neg i}(g_i)f_i(g_i)}[g], Var_{q_{\neg i}(g_i)f_i(g_i)}[g])/q_{\neg i}(g_i)$
-    \item Make preds when approx site potentials $\tilde{f}_i(g_i)$ have stabilised: 
-    \item $P(y'|x', \mathcal{D}) = P(y', g)$ integrating out g, $g\sim p(x'|X)$ (cond Gaussian, $K_{BB} = K_{XX} + \tilde{\Psi}$),  
-\end{itemize}
+Describe how to use EP for Gaussian Process classification.; \begin{itemize} \item Write the GP joint on $g_i, y_i$ as a factor graph: $P(g_{1:n}, y_{1:n}) = f_0(\mathcal{G})\prod_i f_i(g_i) = N(g_{1:n}|\mathbf{0}, K) \prod_i N(y_i|g_i, \sigma^2_i)$ \item EP: approx non-Gaussian $f_i(g_i)$ by Gaussian $\tilde{f}_i(g_i) = N(g_i | \tilde{\mu}_i, \tilde{\phi}^2_i)$ \item Construct $q_{\neg i}(g_i) \sim N(dist on i | dist on \neg i)$ \item EP updates: $\tilde{f}_i^{new}(g_i) = N(E_{q_{\neg i}(g_i)f_i(g_i)}[g], Var_{q_{\neg i}(g_i)f_i(g_i)}[g])/q_{\neg i}(g_i)$ \item Make preds when approx site potentials $\tilde{f}_i(g_i)$ have stabilised:  \item $P(y'|x', \mathcal{D}) = P(y', g)$ integrating out g, $g\sim p(x'|X)$ (cond Gaussian, $K_{BB} = K_{XX} + \tilde{\Psi}$),   \end{itemize}
 
-Write the GP joint (for GP prediction/classification) as a factor graph.; \begin{itemize}
-    \item Let observations $y_i \sim N(y_i | g_i, \sigma^2_i)$.
-    \item Joint: $P(g_{1:n}, y_{1:n}) = f_0(\mathcal{G})\prod_i f_i(g_i) = N(g_{1:n}|\mathbf{0}, K) \prod_i N(y_i|g_i, \sigma^2_i)$
-    \item one big factor connecting $g_{1:n}, g'$ and one factor for each $g_i, y_i$ pair.
-\end{itemize}
+Write the GP joint (for GP prediction/classification) as a factor graph.; \begin{itemize} \item Let observations $y_i \sim N(y_i | g_i, \sigma^2_i)$. \item Joint: $P(g_{1:n}, y_{1:n}) = f_0(\mathcal{G})\prod_i f_i(g_i) = N(g_{1:n}|\mathbf{0}, K) \prod_i N(y_i|g_i, \sigma^2_i)$ \item one big factor connecting $g_{1:n}, g'$ and one factor for each $g_i, y_i$ pair. \end{itemize}
 
-What approximation do we make in EP for GP classification?; \begin{itemize}
-    \item Approx non-Gaussian $f_i(g_i) = P(y_i|g_i)$, where $y_i$ is the observation and $g_i$ is the latent drawn from a GP
-    \item by a Gaussian $\tilde{f}_i(g_i) = N(g_i | \tilde{\mu}_i, \tilde{\phi}^2_i)$.
-\end{itemize}
+What approximation do we make in EP for GP classification?; \begin{itemize} \item Approx non-Gaussian $f_i(g_i) = P(y_i|g_i)$, where $y_i$ is the observation and $g_i$ is the latent drawn from a GP \item by a Gaussian $\tilde{f}_i(g_i) = N(g_i | \tilde{\mu}_i, \tilde{\phi}^2_i)$. \end{itemize}
 
-How do we construct $q_{\neg i}(g_i)$ in EP for GP?; \begin{itemize}
-    \item Use Gaussian conditioning $P(i | \neg i)$.
-    \item $\Rightarrow q_{\neg i}(g_i) = N(\Sigma_{i, \neg i}\Sigma^{-1}_{\neg i, \neg i} \mathbf{\tilde{\mu}}_{\neg i}, K_{ii}-\Sigma_{i, \neg i}\Sigma^{-1}_{\neg i, \neg i}\Sigma_{\neg i, i})$
-    \item where $\Sigma = K + diag[\tilde{\phi}^2_1...\tilde{\phi}^2_n]$.
-    \item Recall observations $y_i \sim N(y_i | g_i, \sigma^2_i)$ and we let $f_i(g_i) = P(y_i|g_i)$, where $y_i$ are observations. We also approximated non-Gaussian $f_i(g_i) = P(y_i|g_i)$ by a Gaussian $\tilde{f}_i(g_i) = N(g_i | \tilde{\mu}_i, \tilde{\phi}^2_i)$.
-\end{itemize}
+How do we construct $q_{\neg i}(g_i)$ in EP for GP?; \begin{itemize} \item Use Gaussian conditioning $P(i | \neg i)$. \item $\Rightarrow q_{\neg i}(g_i) = N(\Sigma_{i, \neg i}\Sigma^{-1}_{\neg i, \neg i} \mathbf{\tilde{\mu}}_{\neg i}, K_{ii}-\Sigma_{i, \neg i}\Sigma^{-1}_{\neg i, \neg i}\Sigma_{\neg i, i})$ \item where $\Sigma = K + diag[\tilde{\phi}^2_1...\tilde{\phi}^2_n]$. \item Recall observations $y_i \sim N(y_i | g_i, \sigma^2_i)$ and we let $f_i(g_i) = P(y_i|g_i)$, where $y_i$ are observations. We also approximated non-Gaussian $f_i(g_i) = P(y_i|g_i)$ by a Gaussian $\tilde{f}_i(g_i) = N(g_i | \tilde{\mu}_i, \tilde{\phi}^2_i)$. \end{itemize} 
 
-State the EP updates for GP classification. Assume we know $q_{\neg i}(g_i)$.; \begin{itemize}
-    \item $\tilde{f}_i^{new}(g_i) = N(\int dg q_{\neg i}(g)f_i(g)g, \int dg q_{\neg i}(g)f_i(g)g^2 - (\tilde{\mu}^{new})^2)/q_{\neg i}(g_i)$.
-    \item Recall observations $y_i \sim N(y_i | g_i, \sigma^2_i)$ and we let $f_i(g_i) = P(y_i|g_i)$, where $y_i$ are observations. We also approximated non-Gaussian $f_i(g_i) = P(y_i|g_i)$ by a Gaussian $\tilde{f}_i(g_i) = N(g_i | \tilde{\mu}_i, \tilde{\phi}^2_i)$.
-\end{itemize}
+State the EP updates for GP classification. Assume we know $q_{\neg i}(g_i)$.; \begin{itemize} \item $\tilde{f}_i^{new}(g_i) = N(\int dg q_{\neg i}(g)f_i(g)g, \int dg q_{\neg i}(g)f_i(g)g^2 - (\tilde{\mu}^{new})^2)/q_{\neg i}(g_i)$. \item Recall observations $y_i \sim N(y_i | g_i, \sigma^2_i)$ and we let $f_i(g_i) = P(y_i|g_i)$, where $y_i$ are observations. We also approximated non-Gaussian $f_i(g_i) = P(y_i|g_i)$ by a Gaussian $\tilde{f}_i(g_i) = N(g_i | \tilde{\mu}_i, \tilde{\phi}^2_i)$. \end{itemize} 
 
-What is the distribution of predictions for GP classification using EP?; \begin{itemize}
-    \item $P(y'|\mathbf{x'}, \mathcal{D}) = \int dg' P(y'|g')N(g' | K_{x'X}(K_{XX}+\tilde{\Psi})^{-1}\tilde{\mu}, K_{x'x'} - K_{x'X}(K_{XX}+\tilde{\Psi})^{-1}K_{Xx'})$
-    \item where $\tilde{\Psi} = diag[\tilde{\psi}^2_{1:n}]$.
-    \item Recall observations $y_i \sim N(y_i | g_i, \sigma^2_i)$ and we let $f_i(g_i) = P(y_i|g_i)$, where $y_i$ are observations. We also approximated non-Gaussian $f_i(g_i) = P(y_i|g_i)$ by a Gaussian $\tilde{f}_i(g_i) = N(g_i | \tilde{\mu}_i, \tilde{\phi}^2_i)$.
-    \item No change is needed to the approximating potentials $\tilde{f}_i$ because introducing a test point changes K, but doesn't affect the marginal $P(g_{1:n})$ by consistency of the GP. Also unobs'd output provides no info about $g'$, so constant factor on $g'$.
-\end{itemize}
+What is the distribution of predictions for GP classification using EP?; \begin{itemize} \item $P(y'|\mathbf{x'}, \mathcal{D}) = \int dg' P(y'|g')N(g' | K_{x'X}(K_{XX}+\tilde{\Psi})^{-1}\tilde{\mu}, K_{x'x'} - K_{x'X}(K_{XX}+\tilde{\Psi})^{-1}K_{Xx'})$ \item where $\tilde{\Psi} = diag[\tilde{\psi}^2_{1:n}]$. \item Recall observations $y_i \sim N(y_i | g_i, \sigma^2_i)$ and we let $f_i(g_i) = P(y_i|g_i)$, where $y_i$ are observations. We also approximated non-Gaussian $f_i(g_i) = P(y_i|g_i)$ by a Gaussian $\tilde{f}_i(g_i) = N(g_i | \tilde{\mu}_i, \tilde{\phi}^2_i)$. \item No change is needed to the approximating potentials $\tilde{f}_i$ because introducing a test point changes K, but doesn't affect the marginal $P(g_{1:n})$ by consistency of the GP. Also unobs'd output provides no info about $g'$, so constant factor on $g'$. \end{itemize}
 
-When we introduce a test point, how do we change the $\tilde{f}_i$? (GP classification using EP); \begin{itemize}
-    \item No change is needed to the approximating potentials $\tilde{f}_i$ 
-    \item because introducing a test point changes K, but doesn't affect the marginal $P(g_{1:n})$ by consistency of the GP. \item Also unobs'd output provides no info about $g'$, so constant factor on $g'$.
-    \item Recall observations $y_i \sim N(y_i | g_i, \sigma^2_i)$ and we let $f_i(g_i) = P(y_i|g_i)$, where $y_i$ are observations. We also approximated non-Gaussian $f_i(g_i) = P(y_i|g_i)$ by a Gaussian $\tilde{f}_i(g_i) = N(g_i | \tilde{\mu}_i, \tilde{\phi}^2_i)$.
-\end{itemize}
+When we introduce a test point, how do we change the $\tilde{f}_i$? (GP classification using EP); \begin{itemize} \item No change is needed to the approximating potentials $\tilde{f}_i$  \item because introducing a test point changes K, but doesn't affect the marginal $P(g_{1:n})$ by consistency of the GP. \item Also unobs'd output provides no info about $g'$, so constant factor on $g'$. \item Recall observations $y_i \sim N(y_i | g_i, \sigma^2_i)$ and we let $f_i(g_i) = P(y_i|g_i)$, where $y_i$ are observations. We also approximated non-Gaussian $f_i(g_i) = P(y_i|g_i)$ by a Gaussian $\tilde{f}_i(g_i) = N(g_i | \tilde{\mu}_i, \tilde{\phi}^2_i)$. \end{itemize}
 
 % TODO s17 normalisers
 
-Discuss normalisers in EP (lol poor FC front); \begin{itemize}
-    \item Approx sites determined by moment matching are naturally normalised
-    \item For posteriors, sufficient to normalise product after convergence. \begin{itemize}
-        \item Often straightforward for exponential family approximations
-    \end{itemize}
-    \item To compute likelihood, we need to keep track of site integrals (below) as well as the overall normaliser of $\prod_i\tilde{f}_i(\mathcal{Y}_i)$: \begin{itemize}
-        \item Minimising `unnormalised KL' $KL(p||q) = \int dx p(x)\log \frac{p(x)}{q(x)} + \int dx (q(x) - p(x))$ \item incorporates normaliser into each $\tilde{f}$ (match zeroth moment, along with sufficient stats
-    \end{itemize}
-\end{itemize}
+Discuss normalisers in EP (lol poor FC front); \begin{itemize} \item Approx sites determined by moment matching are naturally normalised \item For posteriors, sufficient to normalise product after convergence. \begin{itemize} \item Often straightforward for exponential family approximations \end{itemize} \item To compute likelihood, we need to keep track of site integrals (below) as well as the overall normaliser of $\prod_i\tilde{f}_i(\mathcal{Y}_i)$: \begin{itemize} \item Minimising `unnormalised KL' $KL(p||q) = \int dx p(x)\log \frac{p(x)}{q(x)} + \int dx (q(x) - p(x))$ \item incorporates normaliser into each $\tilde{f}$ (match zeroth moment, along with sufficient stats \end{itemize} \end{itemize}
 
-To compute the likelihood in EP, what do we need to keep track of in terms of normalisers?; \begin{itemize}
-    \item Site integrals: \begin{itemize}
-        \item Minimising `unnormalised KL' $KL(p||q) = \int dx p(x)\log \frac{p(x)}{q(x)} + \int dx (q(x) - p(x))$ \item incorporates normaliser into each $\tilde{f}$ (match zeroth moment, along with sufficient stats
-    \end{itemize}
-    \item The overall normaliser of $\prod_i\tilde{f}_i(\mathcal{Y}_i)$
-\end{itemize}
+To compute the likelihood in EP, what do we need to keep track of in terms of normalisers?; \begin{itemize} \item Site integrals: \begin{itemize} \item Minimising `unnormalised KL' $KL(p||q) = \int dx p(x)\log \frac{p(x)}{q(x)} + \int dx (q(x) - p(x))$ \item incorporates normaliser into each $\tilde{f}$ (match zeroth moment, along with sufficient stats \end{itemize} \item The overall normaliser of $\prod_i\tilde{f}_i(\mathcal{Y}_i)$ \end{itemize}
 
 State the definition of alpha divergence.; $D_{\alpha}[p||q] = \frac{1}{\alpha(1-\alpha)}\int dx \alpha p(x) + (1-\alpha)q(x) - p(x)^{\alpha}q(x)^{1-\alpha}$
 
 % TODO s18 Alpha divergences and power EP (after first line)
 
-Name two spocial cases of alpha-divergences; \begin{itemize}
-    \item (Recall alpha divergence is $D_{\alpha}[p||q] = \frac{1}{\alpha(1-\alpha)}\int dx \alpha p(x) + (1-\alpha)q(x) - p(x)^{\alpha}q(x)^{1-\alpha}$)
-    \item $\alpha\rightarrow 0$: min $KL(q||p)$.
-    \item $\alpha\rightarrow 1$: min $KL(p||q)$, EP.
-\end{itemize}
+Name two spocial cases of alpha-divergences; \begin{itemize} \item (Recall alpha divergence is $D_{\alpha}[p||q] = \frac{1}{\alpha(1-\alpha)}\int dx \alpha p(x) + (1-\alpha)q(x) - p(x)^{\alpha}q(x)^{1-\alpha}$) \item $\alpha\rightarrow 0$: min $KL(q||p)$. \item $\alpha\rightarrow 1$: min $KL(p||q)$, EP. \end{itemize}
 
-State the local (EP) minimisation updates for alpha divergences; \begin{itemize}
-    \item (Recall alpha divergence is $D_{\alpha}[p||q] = \frac{1}{\alpha(1-\alpha)}\int dx \alpha p(x) + (1-\alpha)q(x) - p(x)^{\alpha}q(x)^{1-\alpha}$)
-    \item (usual EP is $\alpha\rightarrow 1$)
-    \item Local (EP) min gives fixed-point updates that blend messages (to power $\alpha$) with previous site approximations:
-    \item $\tilde{f}^{new}_i = \arg\min_{f \in \{\tilde{f}\}} KL[f_i(\mathcal{Y}_i)^{\alpha}\tilde{f}_i(\mathcal{Y}_i)^{1-\alpha}q_{\neg i}(\mathcal{Y})||f(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y})]$
-    \item (Small changes (for $\alpha < 1$) lead to more stable updates, and more reliable convergence.)
-\end{itemize}
+State the local (EP) minimisation updates for alpha divergences; \begin{itemize} \item (Recall alpha divergence is $D_{\alpha}[p||q] = \frac{1}{\alpha(1-\alpha)}\int dx \alpha p(x) + (1-\alpha)q(x) - p(x)^{\alpha}q(x)^{1-\alpha}$) \item (usual EP is $\alpha\rightarrow 1$) \item Local (EP) min gives fixed-point updates that blend messages (to power $\alpha$) with previous site approximations: \item $\tilde{f}^{new}_i = \arg\min_{f \in \{\tilde{f}\}} KL[f_i(\mathcal{Y}_i)^{\alpha}\tilde{f}_i(\mathcal{Y}_i)^{1-\alpha}q_{\neg i}(\mathcal{Y})||f(\mathcal{Y}_i)q_{\neg i}(\mathcal{Y})]$ \item (Small changes (for $\alpha < 1$) lead to more stable updates, and more reliable convergence.) \end{itemize}
 
-Briefly discuss how the magnitude of $\alpha$ in alpha-divergences for local (EP) minimisation affects the updates.; \begin{itemize}
-    \item (Recall alpha divergence is $D_{\alpha}[p||q] = \frac{1}{\alpha(1-\alpha)}\int dx \alpha p(x) + (1-\alpha)q(x) - p(x)^{\alpha}q(x)^{1-\alpha}$)
-    \item ($\alpha\rightarrow 0$ is min KL(q||p), $\alpha\rightarrow 1$ is EP KL(p||q)
-    \item Small changes (for $\alpha < 1$) lead to more stable updates, and more reliable convergence.
-\end{itemize}
+Briefly discuss how the magnitude of $\alpha$ in alpha-divergences for local (EP) minimisation affects the updates.; \begin{itemize} \item (Recall alpha divergence is $D_{\alpha}[p||q] = \frac{1}{\alpha(1-\alpha)}\int dx \alpha p(x) + (1-\alpha)q(x) - p(x)^{\alpha}q(x)^{1-\alpha}$) \item ($\alpha\rightarrow 0$ is min KL(q||p), $\alpha\rightarrow 1$ is EP KL(p||q) \item Small changes (for $\alpha < 1$) lead to more stable updates, and more reliable convergence. \end{itemize}
 
 \end{document}
