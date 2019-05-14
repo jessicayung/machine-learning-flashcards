@@ -57,4 +57,14 @@ Manipulate the lower bound for the log likelihood for a VAE to get an objective 
     \end{itemize}
 \end{itemize}
 
+Describe a Generative Adversarial Network (GAN).; \begin{itemize}
+    \item Model has a deterministic $p(v|h, \theta)$: \item $p(v, h) = \delta(v-G_\theta(h))p(h)$
+    \item Define discriminator $D_\phi(v)$ that outputs the probability that $v$ is from the training data set.
+    \item $G_\theta$ is generator.
+    \item Objective: $\min_\theta \max_\phi (E[\log D_\phi(v)]_{v\sim p_{data}(v)} + E[\log(1-D_{\phi}(G_\theta(h)))]_{h\sim p(h)})$ 
+    \item Discrim $\phi$: Objective maximises the ability of the network $D_\phi$ to recognise a true image from a fake (generated) image.
+    \item Generator $\theta$: Min prob of generating images D classifies as fake
+    \item (can't train using likelihood since it's not usually defined for this class of models)
+\end{itemize}
+
 \end{document}
