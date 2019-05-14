@@ -26,10 +26,14 @@ Describe a natural training objective for a generative model (with equations but
     \item (Use variational inference to ascend lower bound of log likelihood)
 \end{itemize}
 
+Why is $p(v|\theta) = \int p(v|h, \theta)p(h)dh$ computationally intractable?; Intractable to sum over $h$, especially because have nonlinearity and many layers. 
+
 State the lower bound on the log likelihood $\log p(v|\theta)$ used in variational inference for a generative model.; \begin{itemize}
     \item $\log p(v|\theta) \geq - \int_h q(h|v, \phi)\log q(h|v, \phi) + \int_h q(h|v, \phi)\log p(v|h, \theta) + C$
     \item (Choose variational dist $q(h|v, \phi)$ s.t. we can either calculate the bound analytically or sample it efficiently.)
 \end{itemize}
+
+State the reparameterisation trick.; Write $E_{x\sim N(\mu, \sigma^2)}[f(x)] = E_{\epsilon \sim N(0,1)} [f(\mu + \sigma\epsilon)]$
 
 How do we usually parameterise $p, q$ in VAEs?; \begin{itemize}
     \item $p(v|h, \theta)$: deep network. \item When exact expectations are intractable, we can sample.
@@ -49,6 +53,7 @@ Manipulate the lower bound for the log likelihood for a VAE to get an objective 
     \item Reparam trick: write the above as
     \begin{itemize}
         \item $\log p(v|\theta) \geq \frac{H}{2} \log \sigma^2_\phi + \int \log p(v|h=\mu_h(v, \phi)+\sigma_\phi\epsilon, \theta)N(\epsilon|0, I_H)d\epsilon + C$
+        \item trick is to write $E_{x\sim N(\mu, \sigma^2)}[f(x)] = E_{\epsilon \sim N(0,1)} [f(\mu + \sigma\epsilon)]$
     \end{itemize}
     \item DRaw samples $\epsilon_{1:S}$ from a zero-mean unit covariance Gaussian to get the approximate objective \begin{itemize}
         \item $\frac{H}{2}\log \sigma^2_\phi + \frac{1}{S}\sum_{s=1}^S \log p(v|h=\mu_h(v, \phi) + \sigma_\phi \epsilon_s, \theta)$
@@ -62,9 +67,18 @@ Describe a Generative Adversarial Network (GAN).; \begin{itemize}
     \item Define discriminator $D_\phi(v)$ that outputs the probability that $v$ is from the training data set.
     \item $G_\theta$ is generator.
     \item Objective: $\min_\theta \max_\phi (E[\log D_\phi(v)]_{v\sim p_{data}(v)} + E[\log(1-D_{\phi}(G_\theta(h)))]_{h\sim p(h)})$ 
-    \item Discrim $\phi$: Objective maximises the ability of the network $D_\phi$ to recognise a true image from a fake (generated) image.
+    \item Discrim $\phi$: Objective maximises the ability of the network $D_\phi$ to recognise a true image from a fake (generated) image. (but impractical to max fully wrt $\phi$)
     \item Generator $\theta$: Min prob of generating images D classifies as fake
     \item (can't train using likelihood since it's not usually defined for this class of models)
+\end{itemize}
+
+Discuss problems with training GANs.; \begin{itemize}
+    \item Impractical to fully opt wrt $\phi$ (discrim, not sure if for gen also)
+    \item So do partial maximisation: $phi^{new} = \phi - \eta \frac{\partial f(\theta, \phi)}{\partial \phi}$ a few steps, 
+    \item $\theta^{new} = 
+    theta + \eta \frac{\partial f^*(\theta)}{\partial \theta}$, where $f^*(\theta) = \min_{\phi} f(\theta, \phi)$. 
+    \item But above is not stable, not justified if we didn't do full min wrt $\phi$.
+    similar with $\theta$.
 \end{itemize}
 
 \end{document}

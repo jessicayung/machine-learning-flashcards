@@ -64,6 +64,9 @@ State and describe the LSTM equations.; \begin{itemize}
     \end{itemize}
 \end{itemize}
 
+Does an LSTM/RNN with memory have memory decay?; Yes, but it decays much more slowly than a vanilla RNN (unless RNN $\lambda = 1$).
+
+
 Describe a GRU and state the GRU equations.; \begin{itemize}
     \item Simpler than LSTM. 
     \item $h_t$ is memory. $z_t$: det whether to forget old and commit new memory. (Input = $1-z_t$)
@@ -93,6 +96,14 @@ Describe bidirectional RNNs (and describe two ways of arranging the hidden state
     \item Encoder model traverses the input seq in both directions. E.g. have $x_{1:5}$ mapped to $h_{1:5}, h_{10:6}$ with hidden states connected $1:5, 6:10$. 
     \item Joint state e.g. $(h_5, h_{10})$ (end of in-order and reverse-order) in this case could be used to represent the input sequence $x_{1:5}$ and used as input to a decoder RNN.
     \item (Alternative bidirectional model: in-order corr to same token fed into reverse-order hidden state, use $h_{10}$ to repr input seq)
+\end{itemize}
+
+When we have parameter tying (e.g. in an RNN), in the computational graph, do we change W multiple times per backward pass (since W is connected to the graph multiple times)?; No. we don't change W per edge, forward pass values still there. (? TODO)
+
+TODO RNN computational graph; 
+
+Briefly describe one method to deal with vanishing/exploding gradients apart from using memory units.; \begin{itemize}
+    \item Truncated BPTT: use a window, stop after. SGD an approx anyway, so only using recent history may not be too problematic.
 \end{itemize}
 
 \end{document}
