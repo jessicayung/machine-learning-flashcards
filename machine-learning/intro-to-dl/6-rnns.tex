@@ -5,105 +5,33 @@
 \usepackage{amsmath}
 \begin{document}
 
-Name two main problems for RNNs; \begin{itemize}
-    \item Vanishing / decaying gradients
-    \item Exploding gradients
-    \item (Also happens for v deep feedforward nets)
-\end{itemize}
+Name two main problems for RNNs; \begin{itemize} \item Vanishing / decaying gradients \item Exploding gradients \item (Also happens for v deep feedforward nets) \end{itemize}
 
-Describe gradient decay/explosion using a network with a linear transfer function $f(x) = x$.; \begin{itemize}
-    \item For simplicity, assume each layer has the same width.
-    \item For input $\bm{x}$, the final layer has value $\bm{W_LW_{L-1}...W_2x}$.
-    \item If all the weight matrices are the same $\bm{W}_l = \bm{W}$, we would have the final layer
-    \item $\bm{W}^{L-1}\bm{x = E\Lambda^{L-1}E^{-1}x}$
-    \item where $\Lambda$ is the diagonal matrix of eigenvalues of $\bm{W}$ and $\bm{E}$ is the matrix of eigenvectors.
-    \item Each element $\lambda_i^{L-1}$ will be exponentially large (if $\lambda_i > 1$) or small (if $\lambda_i < 1$). Only elements with $\lambda_i = 1$ will remain well scaled.
-    \item This suggests that, unless initialised very carefully, gradients may become either zero or infinite, leading too significant difficulties in training.
-    \item (This is particularly a problem in v deep or recurrent nets.)
-\end{itemize}
+Describe gradient decay/explosion using a network with a linear transfer function $f(x) = x$.; \begin{itemize} \item For simplicity, assume each layer has the same width. \item For input $\bm{x}$, the final layer has value $\bm{W_LW_{L-1}...W_2x}$. \item If all the weight matrices are the same $\bm{W}_l = \bm{W}$, we would have the final layer \item $\bm{W}^{L-1}\bm{x = E\Lambda^{L-1}E^{-1}x}$ \item where $\Lambda$ is the diagonal matrix of eigenvalues of $\bm{W}$ and $\bm{E}$ is the matrix of eigenvectors. \item Each element $\lambda_i^{L-1}$ will be exponentially large (if $\lambda_i > 1$) or small (if $\lambda_i < 1$). Only elements with $\lambda_i = 1$ will remain well scaled. \item This suggests that, unless initialised very carefully, gradients may become either zero or infinite, leading too significant difficulties in training. \item (This is particularly a problem in v deep or recurrent nets.) \end{itemize}
 
-Intuitively, why might recalling an image from many timesteps ago be difficult fro a vanilla RNN?; \begin{itemize}
-    \item Typically information is lost from timestep to timestep.
-    \item So also need to explicitly store some info and be able to retrieve it at a much later timepoint.
-\end{itemize}
+Intuitively, why might recalling an image from many timesteps ago be difficult fro a vanilla RNN?; \begin{itemize} \item Typically information is lost from timestep to timestep. \item So also need to explicitly store some info and be able to retrieve it at a much later timepoint. \end{itemize}
 
-Could we train models like LSTMs from vanilla RNNs in theory?; \begin{itemize}
-    \item Yes - LSTMs etc are specially constrained RNNs. 
-    \item Theoretically, we can do this with a conventional unconstrained (vanilla) RNN. IN practice, however, training such models to store long term dependencies has proven difficult.
-    \item (TODO: not sure if I buy this, check)
-\end{itemize}
+Could we train models like LSTMs from vanilla RNNs in theory?; \begin{itemize} \item Yes - LSTMs etc are specially constrained RNNs.  \item Theoretically, we can do this with a conventional unconstrained (vanilla) RNN. IN practice, however, training such models to store long term dependencies has proven difficult. \item (TODO: not sure if I buy this, check) \end{itemize}
 
-Describe (include equations) how you might mitigate memory decay in a vanilla recurrent neural network. (keep it simple); \begin{itemize}
-    \item Need memory / copy mechanism. 
-    \item Add Two roles: Gate and memory store.
-    \item Add gate: whether the current input should be stored.
-    \begin{itemize}
-        \item gate $\alpha(t) = \sigma(W_{in}x(t)+B_{in}$
-    \end{itemize}
-    \item Can update memory $m(t) = \alpha(t)x(t) + (1-\alpha(t))m(t-1)$
-    \item (If $\alpha(t)$ is close to 1, we replace the memory with $x(t)$. If $\alpha(t)$ is close to zero, we ignore $x(t)$ and essentially copy the prev value of the memory to the current memory.
-    \item can then output $y_{out}(t)=\alpha(t)m(t-1)$ (what was forgotten - not sure if this is a good choice tbh)
-\end{itemize}
+Describe (include equations) how you might mitigate memory decay in a vanilla recurrent neural network. (keep it simple); \begin{itemize} \item Need memory / copy mechanism.  \item Add Two roles: Gate and memory store. \item Add gate: whether the current input should be stored. \begin{itemize} \item gate $\alpha(t) = \sigma(W_{in}x(t)+B_{in}$ \end{itemize} \item Can update memory $m(t) = \alpha(t)x(t) + (1-\alpha(t))m(t-1)$ \item (If $\alpha(t)$ is close to 1, we replace the memory with $x(t)$. If $\alpha(t)$ is close to zero, we ignore $x(t)$ and essentially copy the prev value of the memory to the current memory. \item can then output $y_{out}(t)=\alpha(t)m(t-1)$ (what was forgotten - not sure if this is a good choice tbh) \end{itemize} 
 
-State and describe the LSTM equations.; \begin{itemize}
-    \item Forget gate (whether to keep old memory) \begin{itemize}
-        \item $f_t = \sigma(W_f \cdot [h_{t-1}, x_t] + b_f)$
-        \item forget: $f_t = 1$
-    \end{itemize}
-    \item Input gate: whether something should be stored in memory at this timestep \begin{itemize}
-        \item $i_t = \sigma(W_i \cdot [h_{t-1}, x_t] + b_i)$
-        \item Store $\Tilde{C}_t = \tanh(W_C \cdot[h_{t-1}, x_t] + b_C)$
-    \end{itemize}
-    \item Update memory cell \begin{itemize}
-        \item $C_t = f_t * C_{t-1} + i_t * \Tilde{C}_t$
-    \end{itemize}
-    \item Output gate: whether to output memory cell at this timestep. \begin{itemize}
-        \item $o_t = \sigma(W_o[h_{t-1}, x_t] + b_o)$
-        \item output $h_t = o_t * \tanh(C_t)$
-        \item (can modify tanh if not appropriate)
-    \end{itemize}
-\end{itemize}
+State and describe the LSTM equations.; \begin{itemize} \item Forget gate (whether to keep old memory) \begin{itemize} \item $f_t = \sigma(W_f \cdot [h_{t-1}, x_t] + b_f)$ \item forget: $f_t = 1$ \end{itemize} \item Input gate: whether something should be stored in memory at this timestep \begin{itemize} \item $i_t = \sigma(W_i \cdot [h_{t-1}, x_t] + b_i)$ \item Store $\Tilde{C}_t = \tanh(W_C \cdot[h_{t-1}, x_t] + b_C)$ \end{itemize} \item Update memory cell \begin{itemize} \item $C_t = f_t * C_{t-1} + i_t * \Tilde{C}_t$ \end{itemize} \item Output gate: whether to output memory cell at this timestep. \begin{itemize} \item $o_t = \sigma(W_o[h_{t-1}, x_t] + b_o)$ \item output $h_t = o_t * \tanh(C_t)$ \item (can modify tanh if not appropriate) \end{itemize} \end{itemize}
 
 Does an LSTM/RNN with memory have memory decay?; Yes, but it decays much more slowly than a vanilla RNN (unless RNN $\lambda = 1$).
 
 
-Describe a GRU and state the GRU equations.; \begin{itemize}
-    \item Simpler than LSTM. 
-    \item $h_t$ is memory. $z_t$: det whether to forget old and commit new memory. (Input = $1-z_t$)
-    \item $z_t = \sigma(W_z \cdot [h_{t-1}, x_t])$
-    \item $r_t = \sigma(W_r \cdot [h_{t-1}, x_t])$
-    \item $\Tilde{h}_t = \tanh(W\cdot [r_t * h_{t-1}, x_t])$
-    \item $h_t = (1-z_t)*h_{t-1} + z_t \Tilde{h}_t$
-    \item (todo: where are the biases?)
-\end{itemize}
+Describe a GRU and state the GRU equations.; \begin{itemize} \item Simpler than LSTM.  \item $h_t$ is memory. $z_t$: det whether to forget old and commit new memory. (Input = $1-z_t$) \item $z_t = \sigma(W_z \cdot [h_{t-1}, x_t])$ \item $r_t = \sigma(W_r \cdot [h_{t-1}, x_t])$ \item $\Tilde{h}_t = \tanh(W\cdot [r_t * h_{t-1}, x_t])$ \item $h_t = (1-z_t)*h_{t-1} + z_t \Tilde{h}_t$ \item (todo: where are the biases?) \end{itemize}
 
-Compare an LSTM and a GRU.; \begin{itemize}
-    \item LSTM has separate input and forget gates, GRU has forget = 1-input gate.
-    \item GRU has no separate output gate. and output tanh.
-    \item GRU has extra gate modifying impact of prev memory to input to memory $r_t: \Tilde{h}_t = \tanh(W\cdot [r_t * h_{t-1}, x_t])$
-\end{itemize}
+Compare an LSTM and a GRU.; \begin{itemize} \item LSTM has separate input and forget gates, GRU has forget = 1-input gate. \item GRU has no separate output gate. and output tanh. \item GRU has extra gate modifying impact of prev memory to input to memory $r_t: \Tilde{h}_t = \tanh(W\cdot [r_t * h_{t-1}, x_t])$ \end{itemize} 
 
-Describe a Seq2Seq model.; \begin{itemize}
-    \item Take an input seq $x_{1:M}$ and output a seq $y_{1:N}$. 
-    \item Note input and output seqs are potentially of different length (and different from datapoint to datapoint)
-    \item (In practice also useful to reverse the seq order).
-    \item Approach: convert input to fixed length sequence first.
-    \item Can feed in one input token at each timestep, then generate tokens one at a time. (Can also input $y_{t-1}$ as additional input to $h'_t$ when generating output.
-\end{itemize}
+Describe a Seq2Seq model.; \begin{itemize} \item Take an input seq $x_{1:M}$ and output a seq $y_{1:N}$.  \item Note input and output seqs are potentially of different length (and different from datapoint to datapoint) \item (In practice also useful to reverse the seq order). \item Approach: convert input to fixed length sequence first. \item Can feed in one input token at each timestep, then generate tokens one at a time. (Can also input $y_{t-1}$ as additional input to $h'_t$ when generating output. \end{itemize}
 
-Describe bidirectional RNNs (and describe two ways of arranging the hidden states).; \begin{itemize}
-    \item (Potential criticism of Seq2seq: biased towards capturing latter part of the sentence.)
-    \item Encoder model traverses the input seq in both directions. E.g. have $x_{1:5}$ mapped to $h_{1:5}, h_{10:6}$ with hidden states connected $1:5, 6:10$. 
-    \item Joint state e.g. $(h_5, h_{10})$ (end of in-order and reverse-order) in this case could be used to represent the input sequence $x_{1:5}$ and used as input to a decoder RNN.
-    \item (Alternative bidirectional model: in-order corr to same token fed into reverse-order hidden state, use $h_{10}$ to repr input seq)
-\end{itemize}
+Describe bidirectional RNNs (and describe two ways of arranging the hidden states).; \begin{itemize} \item (Potential criticism of Seq2seq: biased towards capturing latter part of the sentence.) \item Encoder model traverses the input seq in both directions. E.g. have $x_{1:5}$ mapped to $h_{1:5}, h_{10:6}$ with hidden states connected $1:5, 6:10$.  \item Joint state e.g. $(h_5, h_{10})$ (end of in-order and reverse-order) in this case could be used to represent the input sequence $x_{1:5}$ and used as input to a decoder RNN. \item (Alternative bidirectional model: in-order corr to same token fed into reverse-order hidden state, use $h_{10}$ to repr input seq) \end{itemize}
 
 When we have parameter tying (e.g. in an RNN), in the computational graph, do we change W multiple times per backward pass (since W is connected to the graph multiple times)?; No. we don't change W per edge, forward pass values still there. (? TODO)
 
 TODO RNN computational graph; 
 
-Briefly describe one method to deal with vanishing/exploding gradients apart from using memory units.; \begin{itemize}
-    \item Truncated BPTT: use a window, stop after. SGD an approx anyway, so only using recent history may not be too problematic.
-\end{itemize}
+Briefly describe one method to deal with vanishing/exploding gradients apart from using memory units.; \begin{itemize} \item Truncated BPTT: use a window, stop after. SGD an approx anyway, so only using recent history may not be too problematic. \end{itemize}
 
 \end{document}

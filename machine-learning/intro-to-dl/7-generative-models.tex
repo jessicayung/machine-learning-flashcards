@@ -5,80 +5,26 @@
 \usepackage{amsmath}
 \begin{document}
 
-Describe generative models.; \begin{itemize}
-    \item Generative models parameterise a joint distribution in the form $p(v, h)=p(v|h)p(h)$ where $v$ are observable `visible' variables and $h$ `latent' or `hidden' variables.
-    \item $p(v|h)$ expresses how the observations in the world are generated.
-    \item From a model, we can then form $p(h|v)$ to understand what latent state likely generated the observation.
-\end{itemize}
+Describe generative models.; \begin{itemize} \item Generative models parameterise a joint distribution in the form $p(v, h)=p(v|h)p(h)$ where $v$ are observable `visible' variables and $h$ `latent' or `hidden' variables. \item $p(v|h)$ expresses how the observations in the world are generated. \item From a model, we can then form $p(h|v)$ to understand what latent state likely generated the observation. \end{itemize}
 
-Name two broad applications of generative models.; \begin{itemize}
-    \item Learning structure in unlabelled data (unsupervised learning).
-    \item Constructing (generating/`phantasising/hallucinating') data \begin{itemize}
-        \item by sampling $h$ from $p(h)$ and then $v$ from $p(v|h)$.
-    \end{itemize}
-\end{itemize}
+Name two broad applications of generative models.; \begin{itemize} \item Learning structure in unlabelled data (unsupervised learning). \item Constructing (generating/`phantasising/hallucinating') data \begin{itemize} \item by sampling $h$ from $p(h)$ and then $v$ from $p(v|h)$. \end{itemize} \end{itemize}
 
-Describe a natural training objective for a generative model (with equations but at a high level).; \begin{itemize}
-    \item $p(v, h) = p(v|h, \theta)p(h)$ 
-    \item (where e.g. $p(v|h, \theta) \sim N(v| \mu_v(h,\theta), \sigma^2I), p(h)\sim N(h|0, I)$ where $\mu_v(h, \theta)$ is a neural network with input $h$ and parameters $\theta$.)
-    \item (output of the network is the mean of the Gaussian $p(v|h, \theta)$.
-    \item Natural training objective: maximise the parameters $p(v|\theta) = \int p(v|h, \theta)p(h)dh$, but this integral is computationally intractable and we need to make approximations.
-    \item (Use variational inference to ascend lower bound of log likelihood)
-\end{itemize}
+Describe a natural training objective for a generative model (with equations but at a high level).; \begin{itemize} \item $p(v, h) = p(v|h, \theta)p(h)$  \item (where e.g. $p(v|h, \theta) \sim N(v| \mu_v(h,\theta), \sigma^2I), p(h)\sim N(h|0, I)$ where $\mu_v(h, \theta)$ is a neural network with input $h$ and parameters $\theta$.) \item (output of the network is the mean of the Gaussian $p(v|h, \theta)$. \item Natural training objective: maximise the parameters $p(v|\theta) = \int p(v|h, \theta)p(h)dh$, but this integral is computationally intractable and we need to make approximations. \item (Use variational inference to ascend lower bound of log likelihood) \end{itemize}
 
 Why is $p(v|\theta) = \int p(v|h, \theta)p(h)dh$ computationally intractable?; Intractable to sum over $h$, especially because have nonlinearity and many layers. 
 
-State the lower bound on the log likelihood $\log p(v|\theta)$ used in variational inference for a generative model.; \begin{itemize}
-    \item $\log p(v|\theta) \geq - \int_h q(h|v, \phi)\log q(h|v, \phi) + \int_h q(h|v, \phi)\log p(v|h, \theta) + C$
-    \item (Choose variational dist $q(h|v, \phi)$ s.t. we can either calculate the bound analytically or sample it efficiently.)
-\end{itemize}
+State the lower bound on the log likelihood $\log p(v|\theta)$ used in variational inference for a generative model.; \begin{itemize} \item $\log p(v|\theta) \geq - \int_h q(h|v, \phi)\log q(h|v, \phi) + \int_h q(h|v, \phi)\log p(v|h, \theta) + C$ \item (Choose variational dist $q(h|v, \phi)$ s.t. we can either calculate the bound analytically or sample it efficiently.) \end{itemize}
 
 State the reparameterisation trick.; Write $E_{x\sim N(\mu, \sigma^2)}[f(x)] = E_{\epsilon \sim N(0,1)} [f(\mu + \sigma\epsilon)]$
 
-How do we usually parameterise $p, q$ in VAEs?; \begin{itemize}
-    \item $p(v|h, \theta)$: deep network. \item When exact expectations are intractable, we can sample.
-    \item Usually parameterise $q(h|v,\phi) = N(h|\mu_h(v, \phi), \sigma^2_\phi)$ where $\mu$ is the output of a NN.
-\end{itemize}
+How do we usually parameterise $p, q$ in VAEs?; \begin{itemize} \item $p(v|h, \theta)$: deep network. \item When exact expectations are intractable, we can sample. \item Usually parameterise $q(h|v,\phi) = N(h|\mu_h(v, \phi), \sigma^2_\phi)$ where $\mu$ is the output of a NN. \end{itemize}
 
-What is the entropy of a Gaussian $q(h|v, \phi) \sim N(h|\mu_h(v, \phi), \sigma^2_\phiI_H)$?; \begin{itemize}
-    \item $H\log(\sigma_\phi\sqrt{2\pi e})$
-    \item (off the top of my head more generally $\log |\Sigma| + \frac{D}{2}(\log 2\pi + 1)$)
-\end{itemize} 
+What is the entropy of a Gaussian $q(h|v, \phi) \sim N(h|\mu_h(v, \phi), \sigma^2_\phiI_H)$?; \begin{itemize} \item $H\log(\sigma_\phi\sqrt{2\pi e})$ \item (off the top of my head more generally $\log |\Sigma| + \frac{D}{2}(\log 2\pi + 1)$) \end{itemize} 
 
-Manipulate the lower bound for the log likelihood for a VAE to get an objective we can calculate or sample from.  Recall \begin{itemize}
-    \item $\log p(v|\theta) \geq - \int_h q(h|v, \phi)\log q(h|v, \phi) + \int_h q(h|v, \phi)\log p(v|h, \theta) + C$,
-    \item $q(h|v,\phi) = N(h|\mu_h(v, \phi), \sigma^2_\phi)$
-\end{itemize}; \begin{itemize}
-    \item $\log p(v|\theta) \geq \frac{H}{2}\log \sigma^2_\phi + \int_h q(h|v, \phi) \log p(v|h, \thehta) + C$
-    \item Reparam trick: write the above as
-    \begin{itemize}
-        \item $\log p(v|\theta) \geq \frac{H}{2} \log \sigma^2_\phi + \int \log p(v|h=\mu_h(v, \phi)+\sigma_\phi\epsilon, \theta)N(\epsilon|0, I_H)d\epsilon + C$
-        \item trick is to write $E_{x\sim N(\mu, \sigma^2)}[f(x)] = E_{\epsilon \sim N(0,1)} [f(\mu + \sigma\epsilon)]$
-    \end{itemize}
-    \item DRaw samples $\epsilon_{1:S}$ from a zero-mean unit covariance Gaussian to get the approximate objective \begin{itemize}
-        \item $\frac{H}{2}\log \sigma^2_\phi + \frac{1}{S}\sum_{s=1}^S \log p(v|h=\mu_h(v, \phi) + \sigma_\phi \epsilon_s, \theta)$
-        \item do gradient ascent on this approx objecitve in $\phi, \theta$
-        \item For multiple datapoints, simply average the above: $\frac{H}{2}\log \sigma^2_\phi + \frac{1}{NS}\sum_{s=1}^S \sum_{n=1}^N \log p(v^n|h=\mu_h(v^n, \phi) + \sigma_\phi \epsilon^n_s, \theta)$
-    \end{itemize}
-\end{itemize}
+Manipulate the lower bound for the log likelihood for a VAE to get an objective we can calculate or sample from.  Recall \begin{itemize} \item $\log p(v|\theta) \geq - \int_h q(h|v, \phi)\log q(h|v, \phi) + \int_h q(h|v, \phi)\log p(v|h, \theta) + C$, \item $q(h|v,\phi) = N(h|\mu_h(v, \phi), \sigma^2_\phi)$ \end{itemize}; \begin{itemize} \item $\log p(v|\theta) \geq \frac{H}{2}\log \sigma^2_\phi + \int_h q(h|v, \phi) \log p(v|h, \thehta) + C$ \item Reparam trick: write the above as \begin{itemize} \item $\log p(v|\theta) \geq \frac{H}{2} \log \sigma^2_\phi + \int \log p(v|h=\mu_h(v, \phi)+\sigma_\phi\epsilon, \theta)N(\epsilon|0, I_H)d\epsilon + C$ \item trick is to write $E_{x\sim N(\mu, \sigma^2)}[f(x)] = E_{\epsilon \sim N(0,1)} [f(\mu + \sigma\epsilon)]$ \end{itemize} \item Draw samples $\epsilon_{1:S}$ from a zero-mean unit covariance Gaussian to get the approximate objective \begin{itemize} \item $\frac{H}{2}\log \sigma^2_\phi + \frac{1}{S}\sum_{s=1}^S \log p(v|h=\mu_h(v, \phi) + \sigma_\phi \epsilon_s, \theta)$ \item do gradient ascent on this approx objecitve in $\phi, \theta$ \item For multiple datapoints, simply average the above: $\frac{H}{2}\log \sigma^2_\phi + \frac{1}{NS}\sum_{s=1}^S \sum_{n=1}^N \log p(v^n|h=\mu_h(v^n, \phi) + \sigma_\phi \epsilon^n_s, \theta)$ \end{itemize} \end{itemize}
 
-Describe a Generative Adversarial Network (GAN).; \begin{itemize}
-    \item Model has a deterministic $p(v|h, \theta)$: \item $p(v, h) = \delta(v-G_\theta(h))p(h)$
-    \item Define discriminator $D_\phi(v)$ that outputs the probability that $v$ is from the training data set.
-    \item $G_\theta$ is generator.
-    \item Objective: $\min_\theta \max_\phi (E[\log D_\phi(v)]_{v\sim p_{data}(v)} + E[\log(1-D_{\phi}(G_\theta(h)))]_{h\sim p(h)})$ 
-    \item Discrim $\phi$: Objective maximises the ability of the network $D_\phi$ to recognise a true image from a fake (generated) image. (but impractical to max fully wrt $\phi$)
-    \item Generator $\theta$: Min prob of generating images D classifies as fake
-    \item (can't train using likelihood since it's not usually defined for this class of models)
-\end{itemize}
+Describe a Generative Adversarial Network (GAN).; \begin{itemize} \item Model has a deterministic $p(v|h, \theta)$: \item $p(v, h) = \delta(v-G_\theta(h))p(h)$ \item Define discriminator $D_\phi(v)$ that outputs the probability that $v$ is from the training data set. \item $G_\theta$ is generator. \item Objective: $\min_\theta \max_\phi (E[\log D_\phi(v)]_{v\sim p_{data}(v)} + E[\log(1-D_{\phi}(G_\theta(h)))]_{h\sim p(h)})$  \item Discrim $\phi$: Objective maximises the ability of the network $D_\phi$ to recognise a true image from a fake (generated) image. (but impractical to max fully wrt $\phi$) \item Generator $\theta$: Min prob of generating images D classifies as fake \item (can't train using likelihood since it's not usually defined for this class of models) \end{itemize}
 
-Discuss problems with training GANs.; \begin{itemize}
-    \item Impractical to fully opt wrt $\phi$ (discrim, not sure if for gen also)
-    \item So do partial maximisation: $phi^{new} = \phi - \eta \frac{\partial f(\theta, \phi)}{\partial \phi}$ a few steps, 
-    \item $\theta^{new} = 
-    theta + \eta \frac{\partial f^*(\theta)}{\partial \theta}$, where $f^*(\theta) = \min_{\phi} f(\theta, \phi)$. 
-    \item But above is not stable, not justified if we didn't do full min wrt $\phi$.
-    similar with $\theta$.
-\end{itemize}
+Discuss problems with training GANs.; \begin{itemize} \item Impractical to fully opt wrt $\phi$ (discrim, not sure if for gen also) \item So do partial maximisation: $phi^{new} = \phi - \eta \frac{\partial f(\theta, \phi)}{\partial \phi}$ a few steps,  \item $\theta^{new} =  theta + \eta \frac{\partial f^*(\theta)}{\partial \theta}$, where $f^*(\theta) = \min_{\phi} f(\theta, \phi)$.  \item But above is not stable, not justified if we didn't do full min wrt $\phi$. similar with $\theta$. \end{itemize}
 
 \end{document}
