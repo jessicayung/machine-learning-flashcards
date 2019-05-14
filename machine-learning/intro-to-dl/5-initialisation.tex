@@ -5,68 +5,30 @@
 \usepackage{amsmath}
 \begin{document}
 
-Why is initialisation important for neural networks?; \begin{itemize}
-    \item Many nonlinearities in the NN
-    \item transfer functions often saturate to some constant value
-    \item If init at saturated value, gradient of error $\approx$ 0
-    \item if do gradient-based training, won't get anywhere
-    \item want to be in area with appreciable gradient, e.g. around origin for sigmoid.
-\end{itemize}
+Why is initialisation important for neural networks?; \begin{itemize} \item Many nonlinearities in the NN \item transfer functions often saturate to some constant value \item If init at saturated value, gradient of error $\approx$ 0 \item if do gradient-based training, won't get anywhere \item want to be in area with appreciable gradient, e.g. around origin for sigmoid. \end{itemize}
 
-Things to watch out for when scaling the objective function; \begin{itemize}
-    \item Good to scale the objective functino by $1/N$ so that it remains roughly $O(1)$ even as the number of datapoints increases.
-    \item Else as the number of examples in your minibatch increases, the learning rate will effectively decrease.
-\end{itemize}
+Things to watch out for when scaling the objective function; \begin{itemize} \item Good to scale the objective function by $1/N$ so that it remains roughly $O(1)$ even as the number of datapoints increases. \item Else as the number of examples in your minibatch increases, the learning rate will effectively decrease. \end{itemize} 
 
-How might we decide on the scale of weights? Assume the input is rescaled to 0 mean unit variance.; \begin{itemize}
-    \item We want $\mathbf{z}_n = \mathbf{w^Tx}$ to be $O(1)$ (vs $O(D)$, say) (TODO: why?)
-    \item Assume $w_i \sim W$ s.t. $E(w_i) = 0$.
-    \item Then $z_n = \sum_i w_i x^n_i$. 
-    \item 
-    \item $E[z_n] = \sum_i E(w_i)x_i^n = 0$
-    \item $E[z_n^2] = \sum_{i\ne j} E(w_i)E(w_j)x_i^nx_j^n + \sum_i E[w_i^2](x_i^n)^2$
-    \item $=E(w^2)\sum_{i=1}^D(x_i^n)^2$
-    \item so have $E(w^2) \sim O(\frac{1}{D})$ to have $E(z_n^2)\sim O(1)$.
-    \item i.e. $w$ has standard deviation $\frac{1}{\sqrt(D)}$, where $D$ is the dim of $x$.
-\end{itemize}
+Describe a problem (with equations) if we don't scale the input.; \begin{itemize} \item Consider squared loss $E(\bm{w}) = \frac{1}{N}\sum_{n=1}^N (y^n - f(\bm{w^Tx}^n))^2$ \item Gradient is $-\frac{2}{N}\sum_{n=1}^N(y^n - f(\bm{w^Tx}^n))f'(\bm{w^Tx}^n)\bm{x}^n$ \item for sigmoid transfer fn, i.e. $f(x) = \frac{1}{1+e^{-x}}$, for large $|\mathbf{w^Tx}|$, this fn saturates to 1 or 0 and the gradient becomes zero. \item so need to make sure we don't immediately get trapped in these zero gradient regions. \end{itemize}
 
-Why don't we initialise all the weights in a NN to zero?; \begin{itemize}
-    \item Note there is permutational symmetry in the weights of a NN.
-    \item (and obj fn generally will have a min associated with each perm)
-    \item If set all w = 0, doesn't help break symmetry, network needs to decide which symmetry / permutation to specialise on
-\end{itemize}
+How might we decide on the scale of weights? Assume the input is rescaled to 0 mean unit variance.; \begin{itemize} \item We want $\mathbf{z}_n = \mathbf{w^Tx}$ to be $O(1)$ (vs $O(D)$, say) (TODO: why?) \item Assume sample iid $w_i \sim W$ s.t. $E(w_i) = 0$. \item Then $z_n = \sum_i w_i x^n_i$.  \item $E[z_n] = \sum_i E(w_i)x_i^n = 0$ \item $E[z_n^2] = \sum_{i\ne j} E(w_i)E(w_j)x_i^nx_j^n + \sum_i E[w_i^2](x_i^n)^2$ \item $=E(w^2)\sum_{i=1}^D(x_i^n)^2$ \item so have $E(w^2) \sim O(\frac{1}{D})$ to have $E(z_n^2)\sim O(1)$. \item i.e. $w$ has standard deviation $\frac{1}{\sqrt(D)}$, where $D$ is the dim of $x$. \end{itemize}
+
+Describe a practical NN weight initialisation scheme. (use actual numbers); \begin{itemize} \item Each $x^n_i (rescaled zero mean unit variance)$ has values roughly in the range $-2, 2$ (2 stdev from the zero mean). \item Reasonable init for net with TF $f(x)$ when $x\in [-2,2]$ is: (1) draw e.g. \begin{itemize}      \item $w_i \sim N(w_i|0,1)$ \item $w_i \sim sign(N(w_i|0,1))$ \item $w_i \sim U(w_i|-\sqrt{3}, \sqrt{3})$. \end{itemize} \item then (2) rescale: $w_i \rightarrow \frac{w_i}{\sqrt{D}}$. \item (for mult layers, rescale $w^l_i \rightarrow \frac{w^l_i}{\sqrt{D_{l-1}}}$ \end{itemize}
+
+Why don't we initialise all the weights in a NN to zero?; \begin{itemize} \item Note there is permutational symmetry in the weights of a NN. \item (and obj fn generally will have a min associated with each perm) \item If set all w = 0, doesn't help break symmetry, network needs to decide which symmetry / permutation to specialise on \end{itemize}
 
 If we want the nonlinearities to have a big gradient, why don't we set the variance of the weights to be very small?; Then the transfer function will be almost linear -> network collapses to a linear function.
 
 What is whitening? (very brief); Decorrelating inputs. (TODO: add)
 
-Motivation for decorrelating inputs / whitening; \begin{itemize}
-    \item May want different learning rates in different directions for non-isotropic objective function, but generally only have one learning rate
-    \item Want Hessian to be $kI$ locally: makes optimisatino easier? cause then locally bowl-shaped. (TODO: check)
-    \item Approx Hessian is $-\frac{2\gamma}{N}\sum_n \mathbf{x_nx_n^T}$, so want to transform $\frac{1}{N}\mathbf{x_nx_n^T}$ to the identity matrix
-    \item (Approx via $H=-\frac{2}{N}\sum_n[(f^n - f(\mathbf{w^Tx_n})f''(\mathbf{w^Tx_n}) - (f'(\mathbf{w^Tx_n}))^2]\mathbf{x_nx_n^T}$ and crude approx all in square bracket $\gamma_n \approx \gamma$.
-    \item (Overall a bit dodgy, from notes only)
-\end{itemize}
+Motivation for decorrelating inputs / whitening; \begin{itemize} \item May want different learning rates in different directions for non-isotropic objective function, but generally only have one learning rate \item Want Hessian to be $kI$ locally: makes optimisatino easier? cause then locally bowl-shaped. (TODO: check) \item Approx Hessian is $-\frac{2\gamma}{N}\sum_n \mathbf{x_nx_n^T}$, so want to transform $\frac{1}{N}\mathbf{x_nx_n^T}$ to the identity matrix \item (Approx via $H=-\frac{2}{N}\sum_n[(y^n - f(\mathbf{w^Tx_n})f''(\mathbf{w^Tx_n}) - (f'(\mathbf{w^Tx_n}))^2]\mathbf{x_nx_n^T}$ and crude approx all in square bracket $\gamma_n \approx \gamma$. \item (Overall a bit dodgy, from notes only) \end{itemize}
 
-Describe the process of whitening data.; \begin{itemize}
-    \item Want to transform the data so that $\frac{1}{N}\sum_n \mathbf{x_nx_n^T} = I$
-    \item write $\mathbf{x_n}' = A(\mathbf{x_n - \mu}$, where $\mathbf{\mu}=\frac{1}{N}\sum_{n=1}^N\mathbf{x_n}$
-    \item SVD of matrix $\mathbf{X}=\frac{1}{\sqrt{N}}[\mathbf{x_1 - \mu, ..., x_N - \mu}]$ then 
-    \item $\frac{1}{N}\sum_n(\mathbf{x_n - \mu})(\mathbf{x_n - \mu})^T = \mathbf{XX^T = USV^TVS^TU^T = US^2U^T}$
-    \item Hence applying the `whitening' transform $\mathbf{x'} = \mathbf{S^{-1}U^T(x_n - \mu})$ will make points $\mathbf{x_n}'$ that are zero mean and unit covariance.
-    \item also makes approx Hessian diagonal and can be a useful initial preprocessing step to make optimisation easier.
-\end{itemize}
+Describe the process of whitening data.; \begin{itemize} \item Want to transform the data so that $\frac{1}{N}\sum_n \mathbf{x_nx_n^T} = I$ \item write $\mathbf{x_n}' = A(\mathbf{x_n - \mu})$, where $\mathbf{\mu}=\frac{1}{N}\sum_{n=1}^N\mathbf{x_n}$ \item SVD of matrix $\mathbf{X}=\frac{1}{\sqrt{N}}[\mathbf{x_1 - \mu, ..., x_N - \mu}]$ then  \item $\frac{1}{N}\sum_n(\mathbf{x_n - \mu})(\mathbf{x_n - \mu})^T = \mathbf{XX^T = USV^TVS^TU^T = US^2U^T}$ \item Hence applying the `whitening' transform $\mathbf{x'} = \mathbf{S^{-1}U^T(x_n - \mu})$ will make points $\mathbf{x_n}'$ that are zero mean and unit covariance. \item also makes approx Hessian diagonal and can be a useful initial preprocessing step to make optimisation easier. \end{itemize}
 
-Write down the whitening transform.; \begin{itemize}
-    \item $\mathbf{x'} = \mathbf{S^{-1}U^T(x_n - \mu})$ 
-    \item (will make points $\mathbf{x_n}'$ that are zero mean and unit covariance.)
-\end{itemize} 
+Write down the whitening transform.; \begin{itemize} \item $\mathbf{x'} = \mathbf{S^{-1}U^T(x_n - \mu})$  \item (will make points $\mathbf{x_n}'$ that are zero mean and unit covariance.) \end{itemize} 
 
-% 'a more complex discussion' omitted
+% TODO: 'a more complex discussion' omitted
 
-Briefly describe the idea of a `poor man's Newton method.' (from notes, dk if this is legit); \begin{itemize}
-    \item Every time change local geometry such that objective function looks like a bowl locally
-    \item (e.g. Batch norm apparently also does something like that)
-\end{itemize}
+Briefly describe the idea of a `poor man's Newton method.' (from notes, dk if this is legit); \begin{itemize} \item Every time change local geometry such that objective function looks like a bowl locally \item (e.g. Batch norm apparently also does something like that) \end{itemize}
 
 \end{document}

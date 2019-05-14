@@ -6,70 +6,29 @@
 \begin{document}
 
 
-Define a (feedforward) neural network.; \begin{itemize}
-    \item Consider a vector input $\bm{x}$ that gets mapped to an output $\bm{y}$ through intermediate layers.
-    \item For a network with $L$ layers, we write the vector function that the network computes as 
-    \item $f(\bm{x}|\mathcal{W})\equiv \sigma_L(\bm{W}_L\bm{h}_{L-1})$, where
-    \item $\bm{h}_l = \sigma_l(\bm{W}_l\bm{h}_{l-1}), l=2,...,L-1, \bm{h}_1 = \sigma_1(\bm{W_1x}$
-    \item (optionally can also include bias)
-    \item (Transfer functions can be different for each layer, or even different for units in the same layer)
-    \item (Typical to use an invertible monotonic transfer function, e.g. sigmoid or tanh.)
-\end{itemize}
+Define a (feedforward) neural network.; \begin{itemize} \item Consider a vector input $\bm{x}$ that gets mapped to an output $\bm{y}$ through intermediate layers. \item For a network with $L$ layers, we write the vector function that the network computes as  \item $f(\bm{x}|\mathcal{W})\equiv \sigma_L(\bm{W}_L\bm{h}_{L-1})$, where \item $\bm{h}_l = \sigma_l(\bm{W}_l\bm{h}_{l-1}), l=2,...,L-1, \bm{h}_1 = \sigma_1(\bm{W_1x}$ \item (optionally can also include bias) \item (Transfer functions can be different for each layer, or even different for units in the same layer) \item (Typical to use an invertible monotonic transfer function, e.g. sigmoid or tanh.) \end{itemize}
 
-State the sigmoid function.; \begin{itemize}
-    \item $\sigma(x) = \frac{1}{1 + e^{-x}}$
-    \item (or $\frac{e^x}{1+e^x}$
-\end{itemize}
+State the sigmoid function.; \begin{itemize} \item $\sigma(x) = \frac{1}{1 + e^{-x}}$ \item (or $\frac{e^x}{1+e^x}$ \end{itemize}
 
-What kinds of functions (characteristics) o we usually use for the non-linearity in a NN layer?; \begin{itemize}
-    \item Invertible monotonic functions
-    \item e.g. sigmoid, tanh
-\end{itemize}
+What kinds of functions (characteristics) o we usually use for the non-linearity in a NN layer?; \begin{itemize} \item Invertible monotonic functions \item e.g. sigmoid, tanh \end{itemize}
 
-What are the advantages of GPUs?; \begin{itemize}
-    \item Calculating matrix products like \mathbf{Wh} quickly
-    \begin{itemize}
-        \item bc graphics involves a lot of projecting from 3D to 2D, requires fast matmuls
-    \end{itemize}
-    \item Can calculate nonlinearities in parallel
-\end{itemize}
+What are the advantages of GPUs?; \begin{itemize} \item Calculating matrix products like \mathbf{Wh} quickly \begin{itemize} \item bc graphics involves a lot of projecting from 3D to 2D, requires fast matmuls \end{itemize} \item Can calculate nonlinearities in parallel \end{itemize}
 
-Describe how one might allocate work between CPUs and GPUs.; \begin{itemize}
-    \item Run message-passing on CPU (instruct GPU what operations to carry out) but
-    \item do operations on GPU
-\end{itemize}
+Describe how one might allocate work between CPUs and GPUs.; \begin{itemize} \item Run message-passing on CPU (instruct GPU what operations to carry out) but \item do operations on GPU \end{itemize}
 
-What are GPUs slow at?; \begin{itemize}
-    \item Communication between RAM on machine and GPU (shifting memory): \begin{itemize}
-        \item Getting values off GPU back to CPU (e.g. error values, plotting)
-    \end{itemize}
-    \item So try to keep everything on GPU (but it doesn't have much memory). \item Scheduling on CPU is fine because don't need fetching.
-\end{itemize}
+What are GPUs slow at?; \begin{itemize} \item Communication between RAM on machine and GPU (shifting memory): \begin{itemize} \item Getting values off GPU back to CPU (e.g. error values, plotting) \end{itemize} \item So try to keep everything on GPU (but it doesn't have much memory). \item Scheduling on CPU is fine because don't need fetching. \end{itemize}
 
 Prove that if the transfer function is linear, the neural network collapses to a linear layer; TODO
 
-Briefly compare statistics and neural networks (TODO wording? but that's what I have in my written notes); \begin{itemize}
-    \item Stats MSE loss $E(\mathbf{w})$ is convex vs NN MSE loss is non-convex.
-    \begin{itemize}
-        \item stats General Linear Model $f(\mathbf{x, w})=\mathbf{w^T\phi(x)}$.
-    \end{itemize}
-    \item Stats mapping $\mathbf{\phi}$ is usually fixed (e.g. GLMs) vs NN mapping is learnable.
-\end{itemize}
+Briefly compare statistics and neural networks (TODO wording? but that's what I have in my written notes); \begin{itemize} \item Stats MSE loss $E(\mathbf{w})$ is convex vs NN MSE loss is non-convex. \begin{itemize} \item stats General Linear Model $f(\mathbf{x, w})=\mathbf{w^T\phi(x)}$. \end{itemize} \item Stats mapping $\mathbf{\phi}$ is usually fixed (e.g. GLMs) vs NN mapping is learnable. \end{itemize}
 
 Show that with squared loss, the generalised linear model $y = f(\bm{x,w})=\bm{w}^T\phi(\bm{x})$, where $\phi(\bm{x})$ is a fixed function, gives a convex $E(\bm{w})$.; (Exam) TODO
 
 Show that with squared loss, a neural network with a single hidden layer gives a non-convex $E(\bm{w})$. $f(\bm{x} W_2, W_1) = W_2\sigma(W_1 \bm{x})$; Exam. TODO
 
-Name types of neural networks with a single hidden layer.; \begin{itemize}
-    \item PCA
-    \item GLM
-    \item Logistic regression
-\end{itemize}
+Name types of neural networks with a single hidden layer.; \begin{itemize} \item PCA \item GLM \item Logistic regression \end{itemize}
 
-Describe neural networks as representation learning.; \begin{itemize}
-    \item NNs as a form of regression in which the final hidden layer is a new representation of the input $\bm{x'} = \bm{h}_L = \sigma(W_l\bm{h}_{L-1})$.
-    \item (The point is that we will jointly learn all the parameters of the representation and predictor so that the overall prediction is good.)
-\end{itemize}
+Describe neural networks as representation learning.; \begin{itemize} \item NNs as a form of regression in which the final hidden layer is a new representation of the input $\bm{x'} = \bm{h}_L = \sigma(W_l\bm{h}_{L-1})$. \item (The point is that we will jointly learn all the parameters of the representation and predictor so that the overall prediction is good.) \end{itemize}
 
 State the objective function for regression; $\min_W E(W) = \sum_{n=1}^N [\mathbf{y}^n - f(\mathbf{x^n}|W)]^2$
 
@@ -83,11 +42,7 @@ Name a bump-like transfer function.; $\sigma(x) = e^{-x^2}$
 
 Problems to consider re nonlinearities (especially non-ReLU ones); Saturating as $x\rightarrow \pm\infty$.
 
-If your output is between 0 and 1 (e.g. scaled MNIST pixel values), what might you choose your loss function to be?; \begin{itemize}
-    \item Likelihood: e.g. for $p=\sigma(w^Tx)$, $KL(q||p)$ is convex in $\mathbf{w}$, squared loss is not.
-    \item i.e. choice of loss function affects whether optimisation is convex or not.
-    \item (Note also squared loss is upper bounded by KL: $(q-p)^2 \leq \frac{1}{2}KL(q||p)$
-\end{itemize}
+If your output is between 0 and 1 (e.g. scaled MNIST pixel values), what might you choose your loss function to be?; \begin{itemize} \item Likelihood: e.g. for $p=\sigma(w^Tx)$, $KL(q||p)$ is convex in $\mathbf{w}$, squared loss is not. \item i.e. choice of loss function affects whether optimisation is convex or not. \item (Note also squared loss is upper bounded by KL: $(q-p)^2 \leq \frac{1}{2}KL(q||p)$ \end{itemize}
 
 For $p=\sigma(w^T)$, is the squared loss convex in w?; No.
 
@@ -99,23 +54,11 @@ For $p=\sigma(w^T)$, is the $KL(y||\hat{y})$ convex in w?; Yes.
 
 State a relationship between the squared loss and KL (bound); $(q-p)^2 \leq \frac{1}{2}KL(q||p)$.
 
-How can we visualise a high dimensional objective function (e.g. to examine convexity)?; \begin{itemize}
-    \item Plot 1D/2D slice in high-dim space
-    \item i.e. eval fn along a dir
-    \item (For a convex fn, any slice must be convex. If see nonconvex slice, then it is not a convex fn. And if a fn is convex in a dir, the slice should be convex.)
-\end{itemize}
+How can we visualise a high dimensional objective function (e.g. to examine convexity)?; \begin{itemize} \item Plot 1D/2D slice in high-dim space \item i.e. eval fn along a dir \item (For a convex fn, any slice must be convex. If see nonconvex slice, then it is not a convex fn. And if a fn is convex in a dir, the slice should be convex.) \end{itemize}
 
-State the log likelihood of N datapoints we classify into one of two classes $c_n$ using logistic regression.; \begin{itemize}
-    \item $\log p(C|X) = \sum_{n=1}^N (1(c_n = 1)\log \sigma(\bm{w^Tx}_n) + 1(c_n = 0)\log (1-\sigma(\bm{w}^T\bm{x}_n)))$
-\end{itemize}
+State the log likelihood of N datapoints we classify into one of two classes $c_n$ using logistic regression.; \begin{itemize} \item $\log p(C|X) = \sum_{n=1}^N (1(c_n = 1)\log \sigma(\bm{w^Tx}_n) + 1(c_n = 0)\log (1-\sigma(\bm{w}^T\bm{x}_n)))$ \end{itemize}
 
-Show that logistic regression $\sigma(w^x_n)$ with log likelihood loss is convex in $w$.; \begin{itemize}
-    \item $E(w)=-\sum_{n=1}^N [1(c_n=1)\log \sigma(\mathbf{w^Tx}_n + 1(c_n=0)\log(1-\sigma(\mathbf{w^Tx}_n)]$
-    \item $\frac{\partial E(w)}{\partial w} = -\sum_{n=1}^N 1(c_n=1)\frac{\sigma(1-\sigma)}{\sigma}\mathbf{x_n} + 1(c_n=0)\frac{-\sigma(1-\sigma)}{1-\sigma}\mathbf{x_n}$
-    \item $\frac{\partial^2E(w)}{\partial w^2} = -\sum_{n=1}^N 1(c_n = 1)(-\sigma)(1-\sigma)\mathbf{x_nx_n^T}+1(c_n=0)(-\sigma)(1-\sigma)\mathbf{x_nx_n^T}$
-    \item $=\sum_{n=1}^N \sigma_n(1-\sigma_n)\mathbf{x_nx_n^T}\geq 0$
-    \item (non-convex in x but convex in w)
-\end{itemize}
+Show that logistic regression $\sigma(w^x_n)$ with log likelihood loss is convex in $w$.; \begin{itemize} \item $E(w)=-\sum_{n=1}^N [1(c_n=1)\log \sigma(\mathbf{w^Tx}_n + 1(c_n=0)\log(1-\sigma(\mathbf{w^Tx}_n)]$ \item $\frac{\partial E(w)}{\partial w} = -\sum_{n=1}^N 1(c_n=1)\frac{\sigma(1-\sigma)}{\sigma}\mathbf{x_n} + 1(c_n=0)\frac{-\sigma(1-\sigma)}{1-\sigma}\mathbf{x_n}$ \item $\frac{\partial^2E(w)}{\partial w^2} = -\sum_{n=1}^N 1(c_n = 1)(-\sigma)(1-\sigma)\mathbf{x_nx_n^T}+1(c_n=0)(-\sigma)(1-\sigma)\mathbf{x_nx_n^T}$ \item $=\sum_{n=1}^N \sigma_n(1-\sigma_n)\mathbf{x_nx_n^T}\geq 0$ \item (non-convex in x but convex in w) \end{itemize}
 
 Is logistic regression $\sigma(w^x_n)$ with log likelihood loss convex in $w$?; Yes.
 
@@ -125,31 +68,17 @@ Is logistic regression $\sigma(w^x_n)$ with log likelihood loss convex in $w$?; 
 
 Is logistic regression $\sigma(w^x_n)$ with `entropic' loss $E(w) = -y\log\hat{y} - (1-y)\log(1-\hat{y})$ convex in $w$?; Yes.
 
-State the softmax function.; \begin{itemize}
-    \item $S(\bm{x}) = \frac{\exp(x_i)}{\sum_i \exp(x_i)}$
-\end{itemize}
+State the softmax function.; \begin{itemize} \item $S(\bm{x}) = \frac{\exp(x_i)}{\sum_i \exp(x_i)}$ \end{itemize}
 
 How do we map an input (put through a linear model $\bm{w^T_ix}$) to a classification  probability (one of C classes)?; $p(c = i|\bm{x}) = \frac{\exp (\bm{w_i^Tx}}{\sum_{i=1}^C\exp(\bm{w^T_i x})}$.
 
-State the log likelihood of N datapoints we classify into one of C classes $c_n$.; \begin{itemize}
-    \item $\log p(C|X) = \sum_{n=1}^N \sum_{i=1}^C 1(c_n = i)\log 
-    p(c_n = i|\bm{x})$, 
-    \item where e.g. $p(c = i|\bm{x}) = \frac{\exp (\bm{w_i^Tx}}{\sum_{i=1}^C\exp(\bm{w^T_i x})}$ (softmax)
-\end{itemize}
+State the log likelihood of N datapoints we classify into one of C classes $c_n$.; \begin{itemize} \item $\log p(C|X) = \sum_{n=1}^N \sum_{i=1}^C 1(c_n = i)\log  p(c_n = i|\bm{x})$,  \item where e.g. $p(c = i|\bm{x}) = \frac{\exp (\bm{w_i^Tx}}{\sum_{i=1}^C\exp(\bm{w^T_i x})}$ (softmax) \end{itemize}
 
 Show tha the loss $E(\bm{w}) = -\log p(C|X) =- \sum_{n=1}^N \sum_{i=1}^C 1(c_n = i)\log p(c_n = i|\bm{x})$ is convex. ($p(c = i|\bm{x}) = \frac{\exp (\bm{w_i^Tx}}{\sum_{i=1}^C\exp(\bm{w^T_i x})}$).; TODO (exam)
 
-State four kinds of loss (two for regression, two for classification).; \begin{itemize}
-    \item Reg: Squared loss
-    \item Reg: Entropy loss for [0, 1] constrained data and predictions $E(W) = \sum_n -y_n\log \hat{y}_n - (1-y_n)\log (1-\hat{y}_n)$
-    \item Clf: Binary class
-    \item Clf: Multiple class $E(W) = \sum_n\sum_i 1(c_n = i)\log NN_i(x_n, W)$
-\end{itemize}
+State four kinds of loss (two for regression, two for classification).; \begin{itemize} \item Reg: Squared loss \item Reg: Entropy loss for [0, 1] constrained data and predictions $E(W) = \sum_n -y_n\log \hat{y}_n - (1-y_n)\log (1-\hat{y}_n)$ \item Clf: Binary class \item Clf: Multiple class $E(W) = \sum_n\sum_i 1(c_n = i)\log NN_i(x_n, W)$ \end{itemize}
 
-Name one method of preventing overfitting that involves weights in neural networks.; \begin{itemize}
-    \item Adding penalty terms so weights don't get too large.
-    \item e.g. $\lambda \sum_l \sum_{ij}(W^l_{ij})^2$.
-\end{itemize}
+Name one method of preventing overfitting that involves weights in neural networks.; \begin{itemize} \item Adding penalty terms so weights don't get too large. \item e.g. $\lambda \sum_l \sum_{ij}(W^l_{ij})^2$. \end{itemize}
 
 How do we usually set the weight regularisation term $\lambda$?; By cross validation.
 
@@ -163,76 +92,34 @@ How might non-linearities saturate?; if W is too big. (Then e.g with sigmoid, gr
 
 What problems might arise when the weights w become too big?; Non-linearities may saturate. (then e.g. with sigmoid, gradient will go to zero.)
 
-List two advantages of ReLUs; \begin{itemize}
-    \item faster to compute
-    \item has one fewer saturating region (than e.g. sigmoid, tanh)
-\end{itemize}
+List two advantages of ReLUs; \begin{itemize} \item faster to compute \item has one fewer saturating region (than e.g. sigmoid, tanh) \end{itemize}
 
-Describe the Single Layer Representation Theorem.; \begin{itemize}
-    \item You can approximate a fn arbitrarily well as the number of hidden units increases (and you have nonlinear activations and a linear layer after.)
-    \item (So mathematically you don't need depth. (But have similar theorem for deep nets.))
-\end{itemize}
+Describe the Single Layer Representation Theorem.; \begin{itemize} \item You can approximate a fn arbitrarily well as the number of hidden units increases (and you have nonlinear activations and a linear layer after.) \item (So mathematically you don't need depth. (But have similar theorem for deep nets.)) \end{itemize}
 
-Given the Single Layer Representation Theorem, why do we use deep nets?; \begin{itemize}
-    \item There is a similar theorem for deep nets and deep nets work better in practice
-    \item (the real q is if this kind of fn class is good for our purposes in ML - e.g. things we care about tend to have hierarchical structure, so deep nets may be more suitable)
-\end{itemize}
+Given the Single Layer Representation Theorem, why do we use deep nets?; \begin{itemize} \item There is a similar theorem for deep nets and deep nets work better in practice \item (the real q is if this kind of fn class is good for our purposes in ML - e.g. things we care about tend to have hierarchical structure, so deep nets may be more suitable) \end{itemize}
 
-Compare the overall performance of PCA and NNs on MNIST; \begin{itemize}
-    \item PCA performs worse reconstruction wise but is much faster
-\end{itemize}
+Compare the overall performance of PCA and NNs on MNIST; \begin{itemize} \item PCA performs worse reconstruction wise but is much faster \end{itemize}
 
-Briefly describe an autoencoder.; \begin{itemize}
-    \item Try to map the input back to itself.
-    \item Hidden layer with the smallest number of units is called the `bottleneck'.
-    \item Bottleneck forces the network to try to find a low dim repr of the data
-    \item Useful for unsupervised learning.
-\end{itemize}
+Briefly describe an autoencoder.; \begin{itemize} \item Try to map the input back to itself. \item Hidden layer with the smallest number of units is called the `bottleneck'. \item Bottleneck forces the network to try to find a low dim repr of the data \item Useful for unsupervised learning. \end{itemize}
 
-Briefly describe PCA.; \begin{itemize}
-    \item Given a set of data $Y = (\bm{y^1,...,y^N})$ 
-    \item find a rank $H$ approximation $\hat{Y}$ to $Y$ 
-    \item that minimises the squared loss $||Y - \hat{Y}||^2$.
-    \item Given by taking the SVD of $Y=USV^T$, and taking the largest H singular values
-    \item $\hat{Y} = U_HS_HV_H^T$.
-    \item (there is a polynomial algorithm for SVD and also v fast approximations)
-\end{itemize}
+Briefly describe PCA.; \begin{itemize} \item Given a set of data $Y = (\bm{y^1,...,y^N})$  \item find a rank $H$ approximation $\hat{Y}$ to $Y$  \item that minimises the squared loss $||Y - \hat{Y}||^2$. \item Given by taking the SVD of $Y=USV^T$, and taking the largest H singular values \item $\hat{Y} = U_HS_HV_H^T$. \item (there is a polynomial algorithm for SVD and also v fast approximations) \end{itemize}
 
 Briefly describe the current optimal computatinoal complexity of SVD.; There is a polynomial algorithm for SVD and also very fast approximations.
 
 Describe PCA in terms of a neural network.; A single hidden layer NN with a linear transfer function. (Also minimising squared loss)
 
-Show that a certain neural network is equivalent to PCA.; \begin{itemize}
-    \item Consider $\bm{y}\rightarrow \bm{h}\rightarrow \hat{\bm{y}}$, a single hidden layer net with linear transfer $\sigma_2(x) = \bm{x}$. Let the output of the network be $\tilde{Y}$. 
-    \item Then the squared loss is given by $E = ||Y - \Tilde{Y}||^2$.
-    \item where $\tilde{Y}=W_2\sigma_1(W_1Y)$. If $\sigma_1(x) = x$ then $\tilde{Y}=W_2W_1Y = W_1W_1USV^T$ which has rank H. (since dim of hidden layer = H?)
-    \item But this is the same as PCA by setting $W_2 = U_H, W_1 = U^T_H$ since then $\tilde{Y}=U_HS_HV_H^T$.
-    \item (Huh really? looks like just $USV^T$ to me?)
-\end{itemize}
+Show that a certain neural network is equivalent to PCA.; \begin{itemize} \item Consider $\bm{y}\rightarrow \bm{h}\rightarrow \hat{\bm{y}}$, a single hidden layer net with linear transfer $\sigma_2(x) = \bm{x}$. Let the output of the network be $\tilde{Y}$.  \item Then the squared loss is given by $E = ||Y - \Tilde{Y}||^2$. \item where $\tilde{Y}=W_2\sigma_1(W_1Y)$. If $\sigma_1(x) = x$ then $\tilde{Y}=W_2W_1Y = W_1W_1USV^T$ which has rank H. (since dim of hidden layer = H?) \item But this is the same as PCA by setting $W_2 = U_H, W_1 = U^T_H$ since then $\tilde{Y}=U_HS_HV_H^T$. \item (Huh really? looks like just $USV^T$ to me?) \end{itemize}
 
 What is the optimal solution for a single hidden layer autoencoder; PCA (linear transfer function)
 
-Does using non-linearities improve performance for a singe hidden layer autoencoder?; \begin{itemize}
-    \item No. PCA is optimal for a single hidden layer. (and linear transfer function at the output)
-    \item (Story changes if you have more than one input layer, i.e. nonlinear input into nonlinearity.)
-\end{itemize}
+Does using non-linearities improve performance for a singe hidden layer autoencoder?; \begin{itemize} \item No. PCA is optimal for a single hidden layer. (and linear transfer function at the output) \item (Story changes if you have more than one input layer, i.e. nonlinear input into nonlinearity.) \end{itemize}
 
 Can we beat PCA with a linear autoencoder and a non-linear decoder?; Yes.
 
-How can you reconstruct four images perfectly with a single-layer autoencoder with only 2 hidden units?; \begin{itemize}
-    \item Encoder: non-linearity output 4 outcomes $(2^2)$
-    \item Output layer set $w_1=$img 1, four combos.
-    \item (Can do this even for a bottleneck with dim 1 provided we have at least $\texttt{num class}$ units in the bottom hidden layer.
-\end{itemize}
+How can you reconstruct four images perfectly with a single-layer autoencoder with only 2 hidden units?; \begin{itemize} \item Encoder: non-linearity output 4 outcomes $(2^2)$ \item Output layer set $w_1=$img 1, four combos. \item (Can do this even for a bottleneck with dim 1 provided we have at least $\texttt{num class}$ units in the bottom hidden layer. \end{itemize}
 
 Does a lower latent dimensionality for an autoencoder mean that the reconstructions will be less complex/detailed?; Not necessarily, it depends on the complexity of the decoder.
 
-Draw the computational graph for $W_1 = W_2 = W$.; \begin{itemize}
-    \item W points to $f_1$ which uses $W_1$ and $f_2$ which uses $W_2$
-    \item sum over all child paths of $W$: here have two.
-    \item so dealing with tied parameters is simple because it's just a sum in the computational graph (I wrote multiplication: which is right? TODO)
-\end{itemize}
-
-% TODO: add remaining in lecture notes, have added all from notebook
+Draw the computational graph for $W_1 = W_2 = W$.; \begin{itemize} \item W points to $f_1$ which uses $W_1$ and $f_2$ which uses $W_2$ \item sum over all child paths of $W$: here have two. \item so dealing with tied parameters is simple because it's just a sum in the computational graph (I wrote multiplication: which is right? TODO) \end{itemize}
 
 \end{document}
