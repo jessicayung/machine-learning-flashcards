@@ -3,7 +3,7 @@ Machine learning flashcards for specific topics, books and courses.
 
 Let me know if you find any errors. Thanks!
 
-### Table of Contents
+### Table of Content
 - `deep-learning-book`: Flashcards based on 'Deep Learning' by Ian Goodfellow, Yoshua Bengio and Aaron Courville.
 - `programming-flashcards`: flashcards on algorithms and strategies for tackling algorithms.
 - `python-tf-torch`: flashcards on Python, NumPy, TensorFlow and PyTorch.
